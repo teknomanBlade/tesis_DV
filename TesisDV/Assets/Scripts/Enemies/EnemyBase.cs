@@ -13,6 +13,9 @@ public abstract class EnemyBase : MonoBehaviour
     public bool end = false;
     public float speed = 2f;
 
+    // effects
+    public bool slowed = false;
+
     protected virtual void Awake()
     {
         _lvm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
@@ -63,5 +66,12 @@ public abstract class EnemyBase : MonoBehaviour
     {
         _lvm.spawnedEnemies.Remove(this);
         Destroy(this.gameObject);
+    }
+
+    public virtual void SetSlowEffect(bool b)
+    {
+        if (b) speed /= 2;
+        else speed *= 2;
+        slowed = b;
     }
 }

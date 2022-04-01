@@ -5,6 +5,7 @@ using UnityEngine;
 public class SWEP_Hands : MonoBehaviour, ISWEP
 {
     public Player _player;
+    private GameObject _swepModel;
 
     // internal
     private float range = 5f;
@@ -25,6 +26,8 @@ public class SWEP_Hands : MonoBehaviour, ISWEP
     public void OnEquip(Player player)
     {
         _player = player;
+        _swepModel = GameVars.Values.WEP_Hands;
+        _swepModel.SetActive(true);
     }
 
     public void PrimaryFire()
@@ -34,11 +37,13 @@ public class SWEP_Hands : MonoBehaviour, ISWEP
             _currentObject.Drop(_player.GetVelocity());
             Physics.IgnoreCollision(_player.GetComponent<Collider>(), _currentObject.GetComponent<Collider>(), false);
             locked = false;
+            _swepModel.SetActive(true);
         }
         else if (IsInRange() && _currentObject.Grab(strength))
         {
             Physics.IgnoreCollision(_player.GetComponent<Collider>(), _currentObject.GetComponent<Collider>(), true);
             locked = true;
+            _swepModel.SetActive(false);
         }
     }
 
@@ -51,6 +56,7 @@ public class SWEP_Hands : MonoBehaviour, ISWEP
                 _currentObject.Push(strength, force, _player.GetCameraForward(), _player.GetVelocity());
                 Physics.IgnoreCollision(_player.GetComponent<Collider>(), _currentObject.GetComponent<Collider>(), false);
                 locked = false;
+                _swepModel.SetActive(true);
             } else if (IsInRange())
             {
                 _currentObject.Push(strength, force, _player.GetCameraForward());
@@ -73,6 +79,7 @@ public class SWEP_Hands : MonoBehaviour, ISWEP
             Physics.IgnoreCollision(_player.GetComponent<Collider>(), _currentObject.GetComponent<Collider>(), false);
             locked = false;
         }
+        _swepModel.SetActive(false);
     }
 
     // internal

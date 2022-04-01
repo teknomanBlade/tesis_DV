@@ -52,7 +52,10 @@ public class Player : MonoBehaviour
 
         originalScale = transform.localScale;
         originalCamPos = _cam.transform.localPosition;
+    }
 
+    private void Start()
+    {
         equippedWep = gameObject.AddComponent<SWEP_Hands>();
         equippedWep.OnEquip(this);
     }
@@ -81,6 +84,24 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(GameVars.Values.useKey)) equippedWep.Interaction();
         if (Input.GetKeyDown(GameVars.Values.primaryFire)) equippedWep.PrimaryFire();
         if (Input.GetKeyDown(GameVars.Values.secondaryFire)) equippedWep.SecondaryFire();
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            equippedWep.OnUnequip();
+            SWEP_Hands aux;
+            if (TryGetComponent<SWEP_Hands>(out aux)) equippedWep = aux;
+            else equippedWep = gameObject.AddComponent<SWEP_Hands>();
+            equippedWep.OnEquip(this);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            equippedWep.OnUnequip();
+            SWEP_FingerGun aux;
+            if (TryGetComponent<SWEP_FingerGun>(out aux)) equippedWep = aux;
+            else equippedWep = gameObject.AddComponent<SWEP_FingerGun>();
+            equippedWep.OnEquip(this);
+        }
 
         //if (lookingAt != null) lookingAtText.text = lookingAt.name;
         //else lookingAtText.text = "null";
