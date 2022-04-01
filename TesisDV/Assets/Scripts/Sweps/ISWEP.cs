@@ -1,8 +1,8 @@
 public interface ISWEP
 {
-    public void OnEquip(Player player);
-    public void PrimaryFire();
-    public void SecondaryFire();
-    public void Interaction();
-    public void OnUnequip();
+    void OnEquip(Player player);
+    void PrimaryFire();
+    void SecondaryFire();
+    void Interaction();
+    void OnUnequip();
 }
