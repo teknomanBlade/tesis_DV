@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelEditorAuxiliar : MonoBehaviour
 {
-    LevelManager lvm;
+    public LevelManager lvm;
     public int selectedPoint = 0;
 
     private void OnDrawGizmos()
@@ -32,7 +32,9 @@ public class LevelEditorAuxiliar : MonoBehaviour
 
     public void AddPoint(int index)
     {
+        if (lvm.path == null) lvm.path = new List<Vector3>();
         lvm.path.Add(Vector3.zero);
+        
         if (index == lvm.path.Count - 2)
         {
             lvm.path[index + 1] = new Vector3(lvm.path[index].x + 1f, 0f, 0f);

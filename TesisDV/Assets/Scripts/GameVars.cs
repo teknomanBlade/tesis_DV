@@ -11,6 +11,8 @@ public class GameVars : MonoBehaviour
     private string objectLayerName;
     [SerializeField]
     private string floorLayerName;
+    [SerializeField]
+    private string enemyLayerName;
 
     // KeyBinds
     public KeyCode jumpKey;
@@ -59,6 +61,17 @@ public class GameVars : MonoBehaviour
     public LayerMask GetFloorLayerMask()
     {
         LayerMask lm = 1 << GetFloorLayer();
+        return lm;
+    }
+
+    public int GetEnemyLayer()
+    {
+        return LayerMask.NameToLayer(enemyLayerName);
+    }
+
+    public LayerMask GetEnemyLayerMask()
+    {
+        LayerMask lm = 1 << GetEnemyLayer();
         return lm;
     }
 }
