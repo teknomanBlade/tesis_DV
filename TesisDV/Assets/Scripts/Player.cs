@@ -12,7 +12,6 @@ public class Player : MonoBehaviour
     //---------
     private Rigidbody _rb;
     private Camera _cam;
-    public ISWEP equippedWep;
 
     // Movement
 
@@ -41,9 +40,9 @@ public class Player : MonoBehaviour
     // Interactions
 
     [SerializeField]
-    public Object lookingAt;
-
-    private float strength = 5f;
+    public Item lookingAt;
+    public GameObject[] invItem = new GameObject[3];
+    public int currentInvSlot = 0;
 
     private void Awake()
     {
@@ -56,8 +55,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        equippedWep = gameObject.AddComponent<SWEP_Hands>();
-        equippedWep.OnEquip(this);
+
     }
 
     private void Update()
@@ -74,43 +72,50 @@ public class Player : MonoBehaviour
             {
                 if (Input.GetKey(GameVars.Values.crouchKey)) CrouchEnter();
                 else CrouchExit();
-            } else if (Input.GetKeyDown(GameVars.Values.crouchKey)) CrouchToggle();
-            
+            }
+            else if (Input.GetKeyDown(GameVars.Values.crouchKey)) CrouchToggle();
+
         }
 
         if (Input.GetKeyDown(GameVars.Values.sprintKey)) speed = sprintSpeed;
         if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed;
 
-        if (Input.GetKeyDown(GameVars.Values.useKey)) equippedWep.Interaction();
-        if (Input.GetKeyDown(GameVars.Values.primaryFire)) equippedWep.PrimaryFire();
-        if (Input.GetKeyDown(GameVars.Values.secondaryFire)) equippedWep.SecondaryFire();
+        if (Input.GetKeyDown(GameVars.Values.useKey) && !InventoryFull()) Interact();
+        //if (Input.GetKeyDown(GameVars.Values.primaryFire)) equippedWep.PrimaryFire();
+        //if (Input.GetKeyDown(GameVars.Values.secondaryFire)) equippedWep.SecondaryFire();
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            equippedWep.OnUnequip();
-            SWEP_Hands aux;
-            if (TryGetComponent<SWEP_Hands>(out aux)) equippedWep = aux;
-            else equippedWep = gameObject.AddComponent<SWEP_Hands>();
-            equippedWep.OnEquip(this);
-        }
+        if (Input.GetKeyDown(KeyCode.Alpha1)) currentInvSlot = 0;
+        if (Input.GetKeyDown(KeyCode.Alpha2)) currentInvSlot = 1;
+        if (Input.GetKeyDown(KeyCode.Alpha3)) currentInvSlot = 2;
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            equippedWep.OnUnequip();
-            SWEP_FingerGun aux;
-            if (TryGetComponent<SWEP_FingerGun>(out aux)) equippedWep = aux;
-            else equippedWep = gameObject.AddComponent<SWEP_FingerGun>();
-            equippedWep.OnEquip(this);
-        }
-
-        //if (lookingAt != null) lookingAtText.text = lookingAt.name;
-        //else lookingAtText.text = "null";
+        UIText();
     }
 
     private void FixedUpdate()
     {
         Walk();
     }
+
+    public void UIText()
+    {
+        string temp = "";
+        if (lookingAt != null) temp += "Looking At: " + lookingAt.name;
+        else temp += "Looking At: null";
+
+        temp += "\n";
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (invItem[i] != null) temp += $"\nInv[{i}]: " + invItem[i].name + " [Press X to drop]";
+            else temp += $"\nInv[{i}]: null";
+            if (currentInvSlot == i) temp += " <--";
+        }
+
+
+        lookingAtText.text = temp;
+    }
+
+    #region Movement
 
     private void Walk()
     {
@@ -159,10 +164,19 @@ public class Player : MonoBehaviour
 
     #endregion
 
+    public Vector3 GetVelocity()
+    {
+        return _rb.velocity;
+    }
+
     private void CheckGround()
     {
         isGrounded = Physics.CheckBox(transform.position - new Vector3(0f, 0.5f, 0f), new Vector3(0.51f, 0.51f, 0.51f), Quaternion.identity, GameVars.Values.GetFloorLayerMask());
     }
+
+    #endregion
+
+    #region Camera
 
     private void Camera()
     {
@@ -187,17 +201,29 @@ public class Player : MonoBehaviour
     private void LookingAt()
     {
         RaycastHit hit;
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, 10f, GameVars.Values.GetObjectLayerMask()))
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, 10f, GameVars.Values.GetItemLayerMask()))
         {
-            lookingAt = hit.collider.gameObject.GetComponent<Object>();
-        } else
+            lookingAt = hit.collider.gameObject.GetComponent<Item>();
+        }
+        else
         {
             lookingAt = null;
         }
     }
 
-    public Vector3 GetVelocity()
+    #endregion
+
+    public void Interact()
     {
-        return _rb.velocity;
+        GameObject aux = lookingAt?.GetComponent<Item>().Interact();
+        if (invItem[0] == null) invItem[0] = aux;
+        else if (invItem[1] == null) invItem[1] = aux;
+        else if (invItem[2] == null) invItem[2] = aux;
+    }
+
+    public bool InventoryFull()
+    {
+        if (invItem[0] != null && invItem[1] != null && invItem[2] != null) return true;
+        else return false;
     }
 }

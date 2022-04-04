@@ -48,14 +48,14 @@ public class GameVars : MonoBehaviour
         crouchToggle = false;
     }
 
-    public int GetObjectLayer()
+    public int GetItemLayer()
     {
         return LayerMask.NameToLayer(objectLayerName);
     }
 
-    public LayerMask GetObjectLayerMask()
+    public LayerMask GetItemLayerMask()
     {
-        LayerMask lm = 1 << GetObjectLayer();
+        LayerMask lm = 1 << GetItemLayer();
         return lm;
     }
 
