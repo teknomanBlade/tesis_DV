@@ -23,12 +23,6 @@ public class GameVars : MonoBehaviour
     public KeyCode crouchKey;
     public bool crouchToggle;
 
-    // Models
-    public GameObject WEP_Hands;
-
-    public GameObject WEP_FingerGun;
-    public GameObject WEP_FingerGun_Projectile;
-
     private void Awake()
     {
         if (_gameVars == null) _gameVars = this;

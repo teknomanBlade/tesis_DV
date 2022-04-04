@@ -9,6 +9,7 @@ public class Item : MonoBehaviour
     {
         gameObject.GetComponent<Renderer>().enabled = false;
         gameObject.GetComponent<Collider>().enabled = false;
+        gameObject.GetComponent<Rigidbody>().isKinematic = true;
         return gameObject;
     }
 
@@ -16,10 +17,11 @@ public class Item : MonoBehaviour
     {
         gameObject.GetComponent<Renderer>().enabled = true;
         gameObject.GetComponent<Collider>().enabled = true;
+        gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
 
-    public void FollowPlayer(Vector3 playerPos)
+    public void SetPos(Vector3 pos)
     {
-        transform.position = playerPos;
+        transform.position = pos;
     }
 }

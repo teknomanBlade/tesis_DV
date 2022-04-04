@@ -44,6 +44,8 @@ public class Player : MonoBehaviour
     public GameObject[] invItem = new GameObject[3];
     public int currentInvSlot = 0;
 
+    public float timer = 0f;
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -80,8 +82,20 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(GameVars.Values.sprintKey)) speed = sprintSpeed;
         if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed;
 
-        if (Input.GetKeyDown(GameVars.Values.useKey) && !InventoryFull()) Interact();
-        //if (Input.GetKeyDown(GameVars.Values.primaryFire)) equippedWep.PrimaryFire();
+        if (Input.GetKeyUp(GameVars.Values.useKey)) timer = 0;
+        if (invItem[currentInvSlot] != null)
+        {
+            if (!InventoryFull() && Input.GetKeyUp(GameVars.Values.useKey)) Interact();
+            if (Input.GetKey(GameVars.Values.useKey)) timer += Time.deltaTime;
+            if (timer > 1f)
+            {
+                timer = 0;
+                Replace();
+            }
+        }
+        else if (Input.GetKeyDown(GameVars.Values.useKey) && !InventoryFull()) Interact();
+
+        if (Input.GetKeyDown(KeyCode.X)) Drop();
         //if (Input.GetKeyDown(GameVars.Values.secondaryFire)) equippedWep.SecondaryFire();
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) currentInvSlot = 0;
@@ -106,9 +120,13 @@ public class Player : MonoBehaviour
 
         for (int i = 0; i < 3; i++)
         {
-            if (invItem[i] != null) temp += $"\nInv[{i}]: " + invItem[i].name + " [Press X to drop]";
+            if (invItem[i] != null) temp += $"\nInv[{i}]: " + invItem[i].name;
             else temp += $"\nInv[{i}]: null";
-            if (currentInvSlot == i) temp += " <--";
+            if (currentInvSlot == i)
+            {
+                temp += " <--";
+                if (invItem[currentInvSlot] != null) temp += " [Press X to drop]";
+            }
         }
 
 
@@ -219,6 +237,30 @@ public class Player : MonoBehaviour
         if (invItem[0] == null) invItem[0] = aux;
         else if (invItem[1] == null) invItem[1] = aux;
         else if (invItem[2] == null) invItem[2] = aux;
+    }
+
+    public void Interact(Item item)
+    {
+        if (invItem[0] == null) invItem[0] = item.Interact();
+        else if (invItem[1] == null) invItem[1] = item.Interact();
+        else if (invItem[2] == null) invItem[2] = item.Interact();
+    }
+
+    public void Drop()
+    {
+        if (invItem[currentInvSlot] != null)
+        {
+            invItem[currentInvSlot].GetComponent<Item>().SetPos(transform.position + transform.forward * 2f);
+            invItem[currentInvSlot].GetComponent<Item>().Drop();
+            invItem[currentInvSlot] = null;
+        }
+    }
+
+    public void Replace()
+    {
+        Item aux = lookingAt;
+        Drop();
+        Interact(aux);
     }
 
     public bool InventoryFull()
