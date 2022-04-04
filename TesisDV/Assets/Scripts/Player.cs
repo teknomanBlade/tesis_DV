@@ -112,6 +112,9 @@ public class Player : MonoBehaviour
 
     public void UIText()
     {
+        if (lookingAtText == null)
+            return;
+
         string temp = "";
         if (lookingAt != null) temp += "Looking At: " + lookingAt.name;
         else temp += "Looking At: null";
