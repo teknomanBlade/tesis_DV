@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     //---------
     private Rigidbody _rb;
     private Camera _cam;
+    [SerializeField]
+    private Inventory _inventory;
 
     // Movement
 
@@ -41,6 +43,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     public Item lookingAt;
+    public IInventoryItem lookingFor;
     public GameObject[] invItem = new GameObject[3];
     public int currentInvSlot = 0;
 
@@ -50,6 +53,7 @@ public class Player : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _cam = GameObject.Find("MainCamera").GetComponent<Camera>();
+        _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
 
         originalScale = transform.localScale;
         originalCamPos = _cam.transform.localPosition;
@@ -65,6 +69,7 @@ public class Player : MonoBehaviour
         LookingAt();
         CheckGround();
         Camera();
+        LookingFor();
 
         if (isGrounded)
         {
@@ -101,6 +106,11 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1)) currentInvSlot = 0;
         if (Input.GetKeyDown(KeyCode.Alpha2)) currentInvSlot = 1;
         if (Input.GetKeyDown(KeyCode.Alpha3)) currentInvSlot = 2;
+
+        if (Input.GetKeyDown(GameVars.Values.grabKey))
+        {
+            InteractWithInventoryItem();
+        }
 
         UIText();
     }
@@ -222,7 +232,8 @@ public class Player : MonoBehaviour
     private void LookingAt()
     {
         RaycastHit hit;
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, 10f, GameVars.Values.GetItemLayerMask()))
+        //Crear variable distancia
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetItemLayerMask()))
         {
             lookingAt = hit.collider.gameObject.GetComponent<Item>();
         }
@@ -240,6 +251,15 @@ public class Player : MonoBehaviour
         if (invItem[0] == null) invItem[0] = aux;
         else if (invItem[1] == null) invItem[1] = aux;
         else if (invItem[2] == null) invItem[2] = aux;
+    }
+
+    public void InteractWithInventoryItem()
+    {
+        if(lookingFor != null)
+        {
+            _inventory.AddItem(lookingFor);
+        }
+        
     }
 
     public void Interact(Item item)
@@ -270,5 +290,19 @@ public class Player : MonoBehaviour
     {
         if (invItem[0] != null && invItem[1] != null && invItem[2] != null) return true;
         else return false;
+    }
+
+    private void LookingFor()
+    {
+        RaycastHit hit;
+        //Crear variable distancia
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetItemLayerMask()))
+        {
+            lookingFor = hit.collider.GetComponent<IInventoryItem>();
+        }
+        else
+        {
+            lookingFor = null;
+        }
     }
 }
