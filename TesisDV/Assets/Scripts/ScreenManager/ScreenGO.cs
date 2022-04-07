@@ -46,6 +46,6 @@ public class ScreenGO : IScreen
     public string Free()
     {
         GameObject.Destroy(root.gameObject);
-        return "Adios pantalla";
+        return " ";
     }
 }

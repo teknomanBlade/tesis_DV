@@ -119,6 +119,12 @@ public class Player : MonoBehaviour
             InteractWithInventoryItem();
         }
 
+        if(Input.GetKeyDown(KeyCode.Tab))
+            {
+                var screenCrafting = Instantiate(Resources.Load<CraftingScreen>("CraftingCanvas"));
+                ScreenManager.Instance.Push(screenCrafting);
+            }
+        
         UIText();
     }
 
@@ -250,6 +256,20 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void LookingFor()
+    {
+        RaycastHit hit;
+        //Crear variable distancia
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetItemLayerMask()))
+        {
+            lookingFor = hit.collider.GetComponent<IInventoryItem>();
+        }
+        else
+        {
+            lookingFor = null;
+        }
+    }
+
     #endregion
 
     public void Interact()
@@ -266,17 +286,5 @@ public class Player : MonoBehaviour
         
     }
 
-    private void LookingFor()
-    {
-        RaycastHit hit;
-        //Crear variable distancia
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetItemLayerMask()))
-        {
-            lookingFor = hit.collider.GetComponent<IInventoryItem>();
-        }
-        else
-        {
-            lookingFor = null;
-        }
-    }
+    
 }
