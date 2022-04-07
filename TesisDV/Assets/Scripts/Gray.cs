@@ -6,32 +6,79 @@ public class Gray : MonoBehaviour
 {
     [SerializeField]
     private GameObject _player;
+    private Animator _anim;
+    private Rigidbody _rb;
     public float distanceToPlayer;
-    public float threshold = 10f;
-    public bool pursue;
+    public float pursueThreshold = 10f;
+    public float disengageThreshold = 15f;
+    public bool pursue = false;
+    public bool stun = false;
+
+    private void Awake()
+    {
+        _anim = GetComponent<Animator>();
+        _rb = GetComponent<Rigidbody>();
+    }
 
     private void Update()
     {
-        distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
-        if (IsInSight()) pursue = true;
-        else pursue = false;
+        if (!stun)
+        {
+            distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
+            if (IsInSight())
+            {
+                pursue = true;
+                _anim.SetFloat("Anim", 1f);
+            }
+            else
+            {
+                pursue = false;
+                _anim.SetFloat("Anim", 0f);
+            }
 
-        if (pursue) Move();
+            if (pursue)
+            {
+                Move();
+            }
+        } else
+        {
+            pursue = false;
+        }
     }
 
     public void Move()
     {
-
+        transform.LookAt(new Vector3(_player.transform.position.x, transform.position.y, _player.transform.position.z));
+        _rb.AddForce(transform.forward * 3f, ForceMode.Impulse);
     }
 
     private bool IsInSight()
     {
-        if (Vector3.Distance(_player.transform.position, transform.position) > threshold) return false;
+        if (pursue)
+        {
+            if (Vector3.Distance(_player.transform.position, transform.position) > disengageThreshold) return false;
+        } else
+        {
+            if (Vector3.Distance(_player.transform.position, transform.position) > pursueThreshold) return false;
+        }
         return true;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, threshold);
+        Gizmos.DrawWireSphere(transform.position, pursueThreshold);
+        Gizmos.DrawWireSphere(transform.position, disengageThreshold);
+    }
+
+    public void Stun()
+    {
+        stun = true;
+        _anim.SetFloat("Anim", 0f);
+        Invoke("UnStun", 5f);
+    }
+
+    public void UnStun()
+    {
+        stun = false;
     }
 }
