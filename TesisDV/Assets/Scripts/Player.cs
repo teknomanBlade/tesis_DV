@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     public Item lookingAt;
+    public Switch activableLookingAt;
     public IInventoryItem lookingFor;
     public GameObject[] invItem = new GameObject[3];
     public int currentInvSlot = 0;
@@ -87,20 +88,26 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(GameVars.Values.sprintKey)) speed = sprintSpeed;
         if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed;
 
-        if (Input.GetKeyUp(GameVars.Values.useKey)) timer = 0;
-        if (invItem[currentInvSlot] != null)
+        if (Input.GetKeyUp(GameVars.Values.useKey))
         {
-            if (!InventoryFull() && Input.GetKeyUp(GameVars.Values.useKey)) Interact();
-            if (Input.GetKey(GameVars.Values.useKey)) timer += Time.deltaTime;
-            if (timer > 1f)
+            if (activableLookingAt != null)
             {
-                timer = 0;
-                Replace();
+                activableLookingAt.Interact();
             }
         }
-        else if (Input.GetKeyDown(GameVars.Values.useKey) && !InventoryFull()) Interact();
+        //if (invItem[currentInvSlot] != null)
+        //{
+        //    if (!InventoryFull() && Input.GetKeyUp(GameVars.Values.useKey)) Interact();
+        //    if (Input.GetKey(GameVars.Values.useKey)) timer += Time.deltaTime;
+        //    if (timer > 1f)
+        //    {
+        //        timer = 0;
+        //        Replace();
+        //    }
+        //}
+        //else if (Input.GetKeyDown(GameVars.Values.useKey) && !InventoryFull()) Interact();
 
-        if (Input.GetKeyDown(KeyCode.X)) Drop();
+        //if (Input.GetKeyDown(KeyCode.X)) Drop();
         //if (Input.GetKeyDown(GameVars.Values.secondaryFire)) equippedWep.SecondaryFire();
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) currentInvSlot = 0;
@@ -233,13 +240,13 @@ public class Player : MonoBehaviour
     {
         RaycastHit hit;
         //Crear variable distancia
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetItemLayerMask()))
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetActivableLayerMask()))
         {
-            lookingAt = hit.collider.gameObject.GetComponent<Item>();
+            activableLookingAt = hit.collider.gameObject.GetComponent<Switch>();
         }
         else
         {
-            lookingAt = null;
+            activableLookingAt = null;
         }
     }
 
@@ -247,10 +254,7 @@ public class Player : MonoBehaviour
 
     public void Interact()
     {
-        GameObject aux = lookingAt?.GetComponent<Item>().Interact();
-        if (invItem[0] == null) invItem[0] = aux;
-        else if (invItem[1] == null) invItem[1] = aux;
-        else if (invItem[2] == null) invItem[2] = aux;
+        //lookingAt?.
     }
 
     public void InteractWithInventoryItem()
@@ -260,36 +264,6 @@ public class Player : MonoBehaviour
             _inventory.AddItem(lookingFor);
         }
         
-    }
-
-    public void Interact(Item item)
-    {
-        if (invItem[0] == null) invItem[0] = item.Interact();
-        else if (invItem[1] == null) invItem[1] = item.Interact();
-        else if (invItem[2] == null) invItem[2] = item.Interact();
-    }
-
-    public void Drop()
-    {
-        if (invItem[currentInvSlot] != null)
-        {
-            invItem[currentInvSlot].GetComponent<Item>().SetPos(transform.position + transform.forward * 2f);
-            invItem[currentInvSlot].GetComponent<Item>().Drop();
-            invItem[currentInvSlot] = null;
-        }
-    }
-
-    public void Replace()
-    {
-        Item aux = lookingAt;
-        Drop();
-        Interact(aux);
-    }
-
-    public bool InventoryFull()
-    {
-        if (invItem[0] != null && invItem[1] != null && invItem[2] != null) return true;
-        else return false;
     }
 
     private void LookingFor()

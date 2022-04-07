@@ -10,17 +10,6 @@ public class BaseballLauncher : Trap
     public int shotsLeft;
     public float interval;
 
-    public bool test = false;
-
-    private void Update()
-    {
-        if (test)
-        {
-            test = false;
-            Activate();
-        }
-    }
-
     public override void Activate()
     {
         if (!active)
@@ -38,5 +27,6 @@ public class BaseballLauncher : Trap
         shotsLeft--;
         yield return new WaitForSeconds(interval);
         if (shotsLeft != 0) StartCoroutine("ActiveCoroutine");
+        else active = false;
     }
 }
