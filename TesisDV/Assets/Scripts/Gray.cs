@@ -49,7 +49,7 @@ public class Gray : MonoBehaviour
     public void Move()
     {
         transform.LookAt(new Vector3(_player.transform.position.x, transform.position.y, _player.transform.position.z));
-        _rb.AddForce(transform.forward * 3f, ForceMode.Impulse);
+        _rb.AddForce(transform.forward * 50f, ForceMode.Impulse);
     }
 
     private bool IsInSight()
