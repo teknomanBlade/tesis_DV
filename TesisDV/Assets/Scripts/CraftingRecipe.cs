@@ -7,8 +7,12 @@ using UnityEngine;
     public class CraftingRecipe : ScriptableObject
     {
         public List<ItemAmount> materials;
+        Player _player;
         public List<ItemAmount> results;
         public InventoryItem itemRemoved;
+
+        public Vector3 auxVector;
+
         public bool CanCraft(Inventory inventory)
         {
             foreach(ItemAmount itemAmount in materials)
@@ -17,13 +21,11 @@ using UnityEngine;
                 if(inventory.ItemCount(itemAmount.item) < itemAmount.amount)
                 {
                     Debug.Log(itemAmount.item);
-                    Debug.Log("No Puede");
                     return false;
                     
                 }
                 itemRemoved = itemAmount.item;
             }
-            Debug.Log("Puede");
             return true;           
         }
 
@@ -36,8 +38,13 @@ using UnityEngine;
                     for (int i = 0; i < itemAmount.amount; i++)
                     {
                         inventory.RemoveItem(itemRemoved);
-                        GameObject aux = Instantiate(itemAmount.baseballMachinePrefab);
-                        Debug.Log("Si");
+                        _player = GameObject.Find("Player").GetComponent<Player>();
+                        Debug.Log("Soy io " + _player.GetPrefabPlacement());
+                        auxVector = new Vector3(_player.GetPrefabPlacement().x, 0 ,_player.GetPrefabPlacement().z);
+                        //GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, _player.GetPrefabPlacement(), Quaternion.identity);
+                        GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, auxVector, Quaternion.Euler(0, -90, 65.358f));
+                        
+                        
                     }
                 }
             }

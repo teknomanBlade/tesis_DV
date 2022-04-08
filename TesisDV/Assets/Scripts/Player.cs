@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
 
     //---------
     private Rigidbody _rb;
+    
     private Camera _cam;
     [SerializeField]
     private Inventory _inventory;
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour
     public Item lookingAt;
     public Switch activableLookingAt;
     public InventoryItem lookingFor;
+    public Vector3 lookingPlacement;
     public GameObject[] invItem = new GameObject[3];
     public int currentInvSlot = 0;
 
@@ -73,6 +75,7 @@ public class Player : MonoBehaviour
         CheckGround();
         Camera();
         LookingFor();
+        LookingForPlacement();
 
         if (isGrounded)
         {
@@ -127,7 +130,7 @@ public class Player : MonoBehaviour
                 ScreenManager.Instance.Push(screenCrafting);
             } */
         
-        if(Input.GetKeyDown(KeyCode.J))
+        if(Input.GetKeyDown(GameVars.Values.primaryFire))
         {
             if(craftingRecipe != null)
                 craftingRecipe.Craft(_inventory);
@@ -250,6 +253,11 @@ public class Player : MonoBehaviour
         return _cam.transform.forward;
     }
 
+    public Vector3 GetPrefabPlacement()
+    {
+        return lookingPlacement;
+    }
+
     private void LookingAt()
     {
         RaycastHit hit;
@@ -279,6 +287,24 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetItemLayerMask()))
         {
             lookingFor = hit.collider.GetComponent<InventoryItem>();
+        }
+        else
+        {
+            lookingFor = null;
+        }
+    }
+
+    private void LookingForPlacement()
+    {
+        RaycastHit hit;
+        //Crear variable distancia
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetFloorLayerMask()))
+        {
+            //Vector3 localHit = transform.InverseTransformPoint(hit.point);
+            Debug.Log("Looking at floor!!!!");
+            //lookingPlacement = localHit;
+            lookingPlacement = hit.point;
+            //Debug.Log(lookingPlacement);
         }
         else
         {
