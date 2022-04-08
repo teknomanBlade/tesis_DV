@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 2492234417376504744}
   - component: {fileID: 2492234417376504745}
   - component: {fileID: 2492234417376504750}
+  - component: {fileID: 3220682168944311247}
   m_Layer: 0
   m_Name: BaseBallMachine
   m_TagString: Untagged
@@ -66,7 +67,7 @@ Transform:
   - {fileID: 2492234418789199519}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 65.358}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 65.358}
 --- !u!114 &2492234417376504741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2325,6 +2326,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &3220682168944311247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2492234417376504751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1f3e8ca3b011ec4ab82a267f583b2b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemName: Baseball Machine
+  _itemImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &2492234418789199516
 GameObject:
   m_ObjectHideFlags: 0

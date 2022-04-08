@@ -8,6 +8,7 @@ public class InventoryItem : MonoBehaviour, IInventoryItem
     private string _itemName;
     [SerializeField]
     private Sprite _itemImage;
+
     public string itemName
     {
         get{ return _itemName;}   
@@ -21,6 +22,6 @@ public class InventoryItem : MonoBehaviour, IInventoryItem
 
     public void OnPickup()
     {
-        Destroy(this.gameObject);
+        gameObject.SetActive(false);
     }
 }

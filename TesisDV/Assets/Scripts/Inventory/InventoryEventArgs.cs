@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class InventoryEventArgs : EventArgs
 {
-    public InventoryEventArgs(IInventoryItem item)
+    public InventoryEventArgs(InventoryItem item)
     {
         Item = item;
     }   
 
-    public IInventoryItem Item;
+    public InventoryItem Item;
 }

@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     private Inventory _inventory;
 
     // Movement
-
+    public CraftingRecipe craftingRecipe;
     private float speed = 5f;
     private float walkSpeed = 5f;
     private float sprintSpeed = 10f;
@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     public Item lookingAt;
     public Switch activableLookingAt;
-    public IInventoryItem lookingFor;
+    public InventoryItem lookingFor;
     public GameObject[] invItem = new GameObject[3];
     public int currentInvSlot = 0;
 
@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _cam = GameObject.Find("MainCamera").GetComponent<Camera>();
         _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
-
+        
 
         originalScale = transform.localScale;
         originalCamPos = _cam.transform.localPosition;
@@ -127,6 +127,11 @@ public class Player : MonoBehaviour
                 ScreenManager.Instance.Push(screenCrafting);
             }
         
+        if(Input.GetKeyDown(KeyCode.J))
+        {
+            craftingRecipe.Craft(_inventory);
+        }
+
         UIText();
     }
 
@@ -265,13 +270,14 @@ public class Player : MonoBehaviour
         }
     }
 
+
     private void LookingFor()
     {
         RaycastHit hit;
         //Crear variable distancia
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetItemLayerMask()))
         {
-            lookingFor = hit.collider.GetComponent<IInventoryItem>();
+            lookingFor = hit.collider.GetComponent<InventoryItem>();
         }
         else
         {
