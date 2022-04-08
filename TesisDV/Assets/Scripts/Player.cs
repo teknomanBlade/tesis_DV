@@ -129,7 +129,8 @@ public class Player : MonoBehaviour
         
         if(Input.GetKeyDown(KeyCode.J))
         {
-            craftingRecipe.Craft(_inventory);
+            if(craftingRecipe != null)
+                craftingRecipe.Craft(_inventory);
         }
 
         UIText();
