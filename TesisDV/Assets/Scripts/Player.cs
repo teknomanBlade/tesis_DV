@@ -121,11 +121,11 @@ public class Player : MonoBehaviour
             InteractWithInventoryItem();
         }
 
-        if(Input.GetKeyDown(KeyCode.Tab))
+        /* if(Input.GetKeyDown(KeyCode.Tab))
             {
                 var screenCrafting = Instantiate(Resources.Load<CraftingScreen>("CraftingCanvas"));
                 ScreenManager.Instance.Push(screenCrafting);
-            }
+            } */
         
         if(Input.GetKeyDown(KeyCode.J))
         {
