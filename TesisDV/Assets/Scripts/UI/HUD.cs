@@ -37,6 +37,15 @@ public class HUD : MonoBehaviour
 
     private void RemoveItemHUD(object sender, InventoryEventArgs e)
     {
+        foreach(Transform slot in _inventoryBar.transform)
+        {
+            Image image = slot.transform.GetChild(0).GetChild(0).GetComponent<Image>();
 
+            if(image.enabled)
+            {
+                image.enabled = false;
+
+            }
+        }
     }
 }

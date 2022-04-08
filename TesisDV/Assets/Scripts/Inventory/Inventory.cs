@@ -7,7 +7,8 @@ public class Inventory : MonoBehaviour
 {
     private int _slots = 5;
     [SerializeField]
-    private List <InventoryItem> mItems = new List<InventoryItem>();
+    private List <string> mItems = new List<string>();
+    private InventoryItem[] inventoryContainer;
     public event EventHandler<InventoryEventArgs> ItemAdded;
     public event EventHandler<InventoryEventArgs> ItemRemoved;
 
@@ -15,7 +16,8 @@ public class Inventory : MonoBehaviour
     {
         if(mItems.Count < _slots)
         {
-            mItems.Add(item);
+            mItems.Add(item.ToString());
+
 
             item.OnPickup();
 
@@ -26,12 +28,17 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void RemoveItem(IInventoryItem item)
+    public void RemoveItem(InventoryItem item)
     {
+        //mItems.Remove(item);
 
+        if(ItemRemoved != null)
+        {
+            ItemRemoved(this, new InventoryEventArgs(item));
+        }
     }
 
-    public bool ContainsItem(InventoryItem item)
+    /* public bool ContainsItem(InventoryItem item)
     {
         for(int i = 0; i < mItems.Count; i++)
         {
@@ -41,23 +48,31 @@ public class Inventory : MonoBehaviour
             }
         }
         return false;
-    }
+    } */
 
     public int ItemCount(InventoryItem item)
     {
-        Debug.Log("es " + item);
         int number = 0;
-
-        for(int i = 0; i < mItems.Count; i++)
+        
+        string itemfor = item.ToString();
+        Debug.Log(itemfor);
+        if(mItems.Contains(itemfor))
         {
-            Debug.Log("Im here");
+            Debug.Log("SIISISIS");
+            number++;
+        }
+        Debug.Log("nonononono");
+
+        /* for(int i = 0; i < mItems.Count; i++)
+        {
+            Debug.Log("Item Count");
             if(mItems[i] == item)
             {
-                Debug.Log("Ayuda dios " + mItems[i]);
+                Debug.Log("Ayuda " + mItems[i]);
                 number++;
             }
         }
-        number++;
+        number++; */
         Debug.Log(number);
         return number;
     }

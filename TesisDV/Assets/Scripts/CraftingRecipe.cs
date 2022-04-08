@@ -8,17 +8,20 @@ using UnityEngine;
     {
         public List<ItemAmount> materials;
         public List<ItemAmount> results;
-
+        public InventoryItem itemRemoved;
         public bool CanCraft(Inventory inventory)
         {
             foreach(ItemAmount itemAmount in materials)
             {
+                
                 if(inventory.ItemCount(itemAmount.item) < itemAmount.amount)
                 {
+                    Debug.Log(itemAmount.item);
                     Debug.Log("No Puede");
                     return false;
                     
                 }
+                itemRemoved = itemAmount.item;
             }
             Debug.Log("Puede");
             return true;           
@@ -32,6 +35,7 @@ using UnityEngine;
                 {
                     for (int i = 0; i < itemAmount.amount; i++)
                     {
+                        inventory.RemoveItem(itemRemoved);
                         GameObject aux = Instantiate(itemAmount.baseballMachinePrefab);
                         Debug.Log("Si");
                     }
