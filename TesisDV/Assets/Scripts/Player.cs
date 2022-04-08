@@ -74,8 +74,9 @@ public class Player : MonoBehaviour
         LookingAt();
         CheckGround();
         Camera();
-        LookingFor();
         LookingForPlacement();
+        LookingFor();
+        
 
         if (isGrounded)
         {
