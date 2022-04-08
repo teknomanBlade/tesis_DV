@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
@@ -55,6 +56,7 @@ public class Player : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _cam = GameObject.Find("MainCamera").GetComponent<Camera>();
         _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
+
 
         originalScale = transform.localScale;
         originalCamPos = _cam.transform.localPosition;
@@ -245,13 +247,20 @@ public class Player : MonoBehaviour
     private void LookingAt()
     {
         RaycastHit hit;
+        var crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
         //Crear variable distancia
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetActivableLayerMask()))
         {
+            crosshair.sprite = Resources.Load<Sprite>("ButtonPress");
+            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 40f);
+            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 40f);
             activableLookingAt = hit.collider.gameObject.GetComponent<Switch>();
         }
         else
         {
+            crosshair.sprite = Resources.Load<Sprite>("crosshair");
+            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 20f);
+            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 20f);
             activableLookingAt = null;
         }
     }

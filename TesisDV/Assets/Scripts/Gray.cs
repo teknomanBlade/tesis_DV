@@ -48,7 +48,9 @@ public class Gray : MonoBehaviour
 
     public void Move()
     {
-        transform.LookAt(new Vector3(_player.transform.position.x, transform.position.y, _player.transform.position.z));
+        var dir = _player.transform.position - transform.position;
+        dir.y = 0f;
+        transform.forward = dir;
         _rb.AddForce(transform.forward * 50f, ForceMode.Impulse);
     }
 
