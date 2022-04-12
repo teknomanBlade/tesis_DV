@@ -2,26 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Renderer))]
-public class Item : MonoBehaviour
+public abstract class Item : MonoBehaviour
 {
-    public GameObject Interact()
-    {
-        gameObject.GetComponent<Renderer>().enabled = false;
-        gameObject.GetComponent<Collider>().enabled = false;
-        gameObject.GetComponent<Rigidbody>().isKinematic = true;
-        return gameObject;
-    }
+    string itemName { get { return itemName; } }
+    Sprite itemImage { get { return itemImage; } }
 
-    public void Drop()
+    public void Interact()
     {
-        gameObject.GetComponent<Renderer>().enabled = true;
-        gameObject.GetComponent<Collider>().enabled = true;
-        gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        
     }
 
     public void SetPos(Vector3 pos)
     {
         transform.position = pos;
+    }
+
+    public virtual void OnPickup()
+    {
+
     }
 }

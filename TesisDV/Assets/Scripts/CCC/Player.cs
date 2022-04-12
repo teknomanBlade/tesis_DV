@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     //---------
     private Rigidbody _rb;
     
-    private Camera _cam;
+    private PlayerCamera _cam;
     [SerializeField]
     private Inventory _inventory;
 
@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _cam = GameObject.Find("MainCamera").GetComponent<Camera>();
+        _cam = GameObject.Find("MainCamera").GetComponent<PlayerCamera>();
         _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
         
 
@@ -241,7 +241,7 @@ public class Player : MonoBehaviour
         pitch = Mathf.Clamp(pitch, -lookAngle, lookAngle);
 
         transform.localEulerAngles = new Vector3(0f, yaw, 0f);
-        _cam.transform.localEulerAngles = new Vector3(pitch, 0f, 0f);
+        _cam.ChangePitch(new Vector3(pitch, 0f, 0f));
     }
 
     public Vector3 GetCameraPosition()
@@ -328,6 +328,4 @@ public class Player : MonoBehaviour
         }
         
     }
-
-    
 }
