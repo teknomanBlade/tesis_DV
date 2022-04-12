@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        LookingAt();
+        //LookingAt();
         CheckGround();
         Camera();
         LookingForPlacement();
@@ -227,7 +227,8 @@ public class Player : MonoBehaviour
 
     private void CheckGround()
     {
-        isGrounded = Physics.CheckBox(transform.position - new Vector3(0f, 0.5f, 0f), new Vector3(0.51f, 0.51f, 0.51f), Quaternion.identity, GameVars.Values.GetFloorLayerMask());
+        LayerMask layermask = 1 << gameObject.layer;
+        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0f, 0.6f, 0f), 0.45f, ~layermask);
     }
 
     #endregion
@@ -327,5 +328,10 @@ public class Player : MonoBehaviour
             _inventory.AddItem(lookingFor);
         }
         
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position - new Vector3(0f, 0.6f, 0f), 0.45f);
     }
 }

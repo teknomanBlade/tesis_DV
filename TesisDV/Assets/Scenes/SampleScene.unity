@@ -710,6 +710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a137efa97bc888a47b2c00ff980e03a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mItems: []
 --- !u!114 &613626369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1290,7 +1291,6 @@ MonoBehaviour:
   shots: 5
   shotsLeft: 0
   interval: 0.35
-  test: 0
 --- !u!1 &1012118490
 GameObject:
   m_ObjectHideFlags: 0
@@ -1351,6 +1351,7 @@ MonoBehaviour:
   objectLayerName: Item
   floorLayerName: Floor
   enemyLayerName: Enemy
+  activableLayerName: 
   jumpKey: 0
   primaryFire: 0
   secondaryFire: 0
@@ -2782,7 +2783,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5996942980142100169, guid: ebd157d13411f2343beebf117d39431a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 2.53
       objectReference: {fileID: 0}
     - target: {fileID: 5996942980142100169, guid: ebd157d13411f2343beebf117d39431a, type: 3}
       propertyPath: m_LocalPosition.z

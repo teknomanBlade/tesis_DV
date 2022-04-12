@@ -31,7 +31,8 @@ public class PlayerCamera : MonoBehaviour
 
     public void Bobbing()
     {
-        if (_player.GetVelocity() != Vector3.zero)
+        Vector3 pVel = _player.GetVelocity();
+        if (Mathf.Abs(pVel.x) >= 0.05f  || Mathf.Abs(pVel.z) >= 0.05f)
         {
             timer += bobSpeed * Time.deltaTime;
             transform.localPosition = new Vector3(Mathf.Cos(timer) * bobAmount, initPos.y + Mathf.Abs((Mathf.Sin(timer) * bobAmount)), initPos.z);
