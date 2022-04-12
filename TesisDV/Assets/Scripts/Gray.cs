@@ -28,7 +28,7 @@ public class Gray : MonoBehaviour
             if (IsInSight())
             {
                 pursue = true;
-                _anim.SetFloat("Anim", 1f);
+                _anim.SetFloat("Anim", 0.3333333f);
             }
             else
             {
@@ -75,7 +75,7 @@ public class Gray : MonoBehaviour
     public void Stun()
     {
         stun = true;
-        _anim.SetFloat("Anim", 0f);
+        _anim.SetFloat("Anim", 0.6666667f);
         Invoke("UnStun", 5f);
     }
 
