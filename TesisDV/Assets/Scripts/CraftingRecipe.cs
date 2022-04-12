@@ -40,9 +40,10 @@ using UnityEngine;
                         inventory.RemoveItem(itemRemoved);
                         _player = GameObject.Find("Player").GetComponent<Player>();
                         Debug.Log("Soy io " + _player.GetPrefabPlacement());
-                        auxVector = new Vector3(_player.GetPrefabPlacement().x, 0 ,_player.GetPrefabPlacement().z);
+                         
+                        auxVector = new Vector3(0, _player.transform.position.y + 4f, _player.transform.position.z + 4f);
                         //GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, _player.GetPrefabPlacement(), Quaternion.identity);
-                        GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, auxVector, Quaternion.Euler(0, -90, 65.358f));
+                        GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, auxVector, Quaternion.Euler(-90, 0f, 0f));
                         
                         
                     }
