@@ -1126,8 +1126,8 @@ GameObject:
   - component: {fileID: 4993016087989928857}
   - component: {fileID: 4809977240887370878}
   - component: {fileID: 4809977240887370865}
-  - component: {fileID: 4809977240887370879}
   - component: {fileID: 4809977240887370864}
+  - component: {fileID: 1388021197548754304}
   m_Layer: 0
   m_Name: GrayOldModel
   m_TagString: Untagged
@@ -1181,25 +1181,6 @@ CapsuleCollider:
   m_Height: 1.3110278
   m_Direction: 1
   m_Center: {x: 0.0008058548, y: 0.57580954, z: 0.11221726}
---- !u!95 &4809977240887370879
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5620792506208950563}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1e1f6adce32079049a6fe83f40fdbc51, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &4809977240887370864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1218,6 +1199,26 @@ MonoBehaviour:
   disengageThreshold: 15
   pursue: 0
   stun: 0
+  skillEMP: 0
+--- !u!95 &1388021197548754304
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5620792506208950563}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 0153e01c8b2849347a15539e2645dfe0, type: 3}
+  m_Controller: {fileID: 9100000, guid: 1e1f6adce32079049a6fe83f40fdbc51, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5685346073406636324
 GameObject:
   m_ObjectHideFlags: 0

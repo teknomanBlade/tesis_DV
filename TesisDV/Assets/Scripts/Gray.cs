@@ -13,6 +13,7 @@ public class Gray : MonoBehaviour
     public float disengageThreshold = 15f;
     public bool pursue = false;
     public bool stun = false;
+    public bool skillEMP = false;
 
     private void Awake()
     {
@@ -22,27 +23,35 @@ public class Gray : MonoBehaviour
 
     private void Update()
     {
-        if (!stun)
+        if (skillEMP)
         {
-            distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
-            if (IsInSight())
+            _anim.SetFloat("Anim", 1f);
+        }
+        else
+        {
+            if (!stun)
             {
-                pursue = true;
-                _anim.SetFloat("Anim", 0.3333333f);
+                distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
+                if (IsInSight())
+                {
+                    pursue = true;
+                    _anim.SetFloat("Anim", 0.25f);
+                }
+                else
+                {
+                    pursue = false;
+                    _anim.SetFloat("Anim", 0f);
+                }
+
+                if (pursue)
+                {
+                    Move();
+                }
             }
             else
             {
                 pursue = false;
-                _anim.SetFloat("Anim", 0f);
             }
-
-            if (pursue)
-            {
-                Move();
-            }
-        } else
-        {
-            pursue = false;
         }
     }
 
@@ -75,7 +84,7 @@ public class Gray : MonoBehaviour
     public void Stun()
     {
         stun = true;
-        _anim.SetFloat("Anim", 0.6666667f);
+        _anim.SetFloat("Anim", 0.75f);
         Invoke("UnStun", 5f);
     }
 
