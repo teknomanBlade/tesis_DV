@@ -26,12 +26,18 @@ public class GameVars : MonoBehaviour
     public KeyCode crouchKey;
     public bool crouchToggle;
 
+    //Resources
+    public Sprite crosshair;
+    public Sprite crosshairDoor;
+    public Sprite crosshairHandGrab;
+
     private void Awake()
     {
         if (_gameVars == null) _gameVars = this;
         else Destroy(this);
 
         SetKeys();
+        LoadResources();
     }
 
     private void SetKeys()
@@ -44,6 +50,13 @@ public class GameVars : MonoBehaviour
         sprintKey = KeyCode.LeftShift;
         crouchKey = KeyCode.LeftControl;
         crouchToggle = false;
+    }
+
+    private void LoadResources()
+    {
+        crosshair = Resources.Load<Sprite>("crosshair");
+        crosshairDoor = Resources.Load<Sprite>("OpenDoor");
+        crosshairHandGrab = Resources.Load<Sprite>("HandGrab");
     }
 
     public int GetItemLayer()

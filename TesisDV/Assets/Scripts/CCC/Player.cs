@@ -6,9 +6,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
-    // TEMP
-    public TMP_Text lookingAtText;
-
     //---------
     private Rigidbody _rb;
     
@@ -22,7 +19,7 @@ public class Player : MonoBehaviour
     private float walkSpeed = 5f;
     private float sprintSpeed = 10f;
     private float maxVelocityChange = 20f;
-    private float jumpForce = 5f;
+    private float jumpForce = 7.5f;
 
     [SerializeField]
     private bool isGrounded = true;
@@ -35,6 +32,7 @@ public class Player : MonoBehaviour
 
     // Mouse
 
+    public Image crosshair;
     private Vector2 mouseSens = new Vector2(1f, 1f);
     private float yaw = 0f;
     private float pitch = 0f;
@@ -47,8 +45,6 @@ public class Player : MonoBehaviour
     public IInteractable activableLookingAt;
     public InventoryItem lookingFor;
     public Vector3 lookingPlacement;
-    public GameObject[] invItem = new GameObject[3];
-    public int currentInvSlot = 0;
     public AudioSource audioSource;
     public float timer = 0f;
 
@@ -61,11 +57,13 @@ public class Player : MonoBehaviour
 
         originalScale = transform.localScale;
         originalCamPos = _cam.transform.localPosition;
+
+        crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
     }
 
     private void Start()
     {
-
+        
     }
 
     private void Update()
@@ -79,7 +77,7 @@ public class Player : MonoBehaviour
 
         if (isGrounded)
         {
-            if (Input.GetKeyDown(GameVars.Values.jumpKey)) Jump();
+            //if (Input.GetKeyDown(GameVars.Values.jumpKey)) Jump();
 
             if (!GameVars.Values.crouchToggle)
             {
@@ -100,24 +98,6 @@ public class Player : MonoBehaviour
                 activableLookingAt.Interact();
             }
         }
-        //if (invItem[currentInvSlot] != null)
-        //{
-        //    if (!InventoryFull() && Input.GetKeyUp(GameVars.Values.useKey)) Interact();
-        //    if (Input.GetKey(GameVars.Values.useKey)) timer += Time.deltaTime;
-        //    if (timer > 1f)
-        //    {
-        //        timer = 0;
-        //        Replace();
-        //    }
-        //}
-        //else if (Input.GetKeyDown(GameVars.Values.useKey) && !InventoryFull()) Interact();
-
-        //if (Input.GetKeyDown(KeyCode.X)) Drop();
-        //if (Input.GetKeyDown(GameVars.Values.secondaryFire)) equippedWep.SecondaryFire();
-
-        if (Input.GetKeyDown(KeyCode.Alpha1)) currentInvSlot = 0;
-        if (Input.GetKeyDown(KeyCode.Alpha2)) currentInvSlot = 1;
-        if (Input.GetKeyDown(KeyCode.Alpha3)) currentInvSlot = 2;
 
         if (Input.GetKeyDown(GameVars.Values.grabKey))
         {
@@ -135,39 +115,19 @@ public class Player : MonoBehaviour
             if(craftingRecipe != null)
                 craftingRecipe.Craft(_inventory);
         }
-
-        UIText();
     }
 
     private void FixedUpdate()
     {
         Walk();
-    }
 
-    public void UIText()
-    {
-        if (lookingAtText == null)
-            return;
-
-        string temp = "";
-        if (lookingAt != null) temp += "Looking At: " + lookingAt.name;
-        else temp += "Looking At: null";
-
-        temp += "\n";
-
-        for (int i = 0; i < 3; i++)
+        if (isGrounded)
         {
-            if (invItem[i] != null) temp += $"\nInv[{i}]: " + invItem[i].name;
-            else temp += $"\nInv[{i}]: null";
-            if (currentInvSlot == i)
-            {
-                temp += " <--";
-                if (invItem[currentInvSlot] != null) temp += " [Press X to drop]";
-            }
+            if (Input.GetKeyDown(GameVars.Values.jumpKey)) Jump();
+        } else
+        {
+            _rb.velocity -= new Vector3(0f, 9.8f * Time.deltaTime, 0f);
         }
-
-
-        lookingAtText.text = temp;
     }
 
     #region Movement
@@ -189,7 +149,7 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        _rb.AddForce(0f, jumpForce, 0f, ForceMode.Impulse);
+        _rb.AddForce(0f, jumpForce, 0f, ForceMode.VelocityChange);
         isGrounded = false;
     }
 
@@ -227,7 +187,7 @@ public class Player : MonoBehaviour
     private void CheckGround()
     {
         LayerMask layermask = 1 << gameObject.layer;
-        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0f, 0.6f, 0f), 0.45f, ~layermask);
+        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0f, 0.75f, 0f), 0.45f, ~layermask);
     }
 
     #endregion
@@ -298,11 +258,12 @@ public class Player : MonoBehaviour
             lookingFor = null;
         }*/
     }
+
     private void ValidateRaycastHit(Image crosshair, RaycastHit hit)
     {
         if (hit.collider.GetComponent<IInventoryItem>() != null)
         {
-            crosshair.sprite = Resources.Load<Sprite>("HandGrab");
+            crosshair.sprite = GameVars.Values.crosshairHandGrab;
             crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 40f);
             crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 40f);
             lookingFor = hit.collider.GetComponent<InventoryItem>();
@@ -310,7 +271,7 @@ public class Player : MonoBehaviour
         else if (hit.collider.GetComponent<IInteractable>() != null)
         {
             if(hit.collider.gameObject.name.Contains("Door"))
-                crosshair.sprite = Resources.Load<Sprite>("OpenDoor");
+                crosshair.sprite = GameVars.Values.crosshairDoor;
 
             crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 40f);
             crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 40f);
@@ -318,7 +279,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            crosshair.sprite = Resources.Load<Sprite>("crosshair");
+            crosshair.sprite = GameVars.Values.crosshair;
             crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 20f);
             crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 20f);
             lookingFor = null;
@@ -363,6 +324,6 @@ public class Player : MonoBehaviour
     
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position - new Vector3(0f, 0.6f, 0f), 0.45f);
+        Gizmos.DrawWireSphere(transform.position - new Vector3(0f, 0.75f, 0f), 0.45f);
     }
 }

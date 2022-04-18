@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour,IInteractable
+public class Door : MonoBehaviour, IInteractable
 {
     private Animator _anim;
     private float _valueToChange;
@@ -19,6 +19,7 @@ public class Door : MonoBehaviour,IInteractable
     {
 
     }
+
     IEnumerator LerpDoorAnim(float endValue, float duration)
     {
         float time = 0;
@@ -32,6 +33,7 @@ public class Door : MonoBehaviour,IInteractable
         }
         _valueToChange = endValue;
     }
+
     public void Interact()
     {
         if (!IsOpened)
