@@ -10,12 +10,11 @@ using UnityEngine;
         Player _player;
         public List<ItemAmount> results;
         public InventoryItem itemRemoved;
-
         public Vector3 auxVector;
 
         public bool CanCraft(Inventory inventory)
         {
-            foreach(ItemAmount itemAmount in materials)
+            foreach (ItemAmount itemAmount in materials)
             {
                 
                 if(inventory.ItemCount(itemAmount.item) < itemAmount.amount)
@@ -31,7 +30,7 @@ using UnityEngine;
 
         public void Craft(Inventory inventory)
         {
-            if(CanCraft(inventory))
+            if (CanCraft(inventory))
             {
                 foreach(ItemAmount itemAmount in results)
                 {
@@ -44,8 +43,7 @@ using UnityEngine;
                         auxVector = new Vector3(0, _player.transform.position.y + 4f, _player.transform.position.z + 4f);
                         //GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, _player.GetPrefabPlacement(), Quaternion.identity);
                         GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, auxVector, Quaternion.Euler(-90, 0f, 0f));
-                        
-                        
+                        Destroy(aux.GetComponent<InventoryItem>());
                     }
                 }
             }

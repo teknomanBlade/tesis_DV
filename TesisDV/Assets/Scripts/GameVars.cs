@@ -19,7 +19,8 @@ public class GameVars : MonoBehaviour
     public KeyCode primaryFire;
     public KeyCode secondaryFire;
     public KeyCode useKey;
-    //public KeyCode grabKey;
+    public KeyCode inventoryKey;
+    public KeyCode inventoryItem1Key;
     public KeyCode sprintKey;
     public KeyCode crouchKey;
     public bool crouchToggle;
@@ -28,7 +29,8 @@ public class GameVars : MonoBehaviour
     public Sprite crosshair;
     public Sprite crosshairDoor;
     public Sprite crosshairHandGrab;
-
+    public Sprite crosshairActivation;
+    public CraftingScreen craftingScreen;
     private void Awake()
     {
         if (_gameVars == null) _gameVars = this;
@@ -43,7 +45,7 @@ public class GameVars : MonoBehaviour
         jumpKey = KeyCode.Space;
         primaryFire = KeyCode.Mouse0;
         secondaryFire = KeyCode.Mouse1;
-        //grabKey = KeyCode.E;
+        inventoryKey = KeyCode.Tab;
         useKey = KeyCode.E;
         sprintKey = KeyCode.LeftShift;
         crouchKey = KeyCode.LeftControl;
@@ -55,6 +57,8 @@ public class GameVars : MonoBehaviour
         crosshair = Resources.Load<Sprite>("crosshair");
         crosshairDoor = Resources.Load<Sprite>("OpenDoor");
         crosshairHandGrab = Resources.Load<Sprite>("HandGrab");
+        crosshairActivation = Resources.Load<Sprite>("ButtonPress");
+        craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
     }
 
     public int GetItemLayer()

@@ -93,11 +93,15 @@ public class Player : MonoBehaviour
             }
         }
 
-         if(Input.GetKeyDown(KeyCode.Tab))
-         {
-             var screenCrafting = Instantiate(Resources.Load<CraftingScreen>("CraftingCanvas"));
-             ScreenManager.Instance.Push(screenCrafting);
-         } 
+        if (Input.GetKeyDown(GameVars.Values.inventoryKey))
+        {
+            var screenCrafting = Instantiate(GameVars.Values.craftingScreen);
+            ScreenManager.Instance.Push(screenCrafting);
+        }
+        else if (Input.GetKeyUp(GameVars.Values.inventoryKey))
+        {
+            ScreenManager.Instance.Pop();
+        }
         
         if(Input.GetKeyDown(GameVars.Values.primaryFire))
         {
@@ -242,6 +246,12 @@ public class Player : MonoBehaviour
         if (lookingAt.gameObject.TryGetComponent<Door>(out Door aux1))
         {
             crosshair.sprite = GameVars.Values.crosshairDoor;
+            ChangeCrosshairSize(40f);
+            return;
+        }
+        if (lookingAt.gameObject.TryGetComponent<BaseballLauncher>(out BaseballLauncher baseballLauncher))
+        {
+            crosshair.sprite = GameVars.Values.crosshairActivation;
             ChangeCrosshairSize(40f);
             return;
         }

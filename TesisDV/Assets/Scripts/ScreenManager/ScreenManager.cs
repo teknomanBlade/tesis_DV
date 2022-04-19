@@ -13,7 +13,7 @@ public class ScreenManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-
+        
         _stack = new Stack<IScreen>();
     }
 
