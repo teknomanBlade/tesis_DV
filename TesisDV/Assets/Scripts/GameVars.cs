@@ -13,8 +13,6 @@ public class GameVars : MonoBehaviour
     private string floorLayerName;
     [SerializeField]
     private string enemyLayerName;
-    [SerializeField]
-    private string activableLayerName;
 
     // KeyBinds
     public KeyCode jumpKey;
@@ -89,17 +87,6 @@ public class GameVars : MonoBehaviour
     public LayerMask GetEnemyLayerMask()
     {
         LayerMask lm = 1 << GetEnemyLayer();
-        return lm;
-    }
-
-    public int GetActivableLayer()
-    {
-        return LayerMask.NameToLayer(activableLayerName);
-    }
-
-    public LayerMask GetActivableLayerMask()
-    {
-        LayerMask lm = 1 << GetActivableLayer();
         return lm;
     }
 }

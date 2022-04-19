@@ -19,7 +19,7 @@ public class Inventory : MonoBehaviour
             mItems.Add(item.ToString());
 
 
-            item.OnPickup();
+            item.Interact();
 
             if(ItemAdded != null)
             {

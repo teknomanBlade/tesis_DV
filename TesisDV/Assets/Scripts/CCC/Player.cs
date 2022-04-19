@@ -27,8 +27,6 @@ public class Player : MonoBehaviour
     private bool isCrouching = false;
     private Vector3 originalScale;
     private Vector3 originalCamPos;
-    [SerializeField]
-    private bool isSprinting = false;
 
     // Mouse
 
@@ -42,7 +40,6 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     public Item lookingAt;
-    public IInteractable activableLookingAt;
     public InventoryItem lookingFor;
     public Vector3 lookingPlacement;
     public AudioSource audioSource;
@@ -68,17 +65,14 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        //LookingAt();
+        LookingAt();
         CheckGround();
         Camera();
         LookingForPlacement();
-        LookingFor();
         
 
         if (isGrounded)
         {
-            //if (Input.GetKeyDown(GameVars.Values.jumpKey)) Jump();
-
             if (!GameVars.Values.crouchToggle)
             {
                 if (Input.GetKey(GameVars.Values.crouchKey)) CrouchEnter();
@@ -93,15 +87,10 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyUp(GameVars.Values.useKey))
         {
-            if (activableLookingAt != null)
+            if (lookingAt != null)
             {
-                activableLookingAt.Interact();
+                Interact();
             }
-        }
-
-        if (Input.GetKeyDown(GameVars.Values.grabKey))
-        {
-            InteractWithInventoryItem();
         }
 
         /* if(Input.GetKeyDown(KeyCode.Tab))
@@ -222,69 +211,48 @@ public class Player : MonoBehaviour
     private void LookingAt()
     {
         RaycastHit hit;
-        
+
         //Crear variable distancia
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetActivableLayerMask()))
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, 10f, GameVars.Values.GetItemLayerMask()))
         {
-            
-            activableLookingAt = hit.collider.gameObject.GetComponent<IInteractable>();
+            lookingAt = hit.collider.gameObject.GetComponent<Item>();
+            ChangeCrosshair();
         }
         else
         {
-           
-            activableLookingAt = null;
+            lookingAt = null;
+            ChangeCrosshair();
         }
     }
 
-
-    private void LookingFor()
+    private void ChangeCrosshair()
     {
-        RaycastHit hit;
-        //Crear variable distancia
-        //Obtengo el objeto Crosshair buscandolo desde el transform en el Canvas de la escena.
-        var crosshair = FindObjectOfType<Canvas>().transform.GetChild(0).GetChild(1).GetComponent<Image>();
-
-        //Lo mejor para tirar Raycast y obtener los objetos es diferenciarlos por su tipo de Script en lugar de su layer.
-        //Asi podemos poner un if que valide entre el tipo de script que posee el objeto que golpea el Raycast.
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, 10f))
-        {
-            ValidateRaycastHit(crosshair, hit);
-        }
-        /*else
-        {
-            crosshair.sprite = Resources.Load<Sprite>("crosshair");
-            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 20f);
-            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 20f);
-            lookingFor = null;
-        }*/
-    }
-
-    private void ValidateRaycastHit(Image crosshair, RaycastHit hit)
-    {
-        if (hit.collider.GetComponent<IInventoryItem>() != null)
-        {
-            crosshair.sprite = GameVars.Values.crosshairHandGrab;
-            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 40f);
-            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 40f);
-            lookingFor = hit.collider.GetComponent<InventoryItem>();
-        }
-        else if (hit.collider.GetComponent<IInteractable>() != null)
-        {
-            if(hit.collider.gameObject.name.Contains("Door"))
-                crosshair.sprite = GameVars.Values.crosshairDoor;
-
-            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 40f);
-            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 40f);
-            activableLookingAt = hit.collider.gameObject.GetComponent<IInteractable>();
-        }
-        else
+        if (lookingAt == null)
         {
             crosshair.sprite = GameVars.Values.crosshair;
-            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 20f);
-            crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 20f);
-            lookingFor = null;
-            activableLookingAt = null;
+            ChangeCrosshairSize(20f);
+            return;
         }
+        if (lookingAt.gameObject.TryGetComponent<InventoryItem>(out InventoryItem aux))
+        {
+            crosshair.sprite = GameVars.Values.crosshairHandGrab;
+            ChangeCrosshairSize(40f);
+            return;
+        }
+        if (lookingAt.gameObject.TryGetComponent<Door>(out Door aux1))
+        {
+            crosshair.sprite = GameVars.Values.crosshairDoor;
+            ChangeCrosshairSize(40f);
+            return;
+        }
+        crosshair.sprite = GameVars.Values.crosshair;
+        ChangeCrosshairSize(20f);
+    }
+
+    private void ChangeCrosshairSize(float num)
+    {
+        crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, num);
+        crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, num);
     }
 
     private void LookingForPlacement()
@@ -309,17 +277,18 @@ public class Player : MonoBehaviour
 
     public void Interact()
     {
-        //lookingAt?.
+        if (lookingAt.gameObject.TryGetComponent<InventoryItem>(out InventoryItem aux))
+        {
+            InteractWithInventoryItem();
+            return;
+        }
+        lookingAt.Interact();
     }
 
     public void InteractWithInventoryItem()
     {
-        if(lookingFor != null)
-        {
-            audioSource.PlayOneShot(audioSource.clip, 0.7f);
-            _inventory.AddItem(lookingFor);
-        }
-        
+        //audioSource.PlayOneShot(audioSource.clip, 0.7f);
+        _inventory.AddItem(lookingAt as InventoryItem);
     }
     
     private void OnDrawGizmos()

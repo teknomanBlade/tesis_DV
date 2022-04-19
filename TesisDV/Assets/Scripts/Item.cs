@@ -4,21 +4,23 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
-    string itemName { get { return itemName; } }
-    Sprite itemImage { get { return itemImage; } }
+    [SerializeField]
+    private string _itemName;
+    public string itemName { get { return _itemName; } }
 
-    public void Interact()
+    [SerializeField]
+    private Sprite _itemImage;
+    public Sprite itemImage
+    {
+        get
+        {
+            if (_itemImage != null) return _itemImage;
+            return default(Sprite);
+        }
+    }
+
+    public virtual void Interact()
     {
         
-    }
-
-    public void SetPos(Vector3 pos)
-    {
-        transform.position = pos;
-    }
-
-    public virtual void OnPickup()
-    {
-
     }
 }

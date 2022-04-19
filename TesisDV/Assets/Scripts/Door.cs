@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour, IInteractable
+public class Door : Item
 {
     private Animator _anim;
     private float _valueToChange;
@@ -34,7 +34,7 @@ public class Door : MonoBehaviour, IInteractable
         _valueToChange = endValue;
     }
 
-    public void Interact()
+    public override void Interact()
     {
         if (!IsOpened)
         {
