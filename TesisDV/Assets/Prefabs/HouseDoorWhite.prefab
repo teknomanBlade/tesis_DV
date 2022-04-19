@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5979865751258133687}
   - component: {fileID: 8437554917229658237}
   - component: {fileID: 7122903368299814140}
-  - component: {fileID: 7122903368299814143}
   - component: {fileID: 3330295789604227245}
-  m_Layer: 0
+  - component: {fileID: 1107964371}
+  m_Layer: 10
   m_Name: HouseDoorWhite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 7933314004753883560}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0.7071068, w: 0}
   m_LocalPosition: {x: 20.943, y: -0.049874306, z: 11.308}
-  m_LocalScale: {x: 2.9625, y: 2.475, z: 3}
+  m_LocalScale: {x: 2.9624994, y: 2.4750004, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -97,7 +97,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.7681809, y: 1.7804315, z: 0.1949265}
   m_Center: {x: -0.38013902, y: -0.89060533, z: -0.002600357}
---- !u!95 &7122903368299814143
+--- !u!114 &3330295789604227245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7933314004753883560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3a64b04de7a2a4abf901cb2b69a2c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemName: DoorWhite
+  _itemImage: {fileID: 0}
+--- !u!95 &1107964371
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
@@ -116,15 +130,3 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &3330295789604227245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7933314004753883560}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c3a64b04de7a2a4abf901cb2b69a2c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

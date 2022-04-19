@@ -19,7 +19,7 @@ public class GameVars : MonoBehaviour
     public KeyCode primaryFire;
     public KeyCode secondaryFire;
     public KeyCode useKey;
-    public KeyCode grabKey;
+    //public KeyCode grabKey;
     public KeyCode sprintKey;
     public KeyCode crouchKey;
     public bool crouchToggle;
@@ -43,8 +43,8 @@ public class GameVars : MonoBehaviour
         jumpKey = KeyCode.Space;
         primaryFire = KeyCode.Mouse0;
         secondaryFire = KeyCode.Mouse1;
-        grabKey = KeyCode.E;
-        useKey = KeyCode.F;
+        //grabKey = KeyCode.E;
+        useKey = KeyCode.E;
         sprintKey = KeyCode.LeftShift;
         crouchKey = KeyCode.LeftControl;
         crouchToggle = false;

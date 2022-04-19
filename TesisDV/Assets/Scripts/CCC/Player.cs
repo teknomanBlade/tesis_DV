@@ -93,11 +93,11 @@ public class Player : MonoBehaviour
             }
         }
 
-        /* if(Input.GetKeyDown(KeyCode.Tab))
-            {
-                var screenCrafting = Instantiate(Resources.Load<CraftingScreen>("CraftingCanvas"));
-                ScreenManager.Instance.Push(screenCrafting);
-            } */
+         if(Input.GetKeyDown(KeyCode.Tab))
+         {
+             var screenCrafting = Instantiate(Resources.Load<CraftingScreen>("CraftingCanvas"));
+             ScreenManager.Instance.Push(screenCrafting);
+         } 
         
         if(Input.GetKeyDown(GameVars.Values.primaryFire))
         {
@@ -287,7 +287,7 @@ public class Player : MonoBehaviour
 
     public void InteractWithInventoryItem()
     {
-        //audioSource.PlayOneShot(audioSource.clip, 0.7f);
+        audioSource.PlayOneShot(audioSource.clip, 0.7f);
         _inventory.AddItem(lookingAt as InventoryItem);
     }
     

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7856109673760006637}
   - component: {fileID: 5396004316289520935}
   - component: {fileID: 6711455224601233830}
-  - component: {fileID: 6711455224601233829}
   - component: {fileID: 919132147656794819}
-  m_Layer: 0
+  - component: {fileID: 4901158061738352041}
+  m_Layer: 10
   m_Name: HouseDoorRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 5900429258786272498}
   m_LocalRotation: {x: -1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: -2.15, y: -0.049874306, z: 25.738}
-  m_LocalScale: {x: 2.9625, y: 2.475, z: 3}
+  m_LocalScale: {x: 2.9624996, y: 2.4750004, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -97,25 +97,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.7681809, y: 1.7804315, z: 0.1949265}
   m_Center: {x: -0.38013902, y: -0.89060533, z: -0.002600357}
---- !u!95 &6711455224601233829
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5900429258786272498}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3e9b3c412343d83488893f4669a3aa63, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &919132147656794819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,3 +109,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c3a64b04de7a2a4abf901cb2b69a2c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemName: DoorRed
+  _itemImage: {fileID: 0}
+--- !u!95 &4901158061738352041
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5900429258786272498}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bf6e07efd2444cd42a23bc0e98f4e95a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
