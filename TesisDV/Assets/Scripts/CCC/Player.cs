@@ -162,6 +162,7 @@ public class Player : MonoBehaviour
     {
         if (isCrouching) return;
         transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y / 2, transform.localScale.z);
+        transform.localPosition -= new Vector3(0f, 0.5f, 0f);
         _cam.transform.localPosition = new Vector3(0f, _cam.transform.position.y / 2, 0f);
         isCrouching = true;
     }
@@ -170,6 +171,7 @@ public class Player : MonoBehaviour
     {
         if (!isCrouching) return;
         transform.localScale = originalScale;
+        transform.localPosition += new Vector3(0f, 0.5f, 0f);
         _cam.transform.localPosition = new Vector3(0f, originalCamPos.y, 0f);
         isCrouching = false;
     }
