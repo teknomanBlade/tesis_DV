@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,8 @@ public class GameVars : MonoBehaviour
 {
     private static GameVars _gameVars;
     public static GameVars Values { get { return _gameVars; } }
+
+    public SoundManager soundManager { get; private set; }
 
     [SerializeField]
     private Player player;
@@ -35,6 +38,7 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairHandGrab;
     public Sprite crosshairActivation;
     public CraftingScreen craftingScreen;
+    public List<AudioClip> audioClips;
 
     // Game
     public float projectileLifeTime = 5f;
@@ -77,6 +81,9 @@ public class GameVars : MonoBehaviour
         crosshairHandGrab = Resources.Load<Sprite>("HandGrab");
         crosshairActivation = Resources.Load<Sprite>("ButtonPress");
         craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
+        audioClips = Resources.LoadAll<AudioClip>("Sounds").ToList();
+        soundManager = FindObjectOfType<SoundManager>();
+        soundManager.SetAudioClips(audioClips);
     }
 
     #region Player

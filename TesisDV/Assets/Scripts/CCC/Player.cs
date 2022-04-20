@@ -44,7 +44,6 @@ public class Player : MonoBehaviour
     public Item lookingAt;
     public InventoryItem lookingFor;
     public Vector3 lookingPlacement;
-    public AudioSource audioSource;
     public float timer = 0f;
 
     private void Awake()
@@ -52,7 +51,6 @@ public class Player : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _cam = GameObject.Find("MainCamera").GetComponent<PlayerCamera>();
         _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
-        audioSource = GetComponent<AudioSource>();
 
         originalScale = transform.localScale;
         originalCamPos = _cam.transform.localPosition;
@@ -309,7 +307,7 @@ public class Player : MonoBehaviour
 
     public void PlayPickUpSound()
     {
-        audioSource.PlayOneShot(audioSource.clip, 0.7f);
+        GameVars.Values.soundManager.PlaySoundAtPoint("GrabSound", transform.position, 0.7f);
     }
 
     public void InteractWithInventoryItem()
