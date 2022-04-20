@@ -9,6 +9,7 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual void Start()
     {
+        lifeTime = GameVars.Values.projectileLifeTime;
         Destroy(gameObject, lifeTime);
     }
 

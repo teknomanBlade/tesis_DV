@@ -37,6 +37,7 @@ public class GameVars : MonoBehaviour
     public CraftingScreen craftingScreen;
 
     // Game
+    public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
 
     private void Awake()
