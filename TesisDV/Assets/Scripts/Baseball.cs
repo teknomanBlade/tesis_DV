@@ -4,5 +4,9 @@ using UnityEngine;
 
 public class Baseball : Projectile
 {
-    
+    protected override void Start()
+    {
+        dieOnImpact = false;
+        base.Start();
+    }
 }

@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     private float sprintSpeed = 10f;
     private float maxVelocityChange = 20f;
     private float jumpForce = 7.5f;
+    private bool jumpOnCooldown = false;
+    private float jumpCooldown = 0.15f;
 
     [SerializeField]
     private bool isGrounded = true;
@@ -116,7 +118,7 @@ public class Player : MonoBehaviour
 
         if (isGrounded)
         {
-            if (Input.GetKeyDown(GameVars.Values.jumpKey)) Jump();
+            if (Input.GetKeyDown(GameVars.Values.jumpKey) && !jumpOnCooldown) Jump();
         } else
         {
             _rb.velocity -= new Vector3(0f, 9.8f * Time.deltaTime, 0f);
@@ -144,6 +146,14 @@ public class Player : MonoBehaviour
     {
         _rb.AddForce(0f, jumpForce, 0f, ForceMode.VelocityChange);
         isGrounded = false;
+        StartCoroutine("JumpCooldown");
+    }
+
+    IEnumerable JumpCooldown()
+    {
+        jumpOnCooldown = true;
+        yield return new WaitForSeconds(jumpCooldown);
+        jumpOnCooldown = false;
     }
 
     #region Crouch
@@ -295,9 +305,13 @@ public class Player : MonoBehaviour
         lookingAt.Interact();
     }
 
-    public void InteractWithInventoryItem()
+    public void PlayPickUpSound()
     {
         audioSource.PlayOneShot(audioSource.clip, 0.7f);
+    }
+
+    public void InteractWithInventoryItem()
+    {
         _inventory.AddItem(lookingAt as InventoryItem);
     }
     

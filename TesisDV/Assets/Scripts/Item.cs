@@ -5,11 +5,11 @@ using UnityEngine;
 public abstract class Item : MonoBehaviour
 {
     [SerializeField]
-    private string _itemName;
+    protected string _itemName;
     public string itemName { get { return _itemName; } }
 
     [SerializeField]
-    private Sprite _itemImage;
+    protected Sprite _itemImage;
     public Sprite itemImage
     {
         get
@@ -18,6 +18,9 @@ public abstract class Item : MonoBehaviour
             return default(Sprite);
         }
     }
+
+    protected virtual void Start() { }
+    protected virtual void Update() { }
 
     public virtual void Interact()
     {

@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameVars : MonoBehaviour
 {
     private static GameVars _gameVars;
     public static GameVars Values { get { return _gameVars; } }
+
+    [SerializeField]
+    private Player player;
 
     [SerializeField]
     private string objectLayerName;
@@ -31,6 +35,10 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairHandGrab;
     public Sprite crosshairActivation;
     public CraftingScreen craftingScreen;
+
+    // Game
+    public float itemPickUpLerpSpeed = 0.2f;
+
     private void Awake()
     {
         if (_gameVars == null) _gameVars = this;
@@ -38,6 +46,8 @@ public class GameVars : MonoBehaviour
 
         SetKeys();
         LoadResources();
+
+        SceneManager.sceneLoaded += FindPlayer;
     }
 
     private void SetKeys()
@@ -52,6 +62,13 @@ public class GameVars : MonoBehaviour
         crouchToggle = false;
     }
 
+    void FindPlayer(Scene scene, LoadSceneMode mode)
+    {
+        var aux = GameObject.Find("Player");
+        if (aux != null) player = aux.GetComponent<Player>();
+        else player = null;
+    }
+
     private void LoadResources()
     {
         crosshair = Resources.Load<Sprite>("crosshair");
@@ -60,6 +77,23 @@ public class GameVars : MonoBehaviour
         crosshairActivation = Resources.Load<Sprite>("ButtonPress");
         craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
     }
+
+    #region Player
+
+    public Vector3 GetPlayerPos()
+    {
+        if (player != null) return player.transform.position;
+        return default(Vector3);
+    }
+
+    public void PlayPickUpSound()
+    {
+        player.PlayPickUpSound();
+    }
+
+    #endregion
+
+    #region LayerManagement
 
     public int GetItemLayer()
     {
@@ -93,4 +127,6 @@ public class GameVars : MonoBehaviour
         LayerMask lm = 1 << GetEnemyLayer();
         return lm;
     }
+
+    #endregion
 }
