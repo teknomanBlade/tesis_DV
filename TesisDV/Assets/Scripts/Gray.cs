@@ -15,44 +15,48 @@ public class Gray : MonoBehaviour
     public bool stun = false;
     public bool skillEMP = false;
 
+    public bool awake = false;
+
     private void Awake()
     {
         _anim = GetComponent<Animator>();
-        //_rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        if (skillEMP)
+        if (awake)
         {
-            _anim.SetBool("IsEMP",true);
-        }
-        else
-        {
-            _anim.SetBool("IsEMP", false);
-            if (!stun)
+            if (skillEMP)
             {
-                _anim.SetBool("IsStunned", false);
-                distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
-                if (IsInSight())
+                _anim.SetBool("IsEMP", true);
+            }
+            else
+            {
+                _anim.SetBool("IsEMP", false);
+                if (!stun)
                 {
-                    pursue = true;
-                    _anim.SetBool("IsWalking", true);
+                    _anim.SetBool("IsStunned", false);
+                    distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
+                    if (IsInSight())
+                    {
+                        pursue = true;
+                        _anim.SetBool("IsWalking", true);
+                    }
+                    else
+                    {
+                        pursue = false;
+                        _anim.SetBool("IsWalking", false);
+                    }
+
+                    if (pursue)
+                    {
+                        if (distanceToPlayer >= 1.7f) Move();
+                    }
                 }
                 else
                 {
                     pursue = false;
-                    _anim.SetBool("IsWalking", false);
                 }
-
-                if (pursue)
-                {
-                    if (distanceToPlayer >= 1.7f) Move();
-                }
-            }
-            else
-            {
-                pursue = false;
             }
         }
     }
@@ -77,12 +81,6 @@ public class Gray : MonoBehaviour
         return true;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, pursueThreshold);
-        Gizmos.DrawWireSphere(transform.position, disengageThreshold);
-    }
-
     public void Stun()
     {
         stun = true;
@@ -93,5 +91,21 @@ public class Gray : MonoBehaviour
     public void UnStun()
     {
         stun = false;
+    }
+
+    public void SetPos(Vector3 pos)
+    {
+        transform.position = pos;
+    }
+
+    public void AwakeGray()
+    {
+        awake = true;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, pursueThreshold);
+        Gizmos.DrawWireSphere(transform.position, disengageThreshold);
     }
 }
