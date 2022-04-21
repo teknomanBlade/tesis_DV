@@ -24,6 +24,7 @@ public class Door : Item
     {
         float time = 0;
         float startValue = _valueToChange;
+        
         while (time < duration)
         {
             _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
@@ -39,12 +40,14 @@ public class Door : Item
         if (!IsOpened)
         {
             IsOpened = true;
-            StartCoroutine(LerpDoorAnim(1f,1f));
+            GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
+            StartCoroutine(LerpDoorAnim(1f,2f));
         }
         else
         {
             IsOpened = false;
-            StartCoroutine(LerpDoorAnim(0f,1f));
+            GameVars.Values.soundManager.PlaySoundAtPoint("CloseDoor", transform.position, 0.4f);
+            StartCoroutine(LerpDoorAnim(0f,2f));
         }
         
     }
