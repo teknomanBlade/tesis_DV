@@ -7,7 +7,7 @@ public class Gray : MonoBehaviour
     [SerializeField]
     private GameObject _player;
     private Animator _anim;
-    //private Rigidbody _rb;
+    private Rigidbody _rb;
     public float distanceToPlayer;
     public float pursueThreshold = 10f;
     public float disengageThreshold = 15f;
@@ -20,6 +20,7 @@ public class Gray : MonoBehaviour
     private void Awake()
     {
         _anim = GetComponent<Animator>();
+        _rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -66,7 +67,8 @@ public class Gray : MonoBehaviour
         var dir = _player.transform.position - transform.position;
         dir.y = 0f;
         transform.forward = dir;
-        transform.position += transform.forward * 3f * Time.deltaTime;
+        //transform.position += transform.forward * 3f * Time.deltaTime;
+        _rb.velocity = transform.forward * 2f;
     }
 
     private bool IsInSight()
