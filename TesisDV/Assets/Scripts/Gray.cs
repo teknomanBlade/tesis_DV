@@ -25,22 +25,24 @@ public class Gray : MonoBehaviour
     {
         if (skillEMP)
         {
-            _anim.SetFloat("Anim", 1f);
+            _anim.SetBool("IsEMP",true);
         }
         else
         {
+            _anim.SetBool("IsEMP", false);
             if (!stun)
             {
+                _anim.SetBool("IsStunned", false);
                 distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
                 if (IsInSight())
                 {
                     pursue = true;
-                    _anim.SetFloat("Anim", 0.25f);
+                    _anim.SetBool("IsWalking", true);
                 }
                 else
                 {
                     pursue = false;
-                    _anim.SetFloat("Anim", 0f);
+                    _anim.SetBool("IsWalking", false);
                 }
 
                 if (pursue)
@@ -84,7 +86,7 @@ public class Gray : MonoBehaviour
     public void Stun()
     {
         stun = true;
-        _anim.SetFloat("Anim", 0.75f);
+        _anim.SetBool("IsStunned", true);
         Invoke("UnStun", 5f);
     }
 
