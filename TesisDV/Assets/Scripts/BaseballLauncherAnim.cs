@@ -9,7 +9,9 @@ public class BaseballLauncherAnim : MonoBehaviour
     void Start()
     {
         myAnimator = GetComponent<Animator>();
+        
     }
+
     public void FinishAnim()
     {
         GameObject aux = Instantiate(trapPrefab, transform.position, transform.rotation);

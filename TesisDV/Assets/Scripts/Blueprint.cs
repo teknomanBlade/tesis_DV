@@ -78,7 +78,7 @@ public class Blueprint : MonoBehaviour
         myRenderer.enabled = false;
         //Canbuild provisional.
         canBuild = false;
-
+        GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
         yield return new WaitForSeconds(2f);
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation);
         //Destroy(aux.GetComponent<InventoryItem>());
