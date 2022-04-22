@@ -1,81 +1,128 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    private int _slots = 5;
-    [SerializeField]
-    private List <string> mItems = new List<string>();
-    private InventoryItem[] inventoryContainer;
-    public event EventHandler<InventoryEventArgs> ItemAdded;
-    public event EventHandler<InventoryEventArgs> ItemRemoved;
+    [SerializeField] List<InventoryItem> items;
+    [SerializeField] Slot[] itemSlots;
 
-    public void AddItem(InventoryItem item)
+     public void AddItem(InventoryItem item)
     {
-        if(mItems.Count < _slots)
+       for (int i = 0; i < itemSlots.Length; i++)
+       {
+           if(itemSlots[i].IsFree())
+           {
+               item.Interact();
+               
+               //itemSlots[i].Item = item;
+               itemSlots[i].SetItem(item);
+
+               return;
+           }
+       }
+    } 
+
+    public void AddItemID(InventoryItem item, int itemID)
+    {
+       for (int i = 0; i < itemSlots.Length; i++)
+       {
+           if(itemSlots[i].IsFree())
+           {
+               item.Interact();
+               
+               //itemSlots[i].Item = item;
+               itemSlots[i].SetItem(item);
+               itemSlots[i].SetItemID(itemID);
+
+               return;
+           }
+       }
+    }
+
+    /* public void RemoveItem(InventoryItem item)
+    {
+        for (int i = 0; i < itemSlots.Length; i++)
         {
-            mItems.Add(item.ToString());
-
-
-            item.Interact();
-
-            if(ItemAdded != null)
+            if(itemSlots[i].HasItem(item))
             {
-                ItemAdded(this, new InventoryEventArgs(item));
+                //itemSlots[i].Item = null;
+                itemSlots[i].RemoveItem();
+                
+            }
+        }  
+    } */
+
+    public void RemoveItemID(int itemID)
+    {
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if(itemSlots[i].HasItemID(itemID))
+            {
+                //itemSlots[i].Item = null;
+                itemSlots[i].RemoveItem();
+                
+            }
+        }  
+    }
+
+    public bool IsFull()
+    {
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if(itemSlots[i].IsFree()) //itemSlots[i].Item = null)
+            {
+                return false;
             }
         }
+        return true;
     }
 
-    public void RemoveItem(InventoryItem item)
+    public bool ContainsItem(InventoryItem item)
     {
-        //mItems.Remove(item);
-
-        if(ItemRemoved != null)
+        for (int i = 0; i < itemSlots.Length; i++)
         {
-            ItemRemoved(this, new InventoryEventArgs(item));
+
+            if(itemSlots[i].HasItem(item))
+            {
+
+                return true;
+            }
         }
+
+        return false;
     }
 
-    /* public bool ContainsItem(InventoryItem item)
+    public bool ContainsID(int itemID)
     {
-        for(int i = 0; i < mItems.Count; i++)
+
+        for (int i = 0; i < itemSlots.Length; i++)
         {
-            if(mItems[i] == item)
+
+            if(itemSlots[i].HasItemID(itemID))
             {
                 return true;
             }
         }
+
         return false;
-    } */
+    }
 
     public int ItemCount(InventoryItem item)
     {
         int number = 0;
-        
-        string itemfor = item.ToString();
-        Debug.Log(itemfor);
-        if(mItems.Contains(itemfor))
-        {
-            Debug.Log("SIISISIS");
-            number++;
-        }
-        Debug.Log("nonononono");
 
-        /* for(int i = 0; i < mItems.Count; i++)
+        for (int i = 0; i < itemSlots.Length; i++)
         {
-            Debug.Log("Item Count");
-            if(mItems[i] == item)
+            if (itemSlots[i].HasItem(item))
             {
-                Debug.Log("Ayuda " + mItems[i]);
+                Debug.Log("Soy +" + itemSlots[i] + " y tengo " + itemSlots[i].HasItem(item));   
                 number++;
+                
             }
         }
-        number++; */
-        Debug.Log(number);
         return number;
     }
 
-
 }
+

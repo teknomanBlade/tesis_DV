@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     private void Update()
@@ -69,6 +69,7 @@ public class Player : MonoBehaviour
         CheckGround();
         Camera();
         LookingForPlacement();
+        
         
 
         if (isGrounded)
@@ -85,7 +86,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(GameVars.Values.sprintKey)) speed = sprintSpeed;
         if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed;
 
-        if (Input.GetKeyUp(GameVars.Values.useKey))
+        if (Input.GetKeyDown(GameVars.Values.useKey))
         {
             if (lookingAt != null)
             {
@@ -103,7 +104,7 @@ public class Player : MonoBehaviour
             ScreenManager.Instance.Pop();
         }
         
-        if(Input.GetKeyDown(GameVars.Values.primaryFire))
+        if(Input.GetKeyDown(KeyCode.Alpha1))
         {
             if(craftingRecipe != null)
                 craftingRecipe.Craft(_inventory);
@@ -282,7 +283,7 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetFloorLayerMask()))
         {
             //Vector3 localHit = transform.InverseTransformPoint(hit.point);
-            Debug.Log("Looking at floor!!!!");
+            //Debug.Log("Looking at floor!!!!");
             //lookingPlacement = localHit;
             lookingPlacement = hit.point;
             //Debug.Log(lookingPlacement);

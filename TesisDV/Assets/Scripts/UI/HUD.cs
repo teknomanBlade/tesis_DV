@@ -14,8 +14,8 @@ public class HUD : MonoBehaviour
     {
         _inventoryBar = GameObject.Find("InventoryBar");
         _inventory = _inventoryBar.GetComponent<Inventory>();
-        _inventory.ItemAdded += AddItemHUD;
-        _inventory.ItemRemoved += RemoveItemHUD;
+        //_inventory.ItemAdded += AddItemHUD;
+        //_inventory.ItemRemoved += RemoveItemHUD;
         _inventoryBar = GameObject.Find("InventoryBar");
     }
 
@@ -28,7 +28,7 @@ public class HUD : MonoBehaviour
             if(!image.enabled)
             {
                 image.enabled = true;
-                image.sprite = e.Item.itemImage;
+                //image.sprite = //e.Item.itemImage;
 
                 break;
             }

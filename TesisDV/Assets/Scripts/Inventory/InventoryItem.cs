@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InventoryItem : Item
 {
+    public int myCraftingID;
     public float timeLimit = 3f;
     protected float timer = 0f;
     protected Vector3 startPos;
