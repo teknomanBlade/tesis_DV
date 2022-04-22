@@ -28,7 +28,7 @@ public class Blueprint : MonoBehaviour
         Debug.Log(originalMaterial);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         
-        if(Physics.Raycast(ray, out hit, 50000.0f, GameVars.Values.GetFloorLayerMask()))
+        if(Physics.Raycast(ray, out hit, 10f, GameVars.Values.GetFloorLayerMask()))
         {
             auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
             transform.position = auxVector;
@@ -51,12 +51,12 @@ public class Blueprint : MonoBehaviour
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0) 
         {
-        transform.Rotate(Vector3.forward * -7f, Space.Self);
+        transform.Rotate(Vector3.forward * -15f, Space.Self);
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0) 
         {
-        transform.Rotate(Vector3.forward * 7f, Space.Self);
+        transform.Rotate(Vector3.forward * 15f, Space.Self);
         }
     }
 
