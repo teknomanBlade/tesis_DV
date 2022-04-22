@@ -9,7 +9,8 @@ public class Blueprint : MonoBehaviour
     private bool canBuild;
     Vector3 auxVector;
     public CraftingRecipe craftingRecipe;
-    public GameObject trapPrefab;
+    public GameObject trapAnimPrefab;
+    public GameObject particles;
     public GameObject customPivot;
     [SerializeField]
     private Material newMaterial;
@@ -36,8 +37,9 @@ public class Blueprint : MonoBehaviour
 
         if(Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
-            GameObject aux = Instantiate(trapPrefab, transform.position, transform.rotation);
-            Destroy(aux.GetComponent<InventoryItem>());
+            Instantiate(particles, transform.position, transform.rotation);
+            GameObject aux = Instantiate(trapAnimPrefab, transform.position, transform.rotation);
+            //Destroy(aux.GetComponent<InventoryItem>());
             craftingRecipe.RemoveItems();
             craftingRecipe.RestoreBuildAmount();
             Destroy(gameObject);
@@ -58,6 +60,12 @@ public class Blueprint : MonoBehaviour
         {
         transform.Rotate(Vector3.forward * 15f, Space.Self);
         }
+    }
+
+    IEnumerable BuildTrap()
+    {
+
+        yield return new WaitForSeconds(2f);
     }
 
     private void ChangeMaterial()
