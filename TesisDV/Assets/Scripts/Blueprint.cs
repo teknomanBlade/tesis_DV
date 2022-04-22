@@ -16,6 +16,8 @@ public class Blueprint : MonoBehaviour
     private Material newMaterial;
     private Material originalMaterial;
     private Renderer myRenderer;
+    private Vector3 finalPosition;
+    private Quaternion finalRotation;
 
     void Start()
     {
@@ -37,12 +39,16 @@ public class Blueprint : MonoBehaviour
 
         if(Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
-            Instantiate(particles, transform.position, transform.rotation);
+            finalPosition = transform.position;
+            finalRotation = transform.rotation;
+            StartCoroutine(BuildTrap());
+
+            /* Instantiate(particles, transform.position, transform.rotation);
             GameObject aux = Instantiate(trapAnimPrefab, transform.position, transform.rotation);
             //Destroy(aux.GetComponent<InventoryItem>());
             craftingRecipe.RemoveItems();
             craftingRecipe.RestoreBuildAmount();
-            Destroy(gameObject);
+            Destroy(gameObject); */
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha2))
@@ -62,10 +68,18 @@ public class Blueprint : MonoBehaviour
         }
     }
 
-    IEnumerable BuildTrap()
+    private IEnumerator BuildTrap()
     {
+        Instantiate(particles, transform.position, transform.rotation);
+        myRenderer.enabled = false;
 
         yield return new WaitForSeconds(2f);
+        GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation);
+        //Destroy(aux.GetComponent<InventoryItem>());
+        craftingRecipe.RemoveItems();
+        craftingRecipe.RestoreBuildAmount();
+        Destroy(gameObject);
+        
     }
 
     private void ChangeMaterial()
