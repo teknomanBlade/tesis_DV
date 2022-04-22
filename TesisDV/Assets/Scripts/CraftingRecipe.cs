@@ -61,7 +61,7 @@ using UnityEngine;
                     for (int i = 0; i < itemAmount.amount; i++)
                     {
                         _player = GameObject.Find("Player").GetComponent<Player>();
-                        Debug.Log((buildAmount));
+                        
                         if(buildAmount == 0)
                         {
                             GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, _player.GetPrefabPlacement(), Quaternion.Euler(-90f,0f,0f));
