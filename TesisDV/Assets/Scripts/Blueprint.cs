@@ -8,6 +8,7 @@ public class Blueprint : MonoBehaviour
     Vector3 movePoint;
     private bool canBuild;
     Vector3 auxVector;
+    Vector3 secondAuxVector;
     public CraftingRecipe craftingRecipe;
     public GameObject trapAnimPrefab;
     public GameObject particles;
@@ -41,7 +42,8 @@ public class Blueprint : MonoBehaviour
 
         if(Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
-            finalPosition = transform.position;
+            secondAuxVector = new Vector3(transform.position.x, 0.25f, transform.position.z);
+            finalPosition = secondAuxVector;
             finalRotation = transform.rotation;
             StartCoroutine(BuildTrap());
 
