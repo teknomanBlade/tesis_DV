@@ -14,12 +14,6 @@ public class Door : Item
         _anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     IEnumerator LerpDoorAnim(float endValue, float duration)
     {
         float time = 0;
@@ -37,17 +31,18 @@ public class Door : Item
 
     public override void Interact()
     {
+        StopAllCoroutines();
         if (!IsOpened)
         {
             IsOpened = true;
             GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
-            StartCoroutine(LerpDoorAnim(1f,2f));
+            StartCoroutine(LerpDoorAnim(1f, 2f));
         }
         else
         {
             IsOpened = false;
             GameVars.Values.soundManager.PlaySoundAtPoint("CloseDoor", transform.position, 0.4f);
-            StartCoroutine(LerpDoorAnim(0f,2f));
+            StartCoroutine(LerpDoorAnim(0f, 2f));
         }
         
     }
