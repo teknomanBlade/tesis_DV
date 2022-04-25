@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UFO : MonoBehaviour
 {
@@ -8,7 +9,8 @@ public class UFO : MonoBehaviour
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
     public Vector3 endPos;
-
+    [Range(0,1)]
+    public float sliderSoundVolume;
     public float spawnTimer = 10f;
     public GameObject grayPrefab;
     public Gray currentGray;
@@ -18,7 +20,7 @@ public class UFO : MonoBehaviour
 
     private void Start()
     {
-        GameVars.Values.soundManager.PlaySound("UFOBuzz", 0.4f, true);
+        GameVars.Values.soundManager.PlaySound("UFOBuzz", sliderSoundVolume, true);
         StartCoroutine("SpawnGrey");
     }
 
