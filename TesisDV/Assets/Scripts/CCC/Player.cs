@@ -23,6 +23,9 @@ public class Player : MonoBehaviour
     private bool jumpOnCooldown = false;
     private float jumpCooldown = 0.15f;
 
+    public bool preventCheck = false;
+    private float preventCheckTime = 0.25f;
+
     [SerializeField]
     private bool isGrounded = true;
     [SerializeField]
@@ -46,6 +49,9 @@ public class Player : MonoBehaviour
     public Vector3 lookingPlacement;
     public float timer = 0f;
 
+    //Gizmos
+    public float gizmoScale = 1f;
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -66,22 +72,17 @@ public class Player : MonoBehaviour
     private void Update()
     {
         LookingAt();
-        CheckGround();
         Camera();
         LookingForPlacement();
         
         
 
-        if (isGrounded)
+        if (!GameVars.Values.crouchToggle)
         {
-            if (!GameVars.Values.crouchToggle)
-            {
-                if (Input.GetKey(GameVars.Values.crouchKey)) CrouchEnter();
-                else CrouchExit();
-            }
-            else if (Input.GetKeyDown(GameVars.Values.crouchKey)) CrouchToggle();
-
+            if (Input.GetKey(GameVars.Values.crouchKey)) CrouchEnter();
+            else CrouchExit();
         }
+        else if (Input.GetKeyDown(GameVars.Values.crouchKey)) CrouchToggle();
 
         if (Input.GetKeyDown(GameVars.Values.sprintKey)) speed = sprintSpeed;
         if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed;
@@ -114,6 +115,7 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         Walk();
+        CheckGround();
 
         if (isGrounded)
         {
@@ -143,16 +145,17 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        _rb.AddForce(0f, jumpForce, 0f, ForceMode.VelocityChange);
         isGrounded = false;
-        StartCoroutine("JumpCooldown");
+        StartCoroutine("PreventCheck");
+        _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
+        _rb.AddForce(0f, jumpForce, 0f, ForceMode.VelocityChange);
     }
 
-    IEnumerable JumpCooldown()
+    IEnumerator PreventCheck()
     {
-        jumpOnCooldown = true;
-        yield return new WaitForSeconds(jumpCooldown);
-        jumpOnCooldown = false;
+        preventCheck = true;
+        yield return new WaitForSeconds(preventCheckTime);
+        preventCheck = false;
     }
 
     #region Crouch
@@ -191,7 +194,35 @@ public class Player : MonoBehaviour
     private void CheckGround()
     {
         LayerMask layermask = 1 << gameObject.layer;
-        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0f, 0.75f, 0f), 0.45f, ~layermask);
+        Vector3 start = transform.position - new Vector3(0f, 0.9f, 0f);
+        float gizmoSin = 0.7f * gizmoScale;
+        float maxDist = 0.2f;
+
+        if (preventCheck) return;
+
+        if (Physics.Raycast(start, -transform.up, 0.25f, ~layermask))
+        {
+            isGrounded = true;
+            return;
+        }
+        if (Physics.Raycast(start + new Vector3(gizmoScale, 0f, 0f), -transform.up, maxDist, ~layermask) ||
+            Physics.Raycast(start + new Vector3(0f, 0f, gizmoScale), -transform.up, maxDist, ~layermask) ||
+            Physics.Raycast(start + new Vector3(-gizmoScale, 0f, 0f), -transform.up, maxDist, ~layermask) ||
+            Physics.Raycast(start + new Vector3(0f, 0f, -gizmoScale), -transform.up, maxDist, ~layermask))
+        {
+            isGrounded = true;
+            return;
+        }
+        if (Physics.Raycast(start + new Vector3(gizmoSin, 0f, gizmoSin), -transform.up, maxDist, ~layermask) ||
+            Physics.Raycast(start + new Vector3(-gizmoSin, 0f, gizmoSin), -transform.up, maxDist, ~layermask) ||
+            Physics.Raycast(start + new Vector3(gizmoSin, 0f, -gizmoSin), -transform.up, maxDist, ~layermask) ||
+            Physics.Raycast(start + new Vector3(-gizmoSin, 0f, -gizmoSin), -transform.up, maxDist, ~layermask))
+        {
+            isGrounded = true;
+            return;
+        }
+
+        isGrounded = false;
     }
 
     #endregion
@@ -318,6 +349,20 @@ public class Player : MonoBehaviour
     
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position - new Vector3(0f, 0.75f, 0f), 0.45f);
+        Vector3 start = transform.position - new Vector3(0f, 0.5f, 0f);
+        Vector3 down = new Vector3(0f, -1f, 0f);
+        float gizmoScaleSin = 0.7f * gizmoScale;
+
+        Gizmos.DrawLine(transform.position, transform.position - new Vector3(0f, 1f, 0f));
+
+        Gizmos.DrawLine(start + new Vector3(gizmoScale, 0f, 0f), start + new Vector3(gizmoScale, 0f, 0f) + down);
+        Gizmos.DrawLine(start + new Vector3(0f, 0f, gizmoScale), start + new Vector3(0f, 0f, gizmoScale) + down);
+        Gizmos.DrawLine(start + new Vector3(-gizmoScale, 0f, 0f), start + new Vector3(-gizmoScale, 0f, 0f) + down);
+        Gizmos.DrawLine(start + new Vector3(0f, 0f, -gizmoScale), start + new Vector3(0f, 0f, -gizmoScale) + down);
+
+        Gizmos.DrawLine(start + new Vector3(gizmoScaleSin, 0f, gizmoScaleSin), start + new Vector3(gizmoScaleSin, 0f, gizmoScaleSin) + down);
+        Gizmos.DrawLine(start + new Vector3(gizmoScaleSin, 0f, -gizmoScaleSin), start + new Vector3(gizmoScaleSin, 0f, -gizmoScaleSin) + down);
+        Gizmos.DrawLine(start + new Vector3(-gizmoScaleSin, 0f, gizmoScaleSin), start + new Vector3(-gizmoScaleSin, 0f, gizmoScaleSin) + down);
+        Gizmos.DrawLine(start + new Vector3(-gizmoScaleSin, 0f, -gizmoScaleSin), start + new Vector3(-gizmoScaleSin, 0f, -gizmoScaleSin) + down);
     }
 }
