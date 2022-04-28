@@ -370,6 +370,9 @@ public class Player : MonoBehaviour
 
     private void SetOnItem(Item item)
     {
+        if (item is null)
+            return;
+
         var outLine = item.gameObject.GetComponent<OutLineItem>();
         if (outLine is null)
             return;
