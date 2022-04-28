@@ -14,7 +14,6 @@ public class Gray : MonoBehaviour
     public bool pursue = false;
     public bool stun = false;
     public bool skillEMP = false;
-
     public bool awake = false;
 
     private void Awake()
@@ -104,7 +103,10 @@ public class Gray : MonoBehaviour
     {
         awake = true;
     }
-
+    public void Dead()
+    {
+        Destroy(gameObject);
+    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, pursueThreshold);
