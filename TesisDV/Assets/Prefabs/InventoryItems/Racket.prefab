@@ -11,7 +11,10 @@ GameObject:
   - component: {fileID: 7341024955952405277}
   - component: {fileID: 4368379009009821670}
   - component: {fileID: 6083911338504831761}
-  m_Layer: 0
+  - component: {fileID: 2928863171368445855}
+  - component: {fileID: 474922429619749596}
+  - component: {fileID: 5120943918535700139}
+  m_Layer: 10
   m_Name: Racket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,3 +84,53 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2928863171368445855
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7988853864577627180}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7553716758358721678, guid: 2d23a42ad2998384db55eebb21272ebe, type: 3}
+--- !u!114 &474922429619749596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7988853864577627180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1f3e8ca3b011ec4ab82a267f583b2b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemName: Racket
+  _itemImage: {fileID: 21300000, guid: 7994abede8e4eee43971f5149741283c, type: 3}
+  myCraftingID: 3
+  timeLimit: 3
+--- !u!114 &5120943918535700139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7988853864577627180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0acf0fff94ef070409d418dc0f6b6bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OutLineMaterial: {fileID: 2100000, guid: de86a44bd232f0e4c9dee10595146479, type: 2}
+  baseMaterial: {fileID: 0}
+  m_Renderer: {fileID: 0}
+  m_MainTexture: {fileID: 2800000, guid: 68b2eaea406c7d3499e39ade51f49713, type: 3}
+  m_Normal: {fileID: 2800000, guid: a241fe48d2d34f74b8bd6c5dce4d278b, type: 3}
+  m_Metal: {fileID: 2800000, guid: a00253c7c2091544ea1652a409c86ff4, type: 3}
+  m_AO: {fileID: 2800000, guid: 97be30d09ad02824ebc67a2d7ceb13e1, type: 3}
+  isFocus: 0

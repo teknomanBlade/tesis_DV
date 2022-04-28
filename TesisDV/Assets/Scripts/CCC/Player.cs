@@ -262,10 +262,12 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, 10f, GameVars.Values.GetItemLayerMask()))
         {
             lookingAt = hit.collider.gameObject.GetComponent<Item>();
+            SetOnItem(lookingAt);
             ChangeCrosshair();
         }
         else
         {
+            SetOffItem(lookingAt);
             lookingAt = null;
             ChangeCrosshair();
         }
@@ -364,5 +366,26 @@ public class Player : MonoBehaviour
         Gizmos.DrawLine(start + new Vector3(gizmoScaleSin, 0f, -gizmoScaleSin), start + new Vector3(gizmoScaleSin, 0f, -gizmoScaleSin) + down);
         Gizmos.DrawLine(start + new Vector3(-gizmoScaleSin, 0f, gizmoScaleSin), start + new Vector3(-gizmoScaleSin, 0f, gizmoScaleSin) + down);
         Gizmos.DrawLine(start + new Vector3(-gizmoScaleSin, 0f, -gizmoScaleSin), start + new Vector3(-gizmoScaleSin, 0f, -gizmoScaleSin) + down);
+    }
+
+    private void SetOnItem(Item item)
+    {
+        var outLine = item.gameObject.GetComponent<OutLineItem>();
+        if (outLine is null)
+            return;
+        outLine.SetMaterials();
+        outLine.isFocus = true;
+    }
+
+    private void SetOffItem(Item item)
+    {
+        if (item is null)
+            return;
+
+        var outLine = item.gameObject.GetComponent<OutLineItem>();
+        if (outLine is null)
+            return;
+
+        outLine.isFocus = false;
     }
 }
