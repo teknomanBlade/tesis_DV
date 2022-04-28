@@ -95,6 +95,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f448d71690a8efc428829c251301bad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkCubePos: {x: 0, y: 4, z: 0}
+  checkCubeExt: {x: 4, y: 4, z: 4}
+  startPos: {x: 0, y: 0, z: 0}
+  endPos: {x: 0, y: 0, z: 0}
+  sliderSoundVolume: 0
+  spawnTimer: 10
+  grayPrefab: {fileID: 0}
+  currentGray: {fileID: 0}
+  timeLimit: 0
+  timer: 0
 --- !u!1001 &5301787495593501606
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -156,32 +166,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ea758ab2ab512c4198f78547e7a2037, type: 3}
---- !u!1 &4995286327960821495 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5ea758ab2ab512c4198f78547e7a2037, type: 3}
-  m_PrefabInstance: {fileID: 5301787495593501606}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5627532363556193357 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5ea758ab2ab512c4198f78547e7a2037, type: 3}
   m_PrefabInstance: {fileID: 5301787495593501606}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &5301787495593501604
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4995286327960821495}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4aadf5aee6282fe4f845c651d6f9cfb1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0

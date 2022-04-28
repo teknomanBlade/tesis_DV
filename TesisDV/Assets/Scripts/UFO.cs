@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UFO : MonoBehaviour
 {
+    private GameObject _UFOSpinner;
     public Vector3 checkCubePos = new Vector3(0f, 4f, 0f);
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
@@ -20,12 +21,19 @@ public class UFO : MonoBehaviour
 
     private void Start()
     {
+        _UFOSpinner = GameObject.Find("UFOSpinner");
         GameVars.Values.soundManager.PlaySound("UFOBuzz", sliderSoundVolume, true);
         StartCoroutine("SpawnGrey");
     }
 
+    public void RotateUFOSpinner()
+    {
+        _UFOSpinner.transform.Rotate(new Vector3(0f,0f,180f * Time.deltaTime));
+    }
+
     private void Update()
     {
+        RotateUFOSpinner();
         if (currentGray != null) SpawnGreyLerp();
         if (timer >= timeLimit)
         {
