@@ -44,6 +44,8 @@ public class GameVars : MonoBehaviour
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
 
+    public List<List<Node>> levelRoutes;
+
     private void Awake()
     {
         if (_gameVars == null) _gameVars = this;
