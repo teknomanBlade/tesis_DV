@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
     public PlayerCamera _cam;
     [SerializeField]
     private Inventory _inventory;
+    public GameObject contextualMenu { get; private set; }
+    public Animator contextualMenuAnim { get; private set; }
+   
 
     // Movement
     //public CraftingRecipe craftingRecipe;
@@ -51,6 +54,7 @@ public class Player : MonoBehaviour
     public bool isDead = false;
     public int hp = 4;
 
+    public bool IsCrafting = false;
     //Gizmos
     public float gizmoScale = 1f;
 
@@ -62,7 +66,8 @@ public class Player : MonoBehaviour
 
         originalScale = transform.localScale;
         originalCamPos = _cam.transform.localPosition;
-
+        contextualMenu = GameObject.Find("ContextualTrapMenu");
+        contextualMenuAnim = contextualMenu.GetComponent<Animator>();
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
     }
 
@@ -111,8 +116,20 @@ public class Player : MonoBehaviour
         {
             ScreenManager.Instance.Pop();
         }
-        
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+
+        if (!IsCrafting)
+        {
+            contextualMenuAnim.SetBool("HasTraps", GameVars.Values.BaseballLauncher.CanCraft(_inventory));
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            IsCrafting = true;
+            if (!HasContextualMenu) ContextualMenuEnter();
+            else ContextualMenuExit();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             GameVars.Values.BaseballLauncher.Craft(_inventory);
         }
@@ -408,6 +425,16 @@ public class Player : MonoBehaviour
         Gizmos.DrawLine(start + new Vector3(-gizmoScaleSin, 0f, -gizmoScaleSin), start + new Vector3(-gizmoScaleSin, 0f, -gizmoScaleSin) + down);
     }
 
+    public void ContextualMenuEnter()
+    {
+        contextualMenuAnim.SetBool("HasTraps", true);
+        HasContextualMenu = true;
+    }
+    public void ContextualMenuExit()
+    {
+        contextualMenuAnim.SetBool("HasTraps", false);
+        HasContextualMenu = false;
+    }
     private void SetOnItem(Item item)
     {
         if (item is null)
