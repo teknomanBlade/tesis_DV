@@ -4,44 +4,66 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    private Player _player;
-    private Vector3 initPos;
+    public Player _player;
+    public GameObject _camera;
+    private Quaternion targetAngle;
+    private float smoothing = 15f;
+    private Vector3 offset = new Vector3(0f, 0.75f, 0f);
 
     //Bobbing
-    private float transitionSpeed = 20f;
-    private float timer = Mathf.PI / 2;
-    private float bobSpeed = 4.8f;
-    private float bobAmount = 0.1f;
+    private Vector3 _initPos;
+    private float _toggleSpeed = 0.3f;
+    private float _amplitude = 0.015f;
+    private float _frequency = 10.0f;
 
-    private void Start()
+    private void Awake()
     {
-        initPos = transform.localPosition;
-        if (_player == null) _player = GetComponentInParent<Player>();
+        _player = GameObject.Find("Player").GetComponent<Player>();
+        _camera = GameObject.Find("MainCamera");
+        _initPos = _camera.transform.localPosition;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        Bobbing();
+        CheckMotion();
+        ResetPosition();
+
+        transform.position = Vector3.Lerp(transform.position, _player.transform.position + offset, smoothing * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetAngle, smoothing * Time.deltaTime);
     }
 
-    public void ChangePitch(Vector3 pitch)
+    public void ChangeAngles(Vector3 angles)
     {
-        transform.localEulerAngles = pitch;
+        targetAngle = Quaternion.Euler(angles.x, angles.y, angles.z);
     }
 
-    public void Bobbing()
+    private void CheckMotion()
     {
-        Vector3 pVel = _player.GetVelocity();
-        if (Mathf.Abs(pVel.x) >= 0.05f  || Mathf.Abs(pVel.z) >= 0.05f)
-        {
-            timer += bobSpeed * Time.deltaTime;
-            transform.localPosition = new Vector3(Mathf.Cos(timer) * bobAmount, initPos.y + Mathf.Abs((Mathf.Sin(timer) * bobAmount)), initPos.z);
-        } else
-        {
-            timer = Mathf.PI / 2;
-            transform.localPosition = new Vector3(Mathf.Lerp(transform.localPosition.x, initPos.x, transitionSpeed * Time.deltaTime), Mathf.Lerp(transform.localPosition.y, initPos.y, transitionSpeed * Time.deltaTime), Mathf.Lerp(transform.localPosition.z, initPos.z, transitionSpeed * Time.deltaTime));
-        }
+        var pSpeed = _player.GetVelocity();
+        float speed = new Vector3(pSpeed.x, 0, pSpeed.z).magnitude;
 
-        if (timer > Mathf.PI * 2) timer = 0;
+        if (speed < _toggleSpeed) return;
+        if (!_player.isGrounded) return;
+
+        PlayMotion(FootStepMotion());
+    }
+
+    private Vector3 FootStepMotion()
+    {
+        Vector3 pos = Vector3.zero;
+        pos.y += Mathf.Sin(Time.time * _frequency) * _amplitude;
+        pos.x += Mathf.Cos(Time.time * _frequency / 2) * _amplitude * 2;
+        return pos;
+    }
+
+    private void ResetPosition()
+    {
+        if (_camera.transform.localPosition == _initPos) return;
+        _camera.transform.localPosition = Vector3.Lerp(_camera.transform.localPosition, _initPos, 1 * Time.deltaTime);
+    }
+
+    private void PlayMotion(Vector3 motion)
+    {
+        _camera.transform.localPosition += motion;
     }
 }

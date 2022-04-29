@@ -56,22 +56,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47e2b9790c83e847abf92fb8d6b3b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookingAtText: {fileID: 0}
   _inventory: {fileID: 0}
-  craftingRecipe: {fileID: 0}
+  preventCheck: 0
   isGrounded: 1
   isCrouching: 0
-  isSprinting: 0
+  crosshair: {fileID: 0}
   lookingAt: {fileID: 0}
-  activableLookingAt: {fileID: 0}
   lookingFor: {fileID: 0}
   lookingPlacement: {x: 0, y: 0, z: 0}
-  invItem:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  currentInvSlot: 0
   timer: 0
+  gizmoScale: 0.45
 --- !u!23 &5996942980142100167
 MeshRenderer:
   m_ObjectHideFlags: 0

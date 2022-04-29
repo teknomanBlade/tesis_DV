@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     //---------
     private Rigidbody _rb;
     
-    private PlayerCamera _cam;
+    public PlayerCamera _cam;
     [SerializeField]
     private Inventory _inventory;
 
@@ -26,8 +26,7 @@ public class Player : MonoBehaviour
     public bool preventCheck = false;
     private float preventCheckTime = 0.25f;
 
-    [SerializeField]
-    private bool isGrounded = true;
+    public bool isGrounded = true;
     [SerializeField]
     private bool isCrouching = false;
     private Vector3 originalScale;
@@ -56,7 +55,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _cam = GameObject.Find("MainCamera").GetComponent<PlayerCamera>();
+        _cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
         _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
 
         originalScale = transform.localScale;
@@ -73,8 +72,6 @@ public class Player : MonoBehaviour
     private void Update()
     {
         LookingAt();
-        Camera();
-        LookingForPlacement();
         
 
         if (!GameVars.Values.crouchToggle)
@@ -121,6 +118,9 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Camera();
+        LookingForPlacement();
+
         Walk();
         CheckGround();
 
@@ -243,7 +243,7 @@ public class Player : MonoBehaviour
         pitch = Mathf.Clamp(pitch, -lookAngle, lookAngle);
 
         transform.localEulerAngles = new Vector3(0f, yaw, 0f);
-        _cam.ChangePitch(new Vector3(pitch, 0f, 0f));
+        _cam.ChangeAngles(new Vector3(pitch, yaw, 0f));
     }
 
     public Vector3 GetCameraPosition()
