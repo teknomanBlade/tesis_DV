@@ -48,6 +48,8 @@ public class Player : MonoBehaviour
     public InventoryItem lookingFor;
     public Vector3 lookingPlacement;
     public float timer = 0f;
+    public bool isDead = false;
+    public int hp = 4;
 
     //Gizmos
     public float gizmoScale = 1f;
@@ -131,6 +133,24 @@ public class Player : MonoBehaviour
         {
             _rb.velocity -= new Vector3(0f, 9.8f * Time.deltaTime, 0f);
         }
+    }
+
+    public void Damage()
+    {
+        hp--;
+        if (hp <= 0) Die();
+    }
+
+    public void Die()
+    {
+        _rb.isKinematic = true;
+        //_anim.SetBool("IsDead", true);
+        Invoke("Dead", 3f);
+    }
+
+    public void Dead()
+    {
+        isDead = true;
     }
 
     #region Movement
@@ -357,7 +377,6 @@ public class Player : MonoBehaviour
             
         }
         //lookingIMovable.BecomeMovable();
-        
     }
 
     public void PlayPickUpSound()
