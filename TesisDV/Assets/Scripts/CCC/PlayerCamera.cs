@@ -13,7 +13,7 @@ public class PlayerCamera : MonoBehaviour
     //Bobbing
     private Vector3 _initPos;
     private float _toggleSpeed = 0.3f;
-    private float _amplitude = 0.015f;
+    private float _amplitude = 0.005f;
     private float _frequency = 10.0f;
 
     private void Awake()
@@ -44,7 +44,6 @@ public class PlayerCamera : MonoBehaviour
 
         if (speed < _toggleSpeed) return;
         if (!_player.isGrounded) return;
-
         PlayMotion(FootStepMotion());
     }
 
