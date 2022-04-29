@@ -20,7 +20,7 @@ using UnityEngine;
             //public InventoryItem item;
             public int craftingID;
             public int amount;
-            public GameObject baseballMachinePrefab;
+            public GameObject trapPrefab;
         }
 
         public bool CanCraft(Inventory inventory)
@@ -64,7 +64,8 @@ using UnityEngine;
                         
                         if(buildAmount == 0)
                         {
-                            GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, _player.GetPrefabPlacement(), Quaternion.Euler(-90f,0f,0f));
+                            //GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, _player.GetPrefabPlacement(), Quaternion.Euler(-90f,0f,90f));
+                            GameObject aux = Instantiate(itemAmount.trapPrefab, _player.GetPrefabPlacement(), Quaternion.identity);
                             //aux.transform.rotation = _player.transform.rotation;
                         }
                         buildAmount++;
