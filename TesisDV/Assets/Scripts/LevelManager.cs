@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -33,7 +34,8 @@ public class LevelManager : MonoBehaviour
 
     public void LoseGame()
     {
-        playing = false;
+        //playing = false;
         Debug.Log("Loser");
+        SceneManager.LoadScene("MainFloor_Upgrade");
     }
 }
