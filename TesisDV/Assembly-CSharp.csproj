@@ -53,6 +53,7 @@
     <UnityVersion>2020.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\PathFinding\PriorityQueue.cs" />
     <Compile Include="Assets\Scripts\ScreenManager\ScreenGO.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\ScreenManager\CraftingScreen.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Assets\Scripts\CCC\PlayerCamera.cs" />
     <Compile Include="Assets\Scripts\Trap.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\PathFinding\PathfindingManager.cs" />
     <Compile Include="Assets\Scripts\Triggers\TriggerMainStairs.cs" />
     <Compile Include="Assets\Scripts\CCC\Player.cs" />
     <Compile Include="Assets\Scripts\SoundManager\SoundManager.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Assets\Scripts\Door.cs" />
     <Compile Include="Assets\Scripts\CraftingRecipe.cs" />
     <Compile Include="Assets\Scripts\MeshRotator\MeshRotator.cs" />
+    <Compile Include="Assets\Scripts\PathFinding\ThetaStar.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryEventArgs.cs" />
     <Compile Include="Assets\Scripts\GameVars.cs" />
     <Compile Include="Assets\Scripts\Blueprint.cs" />
@@ -85,6 +88,7 @@
     <Compile Include="Assets\Scripts\UI\HUD.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInteractable.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
+    <Compile Include="Assets\Scripts\PathFinding\Node.cs" />
     <Compile Include="Assets\Scripts\BaseballLauncher.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\UFO.cs" />
@@ -112,7 +116,9 @@
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_LuminanceNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_FWidthOpNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ScaleAndOffsetNode.shader" />
+    <None Include="Assets\Models\Materials\Gray\ToonShadowsGray.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Templates\Legacy\MultiPassUnlit.shader" />
+    <None Include="Assets\Models\Materials\UFO\ToonShadowsUFO.shader" />
     <None Include="Assets\AmplifyShaderEditor\CreatingTerrainsWithASE.txt" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ATan2OpNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_TFHCCompareWithRange.shader" />
@@ -309,6 +315,7 @@
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_RGBToHSVNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_DecodeFloatRGHlpNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_Clip.shader" />
+    <None Include="Assets\Models\Materials\UFO\ToonShadowsUFOSpinner.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_TemplateShaderProperty.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_WorldNormalVector.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_BreakToComponentsNode.shader" />
