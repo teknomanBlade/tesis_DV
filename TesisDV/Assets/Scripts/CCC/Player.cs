@@ -54,6 +54,7 @@ public class Player : MonoBehaviour
     public bool isDead = false;
     public int hp = 4;
 
+    public bool HasContextualMenu = false;
     public bool IsCrafting = false;
     //Gizmos
     public float gizmoScale = 1f;
