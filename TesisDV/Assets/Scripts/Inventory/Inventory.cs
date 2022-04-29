@@ -6,11 +6,20 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField] List<InventoryItem> items;
     [SerializeField] Slot[] itemSlots;
-
-     public void AddItem(InventoryItem item)
+    [SerializeField] private CanvasGroup _myCanvasGroup;       
+    private float fadeDelay = 1.1f;
+    private bool isFaded;
+    private void Awake()
     {
-       for (int i = 0; i < itemSlots.Length; i++)
-       {
+        _myCanvasGroup = GetComponent<CanvasGroup>();
+        isFaded = true;
+    }
+
+    public void AddItem(InventoryItem item)
+    {
+            Fade();
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
            if(itemSlots[i].IsFree())
            {
                item.Interact();
@@ -20,7 +29,7 @@ public class Inventory : MonoBehaviour
 
                return;
            }
-       }
+        }
     } 
 
     public void AddItemID(InventoryItem item, int itemID)
@@ -123,6 +132,22 @@ public class Inventory : MonoBehaviour
         }
         return number;
     }
+    public void Fade()
+    {
+        StartCoroutine(DoFade(_myCanvasGroup.alpha, 1));
+        isFaded = !isFaded;
+    }
+    public IEnumerator DoFade(float start, float end)
+    {
+        float counter = 0f;
 
+        while(counter < fadeDelay)
+        {
+            counter += Time.deltaTime;
+            _myCanvasGroup.alpha = Mathf.Lerp(start, end, counter / fadeDelay);
+
+            yield return null;
+        }
+    }
 }
 

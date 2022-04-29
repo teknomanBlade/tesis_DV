@@ -74,8 +74,6 @@ public class Player : MonoBehaviour
         LookingAt();
         Camera();
         LookingForPlacement();
-        
-        
 
         if (!GameVars.Values.crouchToggle)
         {

@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Net.Mime;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,10 +13,15 @@ public class Slot : MonoBehaviour
     private Image _image;
     [SerializeField]
     private int _itemID;
-
-    void Start()
+    [SerializeField]
+    private CanvasGroup _myCanvasGroup;  
+    private float fadeDelay = 1.1f;    
+    private bool isFaded;
+    void Awake()
     {
+        isFaded = true;
         _image = GetComponent<Image>();
+        _myCanvasGroup = GetComponent<CanvasGroup>();
     }
     
     public bool IsFree()
@@ -62,11 +68,13 @@ public class Slot : MonoBehaviour
         _image.color = new Color32(255,255,255,255);;
         _image.sprite = item.itemImage;
         _itemID = item.myCraftingID;
+        Fade();
     }
 
     public void SetItemID(int itemID)
     {
         _itemID = itemID;
+        
     }
 
     public void RemoveItem()
@@ -76,6 +84,26 @@ public class Slot : MonoBehaviour
         _image.color = new Color32(0,0,0,255);;
         //_image.enabled = false;
         _image.sprite = null;
+        Fade();
+        
+    }
+
+    public void Fade()
+    {
+        StartCoroutine(DoFade(_myCanvasGroup.alpha, isFaded ? 1 : 0));
+        isFaded = !isFaded;
+    }
+    public IEnumerator DoFade(float start, float end)
+    {
+        float counter = 0f;
+
+        while(counter < fadeDelay)
+        {
+            counter += Time.deltaTime;
+            _myCanvasGroup.alpha = Mathf.Lerp(start, end, counter / fadeDelay);
+
+            yield return null;
+        }
     }
 
 }

@@ -65,6 +65,7 @@ using UnityEngine;
                         if(buildAmount == 0)
                         {
                             GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, _player.GetPrefabPlacement(), Quaternion.Euler(-90f,0f,0f));
+                            //aux.transform.rotation = _player.transform.rotation;
                         }
                         buildAmount++;
   

@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseballLauncher : Item
+public class BaseballLauncher : Item, IMovable
 {
     public GameObject projectilePrefab;
+    public GameObject blueprintPrefab;
     public GameObject exitPoint;
     public GameObject ballsState1, ballsState2, ballsState3;
     public int shots = 15;
@@ -73,4 +74,9 @@ public class BaseballLauncher : Item
         ballsState3.SetActive(state3);
     }
 
+    public void BecomeMovable()
+    {
+        
+        Destroy(gameObject);
+    }
 }

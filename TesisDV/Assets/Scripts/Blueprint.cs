@@ -34,7 +34,7 @@ public class Blueprint : MonoBehaviour
         
 
         //Canbuild provisional.
-        if(Physics.Raycast(ray, out hit, 10f, GameVars.Values.GetFloorLayerMask()) && canBuild)
+        if(Physics.Raycast(ray, out hit, 100f, GameVars.Values.GetFloorLayerMask()) && canBuild)
         {
             auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
             transform.position = auxVector;
