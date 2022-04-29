@@ -72,11 +72,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        
-        //LookingFor();
+        LookingAt();
         Camera();
         LookingForPlacement();
-        LookingAt();
+        
 
         if (!GameVars.Values.crouchToggle)
         {
@@ -351,11 +350,14 @@ public class Player : MonoBehaviour
     {
         if (lookingAt.gameObject.TryGetComponent<IMovable>(out IMovable aux))
         {
+            SetOffItem(lookingAt);
+            lookingAt = null;
             aux.BecomeMovable();
             //ChangeCrosshair();
+            
         }
         //lookingIMovable.BecomeMovable();
-        //SetOffItem(lookingAt);
+        
     }
 
     public void PlayPickUpSound()

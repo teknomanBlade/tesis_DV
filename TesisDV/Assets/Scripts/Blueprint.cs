@@ -29,7 +29,6 @@ public class Blueprint : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(originalMaterial);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         
 

@@ -76,8 +76,8 @@ public class BaseballLauncher : Item, IMovable
 
     public void BecomeMovable()
     {
-        Destroy(gameObject);
+        
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
-        //Destroy(gameObject);
+        Destroy(gameObject);
     }
 }
