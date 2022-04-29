@@ -21,7 +21,7 @@ public class GameVars : MonoBehaviour
     [SerializeField]
     private string enemyLayerName;
 
-    // KeyBinds
+    [Header("KeyBinds")]
     public KeyCode jumpKey;
     public KeyCode primaryFire;
     public KeyCode secondaryFire;
@@ -32,7 +32,7 @@ public class GameVars : MonoBehaviour
     public KeyCode crouchKey;
     public bool crouchToggle;
 
-    //Resources
+    [Header("Resources")]
     public Sprite crosshair;
     public Sprite crosshairDoor;
     public Sprite crosshairHandGrab;
@@ -40,7 +40,11 @@ public class GameVars : MonoBehaviour
     public CraftingScreen craftingScreen;
     public List<AudioClip> audioClips;
 
-    // Game
+    [Header("Crafting Recipes")]
+    public CraftingRecipe BaseballLauncher;
+    public CraftingRecipe TVTrap;
+
+    [Header("Game")]
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
 

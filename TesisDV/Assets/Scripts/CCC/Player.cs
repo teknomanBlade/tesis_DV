@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     private Inventory _inventory;
 
     // Movement
-    public CraftingRecipe craftingRecipe;
+    //public CraftingRecipe craftingRecipe;
     private float speed = 5f;
     private float walkSpeed = 5f;
     private float sprintSpeed = 10f;
@@ -116,8 +116,7 @@ public class Player : MonoBehaviour
         
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if(craftingRecipe != null)
-                craftingRecipe.Craft(_inventory);
+            GameVars.Values.BaseballLauncher.Craft(_inventory);
         }
     }
 
