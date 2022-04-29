@@ -15,6 +15,7 @@ public class Gray : MonoBehaviour
     public bool stun = false;
     public bool skillEMP = false;
     public bool awake = false;
+    public int hp = 3;
 
     private void Awake()
     {
@@ -82,15 +83,17 @@ public class Gray : MonoBehaviour
         return true;
     }
 
-    public void Stun()
+    public void Stun(float time)
     {
+        _rb.isKinematic = true;
         stun = true;
         _anim.SetBool("IsStunned", true);
-        Invoke("UnStun", 5f);
+        Invoke("UnStun", time);
     }
 
     public void UnStun()
     {
+        _rb.isKinematic = false;
         stun = false;
     }
 
@@ -103,10 +106,27 @@ public class Gray : MonoBehaviour
     {
         awake = true;
     }
+
+    public void Damage()
+    {
+        Stun(0.2f);
+        hp--;
+        if (hp <= 0) Die();
+    }
+
+    public void Die()
+    {
+        awake = false;
+        _rb.isKinematic = true;
+        _anim.SetBool("IsDead", true);
+        Invoke("Dead", 3f);
+    }
+
     public void Dead()
     {
         Destroy(gameObject);
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, pursueThreshold);

@@ -266,7 +266,7 @@ public class Player : MonoBehaviour
         RaycastHit hit;
 
         //Crear variable distancia
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, 10f, GameVars.Values.GetItemLayerMask()))
+        if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 10f, GameVars.Values.GetItemLayerMask()))
         {
             lookingAt = hit.collider.gameObject.GetComponent<Item>();
             SetOnItem(lookingAt);
@@ -320,7 +320,7 @@ public class Player : MonoBehaviour
     {
         RaycastHit hit;
         //Crear variable distancia
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit,  10f, GameVars.Values.GetFloorLayerMask()))
+        if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit,  10f, GameVars.Values.GetFloorLayerMask()))
         {
             //Vector3 localHit = transform.InverseTransformPoint(hit.point);
             //Debug.Log("Looking at floor!!!!");

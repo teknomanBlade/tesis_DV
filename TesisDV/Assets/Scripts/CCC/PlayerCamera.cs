@@ -7,7 +7,7 @@ public class PlayerCamera : MonoBehaviour
     public Player _player;
     public GameObject _camera;
     private Quaternion targetAngle;
-    private float smoothing = 15f;
+    private float smoothing = 20f;
     private Vector3 offset = new Vector3(0f, 0.75f, 0f);
 
     //Bobbing
@@ -25,11 +25,16 @@ public class PlayerCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        CheckMotion();
-        ResetPosition();
+        //CheckMotion();
+        //ResetPosition();
 
         transform.position = Vector3.Lerp(transform.position, _player.transform.position + offset, smoothing * Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetAngle, smoothing * Time.deltaTime);
+    }
+
+    public Vector3 GetForward()
+    {
+        return _camera.transform.forward;
     }
 
     public void ChangeAngles(Vector3 angles)

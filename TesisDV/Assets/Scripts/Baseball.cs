@@ -9,4 +9,18 @@ public class Baseball : Projectile
         dieOnImpact = false;
         base.Start();
     }
+
+    protected override void OnContactEffect(Collision collision)
+    {
+        if (effectUp)
+        {
+            Debug.Log("Hit " + collision.transform.name);
+            if (collision.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
+            {
+                effectUp = false;
+                collision.gameObject.GetComponent<Gray>().Damage();
+            }
+            if (dieOnImpact) Destroy(gameObject);
+        }
+    }
 }

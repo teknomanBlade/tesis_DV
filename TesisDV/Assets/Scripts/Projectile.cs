@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Projectile : MonoBehaviour
 {
+    protected bool effectUp = true;
     protected bool dieOnImpact = true;
     protected float lifeTime = 3f;
 
@@ -15,9 +16,13 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual void OnContactEffect(Collision collision)
     {
-        Debug.Log("Hit " + collision.transform.name);
-        if (collision.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer())) collision.gameObject.GetComponent<Gray>().Stun();
-        if (dieOnImpact) Destroy(gameObject);
+        if (effectUp)
+        {
+            Debug.Log("Hit " + collision.transform.name);
+            if (collision.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer())) collision.gameObject.GetComponent<Gray>().Stun(5f);
+            if (dieOnImpact) Destroy(gameObject);
+            effectUp = false;
+        }
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
