@@ -33,12 +33,6 @@ using UnityEngine;
                 {
                     return false;
                 }
-
-                /* if(inventory.ItemCount(itemAmount.item) < itemAmount.amount)
-                {
-                    Debug.Log("Hola: " + itemAmount.item + itemAmount.amount);
-                    return false;
-                } */
             }
             return true;           
         }
@@ -47,15 +41,6 @@ using UnityEngine;
         {
             if (CanCraft(inventory))
             {
-                
-                /* foreach(ItemAmount itemAmount in materials)
-                {
-                    for(int i = 0; i < itemAmount.amount; i++)
-                    {
-                        inventory.RemoveItemID(itemAmount.craftingID);
-                    }
-                } */
-
                 foreach(ItemAmount itemAmount in results)
                 {
                     for (int i = 0; i < itemAmount.amount; i++)
@@ -64,16 +49,11 @@ using UnityEngine;
                         
                         if(buildAmount == 0)
                         {
-                            //GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, _player.GetPrefabPlacement(), Quaternion.Euler(-90f,0f,90f));
-                            GameObject aux = Instantiate(itemAmount.trapPrefab, _player.GetPrefabPlacement(), Quaternion.identity);
+                            GameObject aux = Instantiate(itemAmount.trapPrefab, _player.GetPrefabPlacement(), Quaternion.Euler(-90f,0f,90f));
+                            //GameObject aux = Instantiate(itemAmount.trapPrefab, _player.GetPrefabPlacement(), Quaternion.identity);
                             //aux.transform.rotation = _player.transform.rotation;
                         }
                         buildAmount++;
-  
-                        //auxVector = new Vector3(_player.GetPrefabPlacement().x, 1 ,_player.GetPrefabPlacement().z);
-                        //GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, _player.GetPrefabPlacement(), Quaternion.Euler(0, -90, 65.358f));
-                        //GameObject aux = Instantiate(itemAmount.baseballMachinePrefab, auxVector, Quaternion.Euler(-90f,0f,0f));
-                        //Destroy(aux.GetComponent<InventoryItem>());
                     }                    
                 }
             }

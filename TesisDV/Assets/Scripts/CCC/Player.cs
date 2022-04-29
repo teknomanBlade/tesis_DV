@@ -45,6 +45,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     public Item lookingAt;
+    public IMovable lookingIMovable;
     public InventoryItem lookingFor;
     public Vector3 lookingPlacement;
     public float timer = 0f;
@@ -71,9 +72,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        LookingAt();
+        
+        //LookingFor();
         Camera();
         LookingForPlacement();
+        LookingAt();
 
         if (!GameVars.Values.crouchToggle)
         {
@@ -90,6 +93,14 @@ public class Player : MonoBehaviour
             if (lookingAt != null)
             {
                 Interact();
+            }
+        }
+
+        if (Input.GetKeyDown(GameVars.Values.secondaryFire))
+        {
+            if (lookingAt != null)
+            {
+                MoveTrap();
             }
         }
 
@@ -335,6 +346,17 @@ public class Player : MonoBehaviour
             return;
         }
         lookingAt.Interact();
+    }
+
+    public void MoveTrap()
+    {
+        if (lookingAt.gameObject.TryGetComponent<IMovable>(out IMovable aux))
+        {
+            aux.BecomeMovable();
+            //ChangeCrosshair();
+        }
+        //lookingIMovable.BecomeMovable();
+        //SetOffItem(lookingAt);
     }
 
     public void PlayPickUpSound()

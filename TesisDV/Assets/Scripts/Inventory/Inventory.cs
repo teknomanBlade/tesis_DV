@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(InventoryItem item)
     {
-            Fade();
+        Fade();
         for (int i = 0; i < itemSlots.Length; i++)
         {
            if(itemSlots[i].IsFree())
