@@ -25,8 +25,8 @@ public class PlayerCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        //CheckMotion();
-        //ResetPosition();
+        CheckMotion();
+        ResetPosition();
 
         transform.position = Vector3.Lerp(transform.position, _player.transform.position + offset, smoothing * Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetAngle, smoothing * Time.deltaTime);

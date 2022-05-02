@@ -24,10 +24,11 @@ public class Player : MonoBehaviour
     private float maxVelocityChange = 20f;
     private float jumpForce = 7.5f;
     private bool jumpOnCooldown = false;
-    private float jumpCooldown = 0.15f;
+    private float jumpCooldown = 0.1f;
 
     public bool preventCheck = false;
-    private float preventCheckTime = 0.25f;
+    private float preventCheckTime = 0.1f;
+    private Coroutine preventCheckCoroutine;
 
     public bool isGrounded = true;
     [SerializeField]
@@ -146,6 +147,7 @@ public class Player : MonoBehaviour
 
         if (isGrounded)
         {
+            if (preventCheckCoroutine != null) StopCoroutine(preventCheckCoroutine);
             if (Input.GetKeyDown(GameVars.Values.jumpKey) && !jumpOnCooldown) Jump();
         } else
         {
@@ -191,7 +193,7 @@ public class Player : MonoBehaviour
     private void Jump()
     {
         isGrounded = false;
-        StartCoroutine("PreventCheck");
+        preventCheckCoroutine = StartCoroutine("PreventCheck");
         _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
         _rb.AddForce(0f, jumpForce, 0f, ForceMode.VelocityChange);
     }
