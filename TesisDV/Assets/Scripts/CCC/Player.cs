@@ -443,11 +443,11 @@ public class Player : MonoBehaviour
         if (item is null)
             return;
 
-        var outLine = item.gameObject.GetComponent<OutLineItem>();
+        var outLine = item.gameObject.GetComponent<Outline>();
         if (outLine is null)
             return;
-        outLine.SetMaterials();
-        outLine.isFocus = true;
+
+        outLine.OutlineWidth = 6f;
     }
 
     private void SetOffItem(Item item)
@@ -455,10 +455,11 @@ public class Player : MonoBehaviour
         if (item is null)
             return;
 
-        var outLine = item.gameObject.GetComponent<OutLineItem>();
+        var outLine = item.gameObject.GetComponent<Outline>();
         if (outLine is null)
             return;
 
-        outLine.isFocus = false;
+        outLine.OutlineWidth = 0f;
+
     }
 }

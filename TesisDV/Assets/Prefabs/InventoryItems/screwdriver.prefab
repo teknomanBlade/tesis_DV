@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3372954821157597831}
   - component: {fileID: 4111418311636987399}
   - component: {fileID: 4111418311636987396}
+  - component: {fileID: -6918451654058187791}
   m_Layer: 10
   m_Name: screwdriver
   m_TagString: Untagged
@@ -110,3 +111,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: Screwdriver
   _itemImage: {fileID: 21300000, guid: 2ae4dfdf0c5b8134cb67b35af0148de0, type: 3}
+  myCraftingID: 0
+  timeLimit: 3
+--- !u!114 &-6918451654058187791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3877556373250478930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.19551468, g: 1, b: 0, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

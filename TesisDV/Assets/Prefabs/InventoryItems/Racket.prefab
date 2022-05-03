@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6083911338504831761}
   - component: {fileID: 2928863171368445855}
   - component: {fileID: 474922429619749596}
-  - component: {fileID: 5120943918535700139}
+  - component: {fileID: 4045332455025785545}
   m_Layer: 10
   m_Name: Racket
   m_TagString: Untagged
@@ -114,7 +114,7 @@ MonoBehaviour:
   _itemImage: {fileID: 21300000, guid: 7994abede8e4eee43971f5149741283c, type: 3}
   myCraftingID: 3
   timeLimit: 3
---- !u!114 &5120943918535700139
+--- !u!114 &4045332455025785545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,14 +123,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7988853864577627180}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0acf0fff94ef070409d418dc0f6b6bc1, type: 3}
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutLineMaterial: {fileID: 2100000, guid: de86a44bd232f0e4c9dee10595146479, type: 2}
-  baseMaterial: {fileID: 0}
-  m_Renderer: {fileID: 0}
-  m_MainTexture: {fileID: 2800000, guid: 68b2eaea406c7d3499e39ade51f49713, type: 3}
-  m_Normal: {fileID: 2800000, guid: a241fe48d2d34f74b8bd6c5dce4d278b, type: 3}
-  m_Metal: {fileID: 2800000, guid: a00253c7c2091544ea1652a409c86ff4, type: 3}
-  m_AO: {fileID: 2800000, guid: 97be30d09ad02824ebc67a2d7ceb13e1, type: 3}
-  isFocus: 0
+  outlineMode: 0
+  outlineColor: {r: 0.13299012, g: 1, b: 0, a: 1}
+  outlineWidth: 6
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

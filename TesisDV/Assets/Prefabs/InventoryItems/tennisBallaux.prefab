@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2679019402174758399}
   - component: {fileID: 6794119782065756994}
   - component: {fileID: 7672155381100128060}
+  - component: {fileID: 3923324235713322783}
   m_Layer: 10
   m_Name: tennisBallaux
   m_TagString: Untagged
@@ -124,6 +125,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: Tennis Ball
   _itemImage: {fileID: 21300000, guid: 7f228ebb1835f10488bd7d9087480e2c, type: 3}
+  myCraftingID: 0
+  timeLimit: 3
 --- !u!54 &7672155381100128060
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -140,3 +143,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3923324235713322783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5947256333315532305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.2148037, g: 1, b: 0, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
