@@ -23,8 +23,8 @@ public class Blueprint : MonoBehaviour
     void Start()
     {
         canBuild = true;
-        originalMaterial = GetComponent<Renderer>().material;
-        myRenderer = GetComponent<Renderer>();
+        //originalMaterial = GetComponent<Renderer>().material; Probar despues de arreglar posicionamiento. 
+        //myRenderer = GetComponent<Renderer>(); Probar despues de arreglar posicionamiento. 
     }
 
     void Update()
