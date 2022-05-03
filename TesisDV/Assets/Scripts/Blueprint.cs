@@ -41,7 +41,7 @@ public class Blueprint : MonoBehaviour
 
         if(Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
-            secondAuxVector = new Vector3(transform.position.x, 0.25f, transform.position.z);
+            secondAuxVector = new Vector3(transform.position.x, 1, transform.position.z);
             finalPosition = secondAuxVector;
             finalRotation = transform.rotation;
             StartCoroutine(BuildTrap());
@@ -62,19 +62,19 @@ public class Blueprint : MonoBehaviour
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0) 
         {
-        transform.Rotate(Vector3.forward * -15f, Space.Self);
+        transform.Rotate(Vector3.up * -15f, Space.Self);
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0) 
         {
-        transform.Rotate(Vector3.forward * 15f, Space.Self);
+        transform.Rotate(Vector3.up * 15f, Space.Self);
         }
     }
 
     private IEnumerator BuildTrap()
     {
         Instantiate(particles, transform.position, transform.rotation);
-        myRenderer.enabled = false;
+        //myRenderer.enabled = false; Probar despues de arreglar posicionamiento. 
         //Canbuild provisional.
         canBuild = false;
         GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
@@ -89,12 +89,12 @@ public class Blueprint : MonoBehaviour
 
     private void ChangeMaterial()
     {
-        myRenderer.material = newMaterial;
+        //myRenderer.material = newMaterial; Probar despues de arreglar posicionamiento.
     }
 
     private void SetOriginalMaterial()
     {
-        myRenderer.material = originalMaterial;
+        //myRenderer.material = originalMaterial; Probar despues de arreglar posicionamiento.
     }
 
     void OnTriggerStay(Collider other)

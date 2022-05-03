@@ -365,7 +365,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8337342207286034098}
   - component: {fileID: 8337342207286034100}
-  - component: {fileID: 8337342207286034099}
   - component: {fileID: 8337342207286034101}
   - component: {fileID: 8337342207286034102}
   m_Layer: 10
@@ -420,25 +419,6 @@ MonoBehaviour:
   shotsLeft: 0
   interval: 0.5
   active: 0
---- !u!95 &8337342207286034099
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8337342207286034097}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 939ee6b71c719f6438abd3e9507948a4, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!65 &8337342207286034101
 BoxCollider:
   m_ObjectHideFlags: 0
