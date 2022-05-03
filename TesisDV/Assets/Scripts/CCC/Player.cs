@@ -306,7 +306,7 @@ public class Player : MonoBehaviour
         RaycastHit hit;
 
         //Crear variable distancia
-        if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 10f, GameVars.Values.GetItemLayerMask()))
+        if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()))
         {
             lookingAt = hit.collider.gameObject.GetComponent<Item>();
             SetOnItem(lookingAt);

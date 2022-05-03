@@ -16,6 +16,7 @@ public class BaseballLauncher : Item, IMovable
     public void Awake()
     {
         shotsLeft = shots;
+        ActiveBallsState1();
     }
 
     public override void Interact()
@@ -44,6 +45,11 @@ public class BaseballLauncher : Item, IMovable
         GameVars.Values.soundManager.PlaySoundAtPoint("BallLaunched", transform.position, 0.7f);
     }
 
+    public void ActiveBallsState1()
+    {
+        ballsState1.SetActive(true);
+    }
+
     public void ChangeBallsState(int shotsLeft)
     {
         if (shotsLeft <= 0)
@@ -55,7 +61,7 @@ public class BaseballLauncher : Item, IMovable
 
         if (shotsLeft == 15)
         {
-            ActiveDeactivateBallStates(!ballsState1.activeSelf, false, false);
+            ActiveDeactivateBallStates(true, false, false);
         }
         else if (shotsLeft == 11)
         {
