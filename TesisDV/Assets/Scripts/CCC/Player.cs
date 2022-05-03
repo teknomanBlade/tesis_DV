@@ -33,8 +33,8 @@ public class Player : MonoBehaviour
     public bool isGrounded = true;
     [SerializeField]
     private bool isCrouching = false;
-    private Vector3 originalScale;
-    private Vector3 originalCamPos;
+    private Vector3 _originalScale;
+    private Vector3 _originalCamPos;
 
     // Mouse
 
@@ -66,8 +66,8 @@ public class Player : MonoBehaviour
         _cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
         _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
 
-        originalScale = transform.localScale;
-        originalCamPos = _cam.transform.localPosition;
+        _originalScale = transform.localScale;
+        _originalCamPos = _cam.transform.localPosition;
         contextualMenu = GameObject.Find("ContextualTrapMenu");
         contextualMenuAnim = contextualMenu.GetComponent<Animator>();
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
@@ -81,6 +81,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         LookingAt();
+        CheckGround();
         
 
         if (!GameVars.Values.crouchToggle)
@@ -135,16 +136,7 @@ public class Player : MonoBehaviour
         {
             GameVars.Values.BaseballLauncher.Craft(_inventory);
         }
-    }
-
-    private void FixedUpdate()
-    {
-        Camera();
-        LookingForPlacement();
-
-        Walk();
-        CheckGround();
-
+        
         if (isGrounded)
         {
             if (preventCheckCoroutine != null) StopCoroutine(preventCheckCoroutine);
@@ -153,6 +145,14 @@ public class Player : MonoBehaviour
         {
             _rb.velocity -= new Vector3(0f, 9.8f * Time.deltaTime, 0f);
         }
+    }
+
+    private void FixedUpdate()
+    {
+        Camera();
+        LookingForPlacement();
+
+        Walk();
     }
 
     public void Damage()
@@ -193,7 +193,7 @@ public class Player : MonoBehaviour
     private void Jump()
     {
         isGrounded = false;
-        preventCheckCoroutine = StartCoroutine("PreventCheck");
+        //preventCheckCoroutine = StartCoroutine("PreventCheck");
         _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
         _rb.AddForce(0f, jumpForce, 0f, ForceMode.VelocityChange);
     }
@@ -219,9 +219,9 @@ public class Player : MonoBehaviour
     private void CrouchExit()
     {
         if (!isCrouching) return;
-        transform.localScale = originalScale;
+        transform.localScale = _originalScale;
         transform.localPosition += new Vector3(0f, 0.5f, 0f);
-        _cam.transform.localPosition = new Vector3(0f, originalCamPos.y, 0f);
+        _cam.transform.localPosition = new Vector3(0f, _originalCamPos.y, 0f);
         isCrouching = false;
     }
 
@@ -243,11 +243,11 @@ public class Player : MonoBehaviour
         LayerMask layermask = 1 << gameObject.layer;
         Vector3 start = transform.position - new Vector3(0f, 0.9f, 0f);
         float gizmoSin = 0.7f * gizmoScale;
-        float maxDist = 0.2f;
+        float maxDist = 0.35f;
 
         if (preventCheck) return;
 
-        if (Physics.Raycast(start, -transform.up, 0.25f, ~layermask))
+        if (Physics.Raycast(start, -transform.up, maxDist, ~layermask))
         {
             isGrounded = true;
             return;

@@ -21,6 +21,7 @@ public class Gray : MonoBehaviour
     {
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
+        _player = GameObject.Find("Player");
     }
 
     private void Update()
