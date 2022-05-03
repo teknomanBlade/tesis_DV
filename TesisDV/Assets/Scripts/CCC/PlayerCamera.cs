@@ -20,7 +20,7 @@ public class PlayerCamera : MonoBehaviour
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _camera = GameObject.Find("MainCamera");
-        _initPos = _camera.transform.localPosition;
+        SetInitPos(_camera.transform.localPosition);
     }
 
     private void LateUpdate()
@@ -69,5 +69,10 @@ public class PlayerCamera : MonoBehaviour
     private void PlayMotion(Vector3 motion)
     {
         _camera.transform.localPosition += motion;
+    }
+
+    public void SetInitPos(Vector3 newPos)
+    {
+        _initPos = newPos;
     }
 }

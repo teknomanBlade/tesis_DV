@@ -139,7 +139,6 @@ public class Player : MonoBehaviour
         
         if (isGrounded)
         {
-            if (preventCheckCoroutine != null) StopCoroutine(preventCheckCoroutine);
             if (Input.GetKeyDown(GameVars.Values.jumpKey) && !jumpOnCooldown) Jump();
         } else
         {
@@ -193,7 +192,6 @@ public class Player : MonoBehaviour
     private void Jump()
     {
         isGrounded = false;
-        //preventCheckCoroutine = StartCoroutine("PreventCheck");
         _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
         _rb.AddForce(0f, jumpForce, 0f, ForceMode.VelocityChange);
     }
@@ -212,7 +210,7 @@ public class Player : MonoBehaviour
         if (isCrouching) return;
         transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y / 2, transform.localScale.z);
         transform.localPosition -= new Vector3(0f, 0.5f, 0f);
-        _cam.transform.localPosition = new Vector3(0f, _cam.transform.position.y / 2, 0f);
+        _cam.SetInitPos(new Vector3(0f, -0.5f, 0f));
         isCrouching = true;
     }
 
@@ -221,7 +219,7 @@ public class Player : MonoBehaviour
         if (!isCrouching) return;
         transform.localScale = _originalScale;
         transform.localPosition += new Vector3(0f, 0.5f, 0f);
-        _cam.transform.localPosition = new Vector3(0f, _originalCamPos.y, 0f);
+        _cam.SetInitPos(new Vector3(0f, 0f, 0f));
         isCrouching = false;
     }
 
