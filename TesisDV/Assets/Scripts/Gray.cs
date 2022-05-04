@@ -10,6 +10,8 @@ public class Gray : MonoBehaviour
     private Animator _anim;
     private Rigidbody _rb;
     private LevelManager _lm;
+    private ParticleSystem _empAbility;
+    private bool _isWalkingSoundPlaying = false;
     public float distanceToPlayer;
     public float pursueThreshold = 10f;
     public float disengageThreshold = 15f;
@@ -31,6 +33,8 @@ public class Gray : MonoBehaviour
         _player = GameObject.Find("Player");
         _playerScript = _player.GetComponent<Player>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
+        _empAbility = GameObject.Find("EMPAbility").GetComponent<ParticleSystem>();
+        _empAbility.Stop();
     }
 
     private void Start()
@@ -81,16 +85,23 @@ public class Gray : MonoBehaviour
                     {
                         pursue = false;
                         _anim.SetBool("IsWalking", false);
+                        _isWalkingSoundPlaying = false;
                     }
 
                     if (pursue)
                     {
                         if (distanceToPlayer >= 1.7f) Move();
+                        if (!_isWalkingSoundPlaying)
+                        {
+                            GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
+                            _isWalkingSoundPlaying = true;
+                        }
                     }
                 }
                 else
                 {
                     pursue = false;
+                    _isWalkingSoundPlaying = false;
                 }
             }
         }
@@ -140,10 +151,15 @@ public class Gray : MonoBehaviour
     {
         attacking = true;
         yield return new WaitForSeconds(attackWindup);
-        Debug.Log("atk");
+       
         _playerScript.Damage();
         attacking = false;
         attackCoroutine = StartCoroutine("Attack");
+    }
+
+    public void PlayParticleSystemShader()
+    {
+        _empAbility.Play();
     }
 
     public void Stun(float time)
