@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
     private Vector3 _originalCamPos;
 
     // Mouse
-
+    public bool canMoveCamera = true;
     public Image crosshair;
     private Vector2 mouseSens = new Vector2(1f, 1f);
     private float yaw = 0f;
@@ -148,7 +148,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Camera();
+        if(canMoveCamera) Camera();
         LookingForPlacement();
 
         Walk();
@@ -163,6 +163,7 @@ public class Player : MonoBehaviour
     public void Die()
     {
         _rb.isKinematic = true;
+        canMoveCamera = false;
         //_anim.SetBool("IsDead", true);
         Invoke("Dead", 3f);
     }

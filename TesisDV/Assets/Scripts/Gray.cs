@@ -6,11 +6,17 @@ public class Gray : MonoBehaviour
 {
     [SerializeField]
     private GameObject _player;
+    private Player _playerScript;
     private Animator _anim;
     private Rigidbody _rb;
     public float distanceToPlayer;
     public float pursueThreshold = 10f;
     public float disengageThreshold = 15f;
+    public float attackThreshold = 2.5f;
+    public float attackDisengageThreshold = 3f;
+    public float attackWindup = 1f;
+    public Coroutine attackCoroutine;
+    public bool attacking = false;
     public bool pursue = false;
     public bool stun = false;
     public bool skillEMP = false;
@@ -22,10 +28,16 @@ public class Gray : MonoBehaviour
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
         _player = GameObject.Find("Player");
+        _playerScript = _player.GetComponent<Player>();
     }
 
     private void Update()
     {
+        if (_player == null)
+        {
+            StopAllCoroutines();
+            awake = false;
+        }
         if (awake)
         {
             if (skillEMP)
@@ -41,6 +53,19 @@ public class Gray : MonoBehaviour
                     distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
                     if (IsInSight())
                     {
+                        if (CanAttack())
+                        {
+                            if (attackCoroutine == null) attackCoroutine = StartCoroutine("Attack");
+                        }
+                        else
+                        {
+                            if (attackCoroutine != null)
+                            {
+                                StopCoroutine(attackCoroutine);
+                                attackCoroutine = null;
+                                attacking = false;
+                            }
+                        }
                         pursue = true;
                         _anim.SetBool("IsWalking", true);
                     }
@@ -74,6 +99,12 @@ public class Gray : MonoBehaviour
 
     private bool IsInSight()
     {
+        LayerMask layermask = 1 << 12;
+        layermask = layermask << 3;
+        if (Physics.Raycast(transform.position, _player.transform.position, disengageThreshold, layermask))
+        {
+            return false;
+        }
         if (pursue)
         {
             if (Vector3.Distance(_player.transform.position, transform.position) > disengageThreshold) return false;
@@ -82,6 +113,29 @@ public class Gray : MonoBehaviour
             if (Vector3.Distance(_player.transform.position, transform.position) > pursueThreshold) return false;
         }
         return true;
+    }
+
+    private bool CanAttack()
+    {
+        if (!IsInSight()) return false;
+        if (attacking)
+        {
+            if (Vector3.Distance(_player.transform.position, transform.position) > attackDisengageThreshold) return false;
+        } else
+        {
+            if (Vector3.Distance(_player.transform.position, transform.position) > attackThreshold) return false;
+        }
+        return true;
+    }
+
+    IEnumerator Attack()
+    {
+        attacking = true;
+        yield return new WaitForSeconds(attackWindup);
+        Debug.Log("atk");
+        _playerScript.Damage();
+        attacking = false;
+        attackCoroutine = StartCoroutine("Attack");
     }
 
     public void Stun(float time)
@@ -130,7 +184,12 @@ public class Gray : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackThreshold);
+        Gizmos.DrawWireSphere(transform.position, attackDisengageThreshold);
+        Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(transform.position, pursueThreshold);
         Gizmos.DrawWireSphere(transform.position, disengageThreshold);
+        Gizmos.DrawRay(transform.position, _player.transform.position - transform.position);
     }
 }
