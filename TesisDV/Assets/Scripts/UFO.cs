@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UFO : MonoBehaviour
 {
     private GameObject _UFOSpinner;
+    private LevelManager _lm;
     public Vector3 checkCubePos = new Vector3(0f, 4f, 0f);
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
@@ -17,13 +18,14 @@ public class UFO : MonoBehaviour
     public Gray currentGray;
     public float timeLimit;
     public float timer;
+    public bool spawning = false;
 
 
     private void Start()
     {
         _UFOSpinner = GameObject.Find("UFOSpinner");
+        _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         GameVars.Values.soundManager.PlaySound("UFOBuzz", sliderSoundVolume, true);
-        StartCoroutine("SpawnGrey");
     }
 
     public void RotateUFOSpinner()
@@ -41,6 +43,13 @@ public class UFO : MonoBehaviour
             currentGray = null;
             timer = 0;
         }
+
+    }
+
+    public void BeginSpawn()
+    {
+        spawning = true;
+        StartCoroutine("SpawnGrey");
     }
 
     IEnumerator SpawnGrey()
@@ -49,8 +58,10 @@ public class UFO : MonoBehaviour
         if (!Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
         {
             currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity).GetComponent<Gray>();
+            _lm.EnemySpawned();
+            spawning = false;
         }
-        StartCoroutine("SpawnGrey");
+        else StartCoroutine("SpawnGrey");
     }
 
     public void SpawnGreyLerp()

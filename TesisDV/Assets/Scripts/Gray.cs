@@ -9,6 +9,7 @@ public class Gray : MonoBehaviour
     private Player _playerScript;
     private Animator _anim;
     private Rigidbody _rb;
+    private LevelManager _lm;
     public float distanceToPlayer;
     public float pursueThreshold = 10f;
     public float disengageThreshold = 15f;
@@ -29,6 +30,13 @@ public class Gray : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _player = GameObject.Find("Player");
         _playerScript = _player.GetComponent<Player>();
+        _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
+    }
+
+    private void Start()
+    {
+        //for testing
+        //Invoke("Die", 0.5f);
     }
 
     private void Update()
@@ -174,6 +182,7 @@ public class Gray : MonoBehaviour
         awake = false;
         _rb.isKinematic = true;
         _anim.SetBool("IsDead", true);
+        _lm.EnemyDied();
         Invoke("Dead", 3f);
     }
 
