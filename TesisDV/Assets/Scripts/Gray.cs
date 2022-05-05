@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Gray : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class Gray : MonoBehaviour
     private Animator _anim;
     private Rigidbody _rb;
     private LevelManager _lm;
+    private NavMeshAgent _navMeshAgent;
     private ParticleSystem _empAbility;
     private bool _isWalkingSoundPlaying = false;
     public float distanceToPlayer;
@@ -25,6 +27,7 @@ public class Gray : MonoBehaviour
     public bool skillEMP = false;
     public bool awake = false;
     public int hp = 3;
+    public bool hasObjective = false;
 
     private void Awake()
     {
@@ -35,6 +38,8 @@ public class Gray : MonoBehaviour
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _empAbility = GameObject.Find("EMPAbility").GetComponent<ParticleSystem>();
         _empAbility.Stop();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        _lm.AddGray(this);
     }
 
     private void Start()
@@ -63,6 +68,7 @@ public class Gray : MonoBehaviour
                 {
                     _anim.SetBool("IsStunned", false);
                     distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
+
                     if (IsInSight())
                     {
                         if (CanAttack())
@@ -88,15 +94,17 @@ public class Gray : MonoBehaviour
                         _isWalkingSoundPlaying = false;
                     }
 
-                    if (pursue)
-                    {
-                        if (distanceToPlayer >= 1.7f) Move();
-                        if (!_isWalkingSoundPlaying)
-                        {
-                            GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
-                            _isWalkingSoundPlaying = true;
-                        }
-                    }
+                    Move();
+
+                    //if (pursue)
+                    //{
+                    //    if (distanceToPlayer >= 1.7f) Move();
+                    //    if (!_isWalkingSoundPlaying)
+                    //    {
+                    //        GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
+                    //        _isWalkingSoundPlaying = true;
+                    //    }
+                    //}
                 }
                 else
                 {
@@ -109,11 +117,23 @@ public class Gray : MonoBehaviour
 
     public void Move()
     {
+        Vector3 dest = default(Vector3);
+        if (pursue) dest = _player.transform.position;
+        else if (_lm.enemyHasObjective) dest = _lm.allUfos[0].transform.position;
+        else dest = _lm.objective.transform.position;
+
         var dir = _player.transform.position - transform.position;
         dir.y = 0f;
         transform.forward = dir;
         //transform.position += transform.forward * 3f * Time.deltaTime;
-        _rb.velocity = transform.forward * 2f;
+        //_rb.velocity = transform.forward * 2f;
+        _navMeshAgent.destination = dest;
+
+        if (!_isWalkingSoundPlaying)
+        {
+            GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
+           _isWalkingSoundPlaying = true;
+        }
     }
 
     private bool IsInSight()
@@ -193,12 +213,30 @@ public class Gray : MonoBehaviour
         if (hp <= 0) Die();
     }
 
+    public void Exit()
+    {
+        if (hasObjective)
+        {
+            _lm.LoseGame();
+        }
+        awake = false;
+        _lm.EnemyDied();
+        _lm.RemoveGray(this);
+        Destroy(gameObject);
+    }
+
     public void Die()
     {
+        if (hasObjective)
+        {
+            hasObjective = false;
+        }
         awake = false;
         _rb.isKinematic = true;
         _anim.SetBool("IsDead", true);
         _lm.EnemyDied();
+        _lm.RemoveGray(this);
+        _lm.CheckForObjective();
         Invoke("Dead", 3f);
     }
 

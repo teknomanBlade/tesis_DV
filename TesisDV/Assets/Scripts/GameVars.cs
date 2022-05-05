@@ -96,6 +96,8 @@ public class GameVars : MonoBehaviour
         soundManager.SetAudioClips(audioClips);
     }
 
+    
+
     #region Player
 
     public Vector3 GetPlayerPos()

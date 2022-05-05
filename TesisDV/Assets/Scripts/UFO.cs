@@ -43,7 +43,6 @@ public class UFO : MonoBehaviour
             currentGray = null;
             timer = 0;
         }
-
     }
 
     public void BeginSpawn()

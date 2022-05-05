@@ -11,6 +11,7 @@ public class LevelManager : MonoBehaviour
     public YouLoseScreen YouLose { get; private set; }
 
     public UFO[] allUfos;
+    public GameObject objective;
 
     public delegate void LevelDelegate();
     public CraftingRecipe craftingRecipe;
@@ -24,6 +25,9 @@ public class LevelManager : MonoBehaviour
     public int lastWaveEnemies = 0;
     public int enemiesAlive = 0;
     public int enemiesToSpawn = 0;
+
+    public List<Gray> enemiesInScene = new List<Gray>();
+    public bool enemyHasObjective = false;
 
 
     private void Start()
@@ -120,5 +124,24 @@ public class LevelManager : MonoBehaviour
         YouLose.ActiveScreen();
         Debug.Log("Loser");
         //SceneManager.LoadScene("MainFloor_Upgrade");
+    }
+
+    public void AddGray(Gray gray)
+    {
+        enemiesInScene.Add(gray);
+    }
+
+    public void RemoveGray(Gray gray)
+    {
+        enemiesInScene.Remove(gray);
+    }
+
+    public void CheckForObjective()
+    {
+        foreach (Gray gray in enemiesInScene)
+        {
+            enemyHasObjective = gray.hasObjective;
+            if (enemyHasObjective == true) return;
+        }
     }
 }
