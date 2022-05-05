@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
+    private GameObject _panelMain;
+
+    public YouWinScreen YouWin { get; private set; }
+    public YouLoseScreen YouLose { get; private set; }
+
     public UFO[] allUfos;
 
     public delegate void LevelDelegate();
@@ -24,6 +29,13 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
+        _panelMain = GameObject.Find("Panel");
+        YouWin = Instantiate(GameVars.Values.youWinScreen);
+        YouWin.transform.SetParent(_panelMain.transform);
+        YouLose = Instantiate(GameVars.Values.youLoseScreen);
+        YouLose.transform.SetParent(_panelMain.transform);
+        ScreenManager.Instance.Push(YouWin);
+        ScreenManager.Instance.Push(YouLose);
         craftingRecipe.RestoreBuildAmount();
         EndRound();
     }
@@ -98,13 +110,15 @@ public class LevelManager : MonoBehaviour
     public void WinGame()
     {
         Debug.Log("You Win!");
-        SceneManager.LoadScene("MainFloor_Upgrade");
+        YouWin.ActiveScreen();
+        //SceneManager.LoadScene("MainFloor_Upgrade");
     }
 
     public void LoseGame()
     {
         //playing = false;
+        YouLose.ActiveScreen();
         Debug.Log("Loser");
-        SceneManager.LoadScene("MainFloor_Upgrade");
+        //SceneManager.LoadScene("MainFloor_Upgrade");
     }
 }

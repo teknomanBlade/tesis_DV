@@ -38,6 +38,8 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairHandGrab;
     public Sprite crosshairActivation;
     public CraftingScreen craftingScreen;
+    public YouWinScreen youWinScreen;
+    public YouLoseScreen youLoseScreen;
     public List<AudioClip> audioClips;
 
     [Header("Crafting Recipes")]
@@ -88,6 +90,8 @@ public class GameVars : MonoBehaviour
         crosshairActivation = Resources.Load<Sprite>("ButtonPress");
         craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
         audioClips = Resources.LoadAll<AudioClip>("Sounds").ToList();
+        youWinScreen = Resources.Load<YouWinScreen>("YouWin");
+        youLoseScreen = Resources.Load<YouLoseScreen>("YouLose");
         soundManager = FindObjectOfType<SoundManager>();
         soundManager.SetAudioClips(audioClips);
     }
