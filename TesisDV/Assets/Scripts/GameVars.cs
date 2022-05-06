@@ -47,6 +47,7 @@ public class GameVars : MonoBehaviour
     [Header("Crafting Recipes")]
     public CraftingRecipe BaseballLauncher;
     public CraftingRecipe TVTrap;
+    public TVCraftingRecipe TVTrapAgain;
 
     [Header("Game")]
     public float projectileLifeTime = 5f;

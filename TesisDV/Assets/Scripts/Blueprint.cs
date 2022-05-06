@@ -39,7 +39,6 @@ public class Blueprint : MonoBehaviour
             //auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
             //transform.position = auxVector;
             transform.position = hit.point;
-            //customPivot.transform.position = hit.point;
         }
 
         if(Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)

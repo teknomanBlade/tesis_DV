@@ -42,6 +42,7 @@ public class LevelManager : MonoBehaviour
         ScreenManager.Instance.Push(YouWin);
         ScreenManager.Instance.Push(YouLose);*/
         craftingRecipe.RestoreBuildAmount();
+        GameVars.Values.TVTrapAgain.RestoreBuildAmount();
         EndRound();
     }
 

@@ -139,7 +139,8 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            GameVars.Values.TVTrap.Craft(_inventory);
+            //GameVars.Values.TVTrap.Craft(_inventory);
+            GameVars.Values.TVTrapAgain.Craft(_inventory);
         }
         
         if (isGrounded)
