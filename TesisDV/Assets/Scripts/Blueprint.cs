@@ -105,7 +105,6 @@ public class Blueprint : MonoBehaviour
     {
         canBuild = false;
         ChangeMaterial();
-        Debug.Log(("pene"));
     }
 
     void OnTriggerExit(Collider other)

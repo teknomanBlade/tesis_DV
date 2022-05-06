@@ -1,3 +1,4 @@
+using System.Runtime.Versioning;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,12 +10,22 @@ public class BaseballLauncher : Item, IMovable
     public GameObject exitPoint;
     public GameObject ballsState1, ballsState2, ballsState3;
     public int shots = 15;
+    public float viewRadius;
+    public float viewAngle;
     public int shotsLeft;
     public float interval;
+    public LayerMask targetMask;
+    public LayerMask obstacleMask;
     public bool active = false;
+    Vector3 auxVector;
+    Transform myCannon;
 
     public void Awake()
     {
+        //myCannon = transform.GetChild(2);
+        myCannon = transform.GetChild(2).GetChild(0);
+
+        //Debug.Log(transform.GetChild(2));
         shotsLeft = shots;
         ActiveBallsState1();
     }
@@ -26,6 +37,13 @@ public class BaseballLauncher : Item, IMovable
             active = true;
             StartCoroutine("ActiveCoroutine");
         }
+    }
+
+    void Update()
+    {
+        FieldOfView();
+
+        
     }
 
     IEnumerator ActiveCoroutine()
@@ -73,6 +91,35 @@ public class BaseballLauncher : Item, IMovable
         }
     }
 
+    void FieldOfView()
+    {
+       Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
+
+        foreach (var item in allTargets)
+        {
+            Vector3 dir = item.transform.position - transform.position;
+
+            //if (Vector3.Angle(transform.forward, dir.normalized) < viewAngle / 2)
+            //{
+                if(Physics.Raycast(transform.position, dir, out RaycastHit hit, dir.magnitude, obstacleMask) == false)
+                {
+                    //auxVector = new Vector3(item.tra)
+                    //myCannon.transform.LookAt(item.transform.position);
+                    
+                    Quaternion lookRotation = Quaternion.LookRotation(dir);
+                    Vector3 rotation = lookRotation.eulerAngles;
+                    myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, 0f);
+
+                    Debug.DrawLine(transform.position, item.transform.position, Color.red);
+                }
+                else
+                {
+                    Debug.DrawLine(transform.position, hit.point, Color.red);
+                }
+            //}
+        }
+    }
+
     public void ActiveDeactivateBallStates(bool state1, bool state2, bool state3)
     {
         ballsState1.SetActive(state1);
@@ -85,5 +132,20 @@ public class BaseballLauncher : Item, IMovable
         
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, viewRadius);
+        Vector3 lineA = GetVectorFromAngle(viewAngle /2 + transform.eulerAngles.y);
+        Vector3 lineB = GetVectorFromAngle(-viewAngle /2 + transform.eulerAngles.y);
+
+        Gizmos.DrawLine(transform.position, transform.position + lineA * viewRadius);
+        Gizmos.DrawLine(transform.position, transform.position + lineB * viewRadius);
+    }
+
+    Vector3 GetVectorFromAngle(float angle)
+    {
+        return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
 }
