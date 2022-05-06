@@ -91,20 +91,10 @@ public class Gray : MonoBehaviour
                     {
                         pursue = false;
                         _anim.SetBool("IsWalking", false);
-                        _isWalkingSoundPlaying = false;
                     }
 
                     Move();
 
-                    //if (pursue)
-                    //{
-                    //    if (distanceToPlayer >= 1.7f) Move();
-                    //    if (!_isWalkingSoundPlaying)
-                    //    {
-                    //        GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
-                    //        _isWalkingSoundPlaying = true;
-                    //    }
-                    //}
                 }
                 else
                 {
@@ -129,11 +119,11 @@ public class Gray : MonoBehaviour
         //_rb.velocity = transform.forward * 2f;
         _navMeshAgent.destination = dest;
 
-        if (!_isWalkingSoundPlaying)
+        /*if (_isWalkingSoundPlaying)
         {
-            GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
-           _isWalkingSoundPlaying = true;
+           GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
         }
+        _isWalkingSoundPlaying = false;*/
     }
 
     private bool IsInSight()
@@ -151,6 +141,7 @@ public class Gray : MonoBehaviour
         {
             if (Vector3.Distance(_player.transform.position, transform.position) > pursueThreshold) return false;
         }
+        _isWalkingSoundPlaying = true;
         return true;
     }
 

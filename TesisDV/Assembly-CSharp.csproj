@@ -58,6 +58,7 @@
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\ScreenManager\CraftingScreen.cs" />
     <Compile Include="Assets\Scripts\Baseball.cs" />
+    <Compile Include="Assets\Scripts\ScreenManager\YouLoseScreen.cs" />
     <Compile Include="Assets\Scripts\BaseballLauncherAnim.cs" />
     <Compile Include="Assets\Scripts\Projectile.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryItem.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Assets\Scripts\Trap.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\PathFinding\PathfindingManager.cs" />
+    <Compile Include="Assets\Scripts\ScreenManager\YouWinScreen.cs" />
     <Compile Include="Assets\Scripts\Triggers\TriggerMainStairs.cs" />
     <Compile Include="Assets\Scripts\Outline.cs" />
     <Compile Include="Assets\Scripts\CCC\Player.cs" />
@@ -93,8 +95,6 @@
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\UFO.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
-    <Compile Include="Assets\Scripts\ScreenManager\YouWinScreen.cs" />
-    <Compile Include="Assets\Scripts\ScreenManager\YouLoseScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
@@ -291,6 +291,7 @@
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosOpNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_BlendOpsNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ScaleNode.shader" />
+    <None Include="Assets\Models\Materials\Components\TennisBallsBox.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ATanOpNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_SimpleContrastNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_DeltaTime.shader" />
