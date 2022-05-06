@@ -111,6 +111,26 @@ public class GameVars : MonoBehaviour
         player.PlayPickUpSound();
     }
 
+    public Vector3 GetPlayerPrefabPlacement()
+    {
+        return player.GetPrefabPlacement();
+    }
+
+    public Vector3 GetPlayerCameraPosition()
+    {
+        return player.GetCameraPosition();
+    }
+
+    public Vector3 GetPlayerCameraForward()
+    {
+        return player.GetCameraForward();
+    }
+
+    public float GetPlayerCameraRotation()
+    {
+        return player.GetCameraRotation();
+    }   
+
     #endregion
 
     #region LayerManagement

@@ -295,6 +295,11 @@ public class Player : MonoBehaviour
         return _cam.transform.forward;
     }
 
+    public float GetCameraRotation()
+    {
+        return _cam.transform.eulerAngles.y;
+    }
+
     public Vector3 GetPrefabPlacement()
     {
         return lookingPlacement;

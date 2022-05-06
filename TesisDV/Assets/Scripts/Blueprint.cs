@@ -23,26 +23,30 @@ public class Blueprint : MonoBehaviour
     void Start()
     {
         canBuild = true;
-        //originalMaterial = GetComponent<Renderer>().material; Probar despues de arreglar posicionamiento. 
-        //myRenderer = GetComponent<Renderer>(); Probar despues de arreglar posicionamiento. 
+        //originalMaterial = GetComponent<Renderer>().material; //Probar despues de arreglar posicionamiento. 
+        //myRenderer = GetComponent<Renderer>(); //Probar despues de arreglar posicionamiento. 
     }
 
     void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         
 
         //Canbuild provisional.
-        if(Physics.Raycast(ray, out hit, 100f, GameVars.Values.GetFloorLayerMask()) && canBuild)
+
+        if(Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, GameVars.Values.GetFloorLayerMask()) && canBuild)
         {
-            auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
-            transform.position = auxVector;
+            //auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
+            //transform.position = auxVector;
+            transform.position = hit.point;
+            //customPivot.transform.position = hit.point;
         }
 
         if(Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
-            secondAuxVector = new Vector3(transform.position.x, 1, transform.position.z);
-            finalPosition = secondAuxVector;
+            //secondAuxVector = new Vector3(transform.position.x, 1f, transform.position.z);
+            //finalPosition = secondAuxVector;
+            finalPosition = transform.position;
             finalRotation = transform.rotation;
             StartCoroutine(BuildTrap());
 
@@ -74,7 +78,7 @@ public class Blueprint : MonoBehaviour
     private IEnumerator BuildTrap()
     {
         Instantiate(particles, transform.position, transform.rotation);
-        //myRenderer.enabled = false; Probar despues de arreglar posicionamiento. 
+        //myRenderer.enabled = false; //Probar despues de arreglar posicionamiento. 
         //Canbuild provisional.
         canBuild = false;
         GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
@@ -89,18 +93,19 @@ public class Blueprint : MonoBehaviour
 
     private void ChangeMaterial()
     {
-        //myRenderer.material = newMaterial; Probar despues de arreglar posicionamiento.
+        //myRenderer.material = newMaterial; //Probar despues de arreglar posicionamiento.
     }
 
     private void SetOriginalMaterial()
     {
-        //myRenderer.material = originalMaterial; Probar despues de arreglar posicionamiento.
+        //myRenderer.material = originalMaterial; //Probar despues de arreglar posicionamiento.
     }
 
     void OnTriggerStay(Collider other)
     {
         canBuild = false;
         ChangeMaterial();
+        Debug.Log(("pene"));
     }
 
     void OnTriggerExit(Collider other)
