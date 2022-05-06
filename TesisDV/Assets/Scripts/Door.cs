@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Door : Item
 {
@@ -9,6 +10,7 @@ public class Door : Item
 
     private bool IsOpened { get; set; }
     public bool IsFront = false;
+    
     // Start is called before the first frame update
     void Awake()
     {
@@ -19,6 +21,7 @@ public class Door : Item
     {
         float time = 0;
         float startValue = _valueToChange;
+        
         //if (IsFront) _anim.SetTrigger("TriggerFront"); else _anim.SetTrigger("TriggerBack");
         if (IsFront)
         {
