@@ -60,7 +60,7 @@ public class BaseballLauncher : Item, IMovable
     public void InstantiateBall()
     {
         GameObject aux = Instantiate(projectilePrefab, exitPoint.transform.position, Quaternion.identity);
-        aux.GetComponent<Rigidbody>().AddForce(20f * -exitPoint.transform.right, ForceMode.Impulse);
+        aux.GetComponent<Rigidbody>().AddForce(35f * -exitPoint.transform.right, ForceMode.Impulse); //era 20f
         GameVars.Values.soundManager.PlaySoundAtPoint("BallLaunched", transform.position, 0.7f);
     }
 

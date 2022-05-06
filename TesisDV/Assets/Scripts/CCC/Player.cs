@@ -136,6 +136,11 @@ public class Player : MonoBehaviour
         {
             GameVars.Values.BaseballLauncher.Craft(_inventory);
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            GameVars.Values.TVTrap.Craft(_inventory);
+        }
         
         if (isGrounded)
         {

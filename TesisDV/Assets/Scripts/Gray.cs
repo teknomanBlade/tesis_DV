@@ -192,8 +192,34 @@ public class Gray : MonoBehaviour
         Invoke("UnStun", time);
     }
 
+    public void SecondStun(float time)
+    {
+        
+        stun = true;
+        
+        _navMeshAgent.destination = transform.position;
+        if (hasObjective)
+        {
+            DropObjective();
+        }
+        _anim.SetBool("IsStunned", true);
+        _rb.isKinematic = true;
+        Invoke("SecondUnStun", time);
+    }
+
     public void UnStun()
     {
+        _rb.isKinematic = false;
+        stun = false;
+    }
+
+    public void SecondUnStun()
+    {
+
+        Vector3 dest = default(Vector3);
+        if (pursue) dest = _player.transform.position;
+        else if (_lm.enemyHasObjective) dest = _exitPos;
+        else dest = _lm.objective.transform.position;
         _rb.isKinematic = false;
         stun = false;
     }

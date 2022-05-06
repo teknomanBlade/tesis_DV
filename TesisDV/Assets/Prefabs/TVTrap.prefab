@@ -104,6 +104,7 @@ GameObject:
   - component: {fileID: 5930726582959980629}
   - component: {fileID: 6224538439147176064}
   - component: {fileID: 8114804952724303707}
+  - component: {fileID: 6342056730526475614}
   m_Layer: 0
   m_Name: TVTrap
   m_TagString: Untagged
@@ -140,6 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e96592d7b89f0d347ad5eb71864a2733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blueprintPrefab: {fileID: 7575688342362078860, guid: 70525d1e094c44b459bd5a281d0deea5, type: 3}
   targetMask:
     serializedVersion: 2
     m_Bits: 4096
@@ -156,6 +158,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.9554045, y: 1.088175, z: 0.8949623}
   m_Center: {x: -1.0947196, y: -0.037909944, z: -0.47269237}
+--- !u!65 &6342056730526475614
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5930726582959980628}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4716575, y: 0.61909086, z: 0.9080744}
+  m_Center: {x: 0.113134824, y: 0.013931234, z: -0.4919447}
 --- !u!1 &5930726584245689352
 GameObject:
   m_ObjectHideFlags: 0
