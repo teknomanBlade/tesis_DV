@@ -10,11 +10,12 @@ public class Door : Item
 
     private bool IsOpened { get; set; }
     public bool IsFront = false;
-    
+    public DoorTrigger[] doorTriggers;
     // Start is called before the first frame update
     void Awake()
     {
         _anim = GetComponent<Animator>();
+        doorTriggers = GetComponentsInChildren<DoorTrigger>();
     }
 
     IEnumerator LerpDoorAnim(float endValue, float duration)
@@ -47,6 +48,8 @@ public class Door : Item
         }
         //_anim.ResetTrigger("TriggerFront"); 
         //_anim.ResetTrigger("TriggerBack");
+        if(!IsOpened)
+            doorTriggers.Select(x => x).ToList().ForEach(x => x.gameObject.SetActive(true));
 
         _valueToChange = endValue;
     }
@@ -54,6 +57,7 @@ public class Door : Item
     public override void Interact()
     {
         StopAllCoroutines();
+        doorTriggers.Select(x => x).ToList().ForEach(x => x.gameObject.SetActive(false));
         if (!IsOpened)
         {
             IsOpened = true;
