@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour
     public int currentRound = 0;
     public int finalRound = 5;
 
+    public bool canSpawn = true;
     public int lastWaveEnemies = 0;
     public int enemiesAlive = 0;
     public int enemiesToSpawn = 0;
@@ -46,11 +47,15 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
+        //For testing
+        if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
+
+        canSpawn = !enemyHasObjective;
         if (_player.isDead) LoseGame();
 
         if (playing)
         {
-            if (inRound && enemiesAlive <= 0 && enemiesToSpawn <= 0 && !EnemiesSpawning()) EndRound();
+            if (inRound && enemiesInScene.Count <= 0 && enemiesToSpawn <= 0 && !EnemiesSpawning()) EndRound();
 
             if (inRound && enemiesToSpawn > 0)
             {
@@ -76,6 +81,7 @@ public class LevelManager : MonoBehaviour
 
     public void SpawnWave()
     {
+        if (!canSpawn) return;
         foreach(UFO ufo in allUfos)
         {
             if (!ufo.spawning)
@@ -86,15 +92,14 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void EnemyDied()
-    {
-        enemiesAlive--;
-    }
-
     public void EnemySpawned()
     {
         enemiesToSpawn--;
-        enemiesAlive++;
+    }
+
+    public void EnemyCameBack()
+    {
+        enemiesToSpawn++;
     }
 
     public void StartRound()
@@ -138,10 +143,20 @@ public class LevelManager : MonoBehaviour
 
     public void CheckForObjective()
     {
+        if (enemiesInScene.Count <= 0)
+        {
+            enemyHasObjective = false;
+            return;
+        }
         foreach (Gray gray in enemiesInScene)
         {
             enemyHasObjective = gray.hasObjective;
             if (enemyHasObjective == true) return;
         }
+    }
+
+    private void KillAllEnemiesInScene()
+    {
+        if (enemiesInScene.Count != 0) enemiesInScene[0].Die();
     }
 }

@@ -54,7 +54,7 @@ public class UFO : MonoBehaviour
     IEnumerator SpawnGrey()
     {
         yield return new WaitForSeconds(spawnTimer);
-        if (!Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
+        if (_lm.canSpawn && !Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
         {
             currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity).GetComponent<Gray>();
             _lm.EnemySpawned();

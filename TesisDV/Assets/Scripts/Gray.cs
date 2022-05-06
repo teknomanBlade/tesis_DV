@@ -28,6 +28,7 @@ public class Gray : MonoBehaviour
     public bool awake = false;
     public int hp = 3;
     public bool hasObjective = false;
+    private Vector3 _exitPos;
 
     private void Awake()
     {
@@ -40,6 +41,9 @@ public class Gray : MonoBehaviour
         _empAbility.Stop();
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _lm.AddGray(this);
+
+        Vector3 aux = _lm.allUfos[0].transform.position;
+        _exitPos = new Vector3(aux.x, 0f, aux.z);
     }
 
     private void Start()
@@ -95,6 +99,15 @@ public class Gray : MonoBehaviour
 
                     Move();
 
+                    if (!_lm.enemyHasObjective && Vector3.Distance(transform.position, _lm.objective.transform.position) < 3f)
+                    {
+                        GrabObjective();
+                    }
+                    if (_lm.enemyHasObjective && Vector3.Distance(transform.position, _exitPos) < 3f)
+                    {
+                        GoBackToShip();
+                    }
+                    if (hasObjective) MoveObjective();
                 }
                 else
                 {
@@ -109,14 +122,12 @@ public class Gray : MonoBehaviour
     {
         Vector3 dest = default(Vector3);
         if (pursue) dest = _player.transform.position;
-        else if (_lm.enemyHasObjective) dest = _lm.allUfos[0].transform.position;
+        else if (_lm.enemyHasObjective) dest = _exitPos;
         else dest = _lm.objective.transform.position;
 
-        var dir = _player.transform.position - transform.position;
+        var dir = dest - transform.position;
         dir.y = 0f;
         transform.forward = dir;
-        //transform.position += transform.forward * 3f * Time.deltaTime;
-        //_rb.velocity = transform.forward * 2f;
         _navMeshAgent.destination = dest;
 
         /*if (_isWalkingSoundPlaying)
@@ -136,10 +147,10 @@ public class Gray : MonoBehaviour
         }
         if (pursue)
         {
-            if (Vector3.Distance(_player.transform.position, transform.position) > disengageThreshold) return false;
+            if (distanceToPlayer > disengageThreshold) return false;
         } else
         {
-            if (Vector3.Distance(_player.transform.position, transform.position) > pursueThreshold) return false;
+            if (distanceToPlayer > pursueThreshold) return false;
         }
         _isWalkingSoundPlaying = true;
         return true;
@@ -150,10 +161,10 @@ public class Gray : MonoBehaviour
         if (!IsInSight()) return false;
         if (attacking)
         {
-            if (Vector3.Distance(_player.transform.position, transform.position) > attackDisengageThreshold) return false;
+            if (distanceToPlayer > attackDisengageThreshold) return false;
         } else
         {
-            if (Vector3.Distance(_player.transform.position, transform.position) > attackThreshold) return false;
+            if (distanceToPlayer > attackThreshold) return false;
         }
         return true;
     }
@@ -204,28 +215,45 @@ public class Gray : MonoBehaviour
         if (hp <= 0) Die();
     }
 
-    public void Exit()
+    public void GrabObjective()
+    {
+        hasObjective = true;
+        _lm.CheckForObjective();
+    }
+
+    public void MoveObjective()
+    {
+        _lm.objective.transform.position = transform.position + new Vector3(0f, 2.8f, 0f);
+    }
+
+    public void DropObjective()
+    {
+        _lm.objective.transform.position = transform.position + new Vector3(0f, 0.75f, 0f);
+        hasObjective = false;
+    }
+
+    public void GoBackToShip()
     {
         if (hasObjective)
         {
             _lm.LoseGame();
+            Destroy(_lm.objective);
         }
-        awake = false;
-        _lm.EnemyDied();
         _lm.RemoveGray(this);
+        _lm.EnemyCameBack();
         Destroy(gameObject);
     }
 
     public void Die()
     {
+        _navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
-            hasObjective = false;
+            DropObjective();
         }
         awake = false;
         _rb.isKinematic = true;
         _anim.SetBool("IsDead", true);
-        _lm.EnemyDied();
         _lm.RemoveGray(this);
         _lm.CheckForObjective();
         Invoke("Dead", 3f);
