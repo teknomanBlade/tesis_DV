@@ -308,6 +308,12 @@ MonoBehaviour:
   viewAngle: 90
   shotsLeft: 0
   interval: 0.5
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 8
   active: 0
 --- !u!65 &382628041543726221
 BoxCollider:

@@ -19,10 +19,11 @@ public class BaseballLauncher : Item, IMovable
     public bool active = false;
     Vector3 auxVector;
     Transform myCannon;
+    Transform myCannonSupport;
 
     public void Awake()
     {
-        //myCannon = transform.GetChild(2);
+        myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
 
         //Debug.Log(transform.GetChild(2));
@@ -108,7 +109,8 @@ public class BaseballLauncher : Item, IMovable
                     
                     Quaternion lookRotation = Quaternion.LookRotation(dir);
                     Vector3 rotation = lookRotation.eulerAngles;
-                    myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, 0f);
+                    myCannonSupport.rotation = Quaternion.Euler(0f, rotation.y +90f, 0f);
+                    myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f);
 
                     Debug.DrawLine(transform.position, item.transform.position, Color.red);
                 }
