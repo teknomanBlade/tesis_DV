@@ -73,7 +73,7 @@ public class Gray : MonoBehaviour
                     _anim.SetBool("IsStunned", false);
                     distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
 
-                    if (IsInSight())
+                    if (IsInSight() && !_lm.enemyHasObjective)
                     {
                         if (CanAttack())
                         {
