@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Gray : MonoBehaviour
+public class Gray : MonoBehaviour, IHittableObserver
 {
     [SerializeField]
     private GameObject _player;
@@ -19,7 +19,7 @@ public class Gray : MonoBehaviour
     public float disengageThreshold = 15f;
     public float attackThreshold = 2.5f;
     public float attackDisengageThreshold = 3f;
-    public float attackWindup = 1f;
+    public float attackWindup = 6f;
     public Coroutine attackCoroutine;
     public bool attacking = false;
     public bool pursue = false;
@@ -37,7 +37,8 @@ public class Gray : MonoBehaviour
         _player = GameObject.Find("Player");
         _playerScript = _player.GetComponent<Player>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        _empAbility = GameObject.Find("EMPAbility").GetComponent<ParticleSystem>();
+        //_empAbility = GameObject.Find("EMPAbility").GetComponent<ParticleSystem>();
+        _empAbility = transform.GetComponentInChildren<ParticleSystem>();
         _empAbility.Stop();
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _lm.AddGray(this);
@@ -61,13 +62,13 @@ public class Gray : MonoBehaviour
         }
         if (awake)
         {
-            if (skillEMP)
+            /*if (skillEMP)
             {
                 _anim.SetBool("IsEMP", true);
             }
             else
-            {
-                _anim.SetBool("IsEMP", false);
+            {*/
+                //_anim.SetBool("IsEMP", false);
                 if (!stun)
                 {
                     _anim.SetBool("IsStunned", false);
@@ -119,7 +120,7 @@ public class Gray : MonoBehaviour
                     pursue = false;
                     _isWalkingSoundPlaying = false;
                 }
-            }
+            //}
         }
     }
 
@@ -184,11 +185,13 @@ public class Gray : MonoBehaviour
     IEnumerator Attack()
     {
         attacking = true;
+        _anim.SetBool("IsEMP", true);
         yield return new WaitForSeconds(attackWindup);
-       
+        PlayParticleSystemShader();
         _playerScript.Damage();
         attacking = false;
         attackCoroutine = StartCoroutine("Attack");
+        _anim.SetBool("IsEMP", false);
     }
 
     public void PlayParticleSystemShader()
@@ -198,6 +201,7 @@ public class Gray : MonoBehaviour
 
     public void Stun(float time)
     {
+        _anim.SetBool("IsHitted", false);
         _rb.isKinematic = true;
         stun = true;
         _anim.SetBool("IsStunned", true);
@@ -312,5 +316,14 @@ public class Gray : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, pursueThreshold);
         Gizmos.DrawWireSphere(transform.position, disengageThreshold);
         Gizmos.DrawRay(transform.position, _player.transform.position - transform.position);
+    }
+
+    public void OnNotify(string message)
+    {
+        if (message.Equals("TennisBallHit"))
+        {
+            _anim.SetBool("IsHitted", true);
+            Stun(5f);
+        }
     }
 }

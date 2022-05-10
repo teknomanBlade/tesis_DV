@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Projectile : MonoBehaviour
+public abstract class Projectile : MonoBehaviour, IHittableObservable
 {
+    private List<IHittableObserver> _myHittableObservers = new List<IHittableObserver>();
     protected bool effectUp = true;
     protected bool dieOnImpact = true;
     protected float lifeTime = 3f;
@@ -19,7 +20,12 @@ public abstract class Projectile : MonoBehaviour
         if (effectUp)
         {
             Debug.Log("Hit " + collision.transform.name);
-            if (collision.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer())) collision.gameObject.GetComponent<Gray>().Stun(5f);
+            if (collision.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
+            {
+                AddObserver(collision.gameObject.GetComponent<Gray>());
+                TriggerHit("TennisBallHit");
+            }
+            
             if (dieOnImpact) Destroy(gameObject);
             effectUp = false;
         }
@@ -28,5 +34,20 @@ public abstract class Projectile : MonoBehaviour
     protected virtual void OnCollisionEnter(Collision collision)
     {
         OnContactEffect(collision);
+    }
+
+    public void AddObserver(IHittableObserver obs)
+    {
+        _myHittableObservers.Add(obs);
+    }
+
+    public void RemoveObserver(IHittableObserver obs)
+    {
+        if(_myHittableObservers.Contains(obs)) _myHittableObservers.Remove(obs);
+    }
+
+    public void TriggerHit(string triggerMessage)
+    {
+        _myHittableObservers.ForEach(x => x.OnNotify(triggerMessage));
     }
 }
