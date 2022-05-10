@@ -57,7 +57,7 @@ public class Blueprint : MonoBehaviour
             Destroy(gameObject); */
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha2))
+        if(Input.GetKeyDown(GameVars.Values.secondaryFire))
         {
             Destroy(gameObject);
             craftingRecipe.RestoreBuildAmount();

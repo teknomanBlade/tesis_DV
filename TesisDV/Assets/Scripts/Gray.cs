@@ -89,11 +89,16 @@ public class Gray : MonoBehaviour
                             }
                         }
                         pursue = true;
+
+                        if (!_isWalkingSoundPlaying)
+                            StartCoroutine(PlayGraySound());
+
                         _anim.SetBool("IsWalking", true);
                     }
                     else
                     {
                         pursue = false;
+                        _isWalkingSoundPlaying = false;
                         _anim.SetBool("IsWalking", false);
                     }
 
@@ -130,11 +135,19 @@ public class Gray : MonoBehaviour
         transform.forward = dir;
         _navMeshAgent.destination = dest;
 
-        /*if (_isWalkingSoundPlaying)
-        {
-           GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
-        }
-        _isWalkingSoundPlaying = false;*/
+    }
+    public IEnumerator PlayGraySound()
+    {
+        GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
+        yield return new WaitForSeconds(.01f);
+        _isWalkingSoundPlaying = true;
+    }
+
+    public IEnumerator PlayGrayDeathSound()
+    {
+        GameVars.Values.soundManager.PlaySoundOnce("GrayDeathSound", 0.4f, true);
+        yield return new WaitForSeconds(1.6f);
+        GameVars.Values.soundManager.StopSound();
     }
 
     private bool IsInSight()
@@ -152,7 +165,6 @@ public class Gray : MonoBehaviour
         {
             if (distanceToPlayer > pursueThreshold) return false;
         }
-        _isWalkingSoundPlaying = true;
         return true;
     }
 
@@ -272,6 +284,7 @@ public class Gray : MonoBehaviour
 
     public void Die()
     {
+        StartCoroutine(PlayGrayDeathSound());
         _navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
