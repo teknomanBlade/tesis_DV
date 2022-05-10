@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TVTrap : MonoBehaviour, IMovable
+public class TVTrap : Item, IMovable
 {
     private bool _canStun;
     private float _timePassed;
@@ -19,7 +19,8 @@ public class TVTrap : MonoBehaviour, IMovable
     // Update is called once per frame
     void Update()
     {
-        if(!_canStun)
+        Debug.Log(_timePassed);
+        if(!_canStun && _timePassed > 0)
         {
             _timePassed -= Time.deltaTime;
         }
@@ -47,6 +48,7 @@ public class TVTrap : MonoBehaviour, IMovable
 
     public void BecomeMovable()
     {
+        Debug.Log("2");
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
     }
