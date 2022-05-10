@@ -4,7 +4,7 @@ Shader "Grass_2"
 {
 	Properties
 	{
-		_TextureGrass2_Albedo("TextureGrass2_Albedo", 2D) = "white" {}
+		_MainTex("_MainTex", 2D) = "white" {}
 		_TextureGrass2_Albedo_AO("TextureGrass2_Albedo_AO", 2D) = "white" {}
 		_TextureGrass2_Albedo_NORM("TextureGrass2_Albedo_NORM", 2D) = "bump" {}
 		_TextureGrass2_Albedo_SPEC("TextureGrass2_Albedo_SPEC", 2D) = "white" {}
@@ -27,8 +27,8 @@ Shader "Grass_2"
 
 		uniform sampler2D _TextureGrass2_Albedo_NORM;
 		uniform float4 _TextureGrass2_Albedo_NORM_ST;
-		uniform sampler2D _TextureGrass2_Albedo;
-		uniform float4 _TextureGrass2_Albedo_ST;
+		uniform sampler2D _MainTex;
+		uniform float4 _MainTex_ST;
 		uniform float _SaturateValue;
 		uniform sampler2D _TextureGrass2_Albedo_SPEC;
 		uniform float4 _TextureGrass2_Albedo_SPEC_ST;
@@ -39,8 +39,8 @@ Shader "Grass_2"
 		{
 			float2 uv_TextureGrass2_Albedo_NORM = i.uv_texcoord * _TextureGrass2_Albedo_NORM_ST.xy + _TextureGrass2_Albedo_NORM_ST.zw;
 			o.Normal = UnpackNormal( tex2D( _TextureGrass2_Albedo_NORM, uv_TextureGrass2_Albedo_NORM ) );
-			float2 uv_TextureGrass2_Albedo = i.uv_texcoord * _TextureGrass2_Albedo_ST.xy + _TextureGrass2_Albedo_ST.zw;
-			float4 tex2DNode4 = tex2D( _TextureGrass2_Albedo, uv_TextureGrass2_Albedo );
+			float2 uv_MainTex = i.uv_texcoord * _MainTex_ST.xy + _MainTex_ST.zw;
+			float4 tex2DNode4 = tex2D( _MainTex, uv_MainTex );
 			o.Albedo = ( tex2DNode4 * saturate( tex2DNode4 ) * _SaturateValue ).rgb;
 			float2 uv_TextureGrass2_Albedo_SPEC = i.uv_texcoord * _TextureGrass2_Albedo_SPEC_ST.xy + _TextureGrass2_Albedo_SPEC_ST.zw;
 			o.Smoothness = tex2D( _TextureGrass2_Albedo_SPEC, uv_TextureGrass2_Albedo_SPEC ).r;
@@ -56,8 +56,8 @@ Shader "Grass_2"
 }
 /*ASEBEGIN
 Version=17800
-510;141;1307;573;1533.754;567.4698;2.35782;True;False
-Node;AmplifyShaderEditor.SamplerNode;4;-693.4671,-234.0331;Inherit;True;Property;_TextureGrass2_Albedo;TextureGrass2_Albedo;0;0;Create;True;0;0;False;0;-1;d7daa549577361e45847a77d9d2e0999;d7daa549577361e45847a77d9d2e0999;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+468;230;1307;573;1533.754;560.3963;2.35782;True;False
+Node;AmplifyShaderEditor.SamplerNode;4;-693.4671,-234.0331;Inherit;True;Property;_MainTex;_MainTex;0;0;Create;True;0;0;False;0;-1;d7daa549577361e45847a77d9d2e0999;d7daa549577361e45847a77d9d2e0999;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SaturateNode;8;-359.5594,-147.7777;Inherit;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.RangedFloatNode;10;-343.0547,-32.2448;Inherit;False;Property;_SaturateValue;SaturateValue;4;0;Create;True;0;0;False;0;0.32;0.32;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SamplerNode;5;-516.7132,73.33414;Inherit;True;Property;_TextureGrass2_Albedo_AO;TextureGrass2_Albedo_AO;1;0;Create;True;0;0;False;0;-1;627b9493270b88e4f8d56549aa9c19ec;627b9493270b88e4f8d56549aa9c19ec;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
@@ -74,4 +74,4 @@ WireConnection;3;1;6;0
 WireConnection;3;4;7;0
 WireConnection;3;5;5;0
 ASEEND*/
-//CHKSM=EEA82398E4545674C9485187B0198A45A672EC3B
+//CHKSM=85A20A9958B08EEB9DE20BC4FE52B1E92B6721BE
