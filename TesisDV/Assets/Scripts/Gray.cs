@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,7 +13,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     private Rigidbody _rb;
     private LevelManager _lm;
     private NavMeshAgent _navMeshAgent;
-    private ParticleSystem _empAbility;
+    
     private bool _isWalkingSoundPlaying = false;
     public float distanceToPlayer;
     public float pursueThreshold = 10f;
@@ -29,7 +30,16 @@ public class Gray : MonoBehaviour, IHittableObserver
     public int hp = 3;
     public bool hasObjective = false;
     private Vector3 _exitPos;
+    
+    [SerializeField]
+    private Material dissolveMaterial;
+    private SkinnedMeshRenderer skinned;
 
+    [SerializeField]
+    private ParticleSystem _empAbility;
+
+    [SerializeField]
+    private ParticleSystem _deathEffect;
     private void Awake()
     {
         _anim = GetComponent<Animator>();
@@ -38,9 +48,12 @@ public class Gray : MonoBehaviour, IHittableObserver
         _playerScript = _player.GetComponent<Player>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         //_empAbility = GameObject.Find("EMPAbility").GetComponent<ParticleSystem>();
-        _empAbility = transform.GetComponentInChildren<ParticleSystem>();
+        
         _empAbility.Stop();
+        _deathEffect.Stop();
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        skinned = GetComponentInChildren<SkinnedMeshRenderer>();
+
         _lm.AddGray(this);
 
         Vector3 aux = _lm.allUfos[0].transform.position;
@@ -68,58 +81,58 @@ public class Gray : MonoBehaviour, IHittableObserver
             }
             else
             {*/
-                //_anim.SetBool("IsEMP", false);
-                if (!stun)
+            //_anim.SetBool("IsEMP", false);
+            if (!stun)
+            {
+                _anim.SetBool("IsStunned", false);
+                distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
+
+                if (IsInSight() && !_lm.enemyHasObjective)
                 {
-                    _anim.SetBool("IsStunned", false);
-                    distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
-
-                    if (IsInSight() && !_lm.enemyHasObjective)
+                    if (CanAttack())
                     {
-                        if (CanAttack())
-                        {
-                            if (attackCoroutine == null) attackCoroutine = StartCoroutine("Attack");
-                        }
-                        else
-                        {
-                            if (attackCoroutine != null)
-                            {
-                                StopCoroutine(attackCoroutine);
-                                attackCoroutine = null;
-                                attacking = false;
-                            }
-                        }
-                        pursue = true;
-
-                        if (!_isWalkingSoundPlaying)
-                            StartCoroutine(PlayGraySound());
-
-                        _anim.SetBool("IsWalking", true);
+                        if (attackCoroutine == null) attackCoroutine = StartCoroutine("Attack");
                     }
                     else
                     {
-                        pursue = false;
-                        _isWalkingSoundPlaying = false;
-                        _anim.SetBool("IsWalking", false);
+                        if (attackCoroutine != null)
+                        {
+                            StopCoroutine(attackCoroutine);
+                            attackCoroutine = null;
+                            attacking = false;
+                        }
                     }
+                    pursue = true;
 
-                    Move();
+                    if (!_isWalkingSoundPlaying)
+                        StartCoroutine(PlayGraySound());
 
-                    if (!_lm.enemyHasObjective && Vector3.Distance(transform.position, _lm.objective.transform.position) < 3f)
-                    {
-                        GrabObjective();
-                    }
-                    if (_lm.enemyHasObjective && Vector3.Distance(transform.position, _exitPos) < 3f)
-                    {
-                        GoBackToShip();
-                    }
-                    if (hasObjective) MoveObjective();
+                    _anim.SetBool("IsWalking", true);
                 }
                 else
                 {
                     pursue = false;
                     _isWalkingSoundPlaying = false;
+                    _anim.SetBool("IsWalking", false);
                 }
+
+                Move();
+
+                if (!_lm.enemyHasObjective && Vector3.Distance(transform.position, _lm.objective.transform.position) < 3f)
+                {
+                    GrabObjective();
+                }
+                if (_lm.enemyHasObjective && Vector3.Distance(transform.position, _exitPos) < 3f)
+                {
+                    GoBackToShip();
+                }
+                if (hasObjective) MoveObjective();
+            }
+            else
+            {
+                pursue = false;
+                _isWalkingSoundPlaying = false;
+            }
             //}
         }
     }
@@ -162,7 +175,8 @@ public class Gray : MonoBehaviour, IHittableObserver
         if (pursue)
         {
             if (distanceToPlayer > disengageThreshold) return false;
-        } else
+        }
+        else
         {
             if (distanceToPlayer > pursueThreshold) return false;
         }
@@ -175,7 +189,8 @@ public class Gray : MonoBehaviour, IHittableObserver
         if (attacking)
         {
             if (distanceToPlayer > attackDisengageThreshold) return false;
-        } else
+        }
+        else
         {
             if (distanceToPlayer > attackThreshold) return false;
         }
@@ -210,9 +225,9 @@ public class Gray : MonoBehaviour, IHittableObserver
 
     public void SecondStun(float time)
     {
-        
+
         stun = true;
-        
+
         _navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
@@ -299,6 +314,13 @@ public class Gray : MonoBehaviour, IHittableObserver
         _anim.SetBool("IsDead", true);
         _lm.RemoveGray(this);
         _lm.CheckForObjective();
+
+        var materials = skinned.sharedMaterials.ToList();
+        materials.Add(dissolveMaterial);
+        skinned.materials = materials.ToArray();
+
+        _deathEffect.Play();
+        LerpScaleDissolve(0.5f, 1f);
         Invoke("Dead", 3f);
     }
 
@@ -325,5 +347,24 @@ public class Gray : MonoBehaviour, IHittableObserver
             _anim.SetBool("IsHitted", true);
             Stun(5f);
         }
+    }
+
+    private float _valueToChange;
+    IEnumerator LerpScaleDissolve(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _valueToChange;
+
+        while (time < duration)
+        {
+            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            dissolveMaterial.SetFloat("ScaleDissolve", _valueToChange);
+            yield return null;
+        }
+
+
+        _valueToChange = endValue;
     }
 }

@@ -26,14 +26,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4995286327506427003}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 34.1, y: 10.09, z: 3.87}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5627532363556193357}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &8770436240544467300
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -97,14 +97,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkCubePos: {x: 0, y: 4, z: 0}
   checkCubeExt: {x: 4, y: 4, z: 4}
-  startPos: {x: 0, y: 0, z: 0}
-  endPos: {x: 0, y: 0, z: 0}
-  sliderSoundVolume: 0
-  spawnTimer: 10
-  grayPrefab: {fileID: 0}
+  startPos: {x: 0, y: -1, z: 0}
+  endPos: {x: 0, y: 5.5, z: 0}
+  sliderSoundVolume: 0.03
+  spawnTimer: 5
+  grayPrefab: {fileID: 5620792506208950563, guid: 7cfa94f398b8fac4db693f8e30ba6a7f, type: 3}
   currentGray: {fileID: 0}
-  timeLimit: 0
+  timeLimit: 3
   timer: 0
+  spawning: 0
 --- !u!1001 &5301787495593501606
 PrefabInstance:
   m_ObjectHideFlags: 0
