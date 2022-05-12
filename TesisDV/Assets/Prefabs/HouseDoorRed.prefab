@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7766a44794315984bb4fd4e06760e173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enumDoor: 1
 --- !u!1 &5900429258786272498
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +123,8 @@ GameObject:
   - component: {fileID: 6711455224601233830}
   - component: {fileID: 919132147656794819}
   - component: {fileID: 4901158061738352041}
+  - component: {fileID: 828294902}
+  - component: {fileID: 828294903}
   m_Layer: 10
   m_Name: HouseDoorRed
   m_TagString: Untagged
@@ -138,7 +141,7 @@ Transform:
   m_GameObject: {fileID: 5900429258786272498}
   m_LocalRotation: {x: -1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: -2.15, y: -0.049874306, z: 25.738}
-  m_LocalScale: {x: 2.9624996, y: 2.4750004, z: 3}
+  m_LocalScale: {x: 3.81, y: 3.18, z: 3}
   m_Children:
   - {fileID: 8072194899294261935}
   - {fileID: 7634621162924584920}
@@ -221,8 +224,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: DoorRed
   _itemImage: {fileID: 0}
-  IsplayerFront: {fileID: 605761235867685576}
-  IsPlayerBack: {fileID: 7883186079419148985}
+  IsFront: 0
+  doorTriggers: []
 --- !u!95 &4901158061738352041
 Animator:
   serializedVersion: 3
@@ -242,6 +245,40 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!208 &828294902
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5900429258786272498}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.384, y: 0.89000005, z: 0.097}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.38000003, y: -0.89100003, z: -0.003}
+  m_TimeToStationary: 0.5
+--- !u!114 &828294903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5900429258786272498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 1, b: 0.1538353, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &7612359571366238233
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,3 +387,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7766a44794315984bb4fd4e06760e173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enumDoor: 0

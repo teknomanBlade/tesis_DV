@@ -352,7 +352,16 @@ public class Player : MonoBehaviour
         }
         if (lookingAt.gameObject.TryGetComponent<BaseballLauncher>(out BaseballLauncher baseballLauncher))
         {
-            crosshair.sprite = GameVars.Values.crosshairActivation;
+            if (baseballLauncher.IsEmpty)
+            {
+                baseballLauncher.HasPlayerTennisBallBox = _inventory.ContainsID(4);
+                crosshair.sprite = GameVars.Values.crosshairReloadTrap1;
+            }
+            else
+            {
+                crosshair.sprite = GameVars.Values.crosshairActivation;
+            }
+            
             ChangeCrosshairSize(40f);
             return;
         }

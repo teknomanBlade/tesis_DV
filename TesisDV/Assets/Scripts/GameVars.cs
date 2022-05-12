@@ -39,6 +39,7 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairDoor;
     public Sprite crosshairHandGrab;
     public Sprite crosshairActivation;
+    public Sprite crosshairReloadTrap1;
     public CraftingScreen craftingScreen;
     //public YouWinScreen youWinScreen;
     //public YouLoseScreen youLoseScreen;
@@ -91,6 +92,7 @@ public class GameVars : MonoBehaviour
         crosshairDoor = Resources.Load<Sprite>("OpenDoor");
         crosshairHandGrab = Resources.Load<Sprite>("HandGrab");
         crosshairActivation = Resources.Load<Sprite>("ButtonPress");
+        crosshairReloadTrap1 = Resources.Load<Sprite>("ReloadTrap1");
         craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
         audioClips = Resources.LoadAll<AudioClip>("Sounds").ToList();
         //youWinScreen = Resources.Load<YouWinScreen>("YouWin");

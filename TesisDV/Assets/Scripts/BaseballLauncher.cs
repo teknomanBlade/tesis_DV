@@ -13,6 +13,12 @@ public class BaseballLauncher : Item, IMovable
     public float viewRadius;
     public float viewAngle;
     public int shotsLeft;
+    public bool IsEmpty
+    {
+        get { return shotsLeft == 0; }
+    }
+    public bool HasPlayerTennisBallBox { get; set; }
+
     public float interval;
     public LayerMask targetMask;
     public LayerMask obstacleMask;
@@ -33,6 +39,11 @@ public class BaseballLauncher : Item, IMovable
 
     public override void Interact()
     {
+        if (IsEmpty && HasPlayerTennisBallBox)
+        {
+            Reload();
+        }
+
         if (!active)
         {
             active = true;
@@ -46,7 +57,11 @@ public class BaseballLauncher : Item, IMovable
 
         
     }
-
+    public void Reload()
+    {
+        shotsLeft = shots;
+        ActiveDeactivateBallStates(true, false, false);
+    }
     IEnumerator ActiveCoroutine()
     {
         shotsLeft--;

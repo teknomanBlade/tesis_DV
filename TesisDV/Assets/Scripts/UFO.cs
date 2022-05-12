@@ -25,7 +25,7 @@ public class UFO : MonoBehaviour
     {
         _UFOSpinner = GameObject.Find("UFOSpinner");
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        GameVars.Values.soundManager.PlaySound("UFOBuzz", sliderSoundVolume, true);
+        GameVars.Values.soundManager.PlaySound("UFOBuzz", sliderSoundVolume, true, 1f);
     }
 
     public void RotateUFOSpinner()

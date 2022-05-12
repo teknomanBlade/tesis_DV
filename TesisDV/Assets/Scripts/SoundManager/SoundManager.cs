@@ -35,6 +35,7 @@ public class SoundManager : MonoBehaviour
             _sound.clip = clip;
             _sound.volume = volume;
             _sound.loop = loop;
+            _sound.spatialBlend = 0f;
             _sound.PlayOneShot(clip);
         }
     }
@@ -46,9 +47,25 @@ public class SoundManager : MonoBehaviour
             _sound.clip = clip;
             _sound.volume = volume;
             _sound.loop = loop;
+            _sound.spatialBlend = 0f;
             _sound.Play();
         }
     }
+
+    public void PlaySound(string clipName, float volume, bool loop, float spatialBlend)
+    {
+        if (soundLibrary.TryGetValue(clipName, out clip))
+        {
+            _sound.clip = clip;
+            _sound.volume = volume;
+            _sound.loop = loop;
+            _sound.minDistance = 2f;
+            _sound.maxDistance = 400f;
+            _sound.spatialBlend = spatialBlend;
+            _sound.Play();
+        }
+    }
+
 
     public void PlaySoundAtPoint(string clipName, Vector3 position, float volume)
     {
