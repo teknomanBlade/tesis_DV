@@ -69,8 +69,6 @@ public class Gray : MonoBehaviour, IHittableObserver
 
     private void Update()
     {
-        Debug.Log(_navMeshAgent.pathStatus);
-
         if (_player == null)
         {
             StopAllCoroutines();

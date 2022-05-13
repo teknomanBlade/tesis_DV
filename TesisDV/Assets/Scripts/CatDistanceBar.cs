@@ -15,8 +15,8 @@ public class CatDistanceBar : MonoBehaviour
         _mySlider = GetComponent<Slider>();
         
         _maxDistance = GameVars.Values.GetCatDistance(); //54
-        _mySlider.maxValue = _maxDistance;
-        
+        _mySlider.maxValue = 54; //_maxDistance;
+        _mySlider.minValue = 5f;
         _currentDistance = _maxDistance;
         _mySlider.value = _currentDistance;
         
@@ -25,6 +25,5 @@ public class CatDistanceBar : MonoBehaviour
     void Update()
     {
         _mySlider.value = GameVars.Values.GetCatDistance();
-        Debug.Log(GameVars.Values.GetCatDistance());
     }
 }
