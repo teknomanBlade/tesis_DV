@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class InventoryItem : Item
 {
-    public int myCraftingID;
+    public int myCraftingID; //pasar a get set en Item
+    public GameObject myPrefab; //pasar a get set en Item
     public float timeLimit = 3f;
     protected float timer = 0f;
     protected Vector3 startPos;
@@ -44,5 +45,17 @@ public class InventoryItem : Item
     {
         GameVars.Values.PlayPickUpSound();
         gameObject.SetActive(false);
+        
+        //Destroy(gameObject);
+    }
+
+    public void SetActiveAgain()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void EnableColliderAgain()
+    {
+        gameObject.GetComponent<Collider>().enabled = true;
     }
 }

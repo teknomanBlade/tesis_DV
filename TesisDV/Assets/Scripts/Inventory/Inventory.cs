@@ -49,6 +49,20 @@ public class Inventory : MonoBehaviour
        }
     }
 
+    public void DropItem()
+    {
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if(!itemSlots[i].IsFree())
+           { 
+               itemSlots[i].DropItem();
+               //itemSlots[i].RemoveItem(); El remove va por lado del Slot.
+               
+               return;
+           }
+        }
+    }
+
     /* public void RemoveItem(InventoryItem item)
     {
         for (int i = 0; i < itemSlots.Length; i++)

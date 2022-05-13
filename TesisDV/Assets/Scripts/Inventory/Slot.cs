@@ -13,11 +13,15 @@ public class Slot : MonoBehaviour
     [SerializeField]
     private Image _image;
     [SerializeField]
+    private GameObject _myPrefab;
+    [SerializeField]
     private int _itemID;
     [SerializeField]
     private CanvasGroup _myCanvasGroup;  
     private float fadeDelay = 1.1f;    
     private bool isFaded;
+    private Vector3 auxVector;
+
     void Awake()
     {
         isFaded = true;
@@ -71,6 +75,7 @@ public class Slot : MonoBehaviour
         _image.color = new Color32(255,255,255,255);
         _image.sprite = item.itemImage;
         _itemID = item.myCraftingID;
+        _myPrefab = item.myPrefab;
         //Fade();
     }
 
@@ -78,6 +83,22 @@ public class Slot : MonoBehaviour
     {
         _itemID = itemID;
         
+    }
+
+    public void DropItem()
+    {
+        //Primer metodo: Instanciar.
+        GameObject aux = Instantiate(_myPrefab, GameVars.Values.GetPlayerPrefabPlacement(), Quaternion.identity);
+        aux.SetActive(true);
+        aux.gameObject.GetComponent<Collider>().enabled = true;
+        auxVector = new Vector3(aux.transform.position.x, .25f, aux.transform.position.z);
+        aux.transform.position = auxVector;
+
+        //Segundo método: Reposicionar. Creo que es mejor, debería ver si puedo hacer andar la animación de agarre de nuevo.
+        //_item.gameObject.transform.position = GameVars.Values.GetPlayerPrefabPlacement();
+        //_item.SetActiveAgain();
+        //_item.EnableColliderAgain();
+        RemoveItem();
     }
 
     public void RemoveItem()

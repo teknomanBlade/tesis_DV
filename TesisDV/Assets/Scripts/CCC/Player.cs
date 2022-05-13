@@ -143,6 +143,11 @@ public class Player : MonoBehaviour
             GameVars.Values.TVTrapAgain.Craft(_inventory);
         }
         
+        if (Input.GetKeyDown(GameVars.Values.dropKey))
+        {
+            _inventory.DropItem();
+        }
+
         if (isGrounded)
         {
             if (Input.GetKeyDown(GameVars.Values.jumpKey) && !jumpOnCooldown) Jump();
