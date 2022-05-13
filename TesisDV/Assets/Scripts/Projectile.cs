@@ -19,11 +19,10 @@ public abstract class Projectile : MonoBehaviour, IHittableObservable
     {
         if (effectUp)
         {
-            Debug.Log("Hit " + collision.transform.name);
+            Debug.Log("Hit Projectile" + collision.transform.name);
             if (collision.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             {
-                AddObserver(collision.gameObject.GetComponent<Gray>());
-                TriggerHit("TennisBallHit");
+                
             }
             
             if (dieOnImpact) Destroy(gameObject);

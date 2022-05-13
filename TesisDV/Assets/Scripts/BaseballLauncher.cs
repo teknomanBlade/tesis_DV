@@ -43,6 +43,10 @@ public class BaseballLauncher : Item, IMovable
         {
             Reload();
         }
+        else
+        {
+            GameVars.Values.ShowNotification("We need a Tennis Ball Box to reload!");
+        }
 
         if (!active)
         {

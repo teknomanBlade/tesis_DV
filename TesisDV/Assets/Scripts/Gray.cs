@@ -121,6 +121,7 @@ public class Gray : MonoBehaviour, IHittableObserver
                 if (!_lm.enemyHasObjective && Vector3.Distance(transform.position, _lm.objective.transform.position) < 3f)
                 {
                     GrabObjective();
+                    GameVars.Values.ShowNotification("The cat has been captured! You must prevent the grays getting to the ship!");
                 }
                 if (_lm.enemyHasObjective && Vector3.Distance(transform.position, _exitPos) < 3f)
                 {
@@ -164,6 +165,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         GameVars.Values.soundManager.StopSound();
     }
 
+   
     private bool IsInSight()
     {
         LayerMask layermask = 1 << 12;
@@ -345,6 +347,9 @@ public class Gray : MonoBehaviour, IHittableObserver
         if (message.Equals("TennisBallHit"))
         {
             _anim.SetBool("IsHitted", true);
+            _anim.SetBool("IsWalking", false);
+            GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.35f);
+            Damage();
             Stun(5f);
         }
     }

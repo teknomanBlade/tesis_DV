@@ -18,7 +18,8 @@ public class Baseball : Projectile
             if (collision.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             {
                 effectUp = false;
-                collision.gameObject.GetComponent<Gray>().Damage();
+                AddObserver(collision.gameObject.GetComponent<Gray>());
+                TriggerHit("TennisBallHit");
             }
             if (dieOnImpact) Destroy(gameObject);
         }

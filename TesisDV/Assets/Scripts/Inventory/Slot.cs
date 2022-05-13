@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class Slot : MonoBehaviour
 {
@@ -20,7 +21,8 @@ public class Slot : MonoBehaviour
     void Awake()
     {
         isFaded = true;
-        _image = GetComponent<Image>();
+        _image = transform.GetComponentsInChildren<Transform>()
+            .Where(x => x.gameObject.name.Equals("ItemImage")).First().GetComponent<Image>();
         _myCanvasGroup = GetComponent<CanvasGroup>();
     }
     
@@ -65,10 +67,11 @@ public class Slot : MonoBehaviour
     public void SetItem(InventoryItem item)
     {
         _item = item;
-        _image.color = new Color32(255,255,255,255);;
+        _image.enabled = true;
+        _image.color = new Color32(255,255,255,255);
         _image.sprite = item.itemImage;
         _itemID = item.myCraftingID;
-        Fade();
+        //Fade();
     }
 
     public void SetItemID(int itemID)
@@ -81,10 +84,10 @@ public class Slot : MonoBehaviour
     {
         _item = null;
         _itemID = 0;
+        _image.enabled = false;
         _image.color = new Color32(0,0,0,255);;
-        //_image.enabled = false;
         _image.sprite = null;
-        Fade();
+        //Fade();
         
     }
 

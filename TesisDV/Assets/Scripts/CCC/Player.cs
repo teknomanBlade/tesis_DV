@@ -184,7 +184,8 @@ public class Player : MonoBehaviour
     private void Walk()
     {
         Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
-
+        //TODO: implementar con algun booleano que marque que esta caminando. Esto se ejecuta siempre.
+        //GameVars.Values.soundManager.PlaySound("FootstepsSFX", 0.35f, true);
         input = transform.TransformDirection(input) * speed;
 
         Vector3 velocity = _rb.velocity;

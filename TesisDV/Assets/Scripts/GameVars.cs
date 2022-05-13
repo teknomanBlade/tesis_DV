@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameVars : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairActivation;
     public Sprite crosshairReloadTrap1;
     public CraftingScreen craftingScreen;
+    public Text notifications;
     //public YouWinScreen youWinScreen;
     //public YouLoseScreen youLoseScreen;
     public List<AudioClip> audioClips;
@@ -51,6 +53,8 @@ public class GameVars : MonoBehaviour
     public TVCraftingRecipe TVTrapAgain;
 
     [Header("Game")]
+    private float _fadeDelay = 1.1f;
+    private bool _isFaded;
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
 
@@ -97,11 +101,10 @@ public class GameVars : MonoBehaviour
         audioClips = Resources.LoadAll<AudioClip>("Sounds").ToList();
         //youWinScreen = Resources.Load<YouWinScreen>("YouWin");
         //youLoseScreen = Resources.Load<YouLoseScreen>("YouLose");
+        notifications = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("NotificationsText")).First();
         soundManager = FindObjectOfType<SoundManager>();
         soundManager.SetAudioClips(audioClips);
     }
-
-    
 
     #region Player
 
@@ -182,6 +185,22 @@ public class GameVars : MonoBehaviour
     {
         LayerMask lm = 1 << GetEnemyLayer();
         return lm;
+    }
+
+    #endregion
+
+    #region Notifications
+    public void ShowNotification(string text)
+    {
+        notifications.text = text;
+        StartCoroutine(ShowNotification());
+    }
+
+    public IEnumerator ShowNotification()
+    {
+        notifications.gameObject.GetComponent<Animator>().SetBool("ShowNotification", true);
+        yield return new WaitForSeconds(5f);
+        notifications.gameObject.GetComponent<Animator>().SetBool("ShowNotification", false);
     }
 
     #endregion
