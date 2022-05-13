@@ -10,15 +10,22 @@ public class UFO : MonoBehaviour
     public Vector3 checkCubePos = new Vector3(0f, 4f, 0f);
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
+    public Vector3 startPos2;
+    public Vector3 startPos3;
     public Vector3 endPos;
+    public Vector3 endPos2;
+    public Vector3 endPos3;
     [Range(0,1)]
     public float sliderSoundVolume;
     public float spawnTimer = 10f;
     public GameObject grayPrefab;
     public Gray currentGray;
+    public Gray currentGray2;
+    public Gray currentGray3;
     public float timeLimit;
     public float timer;
     public bool spawning = false;
+    private int numberOfWaves;
 
 
     private void Start()
@@ -37,9 +44,11 @@ public class UFO : MonoBehaviour
     {
         RotateUFOSpinner();
         if (currentGray != null) SpawnGreyLerp();
+        //else if(currentGray != null && numberOfWaves > 5) SpawnGreyLerpTwo();
         if (timer >= timeLimit)
         {
             currentGray.AwakeGray();
+
             currentGray = null;
             timer = 0;
         }
@@ -48,7 +57,15 @@ public class UFO : MonoBehaviour
     public void BeginSpawn()
     {
         spawning = true;
-        StartCoroutine("SpawnGrey");
+        if(numberOfWaves <= 5)
+        {
+            StartCoroutine("SpawnGrey");
+        }
+        else if(numberOfWaves > 5)
+        {
+            StartCoroutine("SpawnGreyTwo");
+        }
+       
     }
 
     IEnumerator SpawnGrey()
@@ -59,13 +76,44 @@ public class UFO : MonoBehaviour
             currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity).GetComponent<Gray>();
             _lm.EnemySpawned();
             spawning = false;
+            numberOfWaves ++;
+            Debug.Log(numberOfWaves);
         }
         else StartCoroutine("SpawnGrey");
     }
 
+    IEnumerator SpawnGreyTwo()
+    {
+        yield return new WaitForSeconds(spawnTimer);
+        if (_lm.canSpawn && !Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
+        {
+            currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity).GetComponent<Gray>();
+            currentGray2 = Instantiate(grayPrefab, transform.position - startPos2, Quaternion.identity).GetComponent<Gray>();
+            currentGray3 = Instantiate(grayPrefab, transform.position - startPos3, Quaternion.identity).GetComponent<Gray>();
+            _lm.EnemySpawned();
+            _lm.EnemySpawned();
+            _lm.EnemySpawned();
+            _lm.EnemySpawned();
+            _lm.EnemySpawned();
+            spawning = false;
+            numberOfWaves ++;
+            Debug.Log(numberOfWaves);
+        }
+        else StartCoroutine("SpawnGrey");
+    }
+
+
     public void SpawnGreyLerp()
     {
         currentGray.SetPos(Vector3.Lerp(transform.position - startPos, transform.position - endPos, timer / timeLimit));
+
+        timer += Time.deltaTime;
+    }
+    public void SpawnGreyLerpTwo()
+    {
+        currentGray.SetPos(Vector3.Lerp(transform.position - startPos, transform.position - endPos, timer / timeLimit));
+        currentGray2.SetPos(Vector3.Lerp(transform.position - startPos2, transform.position - endPos2, timer / timeLimit));
+        currentGray3.SetPos(Vector3.Lerp(transform.position - startPos3, transform.position - endPos3, timer / timeLimit));
         timer += Time.deltaTime;
     }
 
