@@ -16,6 +16,9 @@ public class GameVars : MonoBehaviour
     private Player player;
 
     [SerializeField]
+    private Cat cat;
+
+    [SerializeField]
     private string objectLayerName;
     [SerializeField]
     private string floorLayerName;
@@ -70,6 +73,7 @@ public class GameVars : MonoBehaviour
         LoadResources();
 
         SceneManager.sceneLoaded += FindPlayer;
+        SceneManager.sceneLoaded += FindCat;
     }
 
     private void SetKeys()
@@ -89,6 +93,13 @@ public class GameVars : MonoBehaviour
         var aux = GameObject.Find("Player");
         if (aux != null) player = aux.GetComponent<Player>();
         else player = null;
+    }
+
+    void FindCat(Scene scene, LoadSceneMode mode)
+    {
+        var aux = GameObject.Find("cat");
+        if (aux != null) cat = aux.GetComponent<Cat>();
+        else cat = null;
     }
 
     private void LoadResources()
@@ -204,5 +215,17 @@ public class GameVars : MonoBehaviour
         notifications.gameObject.GetComponent<Animator>().SetBool("ShowNotification", false);
     }
 
+    #endregion
+
+    #region Cat
+    public void SetCatFree()
+    {
+        cat.CatHasBeenReleased();
+    }
+
+    public void TakeCat()
+    {
+        cat.CatIsBeingTaken();
+    }
     #endregion
 }

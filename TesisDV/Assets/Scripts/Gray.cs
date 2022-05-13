@@ -319,6 +319,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     public void GrabObjective()
     {
         hasObjective = true;
+        GameVars.Values.TakeCat();
         _lm.CheckForObjective();
     }
 
@@ -331,6 +332,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     {
         _lm.objective.transform.position = transform.position + new Vector3(0f, 0.75f, 0f);
         hasObjective = false;
+        GameVars.Values.SetCatFree();
         _lm.CheckForObjective();
     }
 
