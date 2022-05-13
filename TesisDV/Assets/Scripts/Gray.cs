@@ -15,6 +15,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     private NavMeshAgent _navMeshAgent;
     
     private bool _isWalkingSoundPlaying = false;
+    private bool _isMoving;
     public float distanceToPlayer;
     public float pursueThreshold = 10f;
     public float disengageThreshold = 15f;
@@ -48,7 +49,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         _playerScript = _player.GetComponent<Player>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         //_empAbility = GameObject.Find("EMPAbility").GetComponent<ParticleSystem>();
-        
+        //_isMoving = true;
         _empAbility.Stop();
         _deathEffect.Stop();
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -68,6 +69,8 @@ public class Gray : MonoBehaviour, IHittableObserver
 
     private void Update()
     {
+        Debug.Log(_navMeshAgent.pathStatus);
+
         if (_player == null)
         {
             StopAllCoroutines();
@@ -107,16 +110,21 @@ public class Gray : MonoBehaviour, IHittableObserver
                     if (!_isWalkingSoundPlaying)
                         StartCoroutine(PlayGraySound());
 
-                    _anim.SetBool("IsWalking", true);
+                    //_anim.SetBool("IsWalking", true); Ahora en MovingAnimations()
                 }
                 else
                 {
                     pursue = false;
                     _isWalkingSoundPlaying = false;
-                    _anim.SetBool("IsWalking", false);
+                    //_anim.SetBool("IsWalking", false); Ahora en MovingAnimations()
                 }
 
-                Move();
+                if(_isMoving)
+                {
+                    Move();
+                }
+                MovingAnimations();
+                CheckPathStatus();
 
                 if (!_lm.enemyHasObjective && Vector3.Distance(transform.position, _lm.objective.transform.position) < 3f)
                 {
@@ -133,6 +141,7 @@ public class Gray : MonoBehaviour, IHittableObserver
             {
                 pursue = false;
                 _isWalkingSoundPlaying = false;
+                _isMoving = false;
             }
             //}
         }
@@ -141,9 +150,18 @@ public class Gray : MonoBehaviour, IHittableObserver
     public void Move()
     {
         Vector3 dest = default(Vector3);
-        if (pursue) dest = _player.transform.position;
-        else if (_lm.enemyHasObjective) dest = _exitPos;
-        else dest = _lm.objective.transform.position;
+        if (pursue)
+        {
+            dest = _player.transform.position;
+        }
+        else if (_lm.enemyHasObjective) 
+        {
+            dest = _exitPos;
+        }
+        else
+        {
+            dest = _lm.objective.transform.position;
+        }
 
         var dir = dest - transform.position;
         dir.y = 0f;
@@ -151,6 +169,27 @@ public class Gray : MonoBehaviour, IHittableObserver
         _navMeshAgent.destination = dest;
 
     }
+
+    public void MovingAnimations()
+    {
+        if(_isMoving)
+        _anim.SetBool("IsWalking", true);
+        else
+        _anim.SetBool("IsWalking", false);
+    }
+
+    public void CheckPathStatus()
+    {
+        if(_navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial || _navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid)
+        {
+            _isMoving = false;
+        }
+        else
+        {
+            _isMoving = true;
+        }
+    }
+
     public IEnumerator PlayGraySound()
     {
         GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
@@ -220,6 +259,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     {
         _anim.SetBool("IsHitted", false);
         _rb.isKinematic = true;
+        _isMoving = false;
         stun = true;
         _anim.SetBool("IsStunned", true);
         Invoke("UnStun", time);
@@ -229,7 +269,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     {
 
         stun = true;
-
+        _isMoving = false;
         _navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
@@ -244,6 +284,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     {
         _rb.isKinematic = false;
         stun = false;
+        _isMoving = false;
     }
 
     public void SecondUnStun()
@@ -255,6 +296,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         else dest = _lm.objective.transform.position;
         _rb.isKinematic = false;
         stun = false;
+        _isMoving = false;
     }
 
     public void SetPos(Vector3 pos)
@@ -289,6 +331,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     {
         _lm.objective.transform.position = transform.position + new Vector3(0f, 0.75f, 0f);
         hasObjective = false;
+        _lm.CheckForObjective();
     }
 
     public void GoBackToShip()

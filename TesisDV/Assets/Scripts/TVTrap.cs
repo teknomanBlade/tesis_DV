@@ -19,7 +19,6 @@ public class TVTrap : Item, IMovable
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(_timePassed);
         if(!_canStun && _timePassed > 0)
         {
             _timePassed -= Time.deltaTime;
