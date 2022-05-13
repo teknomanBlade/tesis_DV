@@ -167,6 +167,7 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        _cam.ActiveShake(1.5f, 0.4f);
         hp--;
         if (hp <= 0) Die();
     }

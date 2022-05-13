@@ -9,6 +9,13 @@ public class PlayerCamera : MonoBehaviour
     private Quaternion targetAngle;
     private float smoothing = 20f;
     private Vector3 offset = new Vector3(0f, 0.75f, 0f);
+    private Transform _cameraTransform;
+    private Vector3 _originalCameraPos;
+
+    //Shake
+    private float _shakeAmount = 0.7f;
+    private float _shakeDuration = 2f;
+    private bool _camShake = false;
 
     //Bobbing
     private Vector3 _initPos;
@@ -20,6 +27,7 @@ public class PlayerCamera : MonoBehaviour
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _camera = GameObject.Find("MainCamera");
+        _cameraTransform = _camera.transform;
         SetInitPos(_camera.transform.localPosition);
     }
 
@@ -27,6 +35,8 @@ public class PlayerCamera : MonoBehaviour
     {
         CheckMotion();
         ResetPosition();
+        if(_camShake)
+            CameraShake();
 
         transform.position = Vector3.Lerp(transform.position, _player.transform.position + offset, smoothing * Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetAngle, smoothing * Time.deltaTime);
@@ -69,6 +79,34 @@ public class PlayerCamera : MonoBehaviour
     private void PlayMotion(Vector3 motion)
     {
         _camera.transform.localPosition += motion;
+    }
+    public void ActiveShake(float shakeDuration, float shakeAmount)
+    {
+        _camShake = true;
+        GameVars.Values.soundManager.PlaySoundAtPoint("KidShaking",transform.position,0.3f);
+        _shakeDuration = shakeDuration;
+        _shakeAmount = shakeAmount;
+        StartCoroutine(ActiveDeactivateShake(shakeDuration));
+    }
+    public IEnumerator ActiveDeactivateShake(float shakeDuration)
+    {
+        yield return new WaitForSeconds(shakeDuration);
+        _camShake = false;
+        _shakeDuration = 0f;
+    }
+
+    private void CameraShake()
+    {
+        if (_shakeDuration > 0)
+        {
+            _cameraTransform.localPosition = _originalCameraPos + Random.insideUnitSphere * _shakeAmount;
+            _shakeDuration -= Time.deltaTime;
+        }
+        else
+        {
+            _shakeDuration = 0f;
+            _cameraTransform.position = _initPos;
+        }
     }
 
     public void SetInitPos(Vector3 newPos)

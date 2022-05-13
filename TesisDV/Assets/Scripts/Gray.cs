@@ -267,7 +267,7 @@ public class Gray : MonoBehaviour, IHittableObserver
 
     public void SecondStun(float time)
     {
-
+        _anim.SetBool("IsHitted", false);
         stun = true;
         _isMoving = false;
         _navMeshAgent.destination = transform.position;
@@ -392,7 +392,6 @@ public class Gray : MonoBehaviour, IHittableObserver
         if (message.Equals("TennisBallHit"))
         {
             _anim.SetBool("IsHitted", true);
-            _anim.SetBool("IsWalking", false);
             GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.35f);
             Damage();
             Stun(5f);
