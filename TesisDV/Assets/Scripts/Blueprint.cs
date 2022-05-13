@@ -19,12 +19,16 @@ public class Blueprint : MonoBehaviour
     private Renderer myRenderer;
     private Vector3 finalPosition;
     private Quaternion finalRotation;
+    private Renderer[] _myChildrenRenderers;
 
     void Start()
     {
         canBuild = true;
         //originalMaterial = GetComponent<Renderer>().material; //Probar despues de arreglar posicionamiento. 
-        //myRenderer = GetComponent<Renderer>(); //Probar despues de arreglar posicionamiento. 
+        originalMaterial = GetComponentInChildren<Renderer>().material;
+        //myRenderer = GetComponent<Renderer>(); //Probar despues de arreglar posicionamiento.
+        _myChildrenRenderers = GetComponentsInChildren<Renderer>();        
+
     }
 
     void Update()
@@ -77,7 +81,12 @@ public class Blueprint : MonoBehaviour
     private IEnumerator BuildTrap()
     {
         Instantiate(particles, transform.position, transform.rotation);
-        //myRenderer.enabled = false; //Probar despues de arreglar posicionamiento. 
+        //myRenderer.enabled = false; //Probar despues de arreglar posicionamiento.
+        
+        //Renderer[] rs = GetComponentsInChildren<Renderer>();
+        foreach(Renderer r in _myChildrenRenderers)
+        r.enabled = false;
+
         //Canbuild provisional.
         canBuild = false;
         GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
@@ -92,11 +101,19 @@ public class Blueprint : MonoBehaviour
 
     private void ChangeMaterial()
     {
+        //Renderer[] rs = GetComponentsInChildren<Renderer>();
+        foreach(Renderer r in _myChildrenRenderers)
+        r.material = newMaterial;
+
         //myRenderer.material = newMaterial; //Probar despues de arreglar posicionamiento.
     }
 
     private void SetOriginalMaterial()
     {
+        //Renderer[] rs = GetComponentsInChildren<Renderer>();
+        foreach(Renderer r in _myChildrenRenderers)
+        r.material = originalMaterial;
+
         //myRenderer.material = originalMaterial; //Probar despues de arreglar posicionamiento.
     }
 
