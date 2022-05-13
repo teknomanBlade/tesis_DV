@@ -43,6 +43,7 @@ public class InventoryItem : Item
 
     public void Die()
     {
+        GameVars.Values.ShowNotification("You've grabbed a " + itemName);
         GameVars.Values.PlayPickUpSound();
         gameObject.SetActive(false);
         
