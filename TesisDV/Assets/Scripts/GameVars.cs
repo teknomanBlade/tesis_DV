@@ -225,7 +225,7 @@ public class GameVars : MonoBehaviour
 
     public float GetCatDistance()
     {
-        return cat.GetDistance();
+        return (cat != null) ? cat.GetDistance() : 0f;
     }
 
     public void TakeCat()
