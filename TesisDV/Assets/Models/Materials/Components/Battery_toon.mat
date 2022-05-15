@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: racket
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Name: Battery_toon
+  m_Shader: {fileID: 4800000, guid: c181b5f9b94735d4db2356bacb063191, type: 3}
   m_ShaderKeywords: _NORMALMAP _PARALLAXMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: a241fe48d2d34f74b8bd6c5dce4d278b, type: 3}
+        m_Texture: {fileID: 2800000, guid: c7f3aaf35aa476c45b4a091021a91ef9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -40,7 +40,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: a8cbc11ff2ace5645a729fff0beabc12, type: 3}
+        m_Texture: {fileID: 2800000, guid: ebeac4cd8014dde46b1cfc168856e167, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexture1:
+        m_Texture: {fileID: 2800000, guid: ebeac4cd8014dde46b1cfc168856e167, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -48,14 +52,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: 97be30d09ad02824ebc67a2d7ceb13e1, type: 3}
+        m_Texture: {fileID: 2800000, guid: fe5383489dbea364c8087bc19964ee4d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: 367924bedf329c8408dce4dc1ee58d3e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9fe23de3b7615fb4486a8f82519ba96b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SpecGlossMap:
+    - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -65,19 +69,26 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0.211
+    - _Glossiness1: 0
     - _GlossyReflections: 1
-    - _Metallic: 0
+    - _Metallic: 0.112
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _Rim1: 0.73
+    - _RimAmount1: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
+    - __dirty: 0
     m_Colors:
+    - _AmbientColor1: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _RimColor1: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecularColor1: {r: 0, g: 0, b: 0, a: 0}
+    - _TintColor: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 0}
   m_BuildTextureStacks: []
