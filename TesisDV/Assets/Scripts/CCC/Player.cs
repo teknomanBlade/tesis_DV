@@ -14,7 +14,9 @@ public class Player : MonoBehaviour
     private Inventory _inventory;
     public GameObject contextualMenu { get; private set; }
     public Animator contextualMenuAnim { get; private set; }
-   
+    public string typeFloor { get; private set; }
+
+    private AudioSource _audioSource;
 
     // Movement
     //public CraftingRecipe craftingRecipe;
@@ -33,6 +35,10 @@ public class Player : MonoBehaviour
     public bool isGrounded = true;
     [SerializeField]
     private bool isCrouching = false;
+    [SerializeField]
+    private bool isWalking = false;
+    [SerializeField]
+    private bool isRunning = false;
     private Vector3 _originalScale;
     private Vector3 _originalCamPos;
 
@@ -65,7 +71,7 @@ public class Player : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
         _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
-
+        _audioSource = GetComponent<AudioSource>();
         _originalScale = transform.localScale;
         _originalCamPos = _cam.transform.localPosition;
         contextualMenu = GameObject.Find("ContextualTrapMenu");
@@ -82,7 +88,6 @@ public class Player : MonoBehaviour
     {
         LookingAt();
         CheckGround();
-        
 
         if (!GameVars.Values.crouchToggle)
         {
@@ -92,7 +97,7 @@ public class Player : MonoBehaviour
         else if (Input.GetKeyDown(GameVars.Values.crouchKey)) CrouchToggle();
 
         if (Input.GetKeyDown(GameVars.Values.sprintKey)) speed = sprintSpeed;
-        if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed;
+        if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed; 
 
         if (Input.GetKeyDown(GameVars.Values.useKey))
         {
@@ -190,17 +195,42 @@ public class Player : MonoBehaviour
     private void Walk()
     {
         Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
-        //TODO: implementar con algun booleano que marque que esta caminando. Esto se ejecuta siempre.
-        //GameVars.Values.soundManager.PlaySound("FootstepsSFX", 0.35f, true);
-        input = transform.TransformDirection(input) * speed;
 
+        input = transform.TransformDirection(input) * speed;
+        
         Vector3 velocity = _rb.velocity;
         Vector3 deltaVelocity = (input - velocity);
         deltaVelocity.x = Mathf.Clamp(deltaVelocity.x, -maxVelocityChange, maxVelocityChange);
         deltaVelocity.z = Mathf.Clamp(deltaVelocity.z, -maxVelocityChange, maxVelocityChange);
         deltaVelocity.y = 0f;
 
+        Vector3 start = transform.position - new Vector3(0f, 0.9f, 0f);
+        float maxDist = 0.35f;
+
+        typeFloor = "";
+
+        if (Physics.Raycast(start, -transform.up, out RaycastHit hit, maxDist))
+        {
+            if (hit.collider.gameObject.tag.Equals("GrassFloor"))
+            {
+                typeFloor = "Grass";
+                Debug.Log("TYPE FLOOR: " + typeFloor);
+            }
+            else
+            {
+                typeFloor = "Wood";
+                Debug.Log("TYPE FLOOR: " + typeFloor);
+            }
+        }
+
         _rb.AddForce(deltaVelocity, ForceMode.VelocityChange);
+        if (_rb.velocity.magnitude > 1f && _rb.velocity.magnitude <= 7.5f)
+            if(!isWalking)
+                StartCoroutine(PlayWalkSound(0.6f));
+
+        if (_rb.velocity.magnitude > 7.5f && _rb.velocity.magnitude <= 15f)
+            if (!isRunning)
+                StartCoroutine(PlayRunSound(0.3f));
     }
 
     private void Jump()
@@ -264,6 +294,9 @@ public class Player : MonoBehaviour
             isGrounded = true;
             return;
         }
+        typeFloor = "";
+        
+
         if (Physics.Raycast(start + new Vector3(gizmoScale, 0f, 0f), -transform.up, maxDist, ~layermask) ||
             Physics.Raycast(start + new Vector3(0f, 0f, gizmoScale), -transform.up, maxDist, ~layermask) ||
             Physics.Raycast(start + new Vector3(-gizmoScale, 0f, 0f), -transform.up, maxDist, ~layermask) ||
@@ -424,10 +457,32 @@ public class Player : MonoBehaviour
         }
         //lookingIMovable.BecomeMovable();
     }
+    public IEnumerator PlayWalkSound(float timer)
+    {
+        var clipName = "Footstep_" + typeFloor + "_0" + Random.Range(1, 3);
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, clipName, 0.4f, false);
+        isWalking = true;
+
+        yield return new WaitForSecondsRealtime(timer);
+
+        isWalking = false;
+    }
+
+    public IEnumerator PlayRunSound(float timer)
+    {
+        var clipName = "Footstep_" + typeFloor + "_0" + Random.Range(1, 3);
+        _audioSource.pitch = 1.5f;
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, clipName, 0.4f, false);
+        isRunning = true;
+
+        yield return new WaitForSecondsRealtime(timer);
+
+        isRunning = false;
+    }
 
     public void PlayPickUpSound()
     {
-        GameVars.Values.soundManager.PlaySoundAtPoint("GrabSound", transform.position, 0.7f);
+        GameVars.Values.soundManager.PlaySoundAtPoint("GrabSound", transform.position , 0.7f);
     }
 
     public void InteractWithInventoryItem()

@@ -40,6 +40,9 @@ public class Gray : MonoBehaviour, IHittableObserver
     private ParticleSystem _empAbility;
 
     [SerializeField]
+    private ParticleSystem _hitEffect;
+
+    [SerializeField]
     private ParticleSystem _deathEffect;
     private void Awake()
     {
@@ -390,7 +393,8 @@ public class Gray : MonoBehaviour, IHittableObserver
         if (message.Equals("TennisBallHit"))
         {
             _anim.SetBool("IsHitted", true);
-            GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.35f);
+            _hitEffect.Play();
+            GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
             Damage();
             Stun(5f);
         }

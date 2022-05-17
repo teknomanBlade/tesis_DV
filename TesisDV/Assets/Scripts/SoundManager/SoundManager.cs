@@ -6,13 +6,13 @@ public class SoundManager : MonoBehaviour
 {
     //public List<AudioClip> AudioClips;
     private List<AudioClip> AudioClips;
-    private Dictionary<string, AudioClip> soundLibrary;
+    private Dictionary<string, AudioClip> SoundLibrary { get; set; }
     private AudioSource _sound;
     private AudioClip clip;
     // Start is called before the first frame update
     void Awake()
     {
-        soundLibrary = new Dictionary<string, AudioClip>();
+        SoundLibrary = new Dictionary<string, AudioClip>();
         _sound = GetComponent<AudioSource>();
     }
 
@@ -24,13 +24,13 @@ public class SoundManager : MonoBehaviour
     public SoundManager SetAudioClips(List<AudioClip> audioClips)
     {
         AudioClips = audioClips;
-        AudioClips.ForEach(x => soundLibrary.Add(x.name, x));
+        AudioClips.ForEach(x => SoundLibrary.Add(x.name, x));
         return this;
     }
 
     public void PlaySoundOnce(string clipName, float volume, bool loop)
     {
-        if (soundLibrary.TryGetValue(clipName, out clip))
+        if (SoundLibrary.TryGetValue(clipName, out clip))
         {
             _sound.clip = clip;
             _sound.volume = volume;
@@ -40,9 +40,21 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void PlaySoundOnce(AudioSource sound, string clipName, float volume, bool loop)
+    {
+        if (SoundLibrary.TryGetValue(clipName, out clip))
+        {
+            sound.clip = clip;
+            sound.volume = volume;
+            sound.loop = loop;
+            sound.spatialBlend = 0f;
+            sound.PlayOneShot(clip);
+        }
+    }
+
     public void PlaySound(string clipName, float volume, bool loop)
     {
-        if (soundLibrary.TryGetValue(clipName, out clip))
+        if (SoundLibrary.TryGetValue(clipName, out clip))
         {
             _sound.clip = clip;
             _sound.volume = volume;
@@ -54,7 +66,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound(string clipName, float volume, bool loop, float spatialBlend)
     {
-        if (soundLibrary.TryGetValue(clipName, out clip))
+        if (SoundLibrary.TryGetValue(clipName, out clip))
         {
             _sound.clip = clip;
             _sound.volume = volume;
@@ -69,9 +81,17 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySoundAtPoint(string clipName, Vector3 position, float volume)
     {
-        if (soundLibrary.TryGetValue(clipName, out clip))
+        if (SoundLibrary.TryGetValue(clipName, out clip))
         {
             AudioSource.PlayClipAtPoint(clip, position, volume);
+        }
+    }
+
+    public void StopSound(AudioSource audioSource)
+    {
+        if (audioSource.isPlaying)
+        {
+            audioSource.Stop();
         }
     }
 
