@@ -16,6 +16,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     
     private bool _isWalkingSoundPlaying = false;
     private bool _isMoving;
+    private bool _hasHitEffectActive = false;
     public float distanceToPlayer;
     public float pursueThreshold = 10f;
     public float disengageThreshold = 15f;
@@ -393,11 +394,21 @@ public class Gray : MonoBehaviour, IHittableObserver
         if (message.Equals("TennisBallHit"))
         {
             _anim.SetBool("IsHitted", true);
-            _hitEffect.Play();
+            StartCoroutine(PlayHitEffect(0.6f));
             GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
             Damage();
             Stun(5f);
         }
+    }
+
+    IEnumerator PlayHitEffect(float timer)
+    {
+        _hitEffect.Play();
+        _hasHitEffectActive = true;
+        _hitEffect.gameObject.transform.GetComponentInChildren<Light>().enabled = _hasHitEffectActive;
+        yield return new WaitForSeconds(timer);
+        _hasHitEffectActive = false;
+        _hitEffect.gameObject.transform.GetComponentInChildren<Light>().enabled = _hasHitEffectActive;
     }
 
     private float _valueToChange;

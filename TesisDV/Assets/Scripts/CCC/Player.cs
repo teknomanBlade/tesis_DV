@@ -224,7 +224,12 @@ public class Player : MonoBehaviour
         }
 
         _rb.AddForce(deltaVelocity, ForceMode.VelocityChange);
-        if (_rb.velocity.magnitude > 1f && _rb.velocity.magnitude <= 7.5f)
+
+        /*if (_rb.velocity.magnitude > 1f && _rb.velocity.magnitude < 4f)
+            if (!isCrouching)
+                StartCoroutine(PlayCrouchSound(0.8f));*/
+
+        if (_rb.velocity.magnitude > 4f && _rb.velocity.magnitude <= 7.5f)
             if(!isWalking)
                 StartCoroutine(PlayWalkSound(0.6f));
 
@@ -457,6 +462,16 @@ public class Player : MonoBehaviour
         }
         //lookingIMovable.BecomeMovable();
     }
+    public IEnumerator PlayCrouchSound(float timer)
+    {
+        var clipName = "Footstep_" + typeFloor + "_0" + Random.Range(1, 3);
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, clipName, 0.4f, false);
+        isCrouching = true;
+
+        yield return new WaitForSecondsRealtime(timer);
+        isCrouching = false;
+    }
+
     public IEnumerator PlayWalkSound(float timer)
     {
         var clipName = "Footstep_" + typeFloor + "_0" + Random.Range(1, 3);
