@@ -11,6 +11,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     private Player _playerScript;
     private Animator _anim;
     private Rigidbody _rb;
+    private CapsuleCollider _cc;
     private LevelManager _lm;
     private NavMeshAgent _navMeshAgent;
     
@@ -49,6 +50,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     {
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
+        _cc = GetComponent<CapsuleCollider>();
         _player = GameObject.Find("Player");
         _playerScript = _player.GetComponent<Player>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
@@ -360,6 +362,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         }
         awake = false;
         _rb.isKinematic = true;
+        _cc.enabled = false;
         _anim.SetBool("IsDead", true);
         _lm.RemoveGray(this);
         _lm.CheckForObjective();

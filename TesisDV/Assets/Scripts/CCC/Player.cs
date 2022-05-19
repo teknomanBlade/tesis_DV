@@ -59,8 +59,8 @@ public class Player : MonoBehaviour
     public Vector3 lookingPlacement;
     public float timer = 0f;
     public bool isDead = false;
-    public int hp = 4;
-
+    public int hp;
+    public int maxHp = 4;
     public bool HasContextualMenu = false;
     public bool IsCrafting = false;
     //Gizmos
@@ -77,6 +77,8 @@ public class Player : MonoBehaviour
         contextualMenu = GameObject.Find("ContextualTrapMenu");
         contextualMenuAnim = contextualMenu.GetComponent<Animator>();
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
+        hp = maxHp;
+        GameVars.Values.ShowLivesRemaining(hp, maxHp);
     }
 
     private void Start()
@@ -172,16 +174,17 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        _cam.ActiveShake(1.5f, 0.4f);
+        _cam.ActiveShake(1.5f, 0.25f);
         hp--;
+        GameVars.Values.ShowLivesRemaining(hp, maxHp);
         if (hp <= 0) Die();
     }
 
     public void Die()
     {
+        _cam.DeactivateShake();
         _rb.isKinematic = true;
         canMoveCamera = false;
-        //_anim.SetBool("IsDead", true);
         Invoke("Dead", 3f);
     }
 
@@ -426,11 +429,7 @@ public class Player : MonoBehaviour
         //Crear variable distancia
         if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit,  10f, GameVars.Values.GetFloorLayerMask()))
         {
-            //Vector3 localHit = transform.InverseTransformPoint(hit.point);
-            //Debug.Log("Looking at floor!!!!");
-            //lookingPlacement = localHit;
             lookingPlacement = hit.point;
-            //Debug.Log(lookingPlacement);
         }
         else
         {

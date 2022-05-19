@@ -11,12 +11,14 @@ public class GameVars : MonoBehaviour
     public static GameVars Values { get { return _gameVars; } }
 
     public SoundManager soundManager { get; private set; }
-
+    public LevelManager LevelManager { get; set; }
     [SerializeField]
     private Player player;
 
     [SerializeField]
     private Cat cat;
+
+   
 
     [SerializeField]
     private string objectLayerName;
@@ -47,6 +49,7 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairReloadTrap1;
     public CraftingScreen craftingScreen;
     public Text notifications;
+    public Text playerLives;
     //public YouWinScreen youWinScreen;
     //public YouLoseScreen youLoseScreen;
     public List<AudioClip> audioClips;
@@ -114,8 +117,10 @@ public class GameVars : MonoBehaviour
         //youWinScreen = Resources.Load<YouWinScreen>("YouWin");
         //youLoseScreen = Resources.Load<YouLoseScreen>("YouLose");
         notifications = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("NotificationsText")).First();
+        playerLives = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("HealthText")).First();
         soundManager = FindObjectOfType<SoundManager>();
         soundManager.SetAudioClips(audioClips);
+        LevelManager = GetComponent<LevelManager>();
     }
 
     #region Player
@@ -129,6 +134,11 @@ public class GameVars : MonoBehaviour
     public void PlayPickUpSound()
     {
         player.PlayPickUpSound();
+    }
+
+    public void ShowLivesRemaining(int lives, int maxHP)
+    {
+        playerLives.text = "X " + Mathf.Clamp(lives, 0, maxHP);
     }
 
     public Vector3 GetPlayerPrefabPlacement()

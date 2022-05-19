@@ -15,7 +15,12 @@ public class BaseballLauncher : Item, IMovable
     public int shotsLeft;
     public bool IsEmpty
     {
-        get { return shotsLeft == 0; }
+        get {
+            if(shotsLeft == 0)
+                GameVars.Values.ShowNotification("We need a Tennis Ball Box to reload!");
+
+            return shotsLeft == 0;
+        }
     }
     public bool HasPlayerTennisBallBox { get; set; }
 
@@ -39,14 +44,8 @@ public class BaseballLauncher : Item, IMovable
 
     public override void Interact()
     {
-        if (IsEmpty && HasPlayerTennisBallBox)
-        {
-            Reload();
-        }
-        else
-        {
-            GameVars.Values.ShowNotification("We need a Tennis Ball Box to reload!");
-        }
+        if (HasPlayerTennisBallBox)
+                Reload();
 
         if (!active)
         {

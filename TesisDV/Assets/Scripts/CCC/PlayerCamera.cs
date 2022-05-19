@@ -91,10 +91,13 @@ public class PlayerCamera : MonoBehaviour
     public IEnumerator ActiveDeactivateShake(float shakeDuration)
     {
         yield return new WaitForSeconds(shakeDuration);
+        DeactivateShake();
+    }
+    public void DeactivateShake()
+    {
         _camShake = false;
         _shakeDuration = 0f;
     }
-
     private void CameraShake()
     {
         if (_shakeDuration > 0)

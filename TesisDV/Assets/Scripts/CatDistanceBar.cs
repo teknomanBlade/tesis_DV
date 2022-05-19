@@ -6,16 +6,20 @@ using UnityEngine.UI;
 public class CatDistanceBar : MonoBehaviour
 {
     private Slider _mySlider;
+    
+
     private float _maxDistance;
     private float _currentDistance = 0;
     private Image _fillImage;
     public GameObject Fill;
+    public Text RoundText;
     public float _valueToChange { get; private set; }
     
 
     void Start()
     {
         _mySlider = GetComponent<Slider>();
+        RoundText = GetComponentInChildren<Text>();
         _fillImage = Fill.GetComponent<Image>();
         _maxDistance = GameVars.Values.GetCatDistance(); //54
         _mySlider.maxValue = 54; //_maxDistance;
@@ -43,6 +47,7 @@ public class CatDistanceBar : MonoBehaviour
     }
     void Update()
     {
+        RoundText.text = "Round: " + GameVars.Values.LevelManager.currentRound;
         _mySlider.value = GameVars.Values.GetCatDistance();
         if (_mySlider.value < 20f)
         {
