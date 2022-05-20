@@ -381,6 +381,11 @@ public class Gray : MonoBehaviour, IHittableObserver
         Destroy(gameObject);
     }
 
+    public Vector3 GetVelocity()
+    {
+        return _navMeshAgent.velocity;
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

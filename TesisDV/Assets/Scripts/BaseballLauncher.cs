@@ -31,6 +31,7 @@ public class BaseballLauncher : Item, IMovable
     Vector3 auxVector;
     Transform myCannon;
     Transform myCannonSupport;
+    public float futureTime;
 
     public void Awake()
     {
@@ -56,7 +57,10 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
-        FieldOfView();
+        if(active)
+        {
+            FieldOfView();
+        }
 
         
     }
@@ -116,7 +120,9 @@ public class BaseballLauncher : Item, IMovable
 
         foreach (var item in allTargets)
         {
-            Vector3 dir = item.transform.position - transform.position;
+            Vector3 futurePos = item.transform.position + (item.GetComponent<Gray>().GetVelocity() * futureTime * Time.deltaTime);
+            //Vector3 dir = item.transform.position - transform.position;
+            Vector3 dir = futurePos - transform.position;
 
             //if (Vector3.Angle(transform.forward, dir.normalized) < viewAngle / 2)
             //{
