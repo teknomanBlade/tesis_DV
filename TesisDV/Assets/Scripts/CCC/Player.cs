@@ -66,6 +66,7 @@ public class Player : MonoBehaviour
     public bool IsCrafting = false;
     //Gizmos
     public float gizmoScale = 1f;
+    public LayerMask itemMask;
 
     private void Awake()
     {
@@ -374,12 +375,13 @@ public class Player : MonoBehaviour
     private void LookingAt()
     {
         RaycastHit hit;
+        RaycastHit wallHit;
 
-        //Debug.Log(Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()));
-        //if(!Physics.Raycast(_cam.transform.position, _cam.GetForward(), 5f, GameVars.Values.GetWallLayerMask()))
+        //if(!Physics.Raycast(_cam.transform.position, _cam.GetForward(), out wallHit, 5f, GameVars.Values.GetWallLayerMask()))
         //{
             if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()))
             {
+                
                 lookingAt = hit.collider.gameObject.GetComponent<Item>();
                 SetOnItem(lookingAt);
                 ChangeCrosshair();
