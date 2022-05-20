@@ -33,7 +33,11 @@ public class Gray : MonoBehaviour, IHittableObserver
     public int hp = 3;
     public bool hasObjective = false;
     private Vector3 _exitPos;
-    
+
+    private float nearestDoorDistance = 1000;
+    private GameObject nearestDoor;
+    private Vector3 nearestDoorVector = new Vector3(0, 0, 0);
+
     [SerializeField]
     private Material dissolveMaterial;
     private SkinnedMeshRenderer skinned;
@@ -162,6 +166,27 @@ public class Gray : MonoBehaviour, IHittableObserver
         {
             dest = _exitPos;
         }
+        else if (_navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial || _navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid)
+        {
+            //float nearestDoorDistance = 1000;
+            //GameObject nearestDoor;
+            //Vector3 nearestDoorVector = new Vector3(0, 0, 0);
+            foreach(GameObject door in _lm.allDoors)
+            {
+                if(Vector3.Distance(transform.position, door.transform.position) < nearestDoorDistance)
+                {
+                    nearestDoorDistance = Vector3.Distance(transform.position, door.transform.position);
+                    nearestDoor = door;
+                    nearestDoorVector = door.transform.position;
+                    dest = nearestDoor.transform.position;
+                }
+
+            }
+            if(Vector3.Distance(transform.position, nearestDoorVector) < 3f)
+            {
+                nearestDoor.GetComponent<Door>().Interact();
+            }
+        }
         else
         {
             dest = _lm.objective.transform.position;
@@ -169,9 +194,10 @@ public class Gray : MonoBehaviour, IHittableObserver
 
         var dir = dest - transform.position;
         dir.y = 0f;
-        transform.forward = dir;
+        //transform.forward = dir;
         _navMeshAgent.destination = dest;
 
+        Debug.Log("voy hacia " + dest);
     }
 
     public void MovingAnimations()
@@ -186,7 +212,8 @@ public class Gray : MonoBehaviour, IHittableObserver
     {
         if(_navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial || _navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid)
         {
-            _isMoving = false;
+            //_isMoving = false;
+
         }
         else
         {

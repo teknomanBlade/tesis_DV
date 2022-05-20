@@ -11,6 +11,7 @@ public class LevelManager : MonoBehaviour
     public GameObject YouLose;
 
     public UFO[] allUfos;
+    public GameObject[] allDoors;
     public GameObject objective;
 
     public delegate void LevelDelegate();

@@ -32,6 +32,8 @@ public class BaseballLauncher : Item, IMovable
     Transform myCannon;
     Transform myCannonSupport;
     public float futureTime;
+    public float speed = 0.2f;
+    float timeCount = 0.0f;
 
     public void Awake()
     {
@@ -57,11 +59,16 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
-        if(active)
-        {
-            FieldOfView();
-        }
+        //if(active)
+        //{
+        //    FieldOfView();
+        //}
+        //else
+        //{
+        //    Inactive();
+        //}
 
+        FieldOfView();
         
     }
     public void Reload()
@@ -133,9 +140,9 @@ public class BaseballLauncher : Item, IMovable
                     
                     Quaternion lookRotation = Quaternion.LookRotation(dir);
                     Vector3 rotation = lookRotation.eulerAngles;
-                    myCannonSupport.rotation = Quaternion.Euler(0f, rotation.y +90f, 0f);
-                    myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f);
-
+                    myCannonSupport.rotation = Quaternion.Euler(0f, rotation.y + 90f, 0f);
+                    //myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f);
+                    myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f), speed * Time.deltaTime);
                     Debug.DrawLine(transform.position, item.transform.position, Color.red);
                 }
                 else
@@ -144,6 +151,11 @@ public class BaseballLauncher : Item, IMovable
                 }
             //}
         }
+    }
+
+    private void Inactive()
+    {
+        myCannon.rotation = Quaternion.Euler(0f, 0f, 0f);
     }
 
     public void ActiveDeactivateBallStates(bool state1, bool state2, bool state3)
