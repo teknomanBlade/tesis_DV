@@ -51,6 +51,9 @@ public class GameVars : MonoBehaviour
     public CraftingScreen craftingScreen;
     public Text notifications;
     public Text playerLives;
+
+    public Animator playerLivesAnim { get; private set; }
+
     //public YouWinScreen youWinScreen;
     //public YouLoseScreen youLoseScreen;
     public List<AudioClip> audioClips;
@@ -120,6 +123,7 @@ public class GameVars : MonoBehaviour
         //youLoseScreen = Resources.Load<YouLoseScreen>("YouLose");
         notifications = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("NotificationsText")).First();
         playerLives = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("HealthText")).First();
+        playerLivesAnim = playerLives.gameObject.GetComponent<Animator>();
         soundManager = FindObjectOfType<SoundManager>();
         soundManager.SetAudioClips(audioClips);
         LevelManager = GetComponent<LevelManager>();
@@ -140,9 +144,15 @@ public class GameVars : MonoBehaviour
 
     public void ShowLivesRemaining(int lives, int maxHP)
     {
+        StartCoroutine(ShowAnimDamagedPlayer());
         playerLives.text = "X " + Mathf.Clamp(lives, 0, maxHP);
     }
-
+    public IEnumerator ShowAnimDamagedPlayer()
+    {
+        playerLivesAnim.SetBool("IsDamaged", true);
+        yield return new WaitForSeconds(1f);
+        playerLivesAnim.SetBool("IsDamaged", false);
+    }
     public Vector3 GetPlayerPrefabPlacement()
     {
         return player.GetPrefabPlacement();

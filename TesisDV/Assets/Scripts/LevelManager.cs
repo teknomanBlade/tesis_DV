@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : MonoBehaviour, IRoundChangeObservable
 {
+    private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
     private GameObject _panelMain;
 
     public GameObject YouWin;
@@ -119,6 +120,7 @@ public class LevelManager : MonoBehaviour
     {
         inRound = false;
         currentRound++;
+        TriggerRoundChange("RoundChanged");
         Invoke("StartRound", 5f);
     }
 
@@ -177,5 +179,21 @@ public class LevelManager : MonoBehaviour
             allDoorsAreClosed = true;
         }
 
+    }
+
+    public void AddObserver(IRoundChangeObserver obs)
+    {
+        roundChangeObservers.Add(obs);
+    }
+
+    public void RemoveObserver(IRoundChangeObserver obs)
+    {
+        if (roundChangeObservers.Contains(obs))
+            roundChangeObservers.Remove(obs);
+    }
+
+    public void TriggerRoundChange(string triggerMessage)
+    {
+        roundChangeObservers.ForEach(x => x.OnNotify(triggerMessage));
     }
 }

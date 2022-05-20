@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CatDistanceBar : MonoBehaviour
+public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
 {
     private Slider _mySlider;
     
@@ -13,6 +13,8 @@ public class CatDistanceBar : MonoBehaviour
     private Image _fillImage;
     public GameObject Fill;
     public Text RoundText;
+
+    public Animator RoundTextAnim { get; private set; }
     public float _valueToChange { get; private set; }
     
 
@@ -20,8 +22,11 @@ public class CatDistanceBar : MonoBehaviour
     {
         _mySlider = GetComponent<Slider>();
         RoundText = GetComponentInChildren<Text>();
+        RoundTextAnim = RoundText.GetComponent<Animator>();
+        GameVars.Values.LevelManager.AddObserver(this);
         _fillImage = Fill.GetComponent<Image>();
-        _maxDistance = GameVars.Values.GetCatDistance(); //54
+        _maxDistance = GameVars.Values.GetCatDistance();
+        //54
         _mySlider.maxValue = 54; //_maxDistance;
         _mySlider.minValue = 5f;
         _currentDistance = _maxDistance;
@@ -45,9 +50,15 @@ public class CatDistanceBar : MonoBehaviour
 
         _valueToChange = endValue;
     }
+    public IEnumerator ShowAnimRoundChanged()
+    {
+        RoundTextAnim.SetBool("IsNewRound", true);
+        yield return new WaitForSeconds(1f);
+        RoundTextAnim.SetBool("IsNewRound", false);
+    }
+
     void Update()
     {
-        RoundText.text = "Round: " + GameVars.Values.LevelManager.currentRound;
         _mySlider.value = GameVars.Values.GetCatDistance();
         if (_mySlider.value < 20f)
         {
@@ -57,5 +68,15 @@ public class CatDistanceBar : MonoBehaviour
         {
             _fillImage.color = Color.green;
         }
+    }
+
+    public void OnNotify(string message)
+    {
+        if (message.Equals("RoundChanged"))
+        {
+            RoundText.text = "Round: " + GameVars.Values.LevelManager.currentRound;
+            StartCoroutine(ShowAnimRoundChanged());
+        } 
+           
     }
 }
