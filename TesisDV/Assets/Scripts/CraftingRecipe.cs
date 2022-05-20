@@ -21,7 +21,17 @@ using UnityEngine;
             //public InventoryItem item;
             public int craftingID;
             public int amount;
+            public Sprite itemImage;
             public GameObject trapPrefab;
+        }
+
+        public bool HasBaseballTrapItems(Inventory inventory)
+        {
+            return inventory.ContainsID(1) && inventory.ContainsID(2);
+        }
+        public bool HasTVTrapItems(Inventory inventory)
+        {
+            return inventory.ContainsID(2) && inventory.ContainsID(6);
         }
 
         public bool CanCraft(Inventory inventory)
@@ -54,7 +64,6 @@ using UnityEngine;
                             //GameObject aux = Instantiate(itemAmount.trapPrefab, _player.GetPrefabPlacement(), Quaternion.identity);
                             GameObject aux = Instantiate(itemAmount.trapPrefab, GameVars.Values.GetPlayerPrefabPlacement(), Quaternion.identity);
                             aux.transform.eulerAngles = new Vector3(aux.transform.eulerAngles.x, GameVars.Values.GetPlayerCameraRotation() + 90f, aux.transform.eulerAngles.z);
-                            //aux.transform.rotation = _player.transform.rotation;
                         }
                         buildAmount++;
                     }                    

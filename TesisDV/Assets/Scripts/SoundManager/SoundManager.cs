@@ -64,7 +64,7 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlaySound(string clipName, float volume, bool loop, float spatialBlend)
+    public void PlaySound(AudioSource sound, string clipName, float volume, bool loop, float spatialBlend)
     {
         if (SoundLibrary.TryGetValue(clipName, out clip))
         {

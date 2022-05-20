@@ -13,11 +13,14 @@ public class Slot : MonoBehaviour
     [SerializeField]
     private Image _image;
     [SerializeField]
+    private Image _keyImage;
+    [SerializeField]
     private GameObject _myPrefab;
     [SerializeField]
     private int _itemID;
     [SerializeField]
-    private CanvasGroup _myCanvasGroup;  
+    private CanvasGroup _slotCanvasGroup;
+    private CanvasGroup _keyCanvasGroup;
     private float fadeDelay = 1.1f;    
     private bool isFaded;
     private Vector3 auxVector;
@@ -25,9 +28,12 @@ public class Slot : MonoBehaviour
     void Awake()
     {
         isFaded = true;
+        _keyImage = transform.GetComponentsInChildren<Transform>()
+            .Where(x => x.gameObject.name.Equals("KeyImage")).First().GetComponent<Image>();
+        _keyCanvasGroup = _keyImage.GetComponent<CanvasGroup>();
         _image = transform.GetComponentsInChildren<Transform>()
             .Where(x => x.gameObject.name.Equals("ItemImage")).First().GetComponent<Image>();
-        _myCanvasGroup = GetComponent<CanvasGroup>();
+        _slotCanvasGroup = GetComponent<CanvasGroup>();
     }
     
     public bool IsFree()
@@ -66,6 +72,11 @@ public class Slot : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public void ActivateTrapKey()
+    {
+        Fade(_keyCanvasGroup);
     }
 
     public void SetItem(InventoryItem item)
@@ -112,19 +123,19 @@ public class Slot : MonoBehaviour
         
     }
 
-    public void Fade()
+    public void Fade(CanvasGroup canvasGroup)
     {
-        StartCoroutine(DoFade(_myCanvasGroup.alpha, isFaded ? 1 : 0));
+        StartCoroutine(DoFade(canvasGroup, canvasGroup.alpha, isFaded ? 1 : 0));
         isFaded = !isFaded;
     }
-    public IEnumerator DoFade(float start, float end)
+    public IEnumerator DoFade(CanvasGroup canvasGroup,float start, float end)
     {
         float counter = 0f;
 
         while(counter < fadeDelay)
         {
             counter += Time.deltaTime;
-            _myCanvasGroup.alpha = Mathf.Lerp(start, end, counter / fadeDelay);
+            canvasGroup.alpha = Mathf.Lerp(start, end, counter / fadeDelay);
 
             yield return null;
         }

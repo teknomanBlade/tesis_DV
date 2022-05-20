@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Inventory _inventory;
     public GameObject contextualMenu { get; private set; }
+    public ContextualTrapMenu contextualMenuScript { get; private set; }
     public Animator contextualMenuAnim { get; private set; }
     public string typeFloor { get; private set; }
 
@@ -75,6 +76,7 @@ public class Player : MonoBehaviour
         _originalScale = transform.localScale;
         _originalCamPos = _cam.transform.localPosition;
         contextualMenu = GameObject.Find("ContextualTrapMenu");
+        contextualMenuScript = contextualMenu.GetComponent<ContextualTrapMenu>();
         contextualMenuAnim = contextualMenu.GetComponent<Animator>();
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
         hp = maxHp;
@@ -129,7 +131,17 @@ public class Player : MonoBehaviour
 
         if (!IsCrafting)
         {
+            
             contextualMenuAnim.SetBool("HasTraps", GameVars.Values.BaseballLauncher.CanCraft(_inventory));
+            if (GameVars.Values.BaseballLauncher.HasBaseballTrapItems(_inventory))
+            {
+                contextualMenuScript.ActivatePanelTrap1();
+            }
+
+            if (GameVars.Values.BaseballLauncher.HasTVTrapItems(_inventory))
+            {
+                contextualMenuScript.ActivatePanelTrap2();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Q))

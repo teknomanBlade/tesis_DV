@@ -7,6 +7,7 @@ public class UFO : MonoBehaviour
 {
     private GameObject _UFOSpinner;
     private LevelManager _lm;
+    private AudioSource _audioSource;
     public Vector3 checkCubePos = new Vector3(0f, 4f, 0f);
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
@@ -31,8 +32,9 @@ public class UFO : MonoBehaviour
     private void Start()
     {
         _UFOSpinner = GameObject.Find("UFOSpinner");
+        _audioSource = GetComponent<AudioSource>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        GameVars.Values.soundManager.PlaySound("UFOBuzz", sliderSoundVolume, true, 1f);
+        GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
     }
 
     public void RotateUFOSpinner()

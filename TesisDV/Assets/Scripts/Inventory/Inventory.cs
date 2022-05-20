@@ -15,6 +15,11 @@ public class Inventory : MonoBehaviour
         isFaded = true;
     }
 
+    public void AddTrapItem(int slotIndex)
+    {
+        itemSlots[slotIndex].ActivateTrapKey();
+    }
+
     public void AddItem(InventoryItem item)
     {
         Fade();
