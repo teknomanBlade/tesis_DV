@@ -35,8 +35,8 @@ public class Gray : MonoBehaviour, IHittableObserver
     private Vector3 _exitPos;
 
     private float nearestDoorDistance = 1000;
-    private GameObject nearestDoor;
-    private Vector3 nearestDoorVector = new Vector3(0, 0, 0);
+    private Transform nearestDoor;
+    private Vector3 nearestDoorVector;
 
     [SerializeField]
     private Material dissolveMaterial;
@@ -64,6 +64,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         _deathEffect.Stop();
         _navMeshAgent = GetComponent<NavMeshAgent>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
+        nearestDoorDistance = 1000;
 
         _lm.AddGray(this);
 
@@ -166,26 +167,21 @@ public class Gray : MonoBehaviour, IHittableObserver
         {
             dest = _exitPos;
         }
-        else if (_navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial || _navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid)
+        else if (_lm.allDoorsAreClosed)
         {
             //float nearestDoorDistance = 1000;
             //GameObject nearestDoor;
             //Vector3 nearestDoorVector = new Vector3(0, 0, 0);
-            foreach(GameObject door in _lm.allDoors)
-            {
-                if(Vector3.Distance(transform.position, door.transform.position) < nearestDoorDistance)
-                {
-                    nearestDoorDistance = Vector3.Distance(transform.position, door.transform.position);
-                    nearestDoor = door;
-                    nearestDoorVector = door.transform.position;
-                    dest = nearestDoor.transform.position;
-                }
 
-            }
-            if(Vector3.Distance(transform.position, nearestDoorVector) < 3f)
+            StartCoroutine(FindClosestDoor());
+            
+            dest = nearestDoor.position;
+            if (Vector3.Distance(transform.position, nearestDoorVector) < 3f)
             {
-                nearestDoor.GetComponent<Door>().Interact();
+                nearestDoor.GetComponent<AuxDoor>().Interact();
+                _lm.ChangeDoorsStatus();
             }
+            
         }
         else
         {
@@ -444,6 +440,24 @@ public class Gray : MonoBehaviour, IHittableObserver
         yield return new WaitForSeconds(timer);
         _hasHitEffectActive = false;
         _hitEffect.gameObject.transform.GetComponentInChildren<Light>().enabled = _hasHitEffectActive;
+    }
+
+    IEnumerator FindClosestDoor()
+    {
+        nearestDoorDistance = 1000f;
+
+        foreach (Transform door in _lm.allDoors)
+        {
+            if (Vector3.Distance(transform.position, door.position) < nearestDoorDistance)
+            {
+                nearestDoorDistance = Vector3.Distance(transform.position, door.position);
+                nearestDoor = door;
+                nearestDoorVector = door.position;
+
+            }
+
+        }
+        yield return new WaitForSeconds(0.5f);
     }
 
     private float _valueToChange;

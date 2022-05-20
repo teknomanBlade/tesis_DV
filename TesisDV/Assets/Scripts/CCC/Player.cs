@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
 
     private AudioSource _audioSource;
 
+    private LevelManager _lm;
+
     // Movement
     //public CraftingRecipe craftingRecipe;
     private float speed = 5f;
@@ -76,6 +78,7 @@ public class Player : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _originalScale = transform.localScale;
         _originalCamPos = _cam.transform.localPosition;
+        _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         contextualMenu = GameObject.Find("ContextualTrapMenu");
         contextualMenuScript = contextualMenu.GetComponent<ContextualTrapMenu>();
         contextualMenuAnim = contextualMenu.GetComponent<Animator>();
@@ -464,6 +467,10 @@ public class Player : MonoBehaviour
             return;
         }
         lookingAt.Interact();
+        if(lookingAt.TryGetComponent<Door>(out Door door))
+        {
+            _lm.ChangeDoorsStatus();
+        }
     }
 
     public void MoveTrap()

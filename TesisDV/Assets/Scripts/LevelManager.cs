@@ -11,8 +11,9 @@ public class LevelManager : MonoBehaviour
     public GameObject YouLose;
 
     public UFO[] allUfos;
-    public GameObject[] allDoors;
+    public Transform[] allDoors;
     public GameObject objective;
+    public bool allDoorsAreClosed;
 
     public delegate void LevelDelegate();
     public CraftingRecipe craftingRecipe;
@@ -36,6 +37,7 @@ public class LevelManager : MonoBehaviour
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _panelMain = GameObject.Find("Panel");
+        allDoorsAreClosed = true;
         /*YouWin = Instantiate(GameVars.Values.youWinScreen);
         YouWin.transform.SetParent(_panelMain.transform);
         YouLose = Instantiate(GameVars.Values.youLoseScreen);
@@ -49,6 +51,8 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(allDoorsAreClosed);
+
         //For testing
         if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
 
@@ -160,5 +164,18 @@ public class LevelManager : MonoBehaviour
     private void KillAllEnemiesInScene()
     {
         if (enemiesInScene.Count != 0) enemiesInScene[0].Die();
+    }
+
+    public void ChangeDoorsStatus()
+    {
+        if(allDoorsAreClosed)
+        {
+            allDoorsAreClosed = false;
+        }
+        else
+        {
+            allDoorsAreClosed = true;
+        }
+
     }
 }
