@@ -59,16 +59,16 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
-        //if(active)
-        //{
-        //    FieldOfView();
-        //}
-        //else
-        //{
-        //    Inactive();
-        //}
+        if(active)
+        {
+            FieldOfView();
+        }
+        else
+        {
+            Inactive();
+        }
 
-        FieldOfView();
+        
         
     }
     public void Reload()
@@ -142,12 +142,13 @@ public class BaseballLauncher : Item, IMovable
                     Vector3 rotation = lookRotation.eulerAngles;
                     myCannonSupport.rotation = Quaternion.Euler(0f, rotation.y + 90f, 0f);
                     //myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f);
-                    myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f), speed * Time.deltaTime);
+                    myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y + 90f, rotation.z), speed * Time.deltaTime);
                     Debug.DrawLine(transform.position, item.transform.position, Color.red);
                 }
                 else
                 {
-                    Debug.DrawLine(transform.position, hit.point, Color.red);
+                    myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(0f, 0f, 35f), speed * Time.deltaTime);
+                    myCannonSupport.rotation = Quaternion.Slerp(myCannonSupport.rotation, Quaternion.Euler(0f, 0f, 0f), speed * Time.deltaTime);
                 }
             //}
         }
@@ -155,7 +156,8 @@ public class BaseballLauncher : Item, IMovable
 
     private void Inactive()
     {
-        myCannon.rotation = Quaternion.Euler(0f, 0f, 0f);
+        myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(0f, 0f, 35f), speed * Time.deltaTime);
+        myCannonSupport.rotation = Quaternion.Slerp(myCannonSupport.rotation, Quaternion.Euler(0f, 0f, 0f), speed * Time.deltaTime);
     }
 
     public void ActiveDeactivateBallStates(bool state1, bool state2, bool state3)
