@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public ContextualTrapMenu contextualMenuScript { get; private set; }
     public Animator contextualMenuAnim { get; private set; }
     public string typeFloor { get; private set; }
+    
 
     private AudioSource _audioSource;
 
@@ -24,6 +25,7 @@ public class Player : MonoBehaviour
     // Movement
     //public CraftingRecipe craftingRecipe;
     private float speed = 5f;
+    private float crouchSpeed = 2.5f;
     private float walkSpeed = 5f;
     private float sprintSpeed = 10f;
     private float maxVelocityChange = 20f;
@@ -34,6 +36,8 @@ public class Player : MonoBehaviour
     public bool preventCheck = false;
     private float preventCheckTime = 0.1f;
     private Coroutine preventCheckCoroutine;
+    [SerializeField]
+    public bool isCrouchingSound = false;
 
     public bool isGrounded = true;
     [SerializeField]
@@ -69,6 +73,7 @@ public class Player : MonoBehaviour
     //Gizmos
     public float gizmoScale = 1f;
     public LayerMask itemMask;
+    
 
     private void Awake()
     {
@@ -245,9 +250,9 @@ public class Player : MonoBehaviour
 
         _rb.AddForce(deltaVelocity, ForceMode.VelocityChange);
 
-        /*if (_rb.velocity.magnitude > 1f && _rb.velocity.magnitude < 4f)
-            if (!isCrouching)
-                StartCoroutine(PlayCrouchSound(0.8f));*/
+        if (_rb.velocity.magnitude > 1f && _rb.velocity.magnitude < 4f)
+            if (!isCrouchingSound && isCrouching)
+                StartCoroutine(PlayCrouchSound(0.8f));
 
         if (_rb.velocity.magnitude > 4f && _rb.velocity.magnitude <= 7.5f)
             if (!isWalking)
@@ -256,6 +261,8 @@ public class Player : MonoBehaviour
         if (_rb.velocity.magnitude > 7.5f && _rb.velocity.magnitude <= 15f)
             if (!isRunning)
                 StartCoroutine(PlayRunSound(0.3f));
+
+        Debug.Log("VELOCITY: " + _rb.velocity.magnitude);
     }
 
     private void Jump()
@@ -277,6 +284,7 @@ public class Player : MonoBehaviour
     private void CrouchEnter()
     {
         if (isCrouching) return;
+        speed = crouchSpeed;
         transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y / 2, transform.localScale.z);
         transform.localPosition -= new Vector3(0f, 0.5f, 0f);
         _cam.SetInitPos(new Vector3(0f, -0.5f, 0f));
@@ -286,6 +294,7 @@ public class Player : MonoBehaviour
     private void CrouchExit()
     {
         if (!isCrouching) return;
+        speed = walkSpeed;
         transform.localScale = _originalScale;
         transform.localPosition += new Vector3(0f, 0.5f, 0f);
         _cam.SetInitPos(new Vector3(0f, 0f, 0f));
@@ -489,10 +498,10 @@ public class Player : MonoBehaviour
     {
         var clipName = "Footstep_" + typeFloor + "_0" + Random.Range(1, 3);
         GameVars.Values.soundManager.PlaySoundOnce(_audioSource, clipName, 0.4f, false);
-        isCrouching = true;
+        isCrouchingSound = true;
 
         yield return new WaitForSecondsRealtime(timer);
-        isCrouching = false;
+        isCrouchingSound = false;
     }
 
     public IEnumerator PlayWalkSound(float timer)
