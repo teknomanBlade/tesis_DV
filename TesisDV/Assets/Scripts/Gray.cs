@@ -193,7 +193,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         //transform.forward = dir;
         _navMeshAgent.destination = dest;
 
-        Debug.Log("voy hacia " + dest);
+        //Debug.Log("voy hacia " + dest);
     }
 
     public void MovingAnimations()

@@ -52,7 +52,7 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
 
     private void Update()
     {
-        Debug.Log(allDoorsAreClosed);
+        //Debug.Log(allDoorsAreClosed);
 
         //For testing
         if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();

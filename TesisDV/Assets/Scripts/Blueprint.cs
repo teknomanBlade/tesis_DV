@@ -21,31 +21,52 @@ public class Blueprint : MonoBehaviour
     private Quaternion finalRotation;
     private Renderer[] _myChildrenRenderers;
 
+    public LayerMask LayerMaskWall;
+    int layerMask;
+
     void Start()
     {
+        int layerMask = GameVars.Values.GetWallLayer();
+        layerMask = ~layerMask;
         canBuild = true;
         //originalMaterial = GetComponent<Renderer>().material; //Probar despues de arreglar posicionamiento. 
         originalMaterial = GetComponentInChildren<Renderer>().material;
         //myRenderer = GetComponent<Renderer>(); //Probar despues de arreglar posicionamiento.
-        _myChildrenRenderers = GetComponentsInChildren<Renderer>();        
+        _myChildrenRenderers = GetComponentsInChildren<Renderer>();
 
     }
 
     void Update()
     {
         //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
 
-        //Canbuild provisional.
+        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, LayerMaskWall))
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            Debug.Log("Blue print Hit " + hit.collider.gameObject.layer + " " + hit.collider.gameObject.name);
+            canBuild = false;
+            transform.position = hit.point;
+            ChangeMaterial();
+            return;
+        }
+        else
+        {
+            canBuild = true;
+            SetOriginalMaterial();
+        }
 
-        if(Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, GameVars.Values.GetFloorLayerMask()) && canBuild)
+
+        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, GameVars.Values.GetFloorLayerMask()) && canBuild)
         {
             //auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
             //transform.position = auxVector;
+            //Debug.Log("Blue print Hit " + hit.collider.gameObject.tag);
+
+
             transform.position = hit.point;
         }
 
-        if(Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
+        if (Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
             //secondAuxVector = new Vector3(transform.position.x, 1f, transform.position.z);
             //finalPosition = secondAuxVector;
@@ -61,20 +82,20 @@ public class Blueprint : MonoBehaviour
             Destroy(gameObject); */
         }
 
-        if(Input.GetKeyDown(GameVars.Values.secondaryFire))
+        if (Input.GetKeyDown(GameVars.Values.secondaryFire))
         {
             Destroy(gameObject);
             craftingRecipe.RestoreBuildAmount();
         }
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0) 
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
-        transform.Rotate(Vector3.up * -15f, Space.Self);
+            transform.Rotate(Vector3.up * -15f, Space.Self);
         }
 
-        if (Input.GetAxis("Mouse ScrollWheel") < 0) 
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
-        transform.Rotate(Vector3.up * 15f, Space.Self);
+            transform.Rotate(Vector3.up * 15f, Space.Self);
         }
     }
 
@@ -82,10 +103,10 @@ public class Blueprint : MonoBehaviour
     {
         Instantiate(particles, transform.position, transform.rotation);
         //myRenderer.enabled = false; //Probar despues de arreglar posicionamiento.
-        
+
         //Renderer[] rs = GetComponentsInChildren<Renderer>();
-        foreach(Renderer r in _myChildrenRenderers)
-        r.enabled = false;
+        foreach (Renderer r in _myChildrenRenderers)
+            r.enabled = false;
 
         //Canbuild provisional.
         canBuild = false;
@@ -96,14 +117,14 @@ public class Blueprint : MonoBehaviour
         craftingRecipe.RemoveItems();
         craftingRecipe.RestoreBuildAmount();
         Destroy(gameObject);
-        
+
     }
 
     private void ChangeMaterial()
     {
         //Renderer[] rs = GetComponentsInChildren<Renderer>();
-        foreach(Renderer r in _myChildrenRenderers)
-        r.material = newMaterial;
+        foreach (Renderer r in _myChildrenRenderers)
+            r.material = newMaterial;
 
         //myRenderer.material = newMaterial; //Probar despues de arreglar posicionamiento.
     }
@@ -111,8 +132,8 @@ public class Blueprint : MonoBehaviour
     private void SetOriginalMaterial()
     {
         //Renderer[] rs = GetComponentsInChildren<Renderer>();
-        foreach(Renderer r in _myChildrenRenderers)
-        r.material = originalMaterial;
+        foreach (Renderer r in _myChildrenRenderers)
+            r.material = originalMaterial;
 
         //myRenderer.material = originalMaterial; //Probar despues de arreglar posicionamiento.
     }

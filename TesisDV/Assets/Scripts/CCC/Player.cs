@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 {
     //---------
     private Rigidbody _rb;
-    
+
     public PlayerCamera _cam;
     [SerializeField]
     private Inventory _inventory;
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
         else if (Input.GetKeyDown(GameVars.Values.crouchKey)) CrouchToggle();
 
         if (Input.GetKeyDown(GameVars.Values.sprintKey)) speed = sprintSpeed;
-        if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed; 
+        if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed;
 
         if (Input.GetKeyDown(GameVars.Values.useKey))
         {
@@ -135,7 +135,7 @@ public class Player : MonoBehaviour
 
         if (!IsCrafting)
         {
-            
+
             contextualMenuAnim.SetBool("HasTraps", GameVars.Values.BaseballLauncher.CanCraft(_inventory));
             if (GameVars.Values.BaseballLauncher.HasBaseballTrapItems(_inventory))
             {
@@ -165,7 +165,7 @@ public class Player : MonoBehaviour
             //GameVars.Values.TVTrap.Craft(_inventory);
             GameVars.Values.TVTrapAgain.Craft(_inventory);
         }
-        
+
         if (Input.GetKeyDown(GameVars.Values.dropKey))
         {
             _inventory.DropItem();
@@ -174,7 +174,8 @@ public class Player : MonoBehaviour
         if (isGrounded)
         {
             if (Input.GetKeyDown(GameVars.Values.jumpKey) && !jumpOnCooldown) Jump();
-        } else
+        }
+        else
         {
             _rb.velocity -= new Vector3(0f, 9.8f * Time.deltaTime, 0f);
         }
@@ -182,7 +183,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(canMoveCamera) Camera();
+        if (canMoveCamera) Camera();
         LookingForPlacement();
 
         Walk();
@@ -216,7 +217,7 @@ public class Player : MonoBehaviour
         Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
 
         input = transform.TransformDirection(input) * speed;
-        
+
         Vector3 velocity = _rb.velocity;
         Vector3 deltaVelocity = (input - velocity);
         deltaVelocity.x = Mathf.Clamp(deltaVelocity.x, -maxVelocityChange, maxVelocityChange);
@@ -233,12 +234,12 @@ public class Player : MonoBehaviour
             if (hit.collider.gameObject.tag.Equals("GrassFloor"))
             {
                 typeFloor = "Grass";
-                Debug.Log("TYPE FLOOR: " + typeFloor);
+                //Debug.Log("TYPE FLOOR: " + typeFloor);
             }
             else
             {
                 typeFloor = "Wood";
-                Debug.Log("TYPE FLOOR: " + typeFloor);
+                //Debug.Log("TYPE FLOOR: " + typeFloor);
             }
         }
 
@@ -249,7 +250,7 @@ public class Player : MonoBehaviour
                 StartCoroutine(PlayCrouchSound(0.8f));*/
 
         if (_rb.velocity.magnitude > 4f && _rb.velocity.magnitude <= 7.5f)
-            if(!isWalking)
+            if (!isWalking)
                 StartCoroutine(PlayWalkSound(0.6f));
 
         if (_rb.velocity.magnitude > 7.5f && _rb.velocity.magnitude <= 15f)
@@ -319,7 +320,7 @@ public class Player : MonoBehaviour
             return;
         }
         typeFloor = "";
-        
+
 
         if (Physics.Raycast(start + new Vector3(gizmoScale, 0f, 0f), -transform.up, maxDist, ~layermask) ||
             Physics.Raycast(start + new Vector3(0f, 0f, gizmoScale), -transform.up, maxDist, ~layermask) ||
@@ -382,19 +383,18 @@ public class Player : MonoBehaviour
 
         //if(!Physics.Raycast(_cam.transform.position, _cam.GetForward(), out wallHit, 5f, GameVars.Values.GetWallLayerMask()))
         //{
-            if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()))
-            {
-                
-                lookingAt = hit.collider.gameObject.GetComponent<Item>();
-                SetOnItem(lookingAt);
-                ChangeCrosshair();
-            }
-            else
-            {
-                SetOffItem(lookingAt);
-                lookingAt = null;
-                ChangeCrosshair();
-            }
+        if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()))
+        {
+            lookingAt = hit.collider.gameObject.GetComponent<Item>();
+            SetOnItem(lookingAt);
+            ChangeCrosshair();
+        }
+        else
+        {
+            SetOffItem(lookingAt);
+            lookingAt = null;
+            ChangeCrosshair();
+        }
         //}
     }
 
@@ -429,7 +429,7 @@ public class Player : MonoBehaviour
             {
                 crosshair.sprite = GameVars.Values.crosshairActivation;
             }
-            
+
             ChangeCrosshairSize(40f);
             return;
         }
@@ -447,7 +447,7 @@ public class Player : MonoBehaviour
     {
         RaycastHit hit;
         //Crear variable distancia
-        if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit,  10f, GameVars.Values.GetFloorLayerMask()))
+        if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 10f, GameVars.Values.GetFloorLayerMask()))
         {
             lookingPlacement = hit.point;
         }
@@ -467,7 +467,7 @@ public class Player : MonoBehaviour
             return;
         }
         lookingAt.Interact();
-        if(lookingAt.TryGetComponent<Door>(out Door door))
+        if (lookingAt.TryGetComponent<Door>(out Door door))
         {
             _lm.ChangeDoorsStatus();
         }
@@ -481,7 +481,7 @@ public class Player : MonoBehaviour
             lookingAt = null;
             aux.BecomeMovable();
             //ChangeCrosshair();
-            
+
         }
         //lookingIMovable.BecomeMovable();
     }
@@ -520,14 +520,14 @@ public class Player : MonoBehaviour
 
     public void PlayPickUpSound()
     {
-        GameVars.Values.soundManager.PlaySoundAtPoint("GrabSound", transform.position , 0.7f);
+        GameVars.Values.soundManager.PlaySoundAtPoint("GrabSound", transform.position, 0.7f);
     }
 
     public void InteractWithInventoryItem()
     {
         _inventory.AddItem(lookingAt as InventoryItem);
     }
-    
+
     private void OnDrawGizmos()
     {
         Vector3 start = transform.position - new Vector3(0f, 0.5f, 0f);
