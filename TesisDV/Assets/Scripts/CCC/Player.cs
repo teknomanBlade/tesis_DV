@@ -375,19 +375,22 @@ public class Player : MonoBehaviour
     {
         RaycastHit hit;
 
-        //Crear variable distancia
-        if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()))
-        {
-            lookingAt = hit.collider.gameObject.GetComponent<Item>();
-            SetOnItem(lookingAt);
-            ChangeCrosshair();
-        }
-        else
-        {
-            SetOffItem(lookingAt);
-            lookingAt = null;
-            ChangeCrosshair();
-        }
+        //Debug.Log(Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()));
+        //if(!Physics.Raycast(_cam.transform.position, _cam.GetForward(), 5f, GameVars.Values.GetWallLayerMask()))
+        //{
+            if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()))
+            {
+                lookingAt = hit.collider.gameObject.GetComponent<Item>();
+                SetOnItem(lookingAt);
+                ChangeCrosshair();
+            }
+            else
+            {
+                SetOffItem(lookingAt);
+                lookingAt = null;
+                ChangeCrosshair();
+            }
+        //}
     }
 
     private void ChangeCrosshair()
