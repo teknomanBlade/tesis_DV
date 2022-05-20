@@ -394,6 +394,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         materials.Add(dissolveMaterial);
         skinned.materials = materials.ToArray();
 
+        _deathEffect.gameObject.transform.SetParent(null);
         _deathEffect.Play();
         LerpScaleDissolve(0.5f, 1f);
         Invoke("Dead", 3f);
