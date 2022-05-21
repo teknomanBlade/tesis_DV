@@ -24,7 +24,7 @@ using UnityEngine;
             public Sprite itemImage;
             public GameObject trapPrefab;
         }
-
+        
         public bool HasBaseballTrapItems(Inventory inventory)
         {
             return inventory.ContainsID(1) && inventory.ContainsID(2);
