@@ -12,6 +12,11 @@ public class Player : MonoBehaviour
     public PlayerCamera _cam;
     [SerializeField]
     private Inventory _inventory;
+
+    public GameObject _weaponGO;
+
+    [SerializeField]
+    private Melee _weapon;
     public GameObject contextualMenu { get; private set; }
     public ContextualTrapMenu contextualMenuScript { get; private set; }
     public Animator contextualMenuAnim { get; private set; }
@@ -80,6 +85,8 @@ public class Player : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
         _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
+        _weapon = _weaponGO.transform.GetChild(0).GetComponent<Racket>();
+        
         _audioSource = GetComponent<AudioSource>();
         _originalScale = transform.localScale;
         _originalCamPos = _cam.transform.localPosition;
@@ -118,6 +125,20 @@ public class Player : MonoBehaviour
             {
                 Interact();
             }
+        }
+        if (_inventory.ContainsID(3))
+        {
+            Debug.Log("A PATEAR GRISES SE HA DICHO!");
+            _weaponGO.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("NO TENES LA RAQUETA PAPU");
+        }
+        if (Input.GetKeyDown(GameVars.Values.primaryFire))
+        {
+            if(_inventory.ContainsID(3))
+                _weapon.MeleeAttack();
         }
 
         if (Input.GetKeyDown(GameVars.Values.secondaryFire))
@@ -205,6 +226,7 @@ public class Player : MonoBehaviour
     public void Die()
     {
         _cam.DeactivateShake();
+        _audioSource.enabled = false;
         _rb.isKinematic = true;
         canMoveCamera = false;
         Invoke("Dead", 3f);
@@ -262,7 +284,7 @@ public class Player : MonoBehaviour
             if (!isRunning)
                 StartCoroutine(PlayRunSound(0.3f));
 
-        Debug.Log("VELOCITY: " + _rb.velocity.magnitude);
+        //Debug.Log("VELOCITY: " + _rb.velocity.magnitude);
     }
 
     private void Jump()

@@ -9,6 +9,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     [SerializeField]
     private GameObject _player;
     private Player _playerScript;
+    [SerializeField]
     private Animator _anim;
     private Rigidbody _rb;
     private CapsuleCollider _cc;
@@ -394,7 +395,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         materials.Add(dissolveMaterial);
         skinned.materials = materials.ToArray();
 
-        _deathEffect.gameObject.transform.SetParent(null);
+        //_deathEffect.gameObject.transform.SetParent(null);
         _deathEffect.Play();
         LerpScaleDissolve(0.5f, 1f);
         Invoke("Dead", 3f);
@@ -430,6 +431,17 @@ public class Gray : MonoBehaviour, IHittableObserver
             GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
             Damage();
             Stun(5f);
+        }
+        else if (message.Equals("RacketHit"))
+        {
+            if (_anim)
+            {
+                _anim.SetBool("IsHitted", true);
+                StartCoroutine(PlayHitEffect(0.6f));
+                GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
+                Damage();
+                Stun(5f);
+            }
         }
     }
 

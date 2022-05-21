@@ -5,13 +5,17 @@ using UnityEngine;
 public abstract class Melee : MonoBehaviour
 {
     private List<IHittableObserver> _myHittableObservers = new List<IHittableObserver>();
-    protected bool effectUp = true;
+    public Animator anim;
+    protected bool IsAttacking = false;
     protected virtual void OnContactEffect(Collider other)
     {
 
     }
 
+    public virtual void MeleeAttack()
+    {
 
+    }
     protected virtual void OnTriggerEnter(Collider other)
     {
         OnContactEffect(other);

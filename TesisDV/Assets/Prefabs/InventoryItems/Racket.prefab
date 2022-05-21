@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 7341024955952405277}
   - component: {fileID: 4368379009009821670}
   - component: {fileID: 6083911338504831761}
-  - component: {fileID: 2928863171368445855}
   - component: {fileID: 474922429619749596}
   - component: {fileID: 4045332455025785545}
   - component: {fileID: 1460707569630886863}
   - component: {fileID: 3869437340328525739}
+  - component: {fileID: 7781972381165934021}
   m_Layer: 10
   m_Name: Racket
   m_TagString: Untagged
@@ -86,20 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2928863171368445855
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7988853864577627180}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -7553716758358721678, guid: 2d23a42ad2998384db55eebb21272ebe, type: 3}
 --- !u!114 &474922429619749596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,6 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56d5cd6cb0b943942af2f43b1b84063a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
 --- !u!54 &3869437340328525739
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -163,3 +150,17 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!136 &7781972381165934021
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7988853864577627180}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.3312801
+  m_Height: 1.0113428
+  m_Direction: 1
+  m_Center: {x: 0.20176308, y: -0.06871927, z: -0.0009577107}
