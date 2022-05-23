@@ -51,6 +51,8 @@ public class Player : MonoBehaviour
     private bool isWalking = false;
     [SerializeField]
     private bool isRunning = false;
+    [SerializeField]
+    private bool isDamaged = false;
     private Vector3 _originalScale;
     private Vector3 _originalCamPos;
 
@@ -218,6 +220,7 @@ public class Player : MonoBehaviour
     public void Damage()
     {
         _cam.ActiveShake(1.5f, 0.25f);
+        StartCoroutine(PlayDamageSound(3.4f));
         hp--;
         GameVars.Values.ShowLivesRemaining(hp, maxHp);
         if (hp <= 0) Die();
@@ -516,6 +519,15 @@ public class Player : MonoBehaviour
         }
         //lookingIMovable.BecomeMovable();
     }
+    public IEnumerator PlayDamageSound(float timer)
+    {
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "KidShaking", 0.4f, false);
+        isDamaged = true;
+
+        yield return new WaitForSecondsRealtime(timer);
+        isDamaged = false;
+    }
+
     public IEnumerator PlayCrouchSound(float timer)
     {
         var clipName = "Footstep_" + typeFloor + "_0" + Random.Range(1, 3);
@@ -540,7 +552,6 @@ public class Player : MonoBehaviour
     public IEnumerator PlayRunSound(float timer)
     {
         var clipName = "Footstep_" + typeFloor + "_0" + Random.Range(1, 3);
-        _audioSource.pitch = 1.5f;
         GameVars.Values.soundManager.PlaySoundOnce(_audioSource, clipName, 0.4f, false);
         isRunning = true;
 

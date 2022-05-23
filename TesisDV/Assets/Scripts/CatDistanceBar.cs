@@ -23,6 +23,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         _mySlider = GetComponent<Slider>();
         RoundText = GetComponentInChildren<Text>();
         RoundTextAnim = RoundText.GetComponent<Animator>();
+        RoundTextAnim.SetBool("IsNewRound", false);
         GameVars.Values.LevelManager.AddObserver(this);
         _fillImage = Fill.GetComponent<Image>();
         _maxDistance = GameVars.Values.GetCatDistance();

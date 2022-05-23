@@ -83,7 +83,6 @@ public class PlayerCamera : MonoBehaviour
     public void ActiveShake(float shakeDuration, float shakeAmount)
     {
         _camShake = true;
-        GameVars.Values.soundManager.PlaySoundAtPoint("KidShaking",transform.position,0.3f);
         _shakeDuration = shakeDuration;
         _shakeAmount = shakeAmount;
         StartCoroutine(ActiveDeactivateShake(shakeDuration));

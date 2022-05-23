@@ -124,6 +124,7 @@ public class GameVars : MonoBehaviour
         notifications = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("NotificationsText")).First();
         playerLives = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("HealthText")).First();
         playerLivesAnim = playerLives.gameObject.GetComponent<Animator>();
+        playerLivesAnim.SetBool("IsDamaged", false);
         soundManager = FindObjectOfType<SoundManager>();
         soundManager.SetAudioClips(audioClips);
         LevelManager = GetComponent<LevelManager>();
