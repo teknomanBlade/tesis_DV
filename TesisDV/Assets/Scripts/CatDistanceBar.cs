@@ -57,12 +57,19 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         yield return new WaitForSeconds(1f);
         RoundTextAnim.SetBool("IsNewRound", false);
     }
+    public IEnumerator PlayMusicPreLose()
+    {
+        GameVars.Values.soundManager.StopSound();
+        yield return new WaitForSeconds(0.5f);
+        GameVars.Values.soundManager.PlaySound("MusicPreLose", 0.35f, true);
+    }
 
     void Update()
     {
         _mySlider.value = GameVars.Values.GetCatDistance();
         if (_mySlider.value < 20f)
         {
+            StartCoroutine(PlayMusicPreLose());
             StartCoroutine(LerpColor(1f,1.5f)); 
         }
         else

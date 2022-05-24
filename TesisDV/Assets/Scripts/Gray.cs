@@ -9,6 +9,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     [SerializeField]
     private GameObject _player;
     private Player _playerScript;
+    private AudioSource _as;
     [SerializeField]
     private Animator _anim;
     private Rigidbody _rb;
@@ -56,6 +57,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
         _cc = GetComponent<CapsuleCollider>();
+        _as = GetComponent<AudioSource>();
         _player = GameObject.Find("Player");
         _playerScript = _player.GetComponent<Player>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
@@ -220,14 +222,14 @@ public class Gray : MonoBehaviour, IHittableObserver
 
     public IEnumerator PlayGraySound()
     {
-        GameVars.Values.soundManager.PlaySoundOnce("VoiceWhispering", 0.4f, true);
+        GameVars.Values.soundManager.PlaySoundOnce(_as,"VoiceWhispering", 0.4f, true);
         yield return new WaitForSeconds(.01f);
         _isWalkingSoundPlaying = true;
     }
 
     public IEnumerator PlayGrayDeathSound()
     {
-        GameVars.Values.soundManager.PlaySoundOnce("GrayDeathSound", 0.4f, true);
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
         yield return new WaitForSeconds(1.6f);
         GameVars.Values.soundManager.StopSound();
     }
