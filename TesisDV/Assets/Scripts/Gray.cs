@@ -41,8 +41,11 @@ public class Gray : MonoBehaviour, IHittableObserver
     private Vector3 nearestDoorVector;
 
     [SerializeField]
+    private Material deathMaterial;
+    [SerializeField]
     private Material dissolveMaterial;
     private SkinnedMeshRenderer skinned;
+    private float _valueToChange;
 
     [SerializeField]
     private ParticleSystem _empAbility;
@@ -68,7 +71,6 @@ public class Gray : MonoBehaviour, IHittableObserver
         _navMeshAgent = GetComponent<NavMeshAgent>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         nearestDoorDistance = 1000;
-
         _lm.AddGray(this);
 
         Vector3 aux = _lm.allUfos[0].transform.position;
@@ -229,6 +231,11 @@ public class Gray : MonoBehaviour, IHittableObserver
 
     public IEnumerator PlayGrayDeathSound()
     {
+         _anim.SetBool("IsDead", true);
+        var materials = skinned.sharedMaterials.ToList();
+        materials.Clear();
+        materials.Add(deathMaterial);
+        skinned.sharedMaterials = materials.ToArray();
         GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
         yield return new WaitForSeconds(1.6f);
         GameVars.Values.soundManager.StopSound();
@@ -389,22 +396,29 @@ public class Gray : MonoBehaviour, IHittableObserver
         awake = false;
         _rb.isKinematic = true;
         _cc.enabled = false;
-        _anim.SetBool("IsDead", true);
+       
         _lm.RemoveGray(this);
         _lm.CheckForObjective();
-
-        var materials = skinned.sharedMaterials.ToList();
-        materials.Add(dissolveMaterial);
+        /*var materials = skinned.sharedMaterials.ToList();
+        materials.Add(deathMaterial);
         skinned.materials = materials.ToArray();
 
         //_deathEffect.gameObject.transform.SetParent(null);
         _deathEffect.Play();
-        LerpScaleDissolve(0.5f, 1f);
-        Invoke("Dead", 3f);
+        LerpScaleDissolve(0.5f, 1f);*/
+
+        Invoke("Dead", 5f);
+    }
+
+    public void PlayShaderDeath()
+    {
+        StartCoroutine(LerpScaleDeath(5f, 2.5f));
     }
 
     public void Dead()
     {
+        deathMaterial.SetFloat("_TeleportDeathVal", 0);
+        deathMaterial.SetFloat("_Transparency", 0);
         Destroy(gameObject);
     }
 
@@ -475,7 +489,6 @@ public class Gray : MonoBehaviour, IHittableObserver
         yield return new WaitForSeconds(0.5f);
     }
 
-    private float _valueToChange;
     IEnumerator LerpScaleDissolve(float endValue, float duration)
     {
         float time = 0;
@@ -487,6 +500,26 @@ public class Gray : MonoBehaviour, IHittableObserver
             time += Time.deltaTime;
 
             dissolveMaterial.SetFloat("ScaleDissolve", _valueToChange);
+            yield return null;
+        }
+
+
+        _valueToChange = endValue;
+    }
+
+    
+    IEnumerator LerpScaleDeath(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _valueToChange;
+
+        while (time < duration)
+        {
+            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            deathMaterial.SetFloat("_TeleportDeathVal", _valueToChange);
+            deathMaterial.SetFloat("_Transparency", _valueToChange / 10);
             yield return null;
         }
 

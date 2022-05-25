@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: house_door_black
-  m_Shader: {fileID: 4800000, guid: c181b5f9b94735d4db2356bacb063191, type: 3}
+  m_Shader: {fileID: 4800000, guid: 07f554fb3702a2c4d97bf5d7902ba843, type: 3}
   m_ShaderKeywords: _NORMALMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -43,6 +43,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 9744657a462c5d74d99aeda378240509, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTexture1:
         m_Texture: {fileID: 2800000, guid: 9744657a462c5d74d99aeda378240509, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -70,25 +74,34 @@ Material:
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
-    - _Glossiness1: 0
+    - _Glossiness1: 5
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Rim1: 0.579
-    - _RimAmount1: 0.175
+    - _Rim: 0
+    - _Rim1: 0.567
+    - _RimAmount: 0
+    - _RimAmount1: 0.277
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _TeleportDeathVal: 0
+    - _TeleportValue: 0
+    - _Transparency: 0
     - _UVSec: 0
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _AmbientColor1: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 0}
+    - _AmbientColor: {r: 0, g: 0, b: 0, a: 0}
+    - _AmbientColor1: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 0, g: 0, b: 0, a: 0}
     - _RimColor1: {r: 1, g: 1, b: 1, a: 0}
-    - _SpecularColor1: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecularColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecularColor1: {r: 0.764151, g: 0.764151, b: 0.764151, a: 0}
     - _TintColor: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 0}
+    - _TintColor1: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

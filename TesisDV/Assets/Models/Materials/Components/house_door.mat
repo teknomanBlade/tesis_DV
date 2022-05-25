@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: house_door
-  m_Shader: {fileID: 4800000, guid: c181b5f9b94735d4db2356bacb063191, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9a740eb707428ba4381a656c94014185, type: 3}
   m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -43,6 +43,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: becd62731e8b440469d44d98e0cf1c8e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTexture1:
         m_Texture: {fileID: 2800000, guid: becd62731e8b440469d44d98e0cf1c8e, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -68,27 +72,37 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _Float0: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
-    - _Glossiness1: 0
+    - _Glossiness1: 4
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Rim1: 0.523
-    - _RimAmount1: 0.322
+    - _Rim: 0
+    - _Rim1: 0.328
+    - _RimAmount: 0
+    - _RimAmount1: 0.366
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _TeleportDeathVal: 0
+    - _TeleportValue: 0
+    - _Transparency: 0
     - _UVSec: 0
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _AmbientColor1: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 0}
+    - _AmbientColor: {r: 0, g: 0, b: 0, a: 0}
+    - _AmbientColor1: {r: 0.6320754, g: 0.6320754, b: 0.6320754, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor1: {r: 0, g: 0, b: 0, a: 0}
-    - _SpecularColor1: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 0}
+    - _RimColor: {r: 0, g: 0, b: 0, a: 0}
+    - _RimColor1: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 0}
+    - _SpecularColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecularColor1: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 0}
     - _TintColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 0}
+    - _TintColor1: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 0}
   m_BuildTextureStacks: []

@@ -7,7 +7,7 @@ Shader "UFOBeam"
 		_Color0("Color 0", Color) = (0,0.9802117,1,0)
 		_Opacity("Opacity", Float) = 0
 		_Scale("Scale", Float) = 0
-		_Scale1("Scale", Float) = 0
+		_Float0("Float 0", Float) = 0
 		_LerpingVal("LerpingVal", Float) = 0.98
 		[HideInInspector] __dirty( "", Int ) = 1
 	}
@@ -29,7 +29,7 @@ Shader "UFOBeam"
 		uniform float4 _Color0;
 		uniform float _Scale;
 		uniform float _LerpingVal;
-		uniform float _Scale1;
+		uniform float _Float0;
 		uniform float _Opacity;
 
 
@@ -114,7 +114,7 @@ Shader "UFOBeam"
 			float mulTime22 = _Time.y * -0.3;
 			float time25 = mulTime22;
 			float2 temp_cast_2 = (( ase_vertex3Pos.y + mulTime22 )).xx;
-			float2 coords25 = temp_cast_2 * _Scale1;
+			float2 coords25 = temp_cast_2 * _Float0;
 			float2 id25 = 0;
 			float voroi25 = voronoi25( coords25, time25,id25, 0 );
 			float lerpResult26 = lerp( voroi13 , _LerpingVal , voroi25);
@@ -196,13 +196,13 @@ Shader "UFOBeam"
 }
 /*ASEBEGIN
 Version=17800
-402;482;1307;555;1987.978;103.2362;1.385408;True;False
+282;491;1307;555;2118.049;231.0174;1.783481;True;False
 Node;AmplifyShaderEditor.PosVertexDataNode;10;-2151.934,-446.6078;Inherit;False;0;0;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleTimeNode;16;-2096.344,-163.8658;Inherit;False;1;0;FLOAT;0.3;False;1;FLOAT;0
 Node;AmplifyShaderEditor.PosVertexDataNode;21;-2171.482,333.2375;Inherit;False;0;0;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleTimeNode;22;-2115.892,615.9794;Inherit;False;1;0;FLOAT;-0.3;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;11;-1880.964,-446.1775;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;23;-1964.163,832.795;Inherit;False;Property;_Scale1;Scale;3;0;Create;True;0;0;False;0;0;3.92;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;23;-1964.163,832.795;Inherit;False;Property;_Float0;Float 0;3;0;Create;True;0;0;False;0;0;3.92;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;24;-1897.867,336.3131;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;15;-1944.615,52.94979;Inherit;False;Property;_Scale;Scale;2;0;Create;True;0;0;False;0;0;3.74;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.VoronoiNode;13;-1610.102,-91.52467;Inherit;True;0;0;1;0;1;False;1;False;False;4;0;FLOAT2;0,0;False;1;FLOAT;0;False;2;FLOAT;1;False;3;FLOAT;0;False;2;FLOAT;0;FLOAT;1
@@ -232,4 +232,4 @@ WireConnection;6;2;7;0
 WireConnection;0;2;1;0
 WireConnection;0;9;6;0
 ASEEND*/
-//CHKSM=C5216D1B43C07697C130EFF79A58484AF1E87537
+//CHKSM=8B3126FE4AB937FB34A06DD005A28E5A65AC27F3
