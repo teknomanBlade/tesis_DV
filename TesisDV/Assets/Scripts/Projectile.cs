@@ -15,9 +15,9 @@ public abstract class Projectile : MonoBehaviour, IHittableObservable
         Destroy(gameObject, lifeTime);
     }
 
-    protected virtual void OnContactEffect(Collision collision)
+    protected virtual void OnContactEffect(Collider other)
     {
-        if (effectUp)
+        /*if (effectUp)
         {
             Debug.Log("Hit Projectile" + collision.transform.name);
             if (collision.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
@@ -27,12 +27,11 @@ public abstract class Projectile : MonoBehaviour, IHittableObservable
             
             if (dieOnImpact) Destroy(gameObject);
             effectUp = false;
-        }
+        }*/
     }
-
-    protected virtual void OnCollisionEnter(Collision collision)
+    protected void OnTriggerEnter(Collider other)
     {
-        OnContactEffect(collision);
+        OnContactEffect(other);
     }
 
     public void AddObserver(IHittableObserver obs)

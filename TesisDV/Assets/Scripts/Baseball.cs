@@ -10,15 +10,16 @@ public class Baseball : Projectile
         base.Start();
     }
 
-    protected override void OnContactEffect(Collision collision)
+    protected override void OnContactEffect(Collider collider)
     {
         if (effectUp)
         {
-            Debug.Log("Hit " + collision.transform.name);
-            if (collision.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
+            Debug.Log("Hit " + collider.transform.name);
+            if (collider.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             {
                 effectUp = false;
-                AddObserver(collision.gameObject.GetComponent<Gray>());
+                dieOnImpact = true;
+                AddObserver(collider.gameObject.GetComponent<Gray>());
                 TriggerHit("TennisBallHit");
             }
             if (dieOnImpact) Destroy(gameObject);
