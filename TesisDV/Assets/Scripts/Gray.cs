@@ -424,6 +424,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     {
         deathMaterial.SetFloat("_TeleportDeathVal", 0);
         deathMaterial.SetFloat("_Transparency", 0);
+        deathMaterial.SetFloat("_ChangeTint", 0);
         Destroy(gameObject);
     }
 
@@ -524,7 +525,8 @@ public class Gray : MonoBehaviour, IHittableObserver
             time += Time.deltaTime;
 
             deathMaterial.SetFloat("_TeleportDeathVal", _valueToChange);
-            deathMaterial.SetFloat("_Transparency", _valueToChange / 10);
+            deathMaterial.SetFloat("_ChangeTint", _valueToChange / 5);
+            deathMaterial.SetFloat("_Transparency", _valueToChange / 15);
             yield return null;
         }
 

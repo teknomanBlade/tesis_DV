@@ -39,7 +39,7 @@ public class UFO : MonoBehaviour
 
     public void RotateUFOSpinner()
     {
-        _UFOSpinner.transform.Rotate(new Vector3(0f, 180f * Time.deltaTime,0f));
+        _UFOSpinner.transform.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime));
     }
 
     private void Update()
