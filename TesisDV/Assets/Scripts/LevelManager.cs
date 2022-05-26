@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,10 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour, IRoundChangeObservable
 {
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
+    public PoolObject<UFOGrayDeath> UFOsPool { get; set; }
+    [SerializeField]
+    private UFOGrayDeath UFOPrefab;
+    private int InitialStockUFO;
     private GameObject _panelMain;
 
     public GameObject YouWin;
@@ -39,6 +44,9 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
         _player = GameObject.Find("Player").GetComponent<Player>();
         _panelMain = GameObject.Find("Panel");
         allDoorsAreClosed = true;
+        InitialStockUFO = 5;
+        UFOPrefab = Resources.Load<UFOGrayDeath>("UFOGrayDeath");
+        UFOsPool = new PoolObject<UFOGrayDeath>(UFOFactory, ActivateEnemy, DeactivateEnemy, InitialStockUFO, true);
         /*YouWin = Instantiate(GameVars.Values.youWinScreen);
         YouWin.transform.SetParent(_panelMain.transform);
         YouLose = Instantiate(GameVars.Values.youLoseScreen);
@@ -49,6 +57,24 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
         GameVars.Values.TVTrapAgain.RestoreBuildAmount();
         GameVars.Values.soundManager.PlaySound("MusicPreWave",0.24f,true);
         Invoke("EndRound",8f);
+    }
+
+    private void DeactivateEnemy(UFOGrayDeath o)
+    {
+        o.gameObject.SetActive(false);
+        o.SetOwner(this);
+        o.transform.localPosition = new Vector3(0f, 0f, 0f);
+    }
+
+    private void ActivateEnemy(UFOGrayDeath o)
+    {
+        o.gameObject.SetActive(true);
+        o.transform.localPosition = new Vector3(0f, 10f, 40f);
+    }
+
+    private UFOGrayDeath UFOFactory()
+    {
+        return Instantiate(UFOPrefab);
     }
 
     private void Update()

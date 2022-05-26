@@ -27,6 +27,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     public float attackDisengageThreshold = 3f;
     public float attackWindup = 6f;
     public Coroutine attackCoroutine;
+    public bool dead = false;
     public bool attacking = false;
     public bool pursue = false;
     public bool stun = false;
@@ -387,6 +388,10 @@ public class Gray : MonoBehaviour, IHittableObserver
 
     public void Die()
     {
+        dead = true;
+        var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);
+        var UFO = GameVars.Values.LevelManager.UFOsPool.GetObject().InitializePosition(spawnPos);
+        UFO.PlayAnimBeamDeployed();
         StartCoroutine(PlayGrayDeathSound());
         _navMeshAgent.destination = transform.position;
         if (hasObjective)
@@ -396,7 +401,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         awake = false;
         _rb.isKinematic = true;
         _cc.enabled = false;
-       
+        
         _lm.RemoveGray(this);
         _lm.CheckForObjective();
         /*var materials = skinned.sharedMaterials.ToList();
