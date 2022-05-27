@@ -69,6 +69,7 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
     private void ActivateEnemy(UFOGrayDeath o)
     {
         o.gameObject.SetActive(true);
+        o.ActiveDissolve();
         o.transform.localPosition = new Vector3(0f, 10f, 40f);
     }
 

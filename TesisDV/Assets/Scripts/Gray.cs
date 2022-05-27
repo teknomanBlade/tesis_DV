@@ -43,8 +43,7 @@ public class Gray : MonoBehaviour, IHittableObserver
 
     [SerializeField]
     private Material deathMaterial;
-    [SerializeField]
-    private Material dissolveMaterial;
+    
     private SkinnedMeshRenderer skinned;
     private float _valueToChange;
 
@@ -391,7 +390,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         dead = true;
         var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);
         var UFO = GameVars.Values.LevelManager.UFOsPool.GetObject().InitializePosition(spawnPos);
-        UFO.PlayAnimBeamDeployed();
+        //UFO.PlayAnimBeamDeployed();
         StartCoroutine(PlayGrayDeathSound());
         _navMeshAgent.destination = transform.position;
         if (hasObjective)
@@ -495,23 +494,7 @@ public class Gray : MonoBehaviour, IHittableObserver
         yield return new WaitForSeconds(0.5f);
     }
 
-    IEnumerator LerpScaleDissolve(float endValue, float duration)
-    {
-        float time = 0;
-        float startValue = _valueToChange;
-
-        while (time < duration)
-        {
-            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
-            time += Time.deltaTime;
-
-            dissolveMaterial.SetFloat("ScaleDissolve", _valueToChange);
-            yield return null;
-        }
-
-
-        _valueToChange = endValue;
-    }
+    
 
     
     IEnumerator LerpScaleDeath(float endValue, float duration)

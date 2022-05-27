@@ -201,12 +201,12 @@ public class Player : MonoBehaviour
         //    }
         //}
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        /*if (Input.GetKeyDown(KeyCode.Q))
         {
             IsCrafting = true;
             if (!HasContextualMenu) ContextualMenuEnter();
             else ContextualMenuExit();
-        }
+        }*/
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
