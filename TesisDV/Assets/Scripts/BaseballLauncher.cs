@@ -163,7 +163,7 @@ public class BaseballLauncher : Item, IMovable
         
             Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<Gray>().GetVelocity() * _futureTime * Time.deltaTime);
             //Vector3 dir = item.transform.position - transform.position;
-            Debug.Log(_currentObjective.GetComponent<Gray>().GetVelocity());
+
             Vector3 dir = futurePos - transform.position;
             _currentObjectiveDistance = Vector3.Distance(transform.position, _currentObjective.transform.position);
 

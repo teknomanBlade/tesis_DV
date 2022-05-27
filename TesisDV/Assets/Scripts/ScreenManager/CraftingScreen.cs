@@ -9,6 +9,7 @@ public class CraftingScreen : MonoBehaviour, IScreen
 
     private void Awake()
     {
+        
         _buttons = GetComponentsInChildren<Button>();
 
         foreach(var button in _buttons)
@@ -16,6 +17,13 @@ public class CraftingScreen : MonoBehaviour, IScreen
             button.interactable = false;
         }
     }
+
+    void Start()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    
 
     void Update()
     {
