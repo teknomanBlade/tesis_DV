@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
     
 
     private AudioSource _audioSource;
-
+    private GameObject _craftingScreen;
     private LevelManager _lm;
 
     // Movement
@@ -91,8 +91,10 @@ public class Player : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
         volume = _cam.Camera.GetComponent<PostProcessVolume>();
-        
-        _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
+
+        _craftingScreen = GameObject.Find("CraftingContainer");
+        //_inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
+        _inventory = _craftingScreen.gameObject.GetComponentInChildren<Inventory>();
         _weapon = _weaponGO.transform.GetChild(0).GetComponent<Racket>();
         _audioSource = GetComponent<AudioSource>();
         _originalScale = transform.localScale;
@@ -137,6 +139,8 @@ public class Player : MonoBehaviour
                 Interact();
             }
         }
+
+        //Cambiar la detección para no fijarte cada frame.
         if (_inventory.ContainsID(3))
         {
             Debug.Log("A PATEAR GRISES SE HA DICHO!");
@@ -146,6 +150,7 @@ public class Player : MonoBehaviour
         {
             Debug.Log("NO TENES LA RAQUETA PAPU");
         }
+
         if (Input.GetKeyDown(GameVars.Values.primaryFire))
         {
             if(_inventory.ContainsID(3))
@@ -160,17 +165,28 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(GameVars.Values.inventoryKey))
+        //if (Input.GetKeyDown(GameVars.Values.inventoryKey))  Dejo el código del screenmanager para usarlo en las pantallas de win y loose, donde si queremos que el PJ no se pueda seguir controlando.
+        //{
+            //var screencrafting = instantiate(gamevars.values.craftingscreen);
+            //screenmanager.instance.push(screencrafting);
+            
+        //}
+        //else if (Input.GetKeyUp(GameVars.Values.inventoryKey))
+        //{
+            //screenmanager.instance.pop();
+            
+        //}
+
+        if(Input.GetKeyDown(GameVars.Values.inventoryKey) && _craftingScreen.activeInHierarchy)
         {
-            var screenCrafting = Instantiate(GameVars.Values.craftingScreen);
-            ScreenManager.Instance.Push(screenCrafting);
+            _craftingScreen.SetActive(false);
         }
-        else if (Input.GetKeyUp(GameVars.Values.inventoryKey))
+        else if(Input.GetKeyDown(GameVars.Values.inventoryKey) && !_craftingScreen.activeInHierarchy)
         {
-            ScreenManager.Instance.Pop();
+            _craftingScreen.SetActive(true);
         }
 
-        if (!IsCrafting)
+        if (!IsCrafting) //Va al TrapHotBar.
         {
 
             contextualMenuAnim.SetBool("HasTraps", GameVars.Values.BaseballLauncher.CanCraft(_inventory));
@@ -203,10 +219,10 @@ public class Player : MonoBehaviour
             GameVars.Values.TVTrapAgain.Craft(_inventory);
         }
 
-        if (Input.GetKeyDown(GameVars.Values.dropKey))
-        {
-            _inventory.DropItem();
-        }
+        //if (Input.GetKeyDown(GameVars.Values.dropKey))
+        //{
+        //    _inventory.DropItem();
+        //}
 
         if (isGrounded)
         {

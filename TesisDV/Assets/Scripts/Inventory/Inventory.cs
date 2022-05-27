@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    //Cambiar por event.
+    private TrapHotBar _trapHotBar;
     [SerializeField] List<InventoryItem> items;
     [SerializeField] Slot[] itemSlots;
     [SerializeField] private CanvasGroup _myCanvasGroup;       
@@ -13,6 +16,7 @@ public class Inventory : MonoBehaviour
     {
         _myCanvasGroup = GetComponent<CanvasGroup>();
         isFaded = true;
+        _trapHotBar = GameObject.Find("InventoryBar").GetComponent<TrapHotBar>(); 
     }
 
     public void AddTrapItem(int slotIndex)
@@ -22,7 +26,7 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(InventoryItem item)
     {
-        Fade();
+        //Fade();
         for (int i = 0; i < itemSlots.Length; i++)
         {
            if(itemSlots[i].IsFree())
@@ -31,8 +35,8 @@ public class Inventory : MonoBehaviour
                
                //itemSlots[i].Item = item;
                itemSlots[i].SetItem(item);
-
-               return;
+                _trapHotBar.CheckRecipeRequirements(this);
+                return;
            }
         }
     } 
@@ -89,7 +93,7 @@ public class Inventory : MonoBehaviour
             {
                 //itemSlots[i].Item = null;
                 itemSlots[i].RemoveItem();
-                
+                _trapHotBar.CheckRecipeRequirements(this);
             }
         }  
     }
