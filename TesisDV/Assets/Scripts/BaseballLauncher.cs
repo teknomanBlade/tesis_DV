@@ -176,8 +176,10 @@ public class BaseballLauncher : Item, IMovable
                     
                     Quaternion lookRotation = Quaternion.LookRotation(dir);
                     Vector3 rotation = lookRotation.eulerAngles;
-                    myCannonSupport.rotation = Quaternion.Euler(0f, rotation.y + 90f, 0f);
+                    //myCannonSupport.rotation = Quaternion.Euler(0f, rotation.y + 90f, 0f);
+
                     //myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f);
+                    myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, rotation.y + 90f, 0f), _shootSpeed * Time.deltaTime);
                     myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y + 90f, rotation.z), _shootSpeed * Time.deltaTime);
                     Debug.DrawLine(transform.position, _currentObjective.transform.position, Color.red);
                 }
