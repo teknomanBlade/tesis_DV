@@ -20,12 +20,13 @@ public class Gray : MonoBehaviour, IHittableObserver
     private bool _isWalkingSoundPlaying = false;
     private bool _isMoving;
     private bool _hasHitEffectActive = false;
+    private float _attackWindup = 2.5f;
     public float distanceToPlayer;
     public float pursueThreshold = 10f;
     public float disengageThreshold = 15f;
     public float attackThreshold = 2.5f;
     public float attackDisengageThreshold = 3f;
-    public float attackWindup = 6f;
+    
     public Coroutine attackCoroutine;
     public bool dead = false;
     public bool attacking = false;
@@ -278,12 +279,14 @@ public class Gray : MonoBehaviour, IHittableObserver
     IEnumerator Attack()
     {
         attacking = true;
+        _isMoving = false;
         _anim.SetBool("IsEMP", true);
-        yield return new WaitForSeconds(attackWindup);
+        yield return new WaitForSeconds(_attackWindup);
         PlayParticleSystemShader();
         _playerScript.Damage();
         attacking = false;
-        attackCoroutine = StartCoroutine("Attack");
+        _isMoving = true;
+        //attackCoroutine = StartCoroutine("Attack");
         _anim.SetBool("IsEMP", false);
     }
 
