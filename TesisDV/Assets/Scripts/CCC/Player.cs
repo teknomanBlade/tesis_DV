@@ -477,11 +477,18 @@ public class Player : MonoBehaviour
     {
         RaycastHit hit;
         RaycastHit wallHit;
+        RaycastHit hitResult;
 
         //if(!Physics.Raycast(_cam.transform.position, _cam.GetForward(), out wallHit, 5f, GameVars.Values.GetWallLayerMask()))
         //{
         if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()))
         {
+            if (Physics.Linecast(_cam.transform.position, hit.collider.gameObject.transform.position, out hitResult))
+            {
+                if (hit.collider.name != hitResult.collider.name)
+                    return;
+            }
+
             lookingAt = hit.collider.gameObject.GetComponent<Item>();
             SetOnItem(lookingAt);
             ChangeCrosshair();
