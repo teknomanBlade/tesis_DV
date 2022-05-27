@@ -61,7 +61,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     {
         GameVars.Values.soundManager.StopSound();
         yield return new WaitForSeconds(0.5f);
-        GameVars.Values.soundManager.PlaySound("MusicPreLose", 0.35f, true);
+        GameVars.Values.soundManager.PlaySound("MusicPreLose", 0.18f, true);
     }
 
     void Update()

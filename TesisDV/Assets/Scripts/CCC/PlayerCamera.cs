@@ -6,6 +6,7 @@ public class PlayerCamera : MonoBehaviour
 {
     public Player _player;
     public GameObject _camera;
+    public GameObject Camera { get; set; }
     private Quaternion targetAngle;
     private float smoothing = 20f;
     private Vector3 offset = new Vector3(0f, 0.75f, 0f);
@@ -27,6 +28,7 @@ public class PlayerCamera : MonoBehaviour
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _camera = GameObject.Find("MainCamera");
+        Camera = _camera;
         _cameraTransform = _camera.transform;
         SetInitPos(_camera.transform.localPosition);
     }

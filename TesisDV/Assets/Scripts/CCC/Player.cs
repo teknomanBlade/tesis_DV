@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -10,6 +11,9 @@ public class Player : MonoBehaviour
     private Rigidbody _rb;
 
     public PlayerCamera _cam;
+    public PostProcessVolume volume;
+    public DamagePlayerPPSSettings postProcessDamage;
+    public AttentionPlayerPPSSettings postProcessAttention;
     [SerializeField]
     private Inventory _inventory;
 
@@ -80,15 +84,16 @@ public class Player : MonoBehaviour
     //Gizmos
     public float gizmoScale = 1f;
     public LayerMask itemMask;
-    
+    private float _valueToChange;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         _cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
+        volume = _cam.Camera.GetComponent<PostProcessVolume>();
+        
         _inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
         _weapon = _weaponGO.transform.GetChild(0).GetComponent<Racket>();
-        
         _audioSource = GetComponent<AudioSource>();
         _originalScale = transform.localScale;
         _originalCamPos = _cam.transform.localPosition;
@@ -110,6 +115,10 @@ public class Player : MonoBehaviour
     {
         LookingAt();
         CheckGround();
+        if (GameVars.Values.IsCatCaptured)
+        {
+            ActiveAttentionEffect();
+        }
 
         if (!GameVars.Values.crouchToggle)
         {
@@ -217,9 +226,63 @@ public class Player : MonoBehaviour
         Walk();
     }
 
+    public void ActiveDamageEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessDamage))
+        {
+            StartCoroutine(LerpDamageEffect(1f,1f));
+        }
+    }
+
+    IEnumerator LerpDamageEffect(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _valueToChange;
+
+        while (time < duration)
+        {
+            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            postProcessDamage._Intensity.value = _valueToChange;
+            postProcessDamage._Distortion.value = _valueToChange;
+            yield return null;
+        }
+
+        _valueToChange = endValue;
+        StartCoroutine(LerpDamageEffect(0f,1f));
+    }
+
+    public void ActiveAttentionEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessAttention))
+        {
+            StartCoroutine(LerpAttentionEffect(1f, 1f));
+        }
+    }
+
+    IEnumerator LerpAttentionEffect(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _valueToChange;
+
+        while (time < duration)
+        {
+            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            postProcessAttention._Interpolator.value = _valueToChange;
+            yield return null;
+        }
+
+        _valueToChange = endValue;
+        StartCoroutine(LerpAttentionEffect(0f, 1f));
+    }
+
     public void Damage()
     {
-        _cam.ActiveShake(1.5f, 0.25f);
+        //_cam.ActiveShake(0.8f, 0.02f);
+        ActiveDamageEffect();
         StartCoroutine(PlayDamageSound(3.4f));
         hp--;
         GameVars.Values.ShowLivesRemaining(hp, maxHp);
@@ -228,7 +291,7 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
-        _cam.DeactivateShake();
+        //_cam.DeactivateShake();
         _audioSource.enabled = false;
         _rb.isKinematic = true;
         canMoveCamera = false;
@@ -521,7 +584,7 @@ public class Player : MonoBehaviour
     }
     public IEnumerator PlayDamageSound(float timer)
     {
-        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "KidShaking", 0.4f, false);
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "KidDamage", 0.4f, false);
         isDamaged = true;
 
         yield return new WaitForSecondsRealtime(timer);
@@ -531,7 +594,7 @@ public class Player : MonoBehaviour
     public IEnumerator PlayCrouchSound(float timer)
     {
         var clipName = "Footstep_" + typeFloor + "_0" + Random.Range(1, 3);
-        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, clipName, 0.4f, false);
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, clipName, 0.15f, false);
         isCrouchingSound = true;
 
         yield return new WaitForSecondsRealtime(timer);
@@ -541,7 +604,7 @@ public class Player : MonoBehaviour
     public IEnumerator PlayWalkSound(float timer)
     {
         var clipName = "Footstep_" + typeFloor + "_0" + Random.Range(1, 3);
-        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, clipName, 0.4f, false);
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, clipName, 0.2f, false);
         isWalking = true;
 
         yield return new WaitForSecondsRealtime(timer);
@@ -562,7 +625,7 @@ public class Player : MonoBehaviour
 
     public void PlayPickUpSound()
     {
-        GameVars.Values.soundManager.PlaySoundAtPoint("GrabSound", transform.position, 0.7f);
+        GameVars.Values.soundManager.PlaySoundAtPoint("GrabSound", transform.position, 0.18f);
     }
 
     public void InteractWithInventoryItem()

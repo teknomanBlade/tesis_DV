@@ -18,7 +18,9 @@ public class GameVars : MonoBehaviour
     [SerializeField]
     private Cat cat;
 
-   
+    [SerializeField]
+    private bool _isCatCaptured;
+    public bool IsCatCaptured { get { return _isCatCaptured; } }
 
     [SerializeField]
     private string objectLayerName;
@@ -243,6 +245,7 @@ public class GameVars : MonoBehaviour
     #region Cat
     public void SetCatFree()
     {
+        _isCatCaptured = false;
         cat.CatHasBeenReleased();
     }
 
@@ -253,6 +256,7 @@ public class GameVars : MonoBehaviour
 
     public void TakeCat()
     {
+        _isCatCaptured = true;
         cat.CatIsBeingTaken();
     }
     #endregion

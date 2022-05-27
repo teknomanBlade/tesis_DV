@@ -55,7 +55,7 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
         ScreenManager.Instance.Push(YouLose);*/
         craftingRecipe.RestoreBuildAmount();
         GameVars.Values.TVTrapAgain.RestoreBuildAmount();
-        GameVars.Values.soundManager.PlaySound("MusicPreWave",0.24f,true);
+        GameVars.Values.soundManager.PlaySound("MusicPreWave",0.14f,true);
         Invoke("EndRound",8f);
     }
 
@@ -138,7 +138,7 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
 
     public void StartRound()
     {
-        GameVars.Values.soundManager.PlaySound("MusicWaves", 0.2f, true);
+        GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
         inRound = true;
         lastWaveEnemies = lastWaveEnemies + 2;
         enemiesToSpawn = lastWaveEnemies;

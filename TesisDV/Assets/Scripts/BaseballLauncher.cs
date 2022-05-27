@@ -17,7 +17,7 @@ public class BaseballLauncher : Item, IMovable
     {
         get {
             if(shotsLeft == 0)
-                GameVars.Values.ShowNotification("We need a Tennis Ball Box to reload!");
+                GameVars.Values.ShowNotification("You need a Tennis Ball Box to reload!");
 
             return shotsLeft == 0;
         }
