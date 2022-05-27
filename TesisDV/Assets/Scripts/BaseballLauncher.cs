@@ -31,9 +31,11 @@ public class BaseballLauncher : Item, IMovable
     Vector3 auxVector;
     Transform myCannon;
     Transform myCannonSupport;
-    public float futureTime;
-    public float speed = 0.2f;
-    float timeCount = 0.0f;
+    private float _futureTime = 30f;
+    private float _shootSpeed = 1f;
+    private float _inactiveSpeed = 0.3f;
+    private Collider _currentObjective = null;
+    private float _currentObjectiveDistance = 1000;
 
     public void Awake()
     {
@@ -66,10 +68,7 @@ public class BaseballLauncher : Item, IMovable
         else
         {
             Inactive();
-        }
-
-        
-        
+        }        
     }
     public void Reload()
     {
@@ -78,12 +77,20 @@ public class BaseballLauncher : Item, IMovable
     }
     IEnumerator ActiveCoroutine()
     {
-        shotsLeft--;
-        shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
-        ChangeBallsState(shotsLeft);
-        yield return new WaitForSeconds(interval);
-        if (shotsLeft != 0) StartCoroutine("ActiveCoroutine");
-        else active = false;
+        if(active)
+        {
+            shotsLeft--;
+            shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
+            ChangeBallsState(shotsLeft);
+            yield return new WaitForSeconds(interval);
+            if (shotsLeft != 0) StartCoroutine("ActiveCoroutine");
+            else active = false;    
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.01f);
+        }
+        
     }
 
     public void InstantiateBall()
@@ -125,11 +132,40 @@ public class BaseballLauncher : Item, IMovable
     {
        Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
-        foreach (var item in allTargets)
+        if(allTargets.Length == 0)
         {
-            Vector3 futurePos = item.transform.position + (item.GetComponent<Gray>().GetVelocity() * futureTime * Time.deltaTime);
+            Inactive();
+            active = false;
+        }
+
+        //Si no tenemos objetivo actual buscamos el más cercano y lo hacemos objetivo.
+        if(_currentObjective == null || _currentObjective.GetComponent<Gray>().dead || _currentObjectiveDistance > viewRadius)
+        {
+            foreach (var item in allTargets)
+            {
+                if(Vector3.Distance(transform.position, item.transform.position) < _currentObjectiveDistance)
+                {
+                    if(!item.GetComponent<Gray>().dead)
+                    {
+                        _currentObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
+                        _currentObjective = item;
+                    }
+                }
+            }
+        }
+        
+
+        //foreach (var item in allTargets)
+        //{
+        if(_currentObjectiveDistance < viewRadius)
+        {
+
+        
+            Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<Gray>().GetVelocity() * _futureTime * Time.deltaTime);
             //Vector3 dir = item.transform.position - transform.position;
+            Debug.Log(_currentObjective.GetComponent<Gray>().GetVelocity());
             Vector3 dir = futurePos - transform.position;
+            _currentObjectiveDistance = Vector3.Distance(transform.position, _currentObjective.transform.position);
 
             //if (Vector3.Angle(transform.forward, dir.normalized) < viewAngle / 2)
             //{
@@ -142,22 +178,19 @@ public class BaseballLauncher : Item, IMovable
                     Vector3 rotation = lookRotation.eulerAngles;
                     myCannonSupport.rotation = Quaternion.Euler(0f, rotation.y + 90f, 0f);
                     //myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f);
-                    myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y + 90f, rotation.z), speed * Time.deltaTime);
-                    Debug.DrawLine(transform.position, item.transform.position, Color.red);
+                    myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y + 90f, rotation.z), _shootSpeed * Time.deltaTime);
+                    Debug.DrawLine(transform.position, _currentObjective.transform.position, Color.red);
                 }
-                else
-                {
-                    myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(0f, 0f, 35f), speed * Time.deltaTime);
-                    myCannonSupport.rotation = Quaternion.Slerp(myCannonSupport.rotation, Quaternion.Euler(0f, 0f, 0f), speed * Time.deltaTime);
-                }
-            //}
         }
+            //}
+        //}
     }
 
     private void Inactive()
     {
-        myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(0f, 0f, 35f), speed * Time.deltaTime);
-        myCannonSupport.rotation = Quaternion.Slerp(myCannonSupport.rotation, Quaternion.Euler(0f, 0f, 0f), speed * Time.deltaTime);
+        //myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(myCannon.rotation.x, myCannon.rotation.y, 35f), speed * Time.deltaTime);
+        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(myCannon.rotation.x, myCannon.rotation.y, 35f), _inactiveSpeed * Time.deltaTime);
+        myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(myCannonSupport.rotation.x, myCannonSupport.rotation.y, 0f), _inactiveSpeed * Time.deltaTime);
     }
 
     public void ActiveDeactivateBallStates(bool state1, bool state2, bool state3)

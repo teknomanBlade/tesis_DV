@@ -51,7 +51,6 @@ public class TrapHotBar : MonoBehaviour
 
         if (GameVars.Values.BaseballLauncher.HasTVTrapItems(inventory))
         {
-            Debug.Log(("Si"));
             if (isFaded)
             {
                 Fade();
@@ -60,7 +59,6 @@ public class TrapHotBar : MonoBehaviour
         }
         else
         {
-            Debug.Log(("No"));
             trapSlots[1].DeactivateImage();
         }
     }
