@@ -26,4 +26,16 @@ public class TrapSlot : MonoBehaviour
     {
         _slotCanvasGroup = GetComponent<CanvasGroup>();
     }
+
+    public void ActivateImage()
+    {
+        //_image.enabled = true;
+        transform.GetChild(0).GetChild(0).GetComponent<Image>().enabled = true;
+    }
+
+    public void DeactivateImage()
+    {
+        //_image.enabled = false;
+        transform.GetChild(0).GetChild(0).GetComponent<Image>().enabled = false;
+    }
 }

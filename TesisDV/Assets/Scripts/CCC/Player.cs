@@ -186,20 +186,20 @@ public class Player : MonoBehaviour
             _craftingScreen.SetActive(true);
         }
 
-        if (!IsCrafting) //Va al TrapHotBar.
-        {
+        //if (!IsCrafting) //Va al TrapHotBar.
+        //{
 
-            contextualMenuAnim.SetBool("HasTraps", GameVars.Values.BaseballLauncher.CanCraft(_inventory));
-            if (GameVars.Values.BaseballLauncher.HasBaseballTrapItems(_inventory))
-            {
-                contextualMenuScript.ActivatePanelTrap1();
-            }
+        //    contextualMenuAnim.SetBool("HasTraps", GameVars.Values.BaseballLauncher.CanCraft(_inventory));
+        //    if (GameVars.Values.BaseballLauncher.HasBaseballTrapItems(_inventory))
+        //    {
+        //        contextualMenuScript.ActivatePanelTrap1();
+        //    }
 
-            if (GameVars.Values.BaseballLauncher.HasTVTrapItems(_inventory))
-            {
-                contextualMenuScript.ActivatePanelTrap2();
-            }
-        }
+        //    if (GameVars.Values.BaseballLauncher.HasTVTrapItems(_inventory))
+        //    {
+        //        contextualMenuScript.ActivatePanelTrap2();
+        //    }
+        //}
 
         if (Input.GetKeyDown(KeyCode.Q))
         {

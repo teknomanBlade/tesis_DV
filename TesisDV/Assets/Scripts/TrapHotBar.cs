@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TrapHotBar : MonoBehaviour
 {
-    [SerializeField] Slot[] trapSlots;
+    [SerializeField] TrapSlot[] trapSlots;
 
     [SerializeField] private CanvasGroup _myCanvasGroup;
     private float fadeDelay = 1.1f;
@@ -38,19 +38,30 @@ public class TrapHotBar : MonoBehaviour
     {
         if (GameVars.Values.BaseballLauncher.HasBaseballTrapItems(inventory))
         {
-            
             if(isFaded)
             {
                 Fade();
             }
+            trapSlots[0].ActivateImage();
+        }
+        else
+        {
+            trapSlots[0].DeactivateImage();
         }
 
         if (GameVars.Values.BaseballLauncher.HasTVTrapItems(inventory))
         {
+            Debug.Log(("Si"));
             if (isFaded)
             {
                 Fade();
             }
+            trapSlots[1].ActivateImage();
+        }
+        else
+        {
+            Debug.Log(("No"));
+            trapSlots[1].DeactivateImage();
         }
     }
 }
