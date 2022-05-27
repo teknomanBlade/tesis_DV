@@ -32,7 +32,7 @@ public class BaseballLauncher : Item, IMovable
     Transform myCannon;
     Transform myCannonSupport;
     private float _futureTime = 30f;
-    private float _shootSpeed = 1f;
+    private float _shootSpeed = 5f;
     private float _inactiveSpeed = 0.3f;
     private Collider _currentObjective = null;
     private float _currentObjectiveDistance = 1000;
