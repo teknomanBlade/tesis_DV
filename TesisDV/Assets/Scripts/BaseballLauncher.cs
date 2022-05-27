@@ -157,10 +157,10 @@ public class BaseballLauncher : Item, IMovable
 
         //foreach (var item in allTargets)
         //{
-        if(_currentObjectiveDistance < viewRadius)
+        if(_currentObjectiveDistance < viewRadius && _currentObjective != null)
         {
 
-        
+            
             Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<Gray>().GetVelocity() * _futureTime * Time.deltaTime);
             //Vector3 dir = item.transform.position - transform.position;
 
