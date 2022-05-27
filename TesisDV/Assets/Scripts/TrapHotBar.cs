@@ -38,12 +38,19 @@ public class TrapHotBar : MonoBehaviour
     {
         if (GameVars.Values.BaseballLauncher.HasBaseballTrapItems(inventory))
         {
-            //Activar slotbaseball
+            
+            if(isFaded)
+            {
+                Fade();
+            }
         }
 
         if (GameVars.Values.BaseballLauncher.HasTVTrapItems(inventory))
         {
-            //Activar slotTV
+            if (isFaded)
+            {
+                Fade();
+            }
         }
     }
 }
