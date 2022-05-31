@@ -24,7 +24,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Albedo:
-        m_Texture: {fileID: 2800000, guid: ca91ff5f9642b2d44b991f0ff2884f73, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1817af775e167f14fb474364efe7b52f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -45,6 +45,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Glossiness2:
+        m_Texture: {fileID: 2800000, guid: ab611d0bba8a0334ca5fac9eaaf7419f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
@@ -83,10 +87,13 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _Intensity1: 5.18
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _Rim2: 0.517
+    - _RimAmount2: 0.599
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -94,6 +101,10 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
+    - _AmbientColor2: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _MainColor2: {r: 0.735849, g: 0.735849, b: 0.735849, a: 0}
+    - _RimColor2: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 0}
+    - _SpecularColor2: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0}
   m_BuildTextureStacks: []
