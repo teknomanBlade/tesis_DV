@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _AO:
-        m_Texture: {fileID: 2800000, guid: fe4158fadb3ce7f4b8b4bb2043a3a4ad, type: 3}
+        m_Texture: {fileID: 2800000, guid: ef03d3080a916604cb5d2116ab22e07d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Albedo:
@@ -59,6 +59,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: afc8bedf10922f549b15b56651014957, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainTexture:
+        m_Texture: {fileID: 2800000, guid: 1817af775e167f14fb474364efe7b52f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -75,6 +79,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Specular:
+        m_Texture: {fileID: 2800000, guid: ef03d3080a916604cb5d2116ab22e07d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -85,15 +93,17 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 3.88
     - _GlossyReflections: 1
-    - _Intensity1: 5.18
+    - _Intensity1: 5.6
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
-    - _Rim2: 0.517
-    - _RimAmount2: 0.599
+    - _Rim: 0.327
+    - _Rim2: 0.68
+    - _RimAmount: 0.504
+    - _RimAmount2: 0.473
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -101,10 +111,14 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _AmbientColor2: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 0}
+    - _AmbientColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 0}
+    - _AmbientColor2: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MainColor2: {r: 0.735849, g: 0.735849, b: 0.735849, a: 0}
-    - _RimColor2: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 0}
+    - _MainColor2: {r: 1, g: 1, b: 1, a: 0}
+    - _RimColor: {r: 16, g: 16, b: 16, a: 0}
+    - _RimColor2: {r: 5.278032, g: 5.278032, b: 5.278032, a: 0}
+    - _SpecularColor: {r: 1, g: 1, b: 1, a: 0}
     - _SpecularColor2: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0}
+    - _TintColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
   m_BuildTextureStacks: []
