@@ -35,7 +35,8 @@ public class Inventory : MonoBehaviour
                
                //itemSlots[i].Item = item;
                itemSlots[i].SetItem(item);
-                _trapHotBar.CheckRecipeRequirements(this);
+               //USAR EVENTO
+               _trapHotBar.CheckRecipeRequirements(this);
                 return;
            }
         }

@@ -140,7 +140,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        //Cambiar la deteccion para no fijarte cada frame. Ver una mejor forma de detectar cuando tenemos un arma para no tener problema al agregar mas.
+        //Cambiar la deteccion para no fijarte cada frame. Ver una mejor forma de detectar cuando tenemos un arma para no tener problema al agregar mas. Hacerlo cada vez que agarramos un item.
         if (_inventory.ContainsID(3))
         {
             //Debug.Log("A PATEAR GRISES SE HA DICHO!");
