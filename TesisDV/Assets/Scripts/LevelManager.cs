@@ -85,7 +85,11 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
         //For testing
         if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
 
-        canSpawn = !enemyHasObjective;
+        
+        //No checkear en update. 
+        //canSpawn = !enemyHasObjective;
+        
+        //No se checkea en update.
         if (_player.isDead) LoseGame();
 
         if (playing)
@@ -98,6 +102,7 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
             }
         }
 
+        //CHECKEAR EN CAMBIO DE RONDA.
         if (currentRound > finalRound)
         {
             playing = false;
@@ -183,12 +188,16 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
         if (enemiesInScene.Count <= 0)
         {
             enemyHasObjective = false;
+            canSpawn = !enemyHasObjective;
             return;
         }
         foreach (Gray gray in enemiesInScene)
         {
             enemyHasObjective = gray.hasObjective;
-            if (enemyHasObjective == true) return;
+            
+            if (enemyHasObjective == true) 
+            canSpawn = !enemyHasObjective;
+            return;
         }
     }
 

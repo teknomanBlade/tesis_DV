@@ -140,15 +140,15 @@ public class Player : MonoBehaviour
             }
         }
 
-        //Cambiar la detección para no fijarte cada frame.
+        //Cambiar la deteccion para no fijarte cada frame. Ver una mejor forma de detectar cuando tenemos un arma para no tener problema al agregar mas.
         if (_inventory.ContainsID(3))
         {
-            Debug.Log("A PATEAR GRISES SE HA DICHO!");
+            //Debug.Log("A PATEAR GRISES SE HA DICHO!");
             _weaponGO.SetActive(true);
         }
         else
         {
-            Debug.Log("NO TENES LA RAQUETA PAPU");
+            //Debug.Log("NO TENES LA RAQUETA PAPU");
         }
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire))
@@ -165,7 +165,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        //if (Input.GetKeyDown(GameVars.Values.inventoryKey))  Dejo el código del screenmanager para usarlo en las pantallas de win y loose, donde si queremos que el PJ no se pueda seguir controlando.
+        //if (Input.GetKeyDown(GameVars.Values.inventoryKey))  Dejo el cï¿½digo del screenmanager para usarlo en las pantallas de win y loose, donde si queremos que el PJ no se pueda seguir controlando.
         //{
             //var screencrafting = instantiate(gamevars.values.craftingscreen);
             //screenmanager.instance.push(screencrafting);
