@@ -11,18 +11,12 @@ public class UFO : MonoBehaviour
     public Vector3 checkCubePos = new Vector3(0f, 4f, 0f);
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
-    public Vector3 startPos2;
-    public Vector3 startPos3;
     public Vector3 endPos;
-    public Vector3 endPos2;
-    public Vector3 endPos3;
     [Range(0,1)]
     public float sliderSoundVolume;
     public float spawnTimer = 10f;
     public GameObject grayPrefab;
     public Gray currentGray;
-    public Gray currentGray2;
-    public Gray currentGray3;
     public float timeLimit;
     public float timer;
     public bool spawning = false;
@@ -45,6 +39,11 @@ public class UFO : MonoBehaviour
     private void Update()
     {
         RotateUFOSpinner();
+
+
+
+
+
         if (currentGray != null) SpawnGreyLerp();
         //else if(currentGray != null && numberOfWaves > 5) SpawnGreyLerpTwo();
         if (timer >= timeLimit)
@@ -89,5 +88,29 @@ public class UFO : MonoBehaviour
         Gizmos.DrawWireCube(transform.position - checkCubePos, checkCubeExt);
         Gizmos.DrawWireCube(transform.position - startPos, new Vector3(0.5f, 0.5f, 0.5f));
         Gizmos.DrawWireCube(transform.position - endPos, new Vector3(0.5f, 0.5f, 0.5f));
+    }
+
+    public UFO SetSpawnPos(Vector3 newPos)
+    {
+        transform.position = newPos;
+        return this;
+    }
+
+    public UFO SetFinalPos(Vector3 newPos)
+    {
+        transform.position = newPos;
+        return this;
+    }
+
+    //public UFO SetWaypoints(List<Transform> newWaypoints)
+    //{
+        //waypoints = newWaypoints;
+        //return this;
+    //}
+
+    public UFO SetRotation(Vector3 newRotation)
+    {
+        transform.rotation *= Quaternion.Euler(newRotation);
+        return this;
     }
 }

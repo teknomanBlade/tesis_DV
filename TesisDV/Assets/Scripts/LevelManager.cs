@@ -181,6 +181,7 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
     public void RemoveGray(Gray gray)
     {
         enemiesInScene.Remove(gray);
+        //Chequear acá si cambiamos de ronda.
     }
 
     public void CheckForObjective()
