@@ -13,7 +13,6 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     private Image _fillImage;
     public GameObject Fill;
     public Text RoundText;
-
     public Animator RoundTextAnim { get; private set; }
     public float _valueToChange { get; private set; }
     
@@ -24,7 +23,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         RoundText = GetComponentInChildren<Text>();
         RoundTextAnim = RoundText.GetComponent<Animator>();
         RoundTextAnim.SetBool("IsNewRound", false);
-        GameVars.Values.LevelManager.AddObserver(this);
+        GameVars.Values.WaveManager.AddObserver(this);
         _fillImage = Fill.GetComponent<Image>();
         _maxDistance = GameVars.Values.GetCatDistance();
         //54
@@ -82,7 +81,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     {
         if (message.Equals("RoundChanged"))
         {
-            RoundText.text = "Round: " + GameVars.Values.LevelManager.currentRound;
+            RoundText.text = "Round: " + GameVars.Values.WaveManager.GetCurrentRound();
             StartCoroutine(ShowAnimRoundChanged());
         } 
            

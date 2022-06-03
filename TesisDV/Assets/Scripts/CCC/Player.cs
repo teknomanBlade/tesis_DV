@@ -488,7 +488,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver
     private void LookingAt()
     {
         RaycastHit hit;
-        RaycastHit wallHit;
+        //RaycastHit wallHit; No se usaba.
         RaycastHit hitResult;
 
         //if(!Physics.Raycast(_cam.transform.position, _cam.GetForward(), out wallHit, 5f, GameVars.Values.GetWallLayerMask()))

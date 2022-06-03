@@ -18,6 +18,7 @@ public class Cat : MonoBehaviour
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
 
+        //La exitpos se la pasa el gray que lo agarra.
         Vector3 aux = _lm.allUfos[0].transform.position;
         _exitPos = new Vector3(aux.x, 0f, aux.z);
     }
@@ -52,8 +53,15 @@ public class Cat : MonoBehaviour
         _navMeshAgent.enabled = true;
     }
 
+    public void SetExitPos(Vector3 exitPos)
+    {
+        _exitPos = exitPos;
+    }
+
     public float GetDistance()
     {
         return Vector3.Distance(transform.position, _exitPos);
     }
+
+
 }

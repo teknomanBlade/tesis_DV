@@ -11,6 +11,8 @@ public class UFO : MonoBehaviour
     public Vector3 checkCubePos = new Vector3(0f, 4f, 0f);
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
+    private Vector3 _spawnPos;
+    private Vector3 _finalPos;
     public Vector3 endPos;
     [Range(0,1)]
     public float sliderSoundVolume;
@@ -20,18 +22,25 @@ public class UFO : MonoBehaviour
     public float timeLimit;
     public float timer;
     public bool spawning = false;
-    private int numberOfWaves;
+    private float _UFOSpeed = 50f;
+    [SerializeField]
+    private int _totalGrays;
+    [SerializeField]
+    private bool _inPosition;
+    private bool _canLeavePlanet;
 
 
     private void Start()
     {
+        _inPosition =  false;
+        _canLeavePlanet = false;
         _UFOSpinner = GameObject.Find("UFOSpinner");
         _audioSource = GetComponent<AudioSource>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
     }
 
-    public void RotateUFOSpinner()
+    private void RotateUFOSpinner()
     {
         _UFOSpinner.transform.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime));
     }
@@ -40,15 +49,18 @@ public class UFO : MonoBehaviour
     {
         RotateUFOSpinner();
 
-
-
-
+        EnterPlanet();
+        ExitPlanet();
 
         if (currentGray != null) SpawnGreyLerp();
-        //else if(currentGray != null && numberOfWaves > 5) SpawnGreyLerpTwo();
+
         if (timer >= timeLimit)
         {
-            currentGray.AwakeGray();
+            if(currentGray != null)
+            {
+                currentGray.AwakeGray();
+                BeginSpawn();
+            }
 
             currentGray = null;
             timer = 0;
@@ -65,15 +77,53 @@ public class UFO : MonoBehaviour
     IEnumerator SpawnGrey()
     {
         yield return new WaitForSeconds(spawnTimer);
-        if (_lm.canSpawn && !Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
+        if(_totalGrays > 0)
         {
-            currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity).GetComponent<Gray>();
-            _lm.EnemySpawned();
-            spawning = false;
-            numberOfWaves ++;
-            Debug.Log(numberOfWaves);
+            if (!Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
+            {
+                currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity).GetComponent<Gray>().SetExitUFO(transform.position);
+                //_lm.EnemySpawned();
+                //SpawnGreyLerp();
+                spawning = false;
+                _totalGrays--;
+            }
+            else StartCoroutine("SpawnGrey");
         }
-        else StartCoroutine("SpawnGrey");
+        else
+        {
+            if(GameVars.Values.LevelManager.enemiesInScene.Count == 0)
+            {
+                _canLeavePlanet = true;
+            }
+            else StartCoroutine("SpawnGrey");
+        }
+    }
+
+    private void ExitPlanet()
+    {
+        if(_canLeavePlanet)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _spawnPos, _UFOSpeed * Time.deltaTime);
+            if(transform.position == _spawnPos)
+            {
+                Destroy(this.gameObject);
+            }
+        }
+        
+    }
+
+    private void EnterPlanet()
+    {
+        if(!_inPosition)
+        {
+            if(transform.position == _finalPos)
+            {
+                BeginSpawn();
+                _inPosition = true;
+            }
+            
+            transform.position = Vector3.MoveTowards(transform.position, _finalPos, _UFOSpeed * Time.deltaTime);
+        }
     }
 
     public void SpawnGreyLerp()
@@ -93,20 +143,21 @@ public class UFO : MonoBehaviour
     public UFO SetSpawnPos(Vector3 newPos)
     {
         transform.position = newPos;
+        _spawnPos = newPos;
         return this;
     }
 
     public UFO SetFinalPos(Vector3 newPos)
     {
-        transform.position = newPos;
+        _finalPos = newPos;
         return this;
     }
 
-    //public UFO SetWaypoints(List<Transform> newWaypoints)
-    //{
-        //waypoints = newWaypoints;
-        //return this;
-    //}
+    public UFO SetTotalGrays(int totalGrays)
+    {
+        _totalGrays = totalGrays;
+        return this;
+    }
 
     public UFO SetRotation(Vector3 newRotation)
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoBehaviour, IRoundChangeObservable
+public class LevelManager : MonoBehaviour
 {
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
     public PoolObject<UFOGrayDeath> UFOsPool { get; set; }
@@ -20,24 +20,22 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
     public Transform[] allDoors;
     public GameObject objective;
     public bool allDoorsAreClosed;
-
+    
     public delegate void LevelDelegate();
-    public CraftingRecipe craftingRecipe;
+    //public CraftingRecipe craftingRecipe;
     public bool playing = true;
-    public bool inRound = false;
+    //public bool inRound = false;
     public Player _player;
-
-    public int currentRound = 0;
-    public int finalRound = 5;
+    //public int currentRound = 0;
+    //public int finalRound = 5;
 
     public bool canSpawn = true;
-    public int lastWaveEnemies = 0;
+    /* public int lastWaveEnemies = 0;
     public int enemiesAlive = 0;
-    public int enemiesToSpawn = 0;
+    public int enemiesToSpawn = 0; */
 
     public List<Gray> enemiesInScene = new List<Gray>();
     public bool enemyHasObjective = false;
-
 
     private void Start()
     {
@@ -47,16 +45,20 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
         InitialStockUFO = 5;
         UFOPrefab = Resources.Load<UFOGrayDeath>("UFOGrayDeath");
         UFOsPool = new PoolObject<UFOGrayDeath>(UFOFactory, ActivateEnemy, DeactivateEnemy, InitialStockUFO, true);
+
         /*YouWin = Instantiate(GameVars.Values.youWinScreen);
         YouWin.transform.SetParent(_panelMain.transform);
         YouLose = Instantiate(GameVars.Values.youLoseScreen);
         YouLose.transform.SetParent(_panelMain.transform);
         ScreenManager.Instance.Push(YouWin);
         ScreenManager.Instance.Push(YouLose);*/
-        craftingRecipe.RestoreBuildAmount();
+        //craftingRecipe.RestoreBuildAmount();
+
+        GameVars.Values.BaseballLauncher.RestoreBuildAmount();
         GameVars.Values.TVTrapAgain.RestoreBuildAmount();
         GameVars.Values.soundManager.PlaySound("MusicPreWave",0.14f,true);
-        Invoke("EndRound",8f);
+        
+        //Invoke("EndRound",8f);
     }
 
     private void DeactivateEnemy(UFOGrayDeath o)
@@ -92,7 +94,7 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
         //No se checkea en update.
         if (_player.isDead) LoseGame();
 
-        if (playing)
+        /* if (playing)
         {
             if (inRound && enemiesInScene.Count <= 0 && enemiesToSpawn <= 0 && !EnemiesSpawning()) EndRound();
 
@@ -100,26 +102,26 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
             {
                 SpawnWave();
             }
-        }
+        } */
 
         //CHECKEAR EN CAMBIO DE RONDA.
-        if (currentRound > finalRound)
+        /* if (currentRound > finalRound)
         {
             playing = false;
             Invoke("WinGame", 3f);
-        }
+        } */
     }
 
-    public bool EnemiesSpawning()
+    /* public bool EnemiesSpawning()
     {
         foreach (UFO ufo in allUfos)
         {
             if (ufo.spawning) return true;
         }
         return false;
-    }
+    } */
 
-    public void SpawnWave()
+    /* public void SpawnWave()
     {
         if (!canSpawn) return;
         foreach(UFO ufo in allUfos)
@@ -130,40 +132,40 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
             }
             if (enemiesToSpawn <= 0) return;
         }
-    }
+    } */
 
-    public void EnemySpawned()
+    /* public void EnemySpawned()
     {
         enemiesToSpawn--;
-    }
+    } */
 
-    public void EnemyCameBack()
+    /* public void EnemyCameBack()
     {
         enemiesToSpawn++;
-    }
+    } */
 
-    public void StartRound()
+    /* public void StartRound()
     {
         GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
         inRound = true;
         lastWaveEnemies = lastWaveEnemies + 2;
         enemiesToSpawn = lastWaveEnemies;
-    }
+    } */
 
-    public void EndRound()
+    /* public void EndRound()
     {
         inRound = false;
         currentRound++;
         TriggerRoundChange("RoundChanged");
         Invoke("StartRound", 5f);
-    }
+    } */
 
     public void WinGame()
     {
         Debug.Log("You Win!");
         YouWin.SetActive(true);
         //SceneManager.LoadScene("MainFloor_Upgrade");
-    }
+    } 
 
     public void LoseGame()
     {
@@ -181,7 +183,10 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
     public void RemoveGray(Gray gray)
     {
         enemiesInScene.Remove(gray);
-        //Chequear acá si cambiamos de ronda.
+        if(enemiesInScene.Count == 0)
+        {
+            GameVars.Values.WaveManager.SendNextRound();
+        }
     }
 
     public void CheckForObjective()
@@ -220,7 +225,7 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
 
     }
 
-    public void AddObserver(IRoundChangeObserver obs)
+    /* public void AddObserver(IRoundChangeObserver obs)
     {
         roundChangeObservers.Add(obs);
     }
@@ -234,5 +239,5 @@ public class LevelManager : MonoBehaviour, IRoundChangeObservable
     public void TriggerRoundChange(string triggerMessage)
     {
         roundChangeObservers.ForEach(x => x.OnNotify(triggerMessage));
-    }
+    } */
 }

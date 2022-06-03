@@ -1,3 +1,4 @@
+//using System.Numerics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,8 +78,9 @@ public class Gray : MonoBehaviour, IHittableObserver
         nearestDoorDistance = 1000;
         _lm.AddGray(this);
 
-        Vector3 aux = _lm.allUfos[0].transform.position;
-        _exitPos = new Vector3(aux.x, 0f, aux.z);
+        //Exit pos lo setea el UFO en el instantiate.
+       /*  Vector3 aux = _lm.allUfos[0].transform.position;
+        _exitPos = new Vector3(aux.x, 0f, aux.z); */
     }
 
     private void Start()
@@ -369,7 +371,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     public void GrabObjective()
     {
         hasObjective = true;
-        GameVars.Values.TakeCat();
+        GameVars.Values.TakeCat(_exitPos);
         _lm.CheckForObjective();
     }
 
@@ -394,7 +396,7 @@ public class Gray : MonoBehaviour, IHittableObserver
             Destroy(_lm.objective);
         }
         _lm.RemoveGray(this);
-        _lm.EnemyCameBack();
+        //_lm.EnemyCameBack();
         Destroy(gameObject);
     }
 
@@ -511,9 +513,6 @@ public class Gray : MonoBehaviour, IHittableObserver
         yield return new WaitForSeconds(0.5f);
     }
 
-
-
-
     IEnumerator LerpScaleDissolve(float endValue, float duration)
     {
         float time = 0;
@@ -529,5 +528,13 @@ public class Gray : MonoBehaviour, IHittableObserver
         }
 
         _valueToChange = endValue;
+    }
+
+    public Gray SetExitUFO(Vector3 exitPosition)
+    {
+        Vector3 aux = exitPosition;
+        _exitPos = new Vector3(aux.x, 0f, aux.z);
+        
+        return this;
     }
 }

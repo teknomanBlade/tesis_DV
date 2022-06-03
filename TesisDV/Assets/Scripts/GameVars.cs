@@ -12,6 +12,8 @@ public class GameVars : MonoBehaviour
 
     public SoundManager soundManager { get; private set; }
     public LevelManager LevelManager { get; set; }
+    public WaveManager WaveManager { get; set; }
+    
     [SerializeField]
     private Player player;
 
@@ -130,6 +132,7 @@ public class GameVars : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>();
         soundManager.SetAudioClips(audioClips);
         LevelManager = GetComponent<LevelManager>();
+        WaveManager = GetComponent<WaveManager>();
     }
 
     #region Player
@@ -254,10 +257,11 @@ public class GameVars : MonoBehaviour
         return (cat != null) ? cat.GetDistance() : 0f;
     }
 
-    public void TakeCat()
+    public void TakeCat(Vector3 exitPos)
     {
         _isCatCaptured = true;
         cat.CatIsBeingTaken();
+        cat.SetExitPos(exitPos);
     }
     #endregion
 }
