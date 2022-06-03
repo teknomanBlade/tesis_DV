@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 47635015672141680}
   - component: {fileID: 2256405468833979967}
   - component: {fileID: 8367305324995763905}
+  - component: {fileID: 1569200517278310983}
   m_Layer: 10
   m_Name: HouseDoorBlack
   m_TagString: Untagged
@@ -139,7 +140,7 @@ Transform:
   m_GameObject: {fileID: 894054800743672356}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0.7071068, w: 0}
   m_LocalPosition: {x: -19.214, y: -0.049874306, z: 13.554}
-  m_LocalScale: {x: 2.9624996, y: 2.4750004, z: 3}
+  m_LocalScale: {x: 2.9032497, y: 2.2180953, z: 3}
   m_Children:
   - {fileID: 482049725094491401}
   - {fileID: 3410777193175623205}
@@ -223,6 +224,7 @@ MonoBehaviour:
   _itemName: DoorBlack
   _itemImage: {fileID: 0}
   IsFront: 0
+  doorTriggers: []
 --- !u!95 &8367305324995763905
 Animator:
   serializedVersion: 3
@@ -242,6 +244,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1569200517278310983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894054800743672356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 1, b: 0.16476631, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &8723757206920087149
 GameObject:
   m_ObjectHideFlags: 0

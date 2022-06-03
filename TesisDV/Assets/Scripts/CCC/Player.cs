@@ -5,14 +5,14 @@ using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IInteractableItemObserver
 {
     //---------
     private Rigidbody _rb;
 
     public PlayerCamera _cam;
     public PostProcessVolume volume;
-    public DamagePlayerPPSSettings postProcessDamage;
+    public Vignette postProcessDamage;
     public AttentionPlayerPPSSettings postProcessAttention;
     [SerializeField]
     private Inventory _inventory;
@@ -57,6 +57,8 @@ public class Player : MonoBehaviour
     private bool isRunning = false;
     [SerializeField]
     private bool isDamaged = false;
+    [SerializeField]
+    private bool isAttacking = false;
     private Vector3 _originalScale;
     private Vector3 _originalCamPos;
 
@@ -141,20 +143,15 @@ public class Player : MonoBehaviour
         }
 
         //Cambiar la deteccion para no fijarte cada frame. Ver una mejor forma de detectar cuando tenemos un arma para no tener problema al agregar mas. Hacerlo cada vez que agarramos un item.
-        if (_inventory.ContainsID(3))
-        {
-            //Debug.Log("A PATEAR GRISES SE HA DICHO!");
-            _weaponGO.SetActive(true);
-        }
-        else
-        {
-            //Debug.Log("NO TENES LA RAQUETA PAPU");
-        }
+        
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire))
         {
-            if(_inventory.ContainsID(3))
+            if (_inventory.ContainsID(3))
+            {
+                StartCoroutine(PlayRacketSwingSound(1f));
                 _weapon.MeleeAttack();
+            }
         }
 
         if (Input.GetKeyDown(GameVars.Values.secondaryFire))
@@ -246,7 +243,7 @@ public class Player : MonoBehaviour
     {
         if (volume.profile.TryGetSettings(out postProcessDamage))
         {
-            StartCoroutine(LerpDamageEffect(1f,1f));
+            StartCoroutine(LerpDamageEffect(0.6f,1f));
         }
     }
 
@@ -260,8 +257,7 @@ public class Player : MonoBehaviour
             _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
             time += Time.deltaTime;
 
-            postProcessDamage._Intensity.value = _valueToChange;
-            postProcessDamage._Distortion.value = _valueToChange;
+            postProcessDamage.intensity.value = _valueToChange;
             yield return null;
         }
 
@@ -297,7 +293,7 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        //_cam.ActiveShake(0.8f, 0.02f);
+        _cam.ActiveShake(0.8f, 0.08f);
         ActiveDamageEffect();
         StartCoroutine(PlayDamageSound(3.4f));
         hp--;
@@ -583,6 +579,7 @@ public class Player : MonoBehaviour
     {
         if (lookingAt.gameObject.TryGetComponent<InventoryItem>(out InventoryItem aux))
         {
+            aux.AddObserver(this);
             InteractWithInventoryItem();
             return;
         }
@@ -605,9 +602,18 @@ public class Player : MonoBehaviour
         }
         //lookingIMovable.BecomeMovable();
     }
+
+    public IEnumerator PlayRacketSwingSound(float timer)
+    {
+        isAttacking = true;
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "RacketSwing", 0.06f, false);
+        yield return new WaitForSecondsRealtime(timer);
+        isAttacking = false;
+    }
+
     public IEnumerator PlayDamageSound(float timer)
     {
-        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "KidDamage", 0.4f, false);
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "KidDamage", 0.3f, false);
         isDamaged = true;
 
         yield return new WaitForSecondsRealtime(timer);
@@ -708,5 +714,16 @@ public class Player : MonoBehaviour
 
         outLine.OutlineWidth = 0f;
 
+    }
+
+    public void OnNotify(string message)
+    {
+        if (message.Equals("ItemGrabbed"))
+        {
+            if (_inventory.ContainsID(3))
+            {
+                _weaponGO.SetActive(true);
+            }
+        }
     }
 }

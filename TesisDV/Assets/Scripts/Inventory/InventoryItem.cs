@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryItem : Item
+public class InventoryItem : Item, IInteractableItemObservable
 {
+    private List<IInteractableItemObserver> _interactableItemObservers = new List<IInteractableItemObserver>();
     public int myCraftingID; //pasar a get set en Item
     public GameObject myPrefab; //pasar a get set en Item
     public float timeLimit = 3f;
@@ -43,6 +44,7 @@ public class InventoryItem : Item
 
     public void Die()
     {
+        TriggerInteractableItem("ItemGrabbed");
         GameVars.Values.ShowNotification("You've grabbed a " + itemName);
         GameVars.Values.PlayPickUpSound();
         gameObject.SetActive(false);
@@ -58,5 +60,20 @@ public class InventoryItem : Item
     public void EnableColliderAgain()
     {
         gameObject.GetComponent<Collider>().enabled = true;
+    }
+
+    public void AddObserver(IInteractableItemObserver obs)
+    {
+        _interactableItemObservers.Add(obs);
+    }
+
+    public void RemoveObserver(IInteractableItemObserver obs)
+    {
+        if (_interactableItemObservers.Contains(obs)) _interactableItemObservers.Remove(obs);
+    }
+
+    public void TriggerInteractableItem(string triggerMessage)
+    {
+        _interactableItemObservers.ForEach(x => x.OnNotify(triggerMessage));
     }
 }
