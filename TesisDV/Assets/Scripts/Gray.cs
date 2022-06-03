@@ -5,8 +5,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Gray : MonoBehaviour, IHittableObserver
+public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
 {
+    private List<IPlayerDamageObserver> _myObserversPlayerDamage = new List<IPlayerDamageObserver>();
     [SerializeField]
     private GameObject _player;
     private Player _playerScript;
@@ -21,7 +22,7 @@ public class Gray : MonoBehaviour, IHittableObserver
     private bool _isWalkingSoundPlaying = false;
     private bool _isMoving;
     private bool _hasHitEffectActive = false;
-    private float _attackWindup = 3.5f;
+    private float _attackWindup = 1f;
     public float distanceToPlayer;
     public float pursueThreshold = 10f;
     public float disengageThreshold = 15f;
@@ -68,8 +69,9 @@ public class Gray : MonoBehaviour, IHittableObserver
         _rb = GetComponent<Rigidbody>();
         _cc = GetComponent<CapsuleCollider>();
         _as = GetComponent<AudioSource>();
-        _player = GameObject.Find("Player");
-        _playerScript = _player.GetComponent<Player>();
+        _player = GameVars.Values.Player.gameObject;
+        _playerScript = GameVars.Values.Player;
+        AddObserver(_playerScript);
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         //_empAbility = GameObject.Find("EMPAbility").GetComponent<ParticleSystem>();
         //_isMoving = true;
@@ -295,8 +297,8 @@ public class Gray : MonoBehaviour, IHittableObserver
         attacking = true;
         _isMoving = false;
         _anim.SetBool("IsAttacking", true);
-        _playerScript.Damage();
         yield return new WaitForSeconds(_attackWindup);
+        TriggerPlayerDamage("DamagePlayer");
         PlayParticleSystemShader();
         attacking = false;
         _isMoving = true;
@@ -560,5 +562,20 @@ public class Gray : MonoBehaviour, IHittableObserver
         _exitPos = new Vector3(aux.x, 0f, aux.z);
         
         return this;
+    }
+
+    public void AddObserver(IPlayerDamageObserver obs)
+    {
+        _myObserversPlayerDamage.Add(obs);
+    }
+
+    public void RemoveObserver(IPlayerDamageObserver obs)
+    {
+        if (_myObserversPlayerDamage.Contains(obs)) _myObserversPlayerDamage.Remove(obs);
+    }
+
+    public void TriggerPlayerDamage(string triggerMessage)
+    {
+        _myObserversPlayerDamage.ForEach(x => x.OnNotifyPlayerDamage(triggerMessage));
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour, IInteractableItemObserver
+public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObserver
 {
     //---------
     private Rigidbody _rb;
@@ -293,7 +293,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver
 
     public void Damage()
     {
-        _cam.ActiveShake(0.8f, 0.08f);
+        _cam.CameraShake();
         ActiveDamageEffect();
         StartCoroutine(PlayDamageSound(3.4f));
         hp--;
@@ -724,6 +724,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver
             {
                 _weaponGO.SetActive(true);
             }
+        }
+    }
+
+    public void OnNotifyPlayerDamage(string message)
+    {
+        if (message.Equals("DamagePlayer"))
+        {
+            Damage();
         }
     }
 }

@@ -37,8 +37,8 @@ public class PlayerCamera : MonoBehaviour
     {
         CheckMotion();
         ResetPosition();
-        if(_camShake)
-            CameraShake();
+        /*if(_camShake)
+            CameraShake();*/
 
         transform.position = Vector3.Lerp(transform.position, _player.transform.position + offset, smoothing * Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetAngle, smoothing * Time.deltaTime);
@@ -82,7 +82,7 @@ public class PlayerCamera : MonoBehaviour
     {
         _camera.transform.localPosition += motion;
     }
-    public void ActiveShake(float shakeDuration, float shakeAmount)
+    /*public void ActiveShake(float shakeDuration, float shakeAmount)
     {
         _camShake = true;
         _shakeDuration = shakeDuration;
@@ -111,8 +111,32 @@ public class PlayerCamera : MonoBehaviour
             _shakeDuration = 0f;
             _cameraTransform.position = _initPos;
         }
+    }*/
+    public void CameraShake()
+    {
+        StartCoroutine(Shake(1f, 0.8f));
     }
 
+    public IEnumerator Shake(float duration, float magnitude)
+    {
+
+        Vector3 originalPos = transform.localPosition;
+
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-0.15f, 0.15f) * magnitude;
+            float y = Random.Range(-0.15f, 0.15f) * magnitude;
+
+            transform.localPosition = new Vector3(originalPos.x + x, originalPos.y + y, originalPos.z);
+
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+    }
     public void SetInitPos(Vector3 newPos)
     {
         _initPos = newPos;

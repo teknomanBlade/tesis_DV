@@ -16,6 +16,10 @@ public class GameVars : MonoBehaviour
     
     [SerializeField]
     private Player player;
+    public Player Player
+    {
+        get { return player; }
+    }
 
     [SerializeField]
     private Cat cat;
@@ -136,6 +140,11 @@ public class GameVars : MonoBehaviour
     }
 
     #region Player
+
+    public Player GetPlayer()
+    {
+        return player;
+    }
 
     public Vector3 GetPlayerPos()
     {
