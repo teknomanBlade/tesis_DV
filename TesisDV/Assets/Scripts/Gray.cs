@@ -48,6 +48,8 @@ public class Gray : MonoBehaviour, IHittableObserver
 
     [SerializeField]
     private Material dissolveMaterial;
+    [SerializeField]
+    private Material sphereEffectMaterial;
 
     private SkinnedMeshRenderer skinned;
     private float _valueToChange;
@@ -467,7 +469,8 @@ public class Gray : MonoBehaviour, IHittableObserver
         if (message.Equals("TennisBallHit"))
         {
             _anim.SetBool("IsHitted", true);
-            StartCoroutine(PlayHitEffect(0.6f));
+            ActiveInnerEffect();
+            StartCoroutine(LerpSphereHitEffect(2f,2f));
             GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
             Damage();
             Stun(5f);
@@ -477,7 +480,8 @@ public class Gray : MonoBehaviour, IHittableObserver
             if (_anim)
             {
                 _anim.SetBool("IsHitted", true);
-                StartCoroutine(PlayHitEffect(0.6f));
+                ActiveInnerEffect();
+                StartCoroutine(LerpSphereHitEffect(2f, 2f));
                 GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
                 Damage();
                 Stun(5f);
@@ -485,14 +489,13 @@ public class Gray : MonoBehaviour, IHittableObserver
         }
     }
 
-    IEnumerator PlayHitEffect(float timer)
+    public void ActiveInnerEffect()
     {
         _hitEffect.Play();
         _hasHitEffectActive = true;
-        _hitEffect.gameObject.transform.GetComponentInChildren<Light>().enabled = _hasHitEffectActive;
-        yield return new WaitForSeconds(timer);
-        _hasHitEffectActive = false;
-        _hitEffect.gameObject.transform.GetComponentInChildren<Light>().enabled = _hasHitEffectActive;
+        var meshRenderer = _hitEffect.gameObject.transform.GetComponentInChildren<MeshRenderer>();
+        meshRenderer.enabled = _hasHitEffectActive;
+        sphereEffectMaterial = meshRenderer.sharedMaterials.FirstOrDefault();
     }
 
     IEnumerator FindClosestDoor()
@@ -511,6 +514,27 @@ public class Gray : MonoBehaviour, IHittableObserver
 
         }
         yield return new WaitForSeconds(0.5f);
+    }
+
+    IEnumerator LerpSphereHitEffect(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _valueToChange;
+
+        while (time < duration)
+        {
+            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            sphereEffectMaterial.SetFloat("_Interpolator", _valueToChange);
+            yield return null;
+        }
+
+        _valueToChange = endValue;
+        yield return new WaitForSeconds(1.5f);
+        sphereEffectMaterial.SetFloat("_Interpolator", 0);
+        _hasHitEffectActive = false;
+        _hitEffect.gameObject.transform.GetComponentInChildren<MeshRenderer>().enabled = _hasHitEffectActive;
     }
 
     IEnumerator LerpScaleDissolve(float endValue, float duration)

@@ -16,6 +16,9 @@ public class LevelManager : MonoBehaviour
     public GameObject YouWin;
     public GameObject YouLose;
 
+    public GameObject NewHouse;
+    public GameObject OldHouse;
+
     public UFO[] allUfos;
     public Transform[] allDoors;
     public GameObject objective;
@@ -78,6 +81,18 @@ public class LevelManager : MonoBehaviour
     private UFOGrayDeath UFOFactory()
     {
         return Instantiate(UFOPrefab);
+    }
+
+    public void ActiveNewHouse()
+    {
+        NewHouse.SetActive(true);
+        OldHouse.SetActive(false);
+    }
+
+    public void ActiveOldHouse()
+    {
+        NewHouse.SetActive(false);
+        OldHouse.SetActive(true);
     }
 
     private void Update()
