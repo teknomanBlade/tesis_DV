@@ -175,6 +175,10 @@ public class UFO : MonoBehaviour
     }
     public void BeginSpawn()
     {
+        //if(_currentCoroutine != StartCoroutine("SpawnGrey"))
+        //{
+        //    StopCoroutine(_currentCoroutine);
+        //}
         StopCoroutine(_currentCoroutine);
         spawning = true;
         PlayAnimBeam(true);
@@ -229,13 +233,16 @@ public class UFO : MonoBehaviour
     }
     private void EnterPlanet()
     {
+        Vector3 dir = _finalPos - transform.position;
         if (!_inPosition)
         {
             PlayAnimBeam(false);
             SwitchDissolveMaterial(dissolveMaterial, dissolveMaterialSpinner);
             StartCoroutine(LerpScaleDissolve(1f, 1f));
-            if (transform.position == _finalPos)
+            //if (transform.position == _finalPos)
+            if(dir.magnitude < 0.2f)
             {
+                //PlayAnimBeam(true);
                 StopCoroutine(_currentCoroutine);
                 SwitchDissolveMaterial(nonDissolveMaterial, nonDissolveMaterialSpinner);
                 _currentCoroutine = StartCoroutine(LerpScaleDissolve(0f, 1f));
