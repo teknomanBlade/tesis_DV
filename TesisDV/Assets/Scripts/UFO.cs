@@ -17,11 +17,18 @@ public class UFO : MonoBehaviour
     private Material dissolveMaterialSpinner;
     [SerializeField]
     private Animator _anim;
+    private Coroutine _currentCoroutine;
     private MeshRenderer _renderer;
     private MeshRenderer _rendererSpinner;
+    private float _arriveRadius;
+    private float _maxSpeed;
+    private float _maxForce;
+    public Vector3 _velocity;
+    Quaternion rotationFinal;
     private LevelManager _lm;
     private AudioSource _audioSource;
     private float _valueToChange;
+    private float _valueToChangeRot;
     public Vector3 checkCubePos = new Vector3(0f, 4f, 0f);
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
@@ -30,7 +37,7 @@ public class UFO : MonoBehaviour
     public Vector3 endPos;
     [Range(0,1)]
     public float sliderSoundVolume;
-    public float spawnTimer = 10f;
+    private float _spawnTimer;
     public GameObject grayPrefab;
     public Gray currentGray;
     public float timeLimit;
@@ -44,17 +51,21 @@ public class UFO : MonoBehaviour
     private bool _canLeavePlanet;
 
 
-    private void Start()
+    private void Awake()
     {
         _inPosition =  false;
+        _spawnTimer = 5f;
+        _arriveRadius = 20f;
+        _maxSpeed = 30f;
+        _maxForce = 12f;
         _canLeavePlanet = false;
         _UFOSpinner = GameObject.Find("UFOSpinner");
+        rotationFinal = Quaternion.Euler(-90f,0f,0f);
         _anim = transform.GetComponentInChildren<Animator>();
         _renderer = GetComponent<MeshRenderer>();
         _rendererSpinner = _UFOSpinner.GetComponent<MeshRenderer>();
         _audioSource = GetComponent<AudioSource>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        
         GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
     }
 
@@ -65,6 +76,36 @@ public class UFO : MonoBehaviour
     public void PlayAnimBeam(bool active)
     {
         _anim.SetBool("IsBeamSpawnerDeployed", active);
+    }
+    public void Move()
+    {
+        if (_velocity != Vector3.zero)
+        {
+            _currentCoroutine = StartCoroutine(LerpRotation(1f, 1f));
+            transform.position += _velocity * Time.deltaTime;
+            transform.forward = _velocity;
+        }
+    }
+
+    void Arrive()
+    {
+        Vector3 desired = (_finalPos - transform.position).normalized;
+        float dist = Vector3.Distance(transform.position, _finalPos);
+        float speed = _maxSpeed;
+        if (dist <= _arriveRadius)
+        {
+            speed = _maxSpeed * (dist / _arriveRadius);
+        }
+        desired *= speed;
+
+        Vector3 steering = Vector3.ClampMagnitude(desired - _velocity, _maxForce);
+
+        ApplyForce(steering);
+    }
+
+    void ApplyForce(Vector3 force)
+    {
+        _velocity += force;
     }
     public void SwitchDissolveMaterial(Material material, Material materialSpinner)
     {
@@ -81,7 +122,6 @@ public class UFO : MonoBehaviour
     private void Update()
     {
         RotateUFOSpinner();
-
         EnterPlanet();
         ExitPlanet();
 
@@ -99,6 +139,23 @@ public class UFO : MonoBehaviour
             timer = 0;
         }
     }
+    IEnumerator LerpRotation(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _valueToChangeRot;
+
+        while (time < duration)
+        {
+            _valueToChangeRot = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotationFinal, _valueToChangeRot);
+            yield return null;
+        }
+
+        _valueToChangeRot = endValue;
+    }
+
     IEnumerator LerpScaleDissolve(float endValue, float duration)
     {
         float time = 0;
@@ -118,14 +175,15 @@ public class UFO : MonoBehaviour
     }
     public void BeginSpawn()
     {
+        StopCoroutine(_currentCoroutine);
         spawning = true;
-        
-        StartCoroutine("SpawnGrey");
+        PlayAnimBeam(true);
+        _currentCoroutine = StartCoroutine("SpawnGrey");
     }
 
     IEnumerator SpawnGrey()
     {
-        yield return new WaitForSeconds(spawnTimer);
+        yield return new WaitForSeconds(_spawnTimer);
         if(_totalGrays > 0)
         {
             if (!Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
@@ -178,14 +236,15 @@ public class UFO : MonoBehaviour
             StartCoroutine(LerpScaleDissolve(1f, 1f));
             if (transform.position == _finalPos)
             {
-                PlayAnimBeam(true);
-                BeginSpawn();
+                StopCoroutine(_currentCoroutine);
                 SwitchDissolveMaterial(nonDissolveMaterial, nonDissolveMaterialSpinner);
-                StartCoroutine(LerpScaleDissolve(0f, 1f));
+                _currentCoroutine = StartCoroutine(LerpScaleDissolve(0f, 1f));
+                BeginSpawn();
                 _inPosition = true;
             }
-            
-            transform.position = Vector3.MoveTowards(transform.position, _finalPos, _UFOSpeed * Time.deltaTime);
+            Move();
+            Arrive();
+            //transform.position = Vector3.MoveTowards(transform.position, _finalPos, _UFOSpeed * Time.deltaTime);
         }
     }
 
@@ -198,6 +257,7 @@ public class UFO : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        Gizmos.DrawWireSphere(transform.position, _arriveRadius);
         Gizmos.DrawWireCube(transform.position - checkCubePos, checkCubeExt);
         Gizmos.DrawWireCube(transform.position - startPos, new Vector3(0.5f, 0.5f, 0.5f));
         Gizmos.DrawWireCube(transform.position - endPos, new Vector3(0.5f, 0.5f, 0.5f));
