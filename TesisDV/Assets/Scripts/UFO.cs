@@ -1,13 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UFO : MonoBehaviour
 {
     private GameObject _UFOSpinner;
+    [SerializeField]
+    private Material nonDissolveMaterial;
+    [SerializeField]
+    private Material nonDissolveMaterialSpinner;
+    [SerializeField]
+    private Material dissolveMaterial;
+    [SerializeField]
+    private Material dissolveMaterialSpinner;
+    [SerializeField]
+    private Animator _anim;
+    private MeshRenderer _renderer;
+    private MeshRenderer _rendererSpinner;
     private LevelManager _lm;
     private AudioSource _audioSource;
+    private float _valueToChange;
     public Vector3 checkCubePos = new Vector3(0f, 4f, 0f);
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
@@ -35,14 +49,33 @@ public class UFO : MonoBehaviour
         _inPosition =  false;
         _canLeavePlanet = false;
         _UFOSpinner = GameObject.Find("UFOSpinner");
+        _anim = transform.GetComponentInChildren<Animator>();
+        _renderer = GetComponent<MeshRenderer>();
+        _rendererSpinner = _UFOSpinner.GetComponent<MeshRenderer>();
         _audioSource = GetComponent<AudioSource>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
+        
         GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
     }
 
     private void RotateUFOSpinner()
     {
         _UFOSpinner.transform.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime));
+    }
+    public void PlayAnimBeam(bool active)
+    {
+        _anim.SetBool("IsBeamSpawnerDeployed", active);
+    }
+    public void SwitchDissolveMaterial(Material material, Material materialSpinner)
+    {
+        var materials = _renderer.sharedMaterials.ToList();
+        materials.Clear();
+        materials.Add(material);
+        _renderer.sharedMaterials = materials.ToArray();
+        var materialsSpinner = _rendererSpinner.sharedMaterials.ToList();
+        materialsSpinner.Clear();
+        materialsSpinner.Add(materialSpinner);
+        _rendererSpinner.sharedMaterials = materialsSpinner.ToArray();
     }
 
     private void Update()
@@ -66,7 +99,23 @@ public class UFO : MonoBehaviour
             timer = 0;
         }
     }
+    IEnumerator LerpScaleDissolve(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _valueToChange;
 
+        while (time < duration)
+        {
+            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            dissolveMaterial.SetFloat("_ScaleDissolve", _valueToChange);
+            dissolveMaterialSpinner.SetFloat("_ScaleDissolveSpinner", _valueToChange);
+            yield return null;
+        }
+
+        _valueToChange = endValue;
+    }
     public void BeginSpawn()
     {
         spawning = true;
@@ -101,24 +150,38 @@ public class UFO : MonoBehaviour
 
     private void ExitPlanet()
     {
-        if(_canLeavePlanet)
+        if (_canLeavePlanet)
         {
+            StartCoroutine(PlayAnimRetractBeam());
+            SwitchDissolveMaterial(dissolveMaterial, dissolveMaterialSpinner);
             transform.position = Vector3.MoveTowards(transform.position, _spawnPos, _UFOSpeed * Time.deltaTime);
             if(transform.position == _spawnPos)
             {
+                StartCoroutine(LerpScaleDissolve(0f, 1f));
                 Destroy(this.gameObject);
             }
         }
         
     }
-
+    IEnumerator PlayAnimRetractBeam()
+    {
+        PlayAnimBeam(false);
+        yield return new WaitForSeconds(1f);
+        
+    }
     private void EnterPlanet()
     {
-        if(!_inPosition)
+        if (!_inPosition)
         {
-            if(transform.position == _finalPos)
+            PlayAnimBeam(false);
+            SwitchDissolveMaterial(dissolveMaterial, dissolveMaterialSpinner);
+            StartCoroutine(LerpScaleDissolve(1f, 1f));
+            if (transform.position == _finalPos)
             {
+                PlayAnimBeam(true);
                 BeginSpawn();
+                SwitchDissolveMaterial(nonDissolveMaterial, nonDissolveMaterialSpinner);
+                StartCoroutine(LerpScaleDissolve(0f, 1f));
                 _inPosition = true;
             }
             
