@@ -232,6 +232,7 @@ GameObject:
   - component: {fileID: 7122903368299814140}
   - component: {fileID: 3330295789604227245}
   - component: {fileID: 1107964371}
+  - component: {fileID: 6833516383978556668}
   m_Layer: 10
   m_Name: HouseDoorWhite
   m_TagString: Untagged
@@ -332,6 +333,7 @@ MonoBehaviour:
   _itemName: DoorWhite
   _itemImage: {fileID: 0}
   IsFront: 0
+  doorTriggers: []
 --- !u!95 &1107964371
 Animator:
   serializedVersion: 3
@@ -351,3 +353,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6833516383978556668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7933314004753883560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 1, b: 0.16476631, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

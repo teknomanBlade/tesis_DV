@@ -194,7 +194,10 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
             if (Vector3.Distance(transform.position, nearestDoorVector) < 3f)
             {
                 _anim.SetBool("IsAttacking", true);
+                
                 nearestDoor.GetComponent<AuxDoor>().Interact();
+                GameVars.Values.ShowNotification("The Grays have entered through the " + nearestDoor.GetComponent<AuxDoor>().myDoor.itemName);
+                StartCoroutine(LerpOutlineWidthAndColor(8f,2f, Color.red));
                 _lm.ChangeDoorsStatus();
             }
             
@@ -546,7 +549,26 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
 
         _valueToChange = endValue;
     }
+    IEnumerator LerpOutlineWidthAndColor(float endValue, float duration, Color color)
+    {
+        float time = 0;
+        float startValue = _valueToChange;
 
+        while (time < duration)
+        {
+            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            nearestDoor.GetComponent<AuxDoor>().myDoor.GetComponent<Outline>().OutlineColor = color;
+            nearestDoor.GetComponent<AuxDoor>().myDoor.GetComponent<Outline>().OutlineWidth = _valueToChange;
+            yield return null;
+        }
+
+        _valueToChange = endValue;
+        yield return StartCoroutine(LerpOutlineWidthAndColor(0f, 2f, Color.red));
+        yield return new WaitForSeconds(0.5f);
+        yield return StartCoroutine(LerpOutlineWidthAndColor(0f, 2f, Color.green));
+    }
     public Gray SetExitUFO(Vector3 exitPosition)
     {
         Vector3 aux = exitPosition;

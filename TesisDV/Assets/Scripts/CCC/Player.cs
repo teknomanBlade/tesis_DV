@@ -699,7 +699,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         var outLine = item.gameObject.GetComponent<Outline>();
         if (outLine is null)
             return;
-
+        outLine.OutlineColor = Color.green;
         outLine.OutlineWidth = 6f;
     }
 
