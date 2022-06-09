@@ -5,7 +5,7 @@ using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObserver
+public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObserver, IDoorGrayInteractObserver
 {
     //---------
     private Rigidbody _rb;
@@ -732,6 +732,15 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         if (message.Equals("DamagePlayer"))
         {
             Damage();
+        }
+    }
+
+    public void OnNotifyDoorGrayInteract(string message)
+    {
+        if (message.Equals("GrayDoorInteract"))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "AlertNotificationDoorAccess", 0.18f, true);
+            ActiveAttentionEffect();
         }
     }
 }

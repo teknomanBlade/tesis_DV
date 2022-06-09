@@ -5,9 +5,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
+public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, IDoorGrayInteractObservable
 {
     private List<IPlayerDamageObserver> _myObserversPlayerDamage = new List<IPlayerDamageObserver>();
+    private List<IDoorGrayInteractObserver> _myObserversDoorGrayInteract = new List<IDoorGrayInteractObserver>();
     [SerializeField]
     private GameObject _player;
     private Player _playerScript;
@@ -72,6 +73,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
         _player = GameVars.Values.Player.gameObject;
         _playerScript = GameVars.Values.Player;
         AddObserver(_playerScript);
+        AddObserverDoorGrayInteract(_playerScript);
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         //_empAbility = GameObject.Find("EMPAbility").GetComponent<ParticleSystem>();
         //_isMoving = true;
@@ -196,7 +198,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
                 _anim.SetBool("IsAttacking", true);
                 
                 nearestDoor.GetComponent<AuxDoor>().Interact();
-                GameVars.Values.ShowNotification("The Grays have entered through the " + nearestDoor.GetComponent<AuxDoor>().myDoor.itemName);
+                GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(nearestDoor.GetComponent<AuxDoor>().myDoor.itemName));
+                TriggerDoorGrayInteract("GrayDoorInteract");
                 StartCoroutine(LerpOutlineWidthAndColor(8f,2f, Color.red));
                 _lm.ChangeDoorsStatus();
             }
@@ -221,6 +224,24 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
         _anim.SetBool("IsWalking", true);
         else
         _anim.SetBool("IsWalking", false);
+    }
+
+    public string GetDoorAccessName(string name)
+    {
+        var result = "";
+        if (name.Contains("Red"))
+        {
+            result = "Red Access Door.";
+        }
+        else if (name.Contains("Black"))
+        {
+            result = "Black Access Door.";
+        }
+        else if (name.Contains("White"))
+        {
+            result = "White Access Door.";
+        }
+        return result;
     }
 
     public void CheckPathStatus()
@@ -590,5 +611,20 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
     public void TriggerPlayerDamage(string triggerMessage)
     {
         _myObserversPlayerDamage.ForEach(x => x.OnNotifyPlayerDamage(triggerMessage));
+    }
+
+    public void AddObserverDoorGrayInteract(IDoorGrayInteractObserver obs)
+    {
+        _myObserversDoorGrayInteract.Add(obs);
+    }
+
+    public void RemoveObserverDoorGrayInteract(IDoorGrayInteractObserver obs)
+    {
+        if (_myObserversDoorGrayInteract.Contains(obs)) _myObserversDoorGrayInteract.Remove(obs);
+    }
+
+    public void TriggerDoorGrayInteract(string triggerMessage)
+    {
+        _myObserversDoorGrayInteract.ForEach(x => x.OnNotifyDoorGrayInteract(triggerMessage));
     }
 }
