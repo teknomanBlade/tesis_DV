@@ -247,8 +247,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
         GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
         yield return new WaitForSeconds(1.6f);
         GameVars.Values.soundManager.StopSound();
-        yield return new WaitForSeconds(6f);
-        StartCoroutine(LerpScaleDissolve(0f, 1.5f));
+        yield return new WaitForSeconds(2.5f);
+        yield return StartCoroutine(LerpScaleDissolve(0f, 1.5f)); 
         Dead();
     }
 
@@ -375,6 +375,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
     public void GrabObjective()
     {
         hasObjective = true;
+        _anim.SetBool("IsGrab", true);
         GameVars.Values.TakeCat(_exitPos);
         _lm.CheckForObjective();
     }
@@ -409,7 +410,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
         dead = true;
         var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);
         var UFO = GameVars.Values.LevelManager.UFOsPool.GetObject().InitializePosition(spawnPos);
-        //UFO.PlayAnimBeamDeployed();
         StartCoroutine(PlayGrayDeathSound());
         _navMeshAgent.destination = transform.position;
         if (hasObjective)
@@ -422,15 +422,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable
         
         _lm.RemoveGray(this);
         _lm.CheckForObjective();
-        /*var materials = skinned.sharedMaterials.ToList();
-        materials.Add(deathMaterial);
-        skinned.materials = materials.ToArray();
-
-        //_deathEffect.gameObject.transform.SetParent(null);
-        _deathEffect.Play();
-        LerpScaleDissolve(0.5f, 1f);*/
-
-        //Invoke("Dead", 5f);
     }
 
     public void PlayShaderDissolve()
