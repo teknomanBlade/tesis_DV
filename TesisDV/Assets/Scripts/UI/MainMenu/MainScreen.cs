@@ -25,6 +25,7 @@ public class MainScreen : MonoBehaviour
     }
     public void BtnCredits()
     {
+        Debug.Log("CLICK CREDITS?");
         houseStructure.SetActive(false);
         credits.SetActive(!credits.activeSelf);
     }
