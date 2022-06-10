@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Blueprint : MonoBehaviour
 {
+    private Player _player;
     RaycastHit hit;
     Vector3 movePoint;
     private bool canBuild;
@@ -20,12 +21,12 @@ public class Blueprint : MonoBehaviour
     private Vector3 finalPosition;
     private Quaternion finalRotation;
     private Renderer[] _myChildrenRenderers;
-
     public LayerMask LayerMaskWall;
     int layerMask;
 
     void Start()
     {
+        _player = GameObject.Find("Player").GetComponent<Player>();
         int layerMask = GameVars.Values.GetWallLayer();
         layerMask = ~layerMask;
         canBuild = true;
@@ -68,6 +69,7 @@ public class Blueprint : MonoBehaviour
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
+            _player.SwitchIsCrafting();
             //secondAuxVector = new Vector3(transform.position.x, 1f, transform.position.z);
             //finalPosition = secondAuxVector;
             finalPosition = transform.position;
@@ -84,6 +86,7 @@ public class Blueprint : MonoBehaviour
 
         if (Input.GetKeyDown(GameVars.Values.secondaryFire))
         {
+            _player.SwitchIsCrafting();
             Destroy(gameObject);
             craftingRecipe.RestoreBuildAmount();
         }

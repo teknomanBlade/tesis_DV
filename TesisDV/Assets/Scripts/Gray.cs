@@ -12,6 +12,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     [SerializeField]
     private GameObject _player;
     private Player _playerScript;
+    [SerializeField]
+    private float _movingSpeed;
     private AudioSource _as;
     [SerializeField]
     private Animator _anim;
@@ -19,7 +21,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private CapsuleCollider _cc;
     private LevelManager _lm;
     private NavMeshAgent _navMeshAgent;
-    
+    private NavMeshPath _navMeshPath;
     private bool _isWalkingSoundPlaying = false;
     private bool _isMoving;
     private bool _hasHitEffectActive = false;
@@ -29,7 +31,9 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public float disengageThreshold = 15f;
     public float attackThreshold = 2.5f;
     public float attackDisengageThreshold = 3f;
-    
+    private List<Transform> _waypoints;
+    private int _currentWaypoint = 0;
+    private int _currentCorner = 0;
     public Coroutine attackCoroutine;
     public bool dead = false;
     public bool attacking = false;
@@ -40,10 +44,11 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public int hp = 3;
     public bool hasObjective = false;
     private Vector3 _exitPos;
-
+    private Vector3 _currentObjective;
     private float nearestDoorDistance = 1000;
     private Transform nearestDoor;
     private Vector3 nearestDoorVector;
+    private bool canCreatePath;
 
     /*[SerializeField]
     private Material deathMaterial;*/
@@ -66,6 +71,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private ParticleSystem _deathEffect;
     private void Awake()
     {
+        canCreatePath = false;
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
         _cc = GetComponent<CapsuleCollider>();
@@ -145,9 +151,18 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
                     //_anim.SetBool("IsWalking", false); Ahora en MovingAnimations()
                 }
 
+                if(canCreatePath)
+                {
+                    _navMeshAgent.ResetPath();
+                    CalculatePath(_currentObjective);
+                   //_currentCorner = 0;
+                    canCreatePath = false;
+                }
+
                 if(_isMoving)
                 {
-                    Move();
+                    ReliableMove();
+                    //Move();
                 }
                 MovingAnimations();
                 CheckPathStatus();
@@ -178,6 +193,57 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         Vector3 dest = default(Vector3);
         if (pursue)
         {
+            //CalculatePath(_player.transform.position);
+            canCreatePath = true;
+            _currentObjective = _player.transform.position;
+            MoveTo();
+            //dest = _player.transform.position;
+        }
+        else if (_lm.enemyHasObjective) 
+        {
+            //CalculatePath(_exitPos);
+            canCreatePath = true;
+            _currentObjective = _exitPos;
+            MoveTo();
+            //dest = _exitPos;
+        }
+        else if (_lm.allDoorsAreClosed)
+        {
+            StartCoroutine(FindClosestDoor());
+            
+            dest = nearestDoor.position;
+            if (Vector3.Distance(transform.position, nearestDoorVector) < 3f)
+            {
+                _anim.SetBool("IsAttacking", true);
+                
+                nearestDoor.GetComponent<AuxDoor>().Interact();
+                GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(nearestDoor.GetComponent<AuxDoor>().myDoor.itemName));
+                TriggerDoorGrayInteract("GrayDoorInteract");
+                StartCoroutine(LerpOutlineWidthAndColor(8f,2f, Color.red));
+                _lm.ChangeDoorsStatus();
+            }
+            
+        }
+        else
+        {
+            //CalculatePath(_lm.objective.transform.position);
+            canCreatePath = true;
+            _currentObjective = _lm.objective.transform.position;
+            MoveTo();
+            //dest = _lm.objective.transform.position;
+        }
+
+        var dir = dest - transform.position;
+        dir.y = 0f;
+
+        //_navMeshAgent.destination = dest;
+    }
+
+    public void ReliableMove()
+    {
+        Vector3 dest = default(Vector3);
+        if (pursue)
+        {
             dest = _player.transform.position;
         }
         else if (_lm.enemyHasObjective) 
@@ -186,10 +252,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         }
         else if (_lm.allDoorsAreClosed)
         {
-            //float nearestDoorDistance = 1000;
-            //GameObject nearestDoor;
-            //Vector3 nearestDoorVector = new Vector3(0, 0, 0);
-
             StartCoroutine(FindClosestDoor());
             
             dest = nearestDoor.position;
@@ -212,10 +274,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
         var dir = dest - transform.position;
         dir.y = 0f;
-        //transform.forward = dir;
-        _navMeshAgent.destination = dest;
 
-        //Debug.Log("voy hacia " + dest);
+        _navMeshAgent.destination = dest;
     }
 
     public void MovingAnimations()
@@ -350,7 +410,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _anim.SetBool("IsHitted", false);
         stun = true;
         _isMoving = false;
-        _navMeshAgent.destination = transform.position;
+        //_navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
             DropObjective();
@@ -358,6 +418,48 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _anim.SetBool("IsStunned", true);
         _rb.isKinematic = true;
         Invoke("SecondUnStun", time);
+    }
+
+    private void MoveTo()
+    {
+        
+            //Vector3 dir = _waypoints[_currentWaypoint].position - transform.position;
+            //Debug.Log(_navMeshAgent.path.corners.Length);
+            if(_currentCorner < _navMeshAgent.path.corners.Length)
+            {
+                Vector3 dir = _navMeshAgent.path.corners[_currentCorner] - transform.position;
+                transform.forward = dir;
+                transform.position += transform.forward * _movingSpeed * Time.deltaTime;
+            }
+
+            if (Vector3.Distance(transform.position, _navMeshAgent.path.corners[_currentCorner]) <= .1f)  //dir.magnitude < 0.1f
+            {
+                if(_currentCorner + 1 > _navMeshAgent.path.corners.Length)
+                {
+                    // -------------------
+                    canCreatePath = true;
+                    _currentCorner = 0;
+                }
+                else
+                {
+                    Mathf.Clamp(_currentCorner, 0 , _navMeshAgent.path.corners.Length);
+                    _currentCorner++;
+                    Mathf.Clamp(_currentCorner, 0 , _navMeshAgent.path.corners.Length);
+                }
+                //_currentWaypoint++;
+                
+
+                /* if (_currentCorner > _navMeshAgent.path.corners.Length) //-1
+                {
+                    //_currentWaypoint = 0;
+                    
+                    canCreatePath = true;
+                    _currentCorner = 0;
+                } */
+
+            }
+        
+    
     }
 
     public void UnStun()
@@ -406,7 +508,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     public void MoveObjective()
     {
-        _lm.objective.transform.position = transform.position + new Vector3(0f, 2.8f, 0f);
+        //CAMBIAR PARA QUE EL GATO QUEDE ENTRE LAS MANOS.
+        _lm.objective.transform.position = transform.position + new Vector3(0f, 1.8f, 0f);
     }
 
     public void DropObjective()
@@ -435,7 +538,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);
         var UFO = GameVars.Values.LevelManager.UFOsPool.GetObject().InitializePosition(spawnPos);
         StartCoroutine(PlayGrayDeathSound());
-        _navMeshAgent.destination = transform.position;
+        //_navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
             DropObjective();
@@ -596,6 +699,19 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _exitPos = new Vector3(aux.x, 0f, aux.z);
         
         return this;
+    }
+
+    private void CalculatePath(Vector3 targetPosition)
+    {
+        _navMeshAgent.ResetPath();  
+        NavMeshPath path = new NavMeshPath();
+        //_navMeshAgent.CalculatePath(targetPosition, path);
+        if(NavMesh.CalculatePath(transform.position, _currentObjective, NavMesh.AllAreas, path))
+        {
+            _navMeshAgent.SetPath(path);
+        }
+        
+        //NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, _navMeshPath)
     }
 
     public void AddObserver(IPlayerDamageObserver obs)

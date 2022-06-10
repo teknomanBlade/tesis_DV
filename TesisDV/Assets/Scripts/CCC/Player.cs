@@ -147,7 +147,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire))
         {
-            if (_inventory.ContainsID(3))
+            if (_inventory.ContainsID(3) && !IsCrafting) 
             {
                 StartCoroutine(PlayRacketSwingSound(1f));
                 _weapon.MeleeAttack();
@@ -158,6 +158,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         {
             if (lookingAt != null)
             {
+                SwitchIsCrafting();
                 MoveTrap();
             }
         }
@@ -308,6 +309,19 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         _rb.isKinematic = true;
         canMoveCamera = false;
         Invoke("Dead", 3f);
+    }
+
+    public void SwitchIsCrafting()
+    {
+        if(IsCrafting)
+        {
+            IsCrafting = false;
+        }
+        else
+        {
+            IsCrafting = true;
+        }
+
     }
 
     public void Dead()

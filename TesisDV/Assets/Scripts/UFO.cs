@@ -39,6 +39,9 @@ public class UFO : MonoBehaviour
     public float sliderSoundVolume;
     private float _spawnTimer;
     public GameObject grayPrefab;
+    [SerializeField]
+    private GameObject UFOIndicatorPrefab;
+    private GameObject UFOIndicator;
     public Gray currentGray;
     public float timeLimit;
     public float timer;
@@ -67,6 +70,13 @@ public class UFO : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
+    }
+
+    void Start()
+    {
+        Vector3 auxVector = new Vector3(_finalPos.x, 0f, _finalPos.z);
+        UFOIndicator = Instantiate(UFOIndicatorPrefab);
+        UFOIndicator.transform.position = auxVector;
     }
 
     private void RotateUFOSpinner()
@@ -247,6 +257,7 @@ public class UFO : MonoBehaviour
                 SwitchDissolveMaterial(nonDissolveMaterial, nonDissolveMaterialSpinner);
                 _currentCoroutine = StartCoroutine(LerpScaleDissolve(0f, 1f));
                 BeginSpawn();
+                Destroy(UFOIndicator);
                 _inPosition = true;
             }
             Move();

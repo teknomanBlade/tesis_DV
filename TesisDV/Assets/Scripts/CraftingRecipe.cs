@@ -13,7 +13,6 @@ using UnityEngine;
         public int buildAmount = 0;
         public List<ItemAmount> results;
         Vector3 auxVector;
-        
 
         [Serializable]
         public struct ItemAmount
@@ -62,6 +61,7 @@ using UnityEngine;
                         {
                             //GameObject aux = Instantiate(itemAmount.trapPrefab, _player.GetPrefabPlacement(), Quaternion.Euler(-90f,0f,90f));
                             //GameObject aux = Instantiate(itemAmount.trapPrefab, _player.GetPrefabPlacement(), Quaternion.identity);
+                            _player.SwitchIsCrafting();
                             GameObject aux = Instantiate(itemAmount.trapPrefab, GameVars.Values.GetPlayerPrefabPlacement(), Quaternion.identity);
                             aux.transform.eulerAngles = new Vector3(aux.transform.eulerAngles.x, GameVars.Values.GetPlayerCameraRotation() + 90f, aux.transform.eulerAngles.z);
                         }
