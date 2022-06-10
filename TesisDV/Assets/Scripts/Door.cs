@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,7 @@ public class Door : Item
     {
         _anim = GetComponent<Animator>();
         doorTriggers = GetComponentsInChildren<DoorTrigger>();
-        _navMeshObstacle = GetComponent<NavMeshObstacle>();
+        //_navMeshObstacle = GetComponent<NavMeshObstacle>();
     }
 
     IEnumerator LerpDoorAnim(float endValue, float duration)
@@ -64,18 +65,23 @@ public class Door : Item
         {
             IsOpened = true;
             GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
-            _navMeshObstacle.enabled = false;
+            //_navMeshObstacle.enabled = false;
             StartCoroutine(LerpDoorAnim(1f, 2f));
         }
         else
         {
             IsOpened = false;
             GameVars.Values.soundManager.PlaySoundAtPoint("CloseDoor", transform.position, 0.4f);
-            _navMeshObstacle.enabled = true;
+            //_navMeshObstacle.enabled = true;
             StartCoroutine(LerpDoorAnim(0f, 2f));
         }
 
     }
+
+    public bool GetDoorStatus()
+    {
+        return IsOpened;
+    }   
 }
 
 public enum EnumDoor
