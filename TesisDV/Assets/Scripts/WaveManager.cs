@@ -35,9 +35,15 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     [SerializeField]
     private int _totalGraysUFO2;
 
+    [SerializeField]
+    private GameObject UFOIndicatorPrefab;
+    private GameObject UFOIndicator;
+    private GameObject UFOIndicator2;
+
     void Start()
     {
-       StartCoroutine("WaitFirstDelay");
+        InstantiateUFOIndicators();
+        StartCoroutine("WaitFirstDelay");
     }
 
     void Update()
@@ -60,6 +66,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     private void SpawnWave()
     {
+        DespawnUFOIndicators();
         if(_currentRound <= _totalRounds)
         {
             _currentRound++;
@@ -76,7 +83,24 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     //Hacer por evento en lugar de void publico.
     public void SendNextRound()
     {
+        InstantiateUFOIndicators();
         StartCoroutine("WaitBetweenWaves");
+    }
+
+    private void DespawnUFOIndicators()
+    {
+        Destroy(UFOIndicator);
+        Destroy(UFOIndicator2);
+    }
+
+    private void InstantiateUFOIndicators()
+    {
+        Vector3 auxVector = new Vector3(_finalPos1.x, 0f, _finalPos1.z);
+        UFOIndicator = Instantiate(UFOIndicatorPrefab);
+        UFOIndicator.transform.position = auxVector;
+        Vector3 auxVector2 = new Vector3(_finalPos2.x, 0f, _finalPos2.z);
+        UFOIndicator2 = Instantiate(UFOIndicatorPrefab);
+        UFOIndicator2.transform.position = auxVector2;
     }
 
     public void AddObserver(IRoundChangeObserver obs)

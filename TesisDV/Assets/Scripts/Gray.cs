@@ -410,7 +410,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _anim.SetBool("IsHitted", false);
         stun = true;
         _isMoving = false;
-        //_navMeshAgent.destination = transform.position;
+        _navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
             DropObjective();
@@ -509,7 +509,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void MoveObjective()
     {
         //CAMBIAR PARA QUE EL GATO QUEDE ENTRE LAS MANOS.
-        _lm.objective.transform.position = transform.position + new Vector3(0f, 1.8f, 0f);
+        _lm.objective.transform.position = transform.position + new Vector3(0f, 1.8f - 0.35f, -0.87f);
     }
 
     public void DropObjective()
@@ -538,7 +538,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);
         var UFO = GameVars.Values.LevelManager.UFOsPool.GetObject().InitializePosition(spawnPos);
         StartCoroutine(PlayGrayDeathSound());
-        //_navMeshAgent.destination = transform.position;
+        _navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
             DropObjective();

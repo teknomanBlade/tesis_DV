@@ -74,9 +74,9 @@ public class UFO : MonoBehaviour
 
     void Start()
     {
-        Vector3 auxVector = new Vector3(_finalPos.x, 0f, _finalPos.z);
-        UFOIndicator = Instantiate(UFOIndicatorPrefab);
-        UFOIndicator.transform.position = auxVector;
+        //Vector3 auxVector = new Vector3(_finalPos.x, 0f, _finalPos.z);
+        //UFOIndicator = Instantiate(UFOIndicatorPrefab);
+        //UFOIndicator.transform.position = auxVector;
     }
 
     private void RotateUFOSpinner()
@@ -257,7 +257,7 @@ public class UFO : MonoBehaviour
                 SwitchDissolveMaterial(nonDissolveMaterial, nonDissolveMaterialSpinner);
                 _currentCoroutine = StartCoroutine(LerpScaleDissolve(0f, 1f));
                 BeginSpawn();
-                Destroy(UFOIndicator);
+                //Destroy(UFOIndicator);
                 _inPosition = true;
             }
             Move();

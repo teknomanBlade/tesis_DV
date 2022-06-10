@@ -10,6 +10,7 @@ public class Cat : MonoBehaviour
     private NavMeshAgent _navMeshAgent;
     private LevelManager _lm;
     private Vector3 _exitPos;
+    private Animator _animator;
 
     void Awake()
     {
@@ -18,7 +19,7 @@ public class Cat : MonoBehaviour
         _isHeld = false;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-
+        _animator = GetComponent<Animator>();
         //La exitpos se la pasa el gray que lo agarra.
         Vector3 aux = _lm.allUfos[0].transform.position;
         _exitPos = new Vector3(aux.x, 0f, aux.z);
@@ -47,6 +48,7 @@ public class Cat : MonoBehaviour
     public void CatIsBeingTaken()
     {
         _isHeld = true;
+        _animator.SetBool("IsBeingTaken", _isHeld);
         //_navMeshAgent.isStopped = true;
         _navMeshAgent.enabled = false;
     }
@@ -54,6 +56,7 @@ public class Cat : MonoBehaviour
     public void CatHasBeenReleased()
     {
         _isHeld = false;
+        _animator.SetBool("IsBeingTaken", _isHeld);
         //_navMeshAgent.isStopped = false;
         _navMeshAgent.enabled = true;
     }
