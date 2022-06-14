@@ -63,6 +63,8 @@ public class UFOGrayDeath : MonoBehaviour
             _tick = 0f;
             PlayAnimBeamDeployed(false);
             StartCoroutine(LerpScaleDissolve(0f, 1f));
+            if(this != null && _isDissapearing)
+                Level.UFOsPool.ReturnObject(this);
         }
     }
     public void PlayAnimBeamDeployed(bool active)
@@ -119,8 +121,6 @@ public class UFOGrayDeath : MonoBehaviour
 
         _valueToChange = endValue;
         _isDissapearing = _valueToChange == 0;
-        if (_isDissapearing)
-            Level.UFOsPool.ReturnObject(this);
     }
     /*public UFOGrayDeath SetTarget(Gray grayDead)
     {
