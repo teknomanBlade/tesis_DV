@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Upper_Wall_cornerL
-  m_Shader: {fileID: 4800000, guid: b64644697627b2d44bc782b24cac14c4, type: 3}
+  m_Shader: {fileID: 4800000, guid: d7f44ff4d41ea604ca9a0d617c240468, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -59,6 +59,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SSSMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -72,13 +76,22 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _InternalColourPower: 4
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _PointLightPunchthrough: 1
+    - _SSSMultiplier: 1
+    - _SSSPower: 1
+    - _SSSScale: 1
+    - _ShadowStrength: 0.1
+    - _ShadowStrength1: 1
+    - _Shininess: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _SubsurfaceDistortion: 0.044
     - _UVSec: 0
     - _Width: 0.001
     - _ZWrite: 1
@@ -87,6 +100,9 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color0: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _InternalColour: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
+    - _MainColor: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 1}
     - _OutLineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecularColor: {r: 0.3921569, g: 0.3921569, b: 0.3921569, a: 1}
     - _TintColor: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
