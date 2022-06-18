@@ -149,7 +149,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         {
             if (_inventory.ContainsID(3) && !IsCrafting) 
             {
-                StartCoroutine(PlayRacketSwingSound(1f));
+                //StartCoroutine(PlayRacketSwingSound(1f));
                 _weapon.MeleeAttack();
             }
         }
@@ -737,6 +737,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
             if (_inventory.ContainsID(3))
             {
                 _weaponGO.SetActive(true);
+                _weaponGO.transform.GetComponentInChildren<Racket>().gameObject.layer = 0;
             }
         }
     }

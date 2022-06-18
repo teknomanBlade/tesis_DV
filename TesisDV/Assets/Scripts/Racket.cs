@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Racket : Melee
@@ -20,17 +21,29 @@ public class Racket : Melee
     public override void MeleeAttack()
     {
         if(!IsAttacking)
-            StartCoroutine(Attack());
+            StartCoroutine(Attack("IsAttacking","RacketSwing"));
     }
-
-    public IEnumerator Attack()
+    IEnumerator Attack(string param, string name)
+    {
+        IsAttacking = true;
+        anim.SetBool(param, true);
+        GameVars.Values.soundManager.PlaySoundAtPoint("RacketSwing", transform.position, 0.06f);
+        var clips = anim.runtimeAnimatorController.animationClips;
+        float time = clips.First(x => x.name == name).length;
+        yield return new WaitForSeconds(time);
+        TriggerHit("RacketHit");
+        anim.SetBool(param, false);
+        IsAttacking = false;
+    }
+    /*public IEnumerator Attack()
     {
         IsAttacking = true;
         anim.SetBool("IsAttacking", true);
         yield return new WaitForSeconds(1f);
+        TriggerHit("RacketHit");
         anim.SetBool("IsAttacking", false);
         IsAttacking = false;
-    }
+    }*/
 
     protected override void OnContactEffect(Collider other)
     {
@@ -40,7 +53,6 @@ public class Racket : Melee
             {
                 Debug.Log("Hit WITH RACKET TO GRAY?" + other.transform.name);
                 AddObserver(other.gameObject.GetComponent<Gray>());
-                TriggerHit("RacketHit");
             }
         }
     }
