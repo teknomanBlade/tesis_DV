@@ -150,6 +150,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
             if (_inventory.ContainsID(3) && !IsCrafting) 
             {
                 //StartCoroutine(PlayRacketSwingSound(1f));
+                _weapon.SetOwner(this);
                 _weapon.MeleeAttack();
             }
         }
@@ -294,7 +295,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
 
     public void Damage()
     {
-        _cam.CameraShake();
+        _cam.CameraShakeDamage(1f, 0.8f);
         ActiveDamageEffect();
         StartCoroutine(PlayDamageSound(3.4f));
         hp--;

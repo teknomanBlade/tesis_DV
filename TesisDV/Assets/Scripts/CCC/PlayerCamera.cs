@@ -10,13 +10,6 @@ public class PlayerCamera : MonoBehaviour
     private Quaternion targetAngle;
     private float smoothing = 20f;
     private Vector3 offset = new Vector3(0f, 0.75f, 0f);
-    private Transform _cameraTransform;
-    private Vector3 _originalCameraPos;
-
-    //Shake
-    private float _shakeAmount = 0.7f;
-    private float _shakeDuration = 2f;
-    private bool _camShake = false;
 
     //Bobbing
     private Vector3 _initPos;
@@ -29,7 +22,6 @@ public class PlayerCamera : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>();
         _camera = GameObject.Find("MainCamera");
         Camera = _camera;
-        _cameraTransform = _camera.transform;
         SetInitPos(_camera.transform.localPosition);
     }
 
@@ -37,8 +29,6 @@ public class PlayerCamera : MonoBehaviour
     {
         CheckMotion();
         ResetPosition();
-        /*if(_camShake)
-            CameraShake();*/
 
         transform.position = Vector3.Lerp(transform.position, _player.transform.position + offset, smoothing * Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetAngle, smoothing * Time.deltaTime);
@@ -82,42 +72,39 @@ public class PlayerCamera : MonoBehaviour
     {
         _camera.transform.localPosition += motion;
     }
-    /*public void ActiveShake(float shakeDuration, float shakeAmount)
+    
+    public void CameraShakeRacketSwing(float duration, float magnitude)
     {
-        _camShake = true;
-        _shakeDuration = shakeDuration;
-        _shakeAmount = shakeAmount;
-        StartCoroutine(ActiveDeactivateShake(shakeDuration));
-    }
-    public IEnumerator ActiveDeactivateShake(float shakeDuration)
-    {
-        yield return new WaitForSeconds(shakeDuration);
-        DeactivateShake();
-    }
-    public void DeactivateShake()
-    {
-        _camShake = false;
-        _shakeDuration = 0f;
-    }
-    private void CameraShake()
-    {
-        if (_shakeDuration > 0)
-        {
-            _cameraTransform.localPosition = _originalCameraPos + Random.insideUnitSphere * _shakeAmount;
-            _shakeDuration -= Time.deltaTime;
-        }
-        else
-        {
-            _shakeDuration = 0f;
-            _cameraTransform.position = _initPos;
-        }
-    }*/
-    public void CameraShake()
-    {
-        StartCoroutine(Shake(1f, 0.8f));
+        StartCoroutine(ShakeRacketSwing(duration, magnitude));
     }
 
-    public IEnumerator Shake(float duration, float magnitude)
+    public IEnumerator ShakeRacketSwing(float duration, float magnitude)
+    {
+
+        Vector3 originalPos = transform.localPosition;
+
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-0.1f, 0.1f) * magnitude;
+            float z = Random.Range(-0.1f, 0.1f) * magnitude;
+
+            transform.localPosition = new Vector3(originalPos.x + x, originalPos.y, originalPos.z + z);
+
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+    }
+
+    public void CameraShakeDamage(float duration, float magnitude)
+    {
+        StartCoroutine(ShakeDamage(duration, magnitude));
+    }
+
+    public IEnumerator ShakeDamage(float duration, float magnitude)
     {
 
         Vector3 originalPos = transform.localPosition;
@@ -127,9 +114,9 @@ public class PlayerCamera : MonoBehaviour
         while (elapsed < duration)
         {
             float x = Random.Range(-0.15f, 0.15f) * magnitude;
-            float y = Random.Range(-0.15f, 0.15f) * magnitude;
+            float z = Random.Range(-0.15f, 0.15f) * magnitude;
 
-            transform.localPosition = new Vector3(originalPos.x + x, originalPos.y + y, originalPos.z);
+            transform.localPosition = new Vector3(originalPos.x + x, originalPos.y, originalPos.z + z);
 
             elapsed += Time.deltaTime;
 
