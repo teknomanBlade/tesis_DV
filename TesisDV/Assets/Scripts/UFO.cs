@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UFO : MonoBehaviour
+public class UFO : MonoBehaviour, IInRoundObserver
 {
     private GameObject _UFOSpinner;
     [SerializeField]
@@ -71,6 +71,7 @@ public class UFO : MonoBehaviour
         _rendererSpinner = _UFOSpinner.GetComponent<MeshRenderer>();
         _audioSource = GetComponent<AudioSource>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
+        GameVars.Values.LevelManager.AddObserverInRound(this);
         GameVars.Values.LevelManager.AddUFO(this);
         GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
     }
@@ -213,14 +214,14 @@ public class UFO : MonoBehaviour
             }
             else StartCoroutine("SpawnGrey");
         }
-        else
+        /*else
         {
             if(GameVars.Values.LevelManager.enemiesInScene.Count == 0)
             {
                 _canLeavePlanet = true;
             }
             else StartCoroutine("SpawnGrey");
-        }
+        }*/
     }
 
     public void ExitPlanet()
@@ -312,5 +313,14 @@ public class UFO : MonoBehaviour
     {
         transform.rotation *= Quaternion.Euler(newRotation);
         return this;
+    }
+
+    public void OnNotifyInRound(string message)
+    {
+        if (message.Equals("EndRound"))
+        {
+            _canLeavePlanet = true;
+        }
+        
     }
 }

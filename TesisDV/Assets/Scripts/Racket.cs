@@ -31,7 +31,6 @@ public class Racket : Melee
         var clips = anim.runtimeAnimatorController.animationClips;
         float time = clips.First(x => x.name == name).length;
         yield return new WaitForSeconds(time);
-        TriggerHit("RacketHit");
         anim.SetBool(param, false);
         IsAttacking = false;
     }
@@ -51,8 +50,9 @@ public class Racket : Melee
         {
             if (other.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             {
-                Debug.Log("Hit WITH RACKET TO GRAY?" + other.transform.name);
+                //Debug.Log("Hit WITH RACKET TO GRAY?" + other.transform.name);
                 AddObserver(other.gameObject.GetComponent<Gray>());
+                TriggerHit("RacketHit");
             }
         }
     }

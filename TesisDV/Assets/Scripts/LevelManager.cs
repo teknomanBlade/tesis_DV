@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : MonoBehaviour, IInRoundObservable
 {
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
+    private List<IInRoundObserver> inRoundObservers = new List<IInRoundObserver>();
     public PoolObject<UFOGrayDeath> UFOsPool { get; set; }
     [SerializeField]
     private UFOGrayDeath UFOPrefab;
@@ -28,7 +29,17 @@ public class LevelManager : MonoBehaviour
     public delegate void LevelDelegate();
     //public CraftingRecipe craftingRecipe;
     public bool playing = true;
-    //public bool inRound = false;
+    public bool InRound {
+        get
+        {
+            if (enemiesInScene.Count == 0)
+            {
+                TriggerHitInRound("EndRound");
+            }
+
+            return enemiesInScene.Count > 0;
+        }
+    }
     public Player _player;
     //public int currentRound = 0;
     //public int finalRound = 5;
@@ -208,7 +219,7 @@ public class LevelManager : MonoBehaviour
     public void RemoveGray(Gray gray)
     {
         enemiesInScene.Remove(gray);
-        if(enemiesInScene.Count == 0)
+        if(!InRound)
         {
             GameVars.Values.WaveManager.SendNextRound();
         }
@@ -248,6 +259,21 @@ public class LevelManager : MonoBehaviour
             allDoorsAreClosed = true;
         }
 
+    }
+
+    public void AddObserverInRound(IInRoundObserver obs)
+    {
+        inRoundObservers.Add(obs);
+    }
+
+    public void RemoveObserverInRound(IInRoundObserver obs)
+    {
+        if(inRoundObservers.Contains(obs)) inRoundObservers.Remove(obs);
+    }
+
+    public void TriggerHitInRound(string triggerMessage)
+    {
+        inRoundObservers.ForEach(x => x.OnNotifyInRound(triggerMessage));
     }
 
     /* public void AddObserver(IRoundChangeObserver obs)
