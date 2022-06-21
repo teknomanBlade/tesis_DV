@@ -15,7 +15,6 @@ public class UFOGrayDeath : MonoBehaviour
     private MeshRenderer _renderer;
     private MeshRenderer _rendererSpinner;
     private Transform _UFOSpinner;
-    private float _arriveRadius;
     private float _tick;
     private float _lifeSpan;
     private float _maxSpeed;
@@ -28,7 +27,6 @@ public class UFOGrayDeath : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        _arriveRadius = 2f;
         _maxSpeed = 10f;
         _maxForce = 8f;
         _UFOSpinner = transform.Find("UFOSpinner");
@@ -46,14 +44,7 @@ public class UFOGrayDeath : MonoBehaviour
     {
         RotateUFOSpinner();
         OnStage();
-        /*if(_gray)
-            Arrive();
-        
-        if (_velocity != Vector3.zero)
-        {
-            transform.position += _velocity * Time.deltaTime;
-            transform.forward = _velocity;
-        }*/
+       
     }
     private void OnStage()
     {
@@ -122,30 +113,4 @@ public class UFOGrayDeath : MonoBehaviour
         _valueToChange = endValue;
         _isDissapearing = _valueToChange == 0;
     }
-    /*public UFOGrayDeath SetTarget(Gray grayDead)
-    {
-        Gray = grayDead;
-        return this;
-    }
-
-    void Arrive()
-    {
-        Vector3 desired = (Gray.transform.position - transform.position).normalized;
-        float dist = Vector3.Distance(transform.position, Gray.transform.position);
-        float speed = _maxSpeed;
-        if (dist <= _arriveRadius)
-        {
-            speed = _maxSpeed * (dist / _arriveRadius);
-        }
-        desired *= speed;
-
-        Vector3 steering = Vector3.ClampMagnitude(desired - _velocity, _maxForce);
-
-        ApplyForce(steering);
-    }
-
-    void ApplyForce(Vector3 force)
-    {
-        _velocity += force;
-    }*/
 }

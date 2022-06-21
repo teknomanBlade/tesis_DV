@@ -52,6 +52,7 @@ public class Racket : Melee
             {
                 //Debug.Log("Hit WITH RACKET TO GRAY?" + other.transform.name);
                 AddObserver(other.gameObject.GetComponent<Gray>());
+                _owner._cam.CameraShakeRacketSwing(0.5f, 0.5f);
                 TriggerHit("RacketHit");
             }
         }
