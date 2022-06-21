@@ -74,6 +74,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     {
         canCreatePath = false;
         _anim = GetComponent<Animator>();
+        _anim.SetBool("IsSpawning", true);
         _rb = GetComponent<Rigidbody>();
         _cc = GetComponent<CapsuleCollider>();
         _as = GetComponent<AudioSource>();
@@ -188,7 +189,10 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             //}
         }
     }
-
+    public void EndSpawnAnim()
+    {
+        _anim.SetBool("IsSpawning", false);
+    }
     public void Move()
     {
         Vector3 dest = default(Vector3);
@@ -523,7 +527,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void MoveObjective()
     {
         //CAMBIAR PARA QUE EL GATO QUEDE ENTRE LAS MANOS.
-        _lm.objective.transform.position = transform.position + new Vector3(0f, 1.8f - 0.35f, -0.87f);
+        if(_lm.objective != null) _lm.objective.transform.position = transform.position + new Vector3(0f, 1.8f - 0.35f, -0.87f);
     }
 
     public void DropObjective()

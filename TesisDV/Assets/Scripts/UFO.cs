@@ -16,7 +16,9 @@ public class UFO : MonoBehaviour
     [SerializeField]
     private Material dissolveMaterialSpinner;
     [SerializeField]
-    private Animator _anim;
+    private Animator _animBeam;
+    [SerializeField]
+    private Animator _animUFO;
     private Coroutine _currentCoroutine;
     private MeshRenderer _renderer;
     private MeshRenderer _rendererSpinner;
@@ -63,12 +65,13 @@ public class UFO : MonoBehaviour
         _maxForce = 12f;
         _canLeavePlanet = false;
         _UFOSpinner = GameObject.Find("UFOSpinner");
+        _animUFO = GetComponent<Animator>();
         rotationFinal = Quaternion.Euler(-90f,0f,0f);
-        _anim = transform.GetComponentInChildren<Animator>();
         _renderer = GetComponent<MeshRenderer>();
         _rendererSpinner = _UFOSpinner.GetComponent<MeshRenderer>();
         _audioSource = GetComponent<AudioSource>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
+        GameVars.Values.LevelManager.AddUFO(this);
         GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
     }
 
@@ -81,11 +84,11 @@ public class UFO : MonoBehaviour
 
     private void RotateUFOSpinner()
     {
-        _UFOSpinner.transform.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime));
+        if(_UFOSpinner != null) _UFOSpinner.transform.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime));
     }
     public void PlayAnimBeam(bool active)
     {
-        _anim.SetBool("IsBeamSpawnerDeployed", active);
+        _animBeam.SetBool("IsBeamSpawnerDeployed", active);
     }
     public void Move()
     {
@@ -220,26 +223,31 @@ public class UFO : MonoBehaviour
         }
     }
 
-    private void ExitPlanet()
+    public void ExitPlanet()
     {
+        Vector3 dir = _spawnPos - transform.position;
         if (_canLeavePlanet)
         {
             StartCoroutine(PlayAnimRetractBeam());
-            SwitchDissolveMaterial(dissolveMaterial, dissolveMaterialSpinner);
             transform.position = Vector3.MoveTowards(transform.position, _spawnPos, _UFOSpeed * Time.deltaTime);
-            if(transform.position == _spawnPos)
+            if(dir.magnitude < 0.2f)
             {
-                StartCoroutine(LerpScaleDissolve(0f, 1f));
-                Destroy(this.gameObject);
+                _animUFO.enabled = true;
+                _animUFO.SetBool("IsWarping", true);
             }
         }
         
     }
+
+    public void DestroyUFO()
+    {
+        GameVars.Values.LevelManager.RemoveUFO(this);
+        Destroy(this.gameObject);
+    }
     IEnumerator PlayAnimRetractBeam()
     {
         PlayAnimBeam(false);
-        yield return new WaitForSeconds(1f);
-        
+        yield return new WaitForSeconds(2f);
     }
     private void EnterPlanet()
     {

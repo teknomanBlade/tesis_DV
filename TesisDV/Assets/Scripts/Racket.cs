@@ -27,7 +27,7 @@ public class Racket : Melee
     {
         IsAttacking = true;
         anim.SetBool(param, true);
-        GameVars.Values.soundManager.PlaySoundAtPoint("RacketSwing", transform.position, 0.06f);
+        GameVars.Values.soundManager.PlaySoundAtPoint("RacketSwing", transform.position, 0.09f);
         var clips = anim.runtimeAnimatorController.animationClips;
         float time = clips.First(x => x.name == name).length;
         yield return new WaitForSeconds(time);

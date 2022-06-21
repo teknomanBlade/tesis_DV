@@ -9,6 +9,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     
 
     private float _maxDistance;
+    private float _dangerThreshold;
     private float _currentDistance = 0;
     private Image _fillImage;
     public GameObject Fill;
@@ -26,9 +27,10 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         GameVars.Values.WaveManager.AddObserver(this);
         _fillImage = Fill.GetComponent<Image>();
         _maxDistance = GameVars.Values.GetCatDistance();
+        _dangerThreshold = _maxDistance * 0.20f;
         //54
-        _mySlider.maxValue = 54; //_maxDistance;
-        _mySlider.minValue = 5f;
+        _mySlider.maxValue = _maxDistance; //_maxDistance;
+        _mySlider.minValue = 1;
         _currentDistance = _maxDistance;
         _mySlider.value = _currentDistance;
         
@@ -60,9 +62,9 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     void Update()
     {
         _mySlider.value = GameVars.Values.GetCatDistance();
-        if (_mySlider.value < 20f)
+        if (_mySlider.value < _dangerThreshold)
         {
-            StartCoroutine(LerpColor(1f,1.5f)); 
+            StartCoroutine(LerpColor(1f,0.8f)); 
         }
         else
         {

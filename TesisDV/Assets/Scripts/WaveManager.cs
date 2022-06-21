@@ -6,10 +6,13 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 {
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
 
+    private Coroutine _currentCoroutine;
+
     [SerializeField]
     private UFO _myUFO;
 
     [Header("Wave Details")]
+    [SerializeField]
     private int _currentRound;
     [SerializeField]
     private float _firstWaveDelay;
@@ -40,10 +43,10 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private GameObject UFOIndicator;
     private GameObject UFOIndicator2;
 
-    void Start()
+    void Awake()
     {
         InstantiateUFOIndicators();
-        StartCoroutine("WaitFirstDelay");
+        _currentCoroutine = StartCoroutine("WaitFirstDelay");
     }
 
     void Update()
@@ -84,7 +87,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public void SendNextRound()
     {
         InstantiateUFOIndicators();
-        StartCoroutine("WaitBetweenWaves");
+        if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
+        _currentCoroutine = StartCoroutine("WaitBetweenWaves");
     }
 
     private void DespawnUFOIndicators()

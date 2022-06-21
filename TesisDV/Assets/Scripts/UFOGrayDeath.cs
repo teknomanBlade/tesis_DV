@@ -63,7 +63,7 @@ public class UFOGrayDeath : MonoBehaviour
             _tick = 0f;
             PlayAnimBeamDeployed(false);
             StartCoroutine(LerpScaleDissolve(0f, 1f));
-            if(this != null && _isDissapearing)
+            if(_isDissapearing)
                 Level.UFOsPool.ReturnObject(this);
         }
     }

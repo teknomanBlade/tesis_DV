@@ -19,7 +19,8 @@ public class LevelManager : MonoBehaviour
     public GameObject NewHouse;
     public GameObject OldHouse;
 
-    public UFO[] allUfos;
+    [SerializeField]
+    public List<UFO> AllUFOs = new List<UFO>();
     public Transform[] allDoors;
     public GameObject objective;
     public bool allDoorsAreClosed;
@@ -74,6 +75,7 @@ public class LevelManager : MonoBehaviour
     private void ActivateEnemy(UFOGrayDeath o)
     {
         o.gameObject.SetActive(true);
+        o.SetOwner(this);
         o.ActiveDissolve();
         o.transform.localPosition = new Vector3(0f, 10f, 40f);
     }
@@ -102,7 +104,6 @@ public class LevelManager : MonoBehaviour
         //For testing
         if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
 
-        
         //No checkear en update. 
         //canSpawn = !enemyHasObjective;
         
@@ -188,6 +189,15 @@ public class LevelManager : MonoBehaviour
         YouLose.SetActive(true);
         Debug.Log("Loser");
         //SceneManager.LoadScene("MainFloor_Upgrade");
+    }
+
+    public void RemoveUFO(UFO ufo)
+    {
+        if(AllUFOs.Contains(ufo)) AllUFOs.Remove(ufo);
+    }
+    public void AddUFO(UFO ufo)
+    {
+        AllUFOs.Add(ufo);
     }
 
     public void AddGray(Gray gray)

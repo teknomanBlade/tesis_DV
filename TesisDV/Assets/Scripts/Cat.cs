@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,10 +21,6 @@ public class Cat : MonoBehaviour
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _animator = GetComponent<Animator>();
-        //La exitpos se la pasa el gray que lo agarra.
-        Vector3 aux = _lm.allUfos[0].transform.position;
-        _exitPos = new Vector3(aux.x, 0f, aux.z);
-
     }
 
     void Update()
