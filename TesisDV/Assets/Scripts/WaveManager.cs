@@ -45,7 +45,6 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     void Awake()
     {
-        InstantiateUFOIndicators();
         _currentCoroutine = StartCoroutine("WaitFirstDelay");
     }
 
@@ -56,6 +55,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     IEnumerator WaitFirstDelay()
     {
+        DespawnUFOIndicators();
         yield return new WaitForSeconds(_firstWaveDelay);
         SpawnWave();
         GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
@@ -63,14 +63,15 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     IEnumerator WaitBetweenWaves()
     {
+        DespawnUFOIndicators();
         yield return new WaitForSeconds(_timeBetweenWaves);
         SpawnWave();
     }
 
     private void SpawnWave()
     {
-        DespawnUFOIndicators();
-        if(_currentRound <= _totalRounds)
+        InstantiateUFOIndicators();
+        if (_currentRound <= _totalRounds)
         {
             _currentRound++;
             TriggerRoundChange("RoundChanged");
@@ -86,7 +87,6 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     //Hacer por evento en lugar de void publico.
     public void SendNextRound()
     {
-        InstantiateUFOIndicators();
         if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
         _currentCoroutine = StartCoroutine("WaitBetweenWaves");
     }
@@ -102,7 +102,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         Vector3 auxVector = new Vector3(_finalPos1.x, 0f, _finalPos1.z);
         UFOIndicator = Instantiate(UFOIndicatorPrefab);
         UFOIndicator.transform.position = auxVector;
-        Vector3 auxVector2 = new Vector3(_finalPos2.x, 0f, _finalPos2.z);
+        Vector3 auxVector2 = new Vector3(_finalPos2.x, 0.05f, _finalPos2.z);
         UFOIndicator2 = Instantiate(UFOIndicatorPrefab);
         UFOIndicator2.transform.position = auxVector2;
     }
