@@ -188,13 +188,14 @@ GameObject:
   - component: {fileID: 124775905213924741}
   - component: {fileID: 6242960789291977473}
   - component: {fileID: 6273763700202772857}
+  - component: {fileID: 429357717487064003}
   m_Layer: 0
   m_Name: InteriorWall_entrance (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7269258380857027600
 Transform:
   m_ObjectHideFlags: 0
@@ -269,8 +270,21 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.000002, y: 0.1313658, z: 6.9978366}
-  m_Center: {x: -2.5033932, y: -0.0036492357, z: -3.5197544}
+  m_Size: {x: 1.1306413, y: 0.1313658, z: 6.9978366}
+  m_Center: {x: -0.5687131, y: -0.0036492348, z: -3.5197544}
+--- !u!65 &429357717487064003
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 480498327048239199}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1650927, y: 0.1313658, z: 6.9978366}
+  m_Center: {x: -4.420848, y: -0.0036468208, z: -3.5197544}
 --- !u!1 &502829729062584037
 GameObject:
   m_ObjectHideFlags: 0
@@ -1548,6 +1562,7 @@ GameObject:
   - component: {fileID: 1382602588326971234}
   - component: {fileID: 2605662858717176336}
   - component: {fileID: 5332733873879500400}
+  - component: {fileID: 2028870729161258364}
   m_Layer: 0
   m_Name: InteriorWall_entrance (2)
   m_TagString: Untagged
@@ -1563,7 +1578,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6148485123778677430}
   m_LocalRotation: {x: -0.5000017, y: 0.49999818, z: -0.49999812, w: -0.50000197}
-  m_LocalPosition: {x: -34.205463, y: 15.129995, z: -37.6}
+  m_LocalPosition: {x: -34.204094, y: 15.129995, z: -38.050797}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4813793576452874975}
@@ -1629,8 +1644,21 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.000002, y: 0.1313658, z: 6.9978366}
-  m_Center: {x: -2.503393, y: -0.0036487589, z: -3.5197544}
+  m_Size: {x: 1.1152427, y: 0.1313658, z: 6.997837}
+  m_Center: {x: -0.5610136, y: -0.003648758, z: -3.5197544}
+--- !u!65 &2028870729161258364
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6148485123778677430}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1841998, y: 0.13136598, z: 6.997835}
+  m_Center: {x: -4.4112997, y: -0.0036462694, z: -3.5197535}
 --- !u!1 &6244966957057328202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1995,6 +2023,7 @@ GameObject:
   - component: {fileID: 2553423811661617559}
   - component: {fileID: 1782747328611101993}
   - component: {fileID: 3482861933504257497}
+  - component: {fileID: 5443292045294715348}
   m_Layer: 0
   m_Name: InteriorWall_entrance
   m_TagString: Untagged
@@ -2010,8 +2039,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7116358044269515002}
   m_LocalRotation: {x: 0.49999952, y: 0.50000054, z: -0.50000024, w: 0.4999997}
-  m_LocalPosition: {x: -34.45137, y: 15.130007, z: -42.469257}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -34.45, y: 15.130007, z: -42.92}
+  m_LocalScale: {x: 0.9857, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4813793576452874975}
   m_RootOrder: 1
@@ -2076,8 +2105,21 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.000002, y: 0.1313658, z: 6.9978366}
-  m_Center: {x: -2.503393, y: -0.0036487589, z: -3.5197544}
+  m_Size: {x: 1.4341686, y: 0.1313658, z: 6.997837}
+  m_Center: {x: -4.286301, y: -0.003648758, z: -3.5197544}
+--- !u!65 &5443292045294715348
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7116358044269515002}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1516536, y: 0.13136578, z: 6.997835}
+  m_Center: {x: -0.57921946, y: -0.0036473274, z: -3.5197535}
 --- !u!1 &7136017345798646901
 GameObject:
   m_ObjectHideFlags: 0
