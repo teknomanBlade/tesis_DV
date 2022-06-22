@@ -9,10 +9,12 @@ using UnityEngine.Rendering.PostProcessing;
 [PostProcess( typeof( AttentionPlayerPPSRenderer ), PostProcessEvent.AfterStack, "AttentionPlayer", true )]
 public sealed class AttentionPlayerPPSSettings : PostProcessEffectSettings
 {
-	[Tooltip( "AttentionTexture" )]
-	public TextureParameter _AttentionTexture = new TextureParameter {  };
 	[Tooltip( "Interpolator" ), Range(0,1)]
 	public FloatParameter _Interpolator = new FloatParameter { value = 0f };
+	[Tooltip( "MaskTexture" )]
+	public TextureParameter _MaskTexture = new TextureParameter {  };
+	[Tooltip( "AttentionTexture" )]
+	public TextureParameter _AttentionTexture = new TextureParameter {  };
 }
 
 public sealed class AttentionPlayerPPSRenderer : PostProcessEffectRenderer<AttentionPlayerPPSSettings>
@@ -20,8 +22,9 @@ public sealed class AttentionPlayerPPSRenderer : PostProcessEffectRenderer<Atten
 	public override void Render( PostProcessRenderContext context )
 	{
 		var sheet = context.propertySheets.Get( Shader.Find( "AttentionPlayer" ) );
-		if(settings._AttentionTexture.value != null) sheet.properties.SetTexture( "_AttentionTexture", settings._AttentionTexture );
 		sheet.properties.SetFloat( "_Interpolator", settings._Interpolator );
+		if(settings._MaskTexture.value != null) sheet.properties.SetTexture( "_MaskTexture", settings._MaskTexture );
+		if(settings._AttentionTexture.value != null) sheet.properties.SetTexture( "_AttentionTexture", settings._AttentionTexture );
 		context.command.BlitFullscreenTriangle( context.source, context.destination, sheet, 0 );
 	}
 }
