@@ -7,6 +7,8 @@ using UnityEngine.AI;
 public class Cat : MonoBehaviour
 {
     private bool _isHeld;
+    private bool _isIdle;
+    private bool _isWalking;
     private Vector3 _startingPosition;
     private NavMeshAgent _navMeshAgent;
     private LevelManager _lm;
@@ -21,6 +23,8 @@ public class Cat : MonoBehaviour
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _animator = GetComponent<Animator>();
+        _isIdle = true;
+        _animator.SetBool("IsIdle", _isIdle);
     }
 
     void Update()
@@ -45,15 +49,15 @@ public class Cat : MonoBehaviour
     public void CatIsBeingTaken()
     {
         _isHeld = true;
-        _animator.SetBool("IsBeingTaken", _isHeld);
+        _animator.SetBool("IsMad", _isHeld);
         //_navMeshAgent.isStopped = true;
         _navMeshAgent.enabled = false;
     }
 
     public void CatHasBeenReleased()
     {
-        _isHeld = false;
-        _animator.SetBool("IsBeingTaken", _isHeld);
+        _isWalking = true;
+        _animator.SetBool("IsWalking", _isWalking);
         //_navMeshAgent.isStopped = false;
         _navMeshAgent.enabled = true;
     }
