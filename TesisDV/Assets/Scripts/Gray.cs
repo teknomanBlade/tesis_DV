@@ -24,6 +24,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private NavMeshPath _navMeshPath;
     private bool _isWalkingSoundPlaying = false;
     private bool _isMoving;
+    private float _dmg = 50f;
     private bool _hasHitEffectActive = false;
     private float _attackWindup = 1.333f;
     public float distanceToPlayer;
@@ -44,15 +45,22 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public bool stun = false;
     public bool skillEMP = false;
     public bool awake = false;
+    private bool _canAttack = true;
     public int hp = 3;
     public bool hasObjective = false;
     private Vector3 _exitPos;
     private Vector3 _currentObjective;
+    private Vector3 _doorPos;
+    private Vector3 _trapPos;
     private float nearestDoorDistance = 1000;
     private Transform nearestDoor;
     private Vector3 nearestDoorVector;
     private bool canCreatePath;
     private bool pathIsCreated;
+    private bool _foundDoorInPath;
+    [SerializeField]
+    private bool _foundTrapInPath;
+    private BaseballLauncher _currentObstacleTrap;
 
     /*[SerializeField]
     private Material deathMaterial;*/
@@ -201,7 +209,23 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void Move()
     {
         Vector3 dest = default(Vector3);
-        if (pursue)
+        if (_foundDoorInPath)
+        {
+            _currentObjective = _doorPos;
+            canCreatePath = true;
+
+            MoveTo();
+            //Poner en falso al final.
+        }
+        else if (_foundTrapInPath)
+        {
+            _currentObjective = _trapPos;
+            canCreatePath = true;
+            BreakTrap(_currentObstacleTrap);
+            MoveTo();    
+            //Poner en falso al final.
+        }
+        else if (pursue)
         {
             //CalculatePath(_player.transform.position);
             _currentObjective = _player.transform.position;
@@ -259,45 +283,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         float time = clips.First(x => x.name == name).length;
         yield return new WaitForSeconds(time);
         _anim.SetBool(param, false);
-    }
-
-    public void ReliableMove()
-    {
-        Vector3 dest = default(Vector3);
-        if (pursue)
-        {
-            dest = _player.transform.position;
-        }
-        else if (_lm.enemyHasObjective) 
-        {
-            dest = _exitPos;
-        }
-        else if (_lm.allDoorsAreClosed)
-        {
-            StartCoroutine(FindClosestDoor());
-            
-            dest = nearestDoor.position;
-            if (Vector3.Distance(transform.position, nearestDoorVector) < 3f)
-            {
-                _anim.SetBool("IsAttacking", true);
-                
-                nearestDoor.GetComponent<AuxDoor>().Interact();
-                GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(nearestDoor.GetComponent<AuxDoor>().myDoor.itemName));
-                TriggerDoorGrayInteract("GrayDoorInteract");
-                StartCoroutine(LerpOutlineWidthAndColor(8f,2f, Color.red));
-                _lm.ChangeDoorsStatus();
-            }
-            
-        }
-        else
-        {
-            dest = _lm.objective.transform.position;
-        }
-
-        var dir = dest - transform.position;
-        dir.y = 0f;
-
-        _navMeshAgent.destination = dest;
     }
 
     public void MovingAnimations()
@@ -401,17 +386,26 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     IEnumerator Attack()
     {
+        //Verifica el booleano antes de atacar, este booleano se desactiva en Die y Stun. Se vuelve a activar al final del Stun.
+        
+        
         attacking = true;
         _isMoving = false;
         StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
         //_anim.SetBool("IsAttacking", true);
         yield return new WaitForSeconds(_attackWindup);
-        TriggerPlayerDamage("DamagePlayer");
-        PlayParticleSystemShader();
-        attacking = false;
-        _isMoving = true;
+        if(_canAttack)
+        {
+            TriggerPlayerDamage("DamagePlayer");
+            PlayParticleSystemShader();
+            attacking = false;
+           _isMoving = true;
+        }
+        
         //attackCoroutine = StartCoroutine("Attack");
         //_anim.SetBool("IsAttacking", false);
+        
+        
     }
 
     public void PlayParticleSystemShader()
@@ -422,6 +416,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void Stun(float time)
     {
         //_anim.SetBool("IsHitted", false);
+        _canAttack = false;
         _rb.isKinematic = true;
         _rb.velocity = Vector3.zero;
         _isMoving = false;
@@ -434,6 +429,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void SecondStun(float time)
     {
         //_anim.SetBool("IsHitted", false);
+        _canAttack = false;
         stun = true;
         _isMoving = false;
         _navMeshAgent.destination = transform.position;
@@ -498,6 +494,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _rb.isKinematic = false;
         stun = false;
         _isMoving = false;
+        _canAttack = true;
     }
 
     public void SecondUnStun()
@@ -510,6 +507,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _rb.isKinematic = false;
         stun = false;
         _isMoving = false;
+        _canAttack = true;
     }
 
     public void SetPos(Vector3 pos)
@@ -563,9 +561,63 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         Destroy(gameObject);
     }
 
+    public void FoundDoorInPath(Door door)
+    {
+        _doorPos = door.gameObject.transform.position;
+        _foundDoorInPath = true;
+        OpenDoor(door);
+    }
+
+    private void OpenDoor(Door door)
+    {
+        currentCoroutine = StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
+        door.Interact();
+        GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
+        TriggerDoorGrayInteract("GrayDoorInteract");
+        //StartCoroutine(LerpOutlineWidthAndColor(8f,2f, Color.red));
+        _foundDoorInPath = false;
+    }
+
+    public void FoundTrapInPath(GameObject trap) //Después cambiar cuando haya un script Trap.
+    {
+        _trapPos = trap.transform.position;
+        _currentObstacleTrap = trap.GetComponent<BaseballLauncher>(); 
+        _foundTrapInPath = true;
+    }
+
+    private void BreakTrap(BaseballLauncher trap)
+    {
+        //Si la distancia a la trampa es menor que tanto ataca, espera unos segundos y vuelve a atacar hasta destruir la trampa. Ahi pone en falso el Foundtrap.
+        Vector3 dir = _trapPos - transform.position;
+        if(dir.magnitude < 0.3f)
+        {
+            float timeToAttack = 5f;
+            float timePassed = 0f;
+
+            if(timePassed > 0)
+            {
+                timePassed -= Time.deltaTime;
+            }
+            else if (timePassed <= 0 && trap) //Después cambiar cuando haya un script Trap.
+            {
+                attacking = true;
+                _isMoving = false;
+                StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
+                //_anim.SetBool("IsAttacking", true);
+                trap.TakeDamage(_dmg);
+                timePassed = timeToAttack;
+                //PlayParticleSystemShader();
+                attacking = false;
+                _isMoving = true;
+                _foundTrapInPath = false;
+            }
+        }
+    }
+
     public void Die()
     {
         dead = true;
+        _canAttack = false;
         var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);
         var UFO = GameVars.Values.LevelManager.UFOsPool.GetObject().InitializePosition(spawnPos);
         StartCoroutine(PlayGrayDeathSound());

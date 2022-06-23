@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class BaseballLauncher : Item, IMovable
 {
+    private float _maxLife = 100f;
+    [SerializeField]
+    private float _currentLife;
     public GameObject projectilePrefab;
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
@@ -23,7 +26,6 @@ public class BaseballLauncher : Item, IMovable
         }
     }
     public bool HasPlayerTennisBallBox { get; set; }
-
     public float interval;
     public LayerMask targetMask;
     public LayerMask obstacleMask;
@@ -36,9 +38,13 @@ public class BaseballLauncher : Item, IMovable
     private float _inactiveSpeed = 0.3f;
     private Collider _currentObjective = null;
     private float _currentObjectiveDistance = 1000;
+    [SerializeField]
+    private List<GameObject> _myItems;
 
     public void Awake()
     {
+        _currentLife = _maxLife;
+
         myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
 
@@ -61,6 +67,8 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
+        Debug.Log(_currentLife);
+
         if(active)
         {
             FieldOfView();
@@ -103,6 +111,17 @@ public class BaseballLauncher : Item, IMovable
     public void ActiveBallsState1()
     {
         ballsState1.SetActive(true);
+    }
+
+    public void TakeDamage(float dmgAmount)
+    {
+        _currentLife =- dmgAmount;
+
+        if (_currentLife <= 0)
+        {
+            //Hacer animacion de destrucción, instanciar sus objetos de construcción y destruirse.
+            Destroy(this.gameObject);
+        }
     }
 
     public void ChangeBallsState(int shotsLeft)
@@ -159,8 +178,6 @@ public class BaseballLauncher : Item, IMovable
         //{
         if(_currentObjectiveDistance < viewRadius && _currentObjective != null)
         {
-
-            
             Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<Gray>().GetVelocity() * _futureTime * Time.deltaTime);
             //Vector3 dir = item.transform.position - transform.position;
 
@@ -204,7 +221,6 @@ public class BaseballLauncher : Item, IMovable
 
     public void BecomeMovable()
     {
-        
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
     }
