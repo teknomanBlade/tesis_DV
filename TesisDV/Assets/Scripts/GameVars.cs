@@ -112,7 +112,8 @@ public class GameVars : MonoBehaviour
 
     void FindCat(Scene scene, LoadSceneMode mode)
     {
-        var aux = GameObject.Find("cat");
+        //var aux = GameObject.Find("cat");
+        var aux = FindObjectOfType<Cat>();
         if (aux != null) cat = aux.GetComponent<Cat>();
         else cat = null;
     }
