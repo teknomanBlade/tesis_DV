@@ -31,7 +31,9 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public float disengageThreshold = 15f;
     public float attackThreshold = 2.5f;
     public float attackDisengageThreshold = 3f;
-    private List<Transform> _waypoints;
+    [SerializeField]
+    //private List<Vector3> _waypoints;
+    private Vector3[] _waypoints;
     private int _currentWaypoint = 0;
     private int _currentCorner = 0;
     public Coroutine attackCoroutine;
@@ -50,6 +52,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private Transform nearestDoor;
     private Vector3 nearestDoorVector;
     private bool canCreatePath;
+    private bool pathIsCreated;
 
     /*[SerializeField]
     private Material deathMaterial;*/
@@ -70,6 +73,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     [SerializeField]
     private ParticleSystem _deathEffect;
+
     private void Awake()
     {
         canCreatePath = false;
@@ -159,12 +163,13 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
                     CalculatePath(_currentObjective);
                    //_currentCorner = 0;
                     canCreatePath = false;
+                    pathIsCreated = false;
                 }
 
                 if(_isMoving)
                 {
-                    ReliableMove();
-                    //Move();
+                    //ReliableMove();
+                    Move();
                 }
                 MovingAnimations();
                 CheckPathStatus();
@@ -199,22 +204,24 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         if (pursue)
         {
             //CalculatePath(_player.transform.position);
-            canCreatePath = true;
             _currentObjective = _player.transform.position;
+            canCreatePath = true;
+            
             MoveTo();
             //dest = _player.transform.position;
         }
         else if (_lm.enemyHasObjective) 
         {
             //CalculatePath(_exitPos);
-            canCreatePath = true;
             _currentObjective = _exitPos;
+            canCreatePath = true;
+            
             MoveTo();
             //dest = _exitPos;
         }
-        else if (_lm.allDoorsAreClosed)
-        {
-            StartCoroutine(FindClosestDoor());
+        //else if (_lm.allDoorsAreClosed)
+        //{
+            /*StartCoroutine(FindClosestDoor());
             
             dest = nearestDoor.position;
             if (Vector3.Distance(transform.position, nearestDoorVector) < 3f)
@@ -226,14 +233,15 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
                 TriggerDoorGrayInteract("GrayDoorInteract");
                 StartCoroutine(LerpOutlineWidthAndColor(8f,2f, Color.red));
                 _lm.ChangeDoorsStatus();
-            }
+            } COMENTAR HASTA SOLUCIONAR EL TEMA DE LAS PUERTAS*/
             
-        }
+        //}
         else
         {
             //CalculatePath(_lm.objective.transform.position);
-            canCreatePath = true;
             _currentObjective = _lm.objective.transform.position;
+            canCreatePath = true;
+            
             MoveTo();
             //dest = _lm.objective.transform.position;
         }
@@ -440,21 +448,39 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     private void MoveTo()
     {
-        
-            //Vector3 dir = _waypoints[_currentWaypoint].position - transform.position;
-            //Debug.Log(_navMeshAgent.path.corners.Length);
-            if(_currentCorner < _navMeshAgent.path.corners.Length)
+        if(pathIsCreated)
+        {
+            Vector3 dir = _waypoints[_currentWaypoint] - transform.position;
+            transform.forward = dir;
+            transform.position += transform.forward * _movingSpeed * Time.deltaTime;
+
+            if (dir.magnitude < 0.5f)
             {
-                Vector3 dir = _navMeshAgent.path.corners[_currentCorner] - transform.position;
-                transform.forward = dir;
-                transform.position += transform.forward * _movingSpeed * Time.deltaTime;
+                //_currentWaypoint++; Lo sumamos después de verificar.
+                if (_currentWaypoint + 1 > _waypoints.Length) //-1
+                {
+                    _currentWaypoint = 0;
+                    canCreatePath = true;
+                }
+                else
+                {
+                    _currentWaypoint++;
+                }
+                    
             }
+        }
+
+            /* if (_currentCorner < _navMeshAgent.path.corners.Length)
+                {
+                    Vector3 dir = _navMeshAgent.path.corners[_currentCorner] - transform.position;
+                    transform.forward = dir;
+                    transform.position += transform.forward * _movingSpeed * Time.deltaTime;
+                }
 
             if (Vector3.Distance(transform.position, _navMeshAgent.path.corners[_currentCorner]) <= .1f)  //dir.magnitude < 0.1f
             {
                 if(_currentCorner + 1 > _navMeshAgent.path.corners.Length)
                 {
-                    // -------------------
                     canCreatePath = true;
                     _currentCorner = 0;
                 }
@@ -464,20 +490,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
                     _currentCorner++;
                     Mathf.Clamp(_currentCorner, 0 , _navMeshAgent.path.corners.Length);
                 }
-                //_currentWaypoint++;
-                
-
-                /* if (_currentCorner > _navMeshAgent.path.corners.Length) //-1
-                {
-                    //_currentWaypoint = 0;
-                    
-                    canCreatePath = true;
-                    _currentCorner = 0;
-                } */
-
-            }
-        
-    
+            } PROBANDO OTRO METODO USANDO FOR PARA REUNIR LOS PUNTOS EN UNA LISTA DE WAYPOINTS*/
     }
 
     public void UnStun()
@@ -721,12 +734,22 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     private void CalculatePath(Vector3 targetPosition)
     {
+        //_waypoints = new List<Vector3>();
+        //_waypoints = null;
+        
+
         _navMeshAgent.ResetPath();  
         NavMeshPath path = new NavMeshPath();
         //_navMeshAgent.CalculatePath(targetPosition, path);
         if(NavMesh.CalculatePath(transform.position, _currentObjective, NavMesh.AllAreas, path))
         {
             _navMeshAgent.SetPath(path);
+
+            for(int i = 0; i > _navMeshAgent.path.corners.Length; i++)
+            {
+                _waypoints[i] = _navMeshAgent.path.corners[i];
+            }
+            pathIsCreated = true;
         }
         
         //NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, _navMeshPath)
