@@ -23,7 +23,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private NavMeshAgent _navMeshAgent;
     private NavMeshPath _navMeshPath;
     private bool _isWalkingSoundPlaying = false;
-    private bool _isMoving;
+    [SerializeField]
+    private bool _isMoving = true;
     private float _dmg = 50f;
     private bool _hasHitEffectActive = false;
     private float _attackWindup = 1.333f;
@@ -58,7 +59,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private bool canCreatePath;
     private bool pathIsCreated;
     private bool _foundDoorInPath;
-    [SerializeField]
     private bool _foundTrapInPath;
     private BaseballLauncher _currentObstacleTrap;
 
@@ -321,7 +321,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         }
         else
         {
-            _isMoving = true;
+            //_isMoving = true;
         }
     }
 
