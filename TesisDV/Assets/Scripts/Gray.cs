@@ -81,6 +81,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     [SerializeField]
     private ParticleSystem _deathEffect;
+    private float timePassed = 0;
 
     private void Awake()
     {
@@ -386,24 +387,37 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     IEnumerator Attack()
     {
+        
         //Verifica el booleano antes de atacar, este booleano se desactiva en Die y Stun. Se vuelve a activar al final del Stun.
         attacking = true;
         _isMoving = false;
         StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
+        yield return null;
         //_anim.SetBool("IsAttacking", true);
-        yield return new WaitForSeconds(_attackWindup);
-        if(_canAttack)
-        {
-            TriggerPlayerDamage("DamagePlayer");
-            PlayParticleSystemShader();
-            attacking = false;
-           _isMoving = true;
-        }
+
+
+        //yield return new WaitForSeconds(_attackWindup);
+        //if(_canAttack)
+        //{
+            //TriggerPlayerDamage("DamagePlayer");
+            //PlayParticleSystemShader();
+            //attacking = false;
+           //_isMoving = true;
+           
+        //}
         
         //attackCoroutine = StartCoroutine("Attack");
         //_anim.SetBool("IsAttacking", false);
         
         
+    }
+
+    private void AttackPlayer()
+    {
+        TriggerPlayerDamage("DamagePlayer");
+        PlayParticleSystemShader();
+        attacking = false;
+        _isMoving = true;
     }
 
     public void PlayParticleSystemShader()
