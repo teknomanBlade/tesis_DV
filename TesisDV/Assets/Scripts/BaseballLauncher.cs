@@ -12,6 +12,8 @@ public class BaseballLauncher : Item, IMovable
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
     public GameObject ballsState1, ballsState2, ballsState3;
+    [SerializeField]
+    private GameObject trapDestroyPrefab;
     public int shots = 15;
     public float viewRadius;
     public float viewAngle;
@@ -69,6 +71,11 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.X))
+        {
+            DestroyThisTrap();
+        }
+
         if(active)
         {
             FieldOfView();
@@ -227,12 +234,14 @@ public class BaseballLauncher : Item, IMovable
 
     public void DestroyThisTrap()
     {
+        Quaternion finalRotation = transform.rotation;
         Vector3 aux = new Vector3(0,0.2f,0);
         for(int i = 0; i < _myItems.Count; i++)
         {
             Vector3 itemPos = new Vector3(Random.Range(0.3f,1.3f), 0, Random.Range(0.3f,1.3f));
             Instantiate(_myItems[i], transform.position + aux + itemPos, Quaternion.identity);
         }
+        Instantiate(trapDestroyPrefab, transform.position, finalRotation);
         Destroy(this.gameObject);
     }
 
