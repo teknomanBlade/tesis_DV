@@ -253,6 +253,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 382628041543726218}
+  - component: {fileID: 3098303661701983032}
   - component: {fileID: 382628041543726220}
   - component: {fileID: 382628041543726221}
   - component: {fileID: 382628041543726222}
@@ -281,6 +282,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &3098303661701983032
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382628041543726217}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 213bc872e368dd4488ad4d96323c3603, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &382628041543726220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,6 +315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: Baseball Launcher
   _itemImage: {fileID: 21300000, guid: 45b425e2ff917154282094ac35d1da19, type: 3}
+  _currentLife: 0
   projectilePrefab: {fileID: 5947256333315532305, guid: 03814f5085065604fbbe6067433ea571, type: 3}
   blueprintPrefab: {fileID: 1813818468909102454, guid: cd29b0c2d3b9ecc46926b2dd3cf7ffdd, type: 3}
   exitPoint: {fileID: 382628042662749892}
@@ -313,6 +334,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   active: 0
+  _myItems:
+  - {fileID: 4622797999073881461, guid: aa752df10be493443b5cfd6ce76fa576, type: 3}
+  - {fileID: 4600965342611424314, guid: a36cf15f5d57e674889c8b7138c2a37d, type: 3}
 --- !u!65 &382628041543726221
 BoxCollider:
   m_ObjectHideFlags: 0

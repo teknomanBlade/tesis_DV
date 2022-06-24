@@ -40,9 +40,11 @@ public class BaseballLauncher : Item, IMovable
     private float _currentObjectiveDistance = 1000;
     [SerializeField]
     private List<GameObject> _myItems;
+    private Animator _animator; //El destroy después se va a hacer con un prefab nuevo, exactamente igual que el prefab que se usa para la animación de construcción.
 
     public void Awake()
     {
+        _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
 
         myCannonSupport = transform.GetChild(2);
@@ -67,8 +69,6 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
-        Debug.Log(_currentLife);
-
         if(active)
         {
             FieldOfView();
@@ -120,7 +120,7 @@ public class BaseballLauncher : Item, IMovable
         if (_currentLife <= 0)
         {
             //Hacer animacion de destrucción, instanciar sus objetos de construcción y destruirse.
-            Destroy(this.gameObject);
+            _animator.SetBool("IsDestroyed", true);
         }
     }
 
@@ -223,6 +223,17 @@ public class BaseballLauncher : Item, IMovable
     {
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
+    }
+
+    public void DestroyThisTrap()
+    {
+        Vector3 aux = new Vector3(0,0.2f,0);
+        for(int i = 0; i < _myItems.Count; i++)
+        {
+            Vector3 itemPos = new Vector3(Random.Range(0.3f,1.3f), 0, Random.Range(0.3f,1.3f));
+            Instantiate(_myItems[i], transform.position + aux + itemPos, Quaternion.identity);
+        }
+        Destroy(this.gameObject);
     }
 
     void OnDrawGizmos()

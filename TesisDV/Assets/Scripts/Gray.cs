@@ -587,7 +587,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     {
         //Si la distancia a la trampa es menor que tanto ataca, espera unos segundos y vuelve a atacar hasta destruir la trampa. Ahi pone en falso el Foundtrap.
         Vector3 dir = _trapPos - transform.position;
-        if(dir.magnitude < 0.3f)
+        if(dir.magnitude < 0.6f)
         {
             float timeToAttack = 5f;
             float timePassed = 0f;
