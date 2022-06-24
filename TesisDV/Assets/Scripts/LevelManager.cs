@@ -25,7 +25,10 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     public Transform[] allDoors;
     public GameObject objective;
     public bool allDoorsAreClosed;
-    
+
+    public delegate void OnGrayAmountChangeDelegate(int newVal);
+    public event OnGrayAmountChangeDelegate OnGrayAmountChange;
+
     public delegate void LevelDelegate();
     //public CraftingRecipe craftingRecipe;
     public bool playing = true;
@@ -36,8 +39,20 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
             {
                 TriggerHitInRound("EndRound");
             }
-
+            
             return enemiesInScene.Count > 0;
+        }
+    }
+
+    private int _amountEnemiesInScene = 0;
+    public int AmountEnemiesInScene
+    {
+        get { return _amountEnemiesInScene; }
+        set
+        {
+            if (_amountEnemiesInScene == value) return;
+            _amountEnemiesInScene = value;
+            OnGrayAmountChange?.Invoke(_amountEnemiesInScene);
         }
     }
     public Player _player;
@@ -111,13 +126,12 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     private void Update()
     {
         //Debug.Log(allDoorsAreClosed);
-
         //For testing
         if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
 
         //No checkear en update. 
         //canSpawn = !enemyHasObjective;
-        
+        AmountEnemiesInScene = enemiesInScene.Count;
         //No se checkea en update.
         if (_player.isDead) LoseGame();
 
@@ -213,7 +227,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     public void AddGray(Gray gray)
     {
-        enemiesInScene.Add(gray);
+         enemiesInScene.Add(gray);
     }
 
     public void RemoveGray(Gray gray)
@@ -275,20 +289,4 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     {
         inRoundObservers.ForEach(x => x.OnNotifyInRound(triggerMessage));
     }
-
-    /* public void AddObserver(IRoundChangeObserver obs)
-    {
-        roundChangeObservers.Add(obs);
-    }
-
-    public void RemoveObserver(IRoundChangeObserver obs)
-    {
-        if (roundChangeObservers.Contains(obs))
-            roundChangeObservers.Remove(obs);
-    }
-
-    public void TriggerRoundChange(string triggerMessage)
-    {
-        roundChangeObservers.ForEach(x => x.OnNotify(triggerMessage));
-    } */
 }

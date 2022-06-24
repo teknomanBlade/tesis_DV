@@ -102,9 +102,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         _originalScale = transform.localScale;
         _originalCamPos = _cam.transform.localPosition;
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        contextualMenu = GameObject.Find("ContextualTrapMenu");
-        contextualMenuScript = contextualMenu.GetComponent<ContextualTrapMenu>();
-        contextualMenuAnim = contextualMenu.GetComponent<Animator>();
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
         hp = maxHp;
         GameVars.Values.ShowLivesRemaining(hp, maxHp);
@@ -199,13 +196,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         //        contextualMenuScript.ActivatePanelTrap2();
         //    }
         //}
-
-        /*if (Input.GetKeyDown(KeyCode.Q))
-        {
-            IsCrafting = true;
-            if (!HasContextualMenu) ContextualMenuEnter();
-            else ContextualMenuExit();
-        }*/
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
