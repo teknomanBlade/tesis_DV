@@ -8,8 +8,6 @@ using UnityEngine.UI;
 public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
 {
     private Slider _mySlider;
-
-
     private float _maxDistance;
     private float _dangerThreshold;
     private float _currentDistance = 0;
@@ -18,6 +16,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     public Text GraysAmountPerWaveText;
     public Animator GraysAmountPerWaveTextAnim { get; private set; }
     public Text RoundText;
+    public Text RestWaveTimeText;
     public Animator RoundTextAnim { get; private set; }
     public float _valueToChange { get; private set; }
     
@@ -30,6 +29,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         RoundTextAnim.SetBool("IsNewRound", false);
         GraysAmountPerWaveText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtGrayAmountPerWave")).FirstOrDefault();
         GraysAmountPerWaveTextAnim = GraysAmountPerWaveText.GetComponentInChildren<Image>().gameObject.GetComponent<Animator>();
+        RestWaveTimeText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRestWaveTime")).FirstOrDefault();
         GameVars.Values.WaveManager.AddObserver(this);
         GameVars.Values.LevelManager.OnGrayAmountChange += GrayAmountChanged;
         _fillImage = Fill.GetComponent<Image>();

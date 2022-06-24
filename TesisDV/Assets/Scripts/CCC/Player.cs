@@ -149,8 +149,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         {
             if (_inventory.ContainsID(3) && !IsCrafting) 
             {
-                //StartCoroutine(PlayRacketSwingSound(1f));
-                _weapon.SetOwner(this);
+                _cam.CameraShakeRacketSwing(0.6f, 0.4f);
                 _weapon.MeleeAttack();
             }
         }

@@ -17,6 +17,9 @@ public class PlayerCamera : MonoBehaviour
     private float _amplitude = 0.005f;
     private float _frequency = 10.0f;
 
+    private float _amplitudeRacketSwing = 0.08f;
+    private float _frequencyRacketSwing = 10.0f;
+
     private void Awake()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -75,9 +78,16 @@ public class PlayerCamera : MonoBehaviour
     
     public void CameraShakeRacketSwing(float duration, float magnitude)
     {
-        StartCoroutine(ShakeRacketSwing(duration, magnitude));
+        PlayMotion(RacketSwingMotion());
+        //StartCoroutine(ShakeRacketSwing(duration, magnitude));
     }
-
+    private Vector3 RacketSwingMotion()
+    {
+        Vector3 pos = Vector3.zero;
+        pos.y += Mathf.Sin(Time.time * _frequencyRacketSwing) * _amplitudeRacketSwing;
+        pos.x += Mathf.Cos(Time.time * _frequencyRacketSwing / 4) * _amplitudeRacketSwing * 4;
+        return pos;
+    }
     public IEnumerator ShakeRacketSwing(float duration, float magnitude)
     {
 
@@ -88,9 +98,9 @@ public class PlayerCamera : MonoBehaviour
         while (elapsed < duration)
         {
             float x = Random.Range(-0.1f, 0.1f) * magnitude;
-            float z = Random.Range(-0.1f, 0.1f) * magnitude;
+            float y = Random.Range(-0.1f, 0.1f) * magnitude;
 
-            transform.localPosition = new Vector3(originalPos.x + x, originalPos.y, originalPos.z + z);
+            transform.localPosition = new Vector3(originalPos.x + x, originalPos.y + y, originalPos.z);
 
             elapsed += Time.deltaTime;
 

@@ -21,6 +21,7 @@ public class Cat : MonoBehaviour
         _startingPosition = GameObject.Find("StartingPosition").transform.position;
         _isHeld = false;
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshAgent.speed = 0.6f;
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _animator = GetComponent<Animator>();
         _animator.SetBool("IsIdle", true);
@@ -31,6 +32,7 @@ public class Cat : MonoBehaviour
 
         if(_isHeld == false && Vector3.Distance(transform.position, _startingPosition) > 3f)
         {
+            
             Vector3 dest = default(Vector3);
             dest = _startingPosition;
             var dir = dest - transform.position;
@@ -81,7 +83,7 @@ public class Cat : MonoBehaviour
     {
         if (other.gameObject.name.Equals("StartingPosition"))
         {
-            Debug.Log("ENTRA EN TRIGGER??");
+            //Debug.Log("ENTRA EN TRIGGER??");
             _animator.SetBool("IsIdle", true);
         }
     }
