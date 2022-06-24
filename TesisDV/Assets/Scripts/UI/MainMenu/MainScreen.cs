@@ -7,10 +7,11 @@ public class MainScreen : MonoBehaviour
 {
     public GameObject credits;
     public GameObject houseStructure;
+    private AudioSource _as;
     // Start is called before the first frame update
     void Awake()
     {
-        
+        _as = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -21,6 +22,7 @@ public class MainScreen : MonoBehaviour
 
     public void BtnPlay()
     {
+        _as.Stop();
         SceneManager.LoadScene(1);
     }
     public void BtnCredits()

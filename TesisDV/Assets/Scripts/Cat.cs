@@ -7,7 +7,6 @@ using UnityEngine.AI;
 public class Cat : MonoBehaviour
 {
     private bool _isHeld;
-    private bool _isIdle;
     private bool _isWalking;
     private Vector3 _startingPosition;
     private NavMeshAgent _navMeshAgent;
@@ -23,8 +22,7 @@ public class Cat : MonoBehaviour
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _animator = GetComponent<Animator>();
-        _isIdle = true;
-        _animator.SetBool("IsIdle", _isIdle);
+        _animator.SetBool("IsIdle", true);
     }
 
     void Update()
@@ -36,7 +34,11 @@ public class Cat : MonoBehaviour
             dest = _startingPosition;
             var dir = dest - transform.position;
             dir.y = 0f;
-            
+            Debug.Log("DISTANCE TO STARTING POS:" + Vector3.Distance(transform.position, _startingPosition));
+            if(Vector3.Distance(transform.position, _startingPosition) < 3.025f)
+            {
+                _animator.SetBool("IsIdle", true);
+            }
             _navMeshAgent.destination = dest;
             //transform.rotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
         }
@@ -49,15 +51,17 @@ public class Cat : MonoBehaviour
     public void CatIsBeingTaken()
     {
         _isHeld = true;
-        _animator.SetBool("IsMad", _isHeld);
+        _animator.SetBool("IsMad", true);
         //_navMeshAgent.isStopped = true;
         _navMeshAgent.enabled = false;
     }
 
     public void CatHasBeenReleased()
     {
-        _isWalking = true;
-        _animator.SetBool("IsWalking", _isWalking);
+        _isHeld = false;
+        _animator.SetBool("IsIdle", false);
+        _animator.SetBool("IsMad", false);
+        _animator.SetBool("IsWalking", true);
         //_navMeshAgent.isStopped = false;
         _navMeshAgent.enabled = true;
     }

@@ -387,8 +387,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     IEnumerator Attack()
     {
         //Verifica el booleano antes de atacar, este booleano se desactiva en Die y Stun. Se vuelve a activar al final del Stun.
-        
-        
         attacking = true;
         _isMoving = false;
         StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
