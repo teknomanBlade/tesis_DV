@@ -87,6 +87,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     public float gizmoScale = 1f;
     public LayerMask itemMask;
     private float _valueToChange;
+    public bool canDoAnything; //Dios me perdone por lo que voy a hacer.
 
     private void Awake()
     {
@@ -109,12 +110,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
 
     private void Start()
     {
-
+        canDoAnything = true;
     }
 
     private void Update()
     {
-        LookingAt();
+        if(canDoAnything)
+        {
+                    LookingAt();
         CheckGround();
         if (GameVars.Values.IsCatCaptured)
         {
@@ -221,14 +224,19 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         {
             _rb.velocity -= new Vector3(0f, 9.8f * Time.deltaTime, 0f);
         }
+        }
     }
 
     private void FixedUpdate()
     {
-        if (canMoveCamera) Camera();
-        LookingForPlacement();
+        if(canDoAnything)
+        {
+            if (canMoveCamera) Camera();
+            LookingForPlacement();
 
-        Walk();
+            Walk();
+        }
+        
     }
 
     public void ActiveDamageEffect()

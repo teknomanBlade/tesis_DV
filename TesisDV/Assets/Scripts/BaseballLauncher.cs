@@ -71,11 +71,6 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.X))
-        {
-            DestroyThisTrap();
-        }
-
         if(active)
         {
             FieldOfView();
@@ -127,7 +122,7 @@ public class BaseballLauncher : Item, IMovable
         if (_currentLife <= 0)
         {
             //Hacer animacion de destrucción, instanciar sus objetos de construcción y destruirse.
-            _animator.SetBool("IsDestroyed", true);
+            DestroyThisTrap();
         }
     }
 
@@ -235,7 +230,7 @@ public class BaseballLauncher : Item, IMovable
     public void DestroyThisTrap()
     {
         Quaternion finalRotation = transform.rotation;
-        Vector3 aux = new Vector3(0,0.2f,0);
+        Vector3 aux = new Vector3(0,0.4f,0);
         for(int i = 0; i < _myItems.Count; i++)
         {
             Vector3 itemPos = new Vector3(Random.Range(0.3f,1.3f), 0, Random.Range(0.3f,1.3f));
