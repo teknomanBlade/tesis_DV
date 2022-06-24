@@ -8,6 +8,7 @@ public class Cat : MonoBehaviour
 {
     private bool _isHeld;
     private bool _isWalking;
+    [SerializeField]
     private Vector3 _startingPosition;
     private NavMeshAgent _navMeshAgent;
     private LevelManager _lm;
@@ -16,8 +17,8 @@ public class Cat : MonoBehaviour
 
     void Awake()
     {
-       
-        _startingPosition = transform.position;
+
+        _startingPosition = GameObject.Find("StartingPosition").transform.position;
         _isHeld = false;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
@@ -34,11 +35,11 @@ public class Cat : MonoBehaviour
             dest = _startingPosition;
             var dir = dest - transform.position;
             dir.y = 0f;
-            Debug.Log("DISTANCE TO STARTING POS:" + Vector3.Distance(transform.position, _startingPosition));
+            /*Debug.Log("DISTANCE TO STARTING POS:" + Vector3.Distance(transform.position, _startingPosition));
             if(Vector3.Distance(transform.position, _startingPosition) < 3.025f)
             {
                 _animator.SetBool("IsIdle", true);
-            }
+            }*/
             _navMeshAgent.destination = dest;
             //transform.rotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
         }
@@ -76,5 +77,13 @@ public class Cat : MonoBehaviour
         return Vector3.Distance(transform.position, _exitPos);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name.Equals("StartingPosition"))
+        {
+            Debug.Log("ENTRA EN TRIGGER??");
+            _animator.SetBool("IsIdle", true);
+        }
+    }
 
 }

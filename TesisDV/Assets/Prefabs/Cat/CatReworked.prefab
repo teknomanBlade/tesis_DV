@@ -1431,6 +1431,8 @@ GameObject:
   - component: {fileID: 2248599682449135364}
   - component: {fileID: 5400569553477540198}
   - component: {fileID: 5400569553477540199}
+  - component: {fileID: 4243537570077294807}
+  - component: {fileID: 7791611960195145981}
   m_Layer: 0
   m_Name: CatReworked
   m_TagString: Untagged
@@ -1605,6 +1607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e34294480474fb41966a48d586f356c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _startingPosition: {x: 0, y: 0, z: 0}
 --- !u!195 &5400569553477540199
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1627,6 +1630,35 @@ NavMeshAgent:
   m_BaseOffset: 18
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!135 &4243537570077294807
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400569553477540200}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 3.3194337
+  m_Center: {x: 0.6132541, y: -0.5536439, z: -3.007483}
+--- !u!54 &7791611960195145981
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400569553477540200}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &5521520194315799854
 GameObject:
   m_ObjectHideFlags: 0
