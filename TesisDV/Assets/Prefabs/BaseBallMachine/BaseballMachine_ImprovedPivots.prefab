@@ -83,12 +83,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: Baseball Launcher
   _itemImage: {fileID: 21300000, guid: 9485f5ca79c73ac4b8210461edb09ff9, type: 3}
+  _currentLife: 0
   projectilePrefab: {fileID: 5947256333315532305, guid: 03814f5085065604fbbe6067433ea571, type: 3}
   blueprintPrefab: {fileID: 0}
   exitPoint: {fileID: 1763169152}
   ballsState1: {fileID: 6324662650322469161}
   ballsState2: {fileID: 2864198610529354043}
   ballsState3: {fileID: 4699611236156734117}
+  trapDestroyPrefab: {fileID: 0}
   shots: 15
   viewRadius: 10
   viewAngle: 90
@@ -101,7 +103,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   active: 0
-  futureTime: 3
+  _myItems: []
 --- !u!65 &6001024435997462729
 BoxCollider:
   m_ObjectHideFlags: 0

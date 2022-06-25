@@ -63,7 +63,7 @@ using UnityEngine;
                             //GameObject aux = Instantiate(itemAmount.trapPrefab, _player.GetPrefabPlacement(), Quaternion.identity);
                             _player.SwitchIsCrafting();
                             GameObject aux = Instantiate(itemAmount.trapPrefab, GameVars.Values.GetPlayerPrefabPlacement(), Quaternion.identity);
-                            aux.transform.eulerAngles = new Vector3(aux.transform.eulerAngles.x, GameVars.Values.GetPlayerCameraRotation() + 90f, aux.transform.eulerAngles.z);
+                            aux.transform.eulerAngles = new Vector3(aux.transform.eulerAngles.x, GameVars.Values.GetPlayerCameraRotation(), aux.transform.eulerAngles.z);
                         }
                         buildAmount++;
                     }                    

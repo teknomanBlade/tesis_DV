@@ -106,7 +106,7 @@ public class BaseballLauncher : Item, IMovable
     public void InstantiateBall()
     {
         GameObject aux = Instantiate(projectilePrefab, exitPoint.transform.position, Quaternion.identity);
-        aux.GetComponent<Rigidbody>().AddForce(35f * -exitPoint.transform.right, ForceMode.Impulse); //era 20f
+        aux.GetComponent<Rigidbody>().AddForce(35f * exitPoint.transform.forward, ForceMode.Impulse); //era 20f
         GameVars.Values.soundManager.PlaySoundAtPoint("BallLaunched", transform.position, 0.7f);
     }
 
@@ -198,8 +198,8 @@ public class BaseballLauncher : Item, IMovable
                     //myCannonSupport.rotation = Quaternion.Euler(0f, rotation.y + 90f, 0f);
 
                     //myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f);
-                    myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, rotation.y + 90f, 0f), _shootSpeed * Time.deltaTime);
-                    myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y + 90f, rotation.z), _shootSpeed * Time.deltaTime);
+                    myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, rotation.y, 0f), _shootSpeed * Time.deltaTime);
+                    myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y, rotation.z), _shootSpeed * Time.deltaTime);
                     Debug.DrawLine(transform.position, _currentObjective.transform.position, Color.red);
                 }
         }
@@ -210,8 +210,8 @@ public class BaseballLauncher : Item, IMovable
     private void Inactive()
     {
         //myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(myCannon.rotation.x, myCannon.rotation.y, 35f), speed * Time.deltaTime);
-        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(myCannon.rotation.x, myCannon.rotation.y, 35f), _inactiveSpeed * Time.deltaTime);
-        myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(myCannonSupport.rotation.x, myCannonSupport.rotation.y, 0f), _inactiveSpeed * Time.deltaTime);
+        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(35f, myCannon.rotation.y, myCannon.rotation.z), _inactiveSpeed * Time.deltaTime);
+        myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, myCannonSupport.rotation.y, myCannonSupport.rotation.z), _inactiveSpeed * Time.deltaTime);
     }
 
     public void ActiveDeactivateBallStates(bool state1, bool state2, bool state3)

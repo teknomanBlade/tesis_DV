@@ -203,7 +203,6 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     public void WinGame()
     {
-        _player.canDoAnything = false;
         Debug.Log("You Win!");
         YouWin.SetActive(true);
         //SceneManager.LoadScene("MainFloor_Upgrade");
@@ -211,7 +210,6 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     public void LoseGame()
     {
-        _player.canDoAnything = false;
         //playing = false;
         YouLose.SetActive(true);
         Debug.Log("Loser");
