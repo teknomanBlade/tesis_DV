@@ -204,8 +204,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            //GameVars.Values.TVTrap.Craft(_inventory);
-            GameVars.Values.TVTrapAgain.Craft(_inventory);
+            GameVars.Values.TVTrap.Craft(_inventory);
+            //GameVars.Values.TVTrapAgain.Craft(_inventory);
         }
 
         //if (Input.GetKeyDown(GameVars.Values.dropKey))
