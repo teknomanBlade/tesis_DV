@@ -8,20 +8,10 @@ public class UFO : MonoBehaviour, IInRoundObserver
 {
     private GameObject _UFOSpinner;
     [SerializeField]
-    private Material nonDissolveMaterial;
-    [SerializeField]
-    private Material nonDissolveMaterialSpinner;
-    [SerializeField]
-    private Material dissolveMaterial;
-    [SerializeField]
-    private Material dissolveMaterialSpinner;
-    [SerializeField]
     private Animator _animBeam;
     [SerializeField]
     private Animator _animUFO;
     private Coroutine _currentCoroutine;
-    private MeshRenderer _renderer;
-    private MeshRenderer _rendererSpinner;
     private float _arriveRadius;
     private float _maxSpeed;
     private float _maxForce;
@@ -66,9 +56,8 @@ public class UFO : MonoBehaviour, IInRoundObserver
         _canLeavePlanet = false;
         _UFOSpinner = GameObject.Find("UFOSpinner");
         _animUFO = GetComponent<Animator>();
+        _animUFO.enabled = true;
         rotationFinal = Quaternion.Euler(-90f,0f,0f);
-        _renderer = GetComponent<MeshRenderer>();
-        _rendererSpinner = _UFOSpinner.GetComponent<MeshRenderer>();
         _audioSource = GetComponent<AudioSource>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         GameVars.Values.LevelManager.AddObserverInRound(this);
@@ -121,18 +110,6 @@ public class UFO : MonoBehaviour, IInRoundObserver
     {
         _velocity += force;
     }
-    public void SwitchDissolveMaterial(Material material, Material materialSpinner)
-    {
-        var materials = _renderer.sharedMaterials.ToList();
-        materials.Clear();
-        materials.Add(material);
-        _renderer.sharedMaterials = materials.ToArray();
-        var materialsSpinner = _rendererSpinner.sharedMaterials.ToList();
-        materialsSpinner.Clear();
-        materialsSpinner.Add(materialSpinner);
-        _rendererSpinner.sharedMaterials = materialsSpinner.ToArray();
-    }
-
     private void Update()
     {
         RotateUFOSpinner();
@@ -170,29 +147,8 @@ public class UFO : MonoBehaviour, IInRoundObserver
         _valueToChangeRot = endValue;
     }
 
-    IEnumerator LerpScaleDissolve(float endValue, float duration)
-    {
-        float time = 0;
-        float startValue = _valueToChange;
-
-        while (time < duration)
-        {
-            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
-            time += Time.deltaTime;
-
-            dissolveMaterial.SetFloat("_ScaleDissolve", _valueToChange);
-            dissolveMaterialSpinner.SetFloat("_ScaleDissolveSpinner", _valueToChange);
-            yield return null;
-        }
-
-        _valueToChange = endValue;
-    }
     public void BeginSpawn()
     {
-        //if(_currentCoroutine != StartCoroutine("SpawnGrey"))
-        //{
-        //    StopCoroutine(_currentCoroutine);
-        //}
         StopCoroutine(_currentCoroutine);
         spawning = true;
         PlayAnimBeam(true);
@@ -214,14 +170,6 @@ public class UFO : MonoBehaviour, IInRoundObserver
             }
             else StartCoroutine("SpawnGrey");
         }
-        /*else
-        {
-            if(GameVars.Values.LevelManager.enemiesInScene.Count == 0)
-            {
-                _canLeavePlanet = true;
-            }
-            else StartCoroutine("SpawnGrey");
-        }*/
     }
 
     public void ExitPlanet()
@@ -255,26 +203,26 @@ public class UFO : MonoBehaviour, IInRoundObserver
         Vector3 dir = _finalPos - transform.position;
         if (!_inPosition)
         {
+            _currentCoroutine = StartCoroutine(PlayAnimation("IsArriving", "UFOSpawnerWarpArrive"));
             PlayAnimBeam(false);
-            SwitchDissolveMaterial(dissolveMaterial, dissolveMaterialSpinner);
-            StartCoroutine(LerpScaleDissolve(1f, 1f));
-            //if (transform.position == _finalPos)
-            if(dir.magnitude < 0.2f)
+            if (dir.magnitude < 0.2f)
             {
-                //PlayAnimBeam(true);
-                StopCoroutine(_currentCoroutine);
-                SwitchDissolveMaterial(nonDissolveMaterial, nonDissolveMaterialSpinner);
-                _currentCoroutine = StartCoroutine(LerpScaleDissolve(0f, 1f));
                 BeginSpawn();
-                //Destroy(UFOIndicator);
                 _inPosition = true;
             }
             Move();
             Arrive();
-            //transform.position = Vector3.MoveTowards(transform.position, _finalPos, _UFOSpeed * Time.deltaTime);
         }
     }
-
+    IEnumerator PlayAnimation(string param, string name)
+    {
+        _animUFO.SetBool(param, true);
+        var clips = _animUFO.runtimeAnimatorController.animationClips;
+        float time = clips.First(x => x.name == name).length;
+        yield return new WaitForSeconds(time);
+        _animUFO.SetBool(param, false);
+        _animUFO.enabled = false;
+    }
     public void SpawnGreyLerp()
     {
         currentGray.SetPos(Vector3.Lerp(transform.position - startPos, transform.position - endPos, timer / timeLimit));

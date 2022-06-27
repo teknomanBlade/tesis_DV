@@ -10,7 +10,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     //---------
     private Rigidbody _rb;
 
-    public PlayerCamera _cam;
+    private PlayerCamera _cam;
+    public PlayerCamera Cam {
+        get { return _cam; }
+        set { _cam = value; }
+    }
     public PostProcessVolume volume;
     public Vignette postProcessDamage;
     public AttentionPlayerPPSSettings postProcessAttention;
@@ -91,7 +95,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
+        Cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
         volume = _cam.Camera.GetComponent<PostProcessVolume>();
 
         _craftingScreen = GameObject.Find("CraftingContainer");
@@ -147,7 +151,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         {
             if (_inventory.ContainsID(3) && !IsCrafting) 
             {
-                _cam.CameraShakeRacketSwing(0.6f, 0.4f);
+                Cam.ShakeRacketSwing();
+                _weapon.SetOwner(this);
                 _weapon.MeleeAttack();
             }
         }

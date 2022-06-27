@@ -105,8 +105,8 @@ public class UFOGrayDeath : MonoBehaviour
             _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
             time += Time.deltaTime;
 
-            dissolveMaterial.SetFloat("_ScaleDissolve", _valueToChange);
-            dissolveMaterialSpinner.SetFloat("_ScaleDissolveSpinner", _valueToChange);
+            _renderer.material.SetFloat("_ScaleDissolve", _valueToChange);
+            _rendererSpinner.material.SetFloat("_ScaleDissolveSpinner", _valueToChange);
             yield return null;
         }
 

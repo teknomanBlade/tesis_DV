@@ -61,6 +61,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private bool _foundDoorInPath;
     private bool _foundTrapInPath;
     private BaseballLauncher _currentObstacleTrap;
+    private Coroutine _currentCoroutine;
 
     /*[SerializeField]
     private Material deathMaterial;*/
@@ -74,13 +75,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private float _valueToChange;
 
     [SerializeField]
-    private ParticleSystem _empAbility;
-
-    [SerializeField]
     private ParticleSystem _hitEffect;
 
-    [SerializeField]
-    private ParticleSystem _deathEffect;
     private float timePassed = 0;
 
     private void Awake()
@@ -96,10 +92,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         AddObserver(_playerScript);
         AddObserverDoorGrayInteract(_playerScript);
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        //_empAbility = GameObject.Find("EMPAbility").GetComponent<ParticleSystem>();
         //_isMoving = true;
-        _empAbility.Stop();
-        _deathEffect.Stop();
         _navMeshAgent = GetComponent<NavMeshAgent>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         nearestDoorDistance = 1000;
@@ -331,8 +324,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         yield return new WaitForSeconds(.01f);
         _isWalkingSoundPlaying = true;
     }
-
-    public IEnumerator PlayGrayDeathSound()
+    
+    /*public IEnumerator PlayGrayDeathSound()
     {
          _anim.SetBool("IsDead", true);
         SwitchDissolveMaterial(dissolveMaterial);
@@ -340,9 +333,11 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         yield return new WaitForSeconds(1.6f);
         GameVars.Values.soundManager.StopSound();
         yield return new WaitForSeconds(2.5f);
-        yield return StartCoroutine(LerpScaleDissolve(0f, 1.5f)); 
-        Dead();
-    }
+        
+        //StopCoroutine(_currentCoroutine);
+        //yield return StartCoroutine(LerpScaleDissolve(0f, 1.5f)); 
+        //Dead();
+    }*/
 
    
     private bool IsInSight()
@@ -415,14 +410,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private void AttackPlayer()
     {
         TriggerPlayerDamage("DamagePlayer");
-        PlayParticleSystemShader();
         attacking = false;
         _isMoving = true;
-    }
-
-    public void PlayParticleSystemShader()
-    {
-        _empAbility.Play();
     }
 
     public void Stun(float time)
@@ -626,13 +615,28 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         }
     }
 
+    IEnumerator PlayAnimationsDeathPostDeath(string param, string name)
+    {
+        _anim.SetBool(param, true);
+        var clips = _anim.runtimeAnimatorController.animationClips;
+        float time = clips.First(x => x.name == name).length;
+        yield return new WaitForSeconds(time);
+        _anim.SetBool(param, false);
+    }
+    public void PlayGrayDeathSound()
+    {
+        _anim.SetBool("IsDead", true);
+        SwitchDissolveMaterial(dissolveMaterial);
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
+    }
     public void Die()
     {
         dead = true;
         _canAttack = false;
         var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);
         var UFO = GameVars.Values.LevelManager.UFOsPool.GetObject().InitializePosition(spawnPos);
-        StartCoroutine(PlayGrayDeathSound());
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
+        StartCoroutine(PlayAnimationsDeathPostDeath("IsDead", "Death"));
         _navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
@@ -644,21 +648,26 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _lm.RemoveGray(this);
         _lm.CheckForObjective();
     }
-
-    public void PlayShaderDissolve()
+    public void Dissolve()
     {
-        
+        _currentCoroutine = StartCoroutine(PlayShaderDissolve());
+    }
+    IEnumerator PlayShaderDissolve()
+    {
+        SwitchDissolveMaterial(dissolveMaterial);
+        _currentCoroutine = StartCoroutine(LerpScaleDissolve(0f, 1.5f));
+        yield return new WaitForSeconds(1.5f);
+        Dead();
     }
 
     public void PlayPostDeath()
     {
         _anim.SetBool("IsPostDeath", true);
-        //StartCoroutine(LerpScaleDissolve(0f, 1f));
     }
 
     public void Dead()
     {
-        dissolveMaterial.SetFloat("_ScaleDissolveGray", 1);
+        //dissolveMaterial.SetFloat("_ScaleDissolveGray", 1);
         Destroy(gameObject);
     }
 
@@ -762,7 +771,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
             time += Time.deltaTime;
 
-            dissolveMaterial.SetFloat("_ScaleDissolveGray", _valueToChange);
+            skinned.material.SetFloat("_ScaleDissolveGray", _valueToChange);
             yield return null;
         }
 

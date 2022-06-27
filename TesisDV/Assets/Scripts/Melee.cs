@@ -6,10 +6,17 @@ public abstract class Melee : MonoBehaviour
 {
     private List<IHittableObserver> _myHittableObservers = new List<IHittableObserver>();
     public Animator anim;
+    protected Player _player;
     protected bool IsAttacking = false;
     protected virtual void OnContactEffect(Collider other)
     {
 
+    }
+
+    public Melee SetOwner(Player player)
+    {
+        _player = player;
+        return this;
     }
 
     public virtual void MeleeAttack()

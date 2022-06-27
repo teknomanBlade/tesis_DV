@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class PlayerCamera : MonoBehaviour
 {
     public Player _player;
     public GameObject _camera;
     public GameObject Camera { get; set; }
+    public Animator Animator { get; set; }
     private Quaternion targetAngle;
     private float smoothing = 20f;
     private Vector3 offset = new Vector3(0f, 0.75f, 0f);
@@ -17,14 +19,12 @@ public class PlayerCamera : MonoBehaviour
     private float _amplitude = 0.005f;
     private float _frequency = 10.0f;
 
-    private float _amplitudeRacketSwing = 0.08f;
-    private float _frequencyRacketSwing = 10.0f;
-
     private void Awake()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _camera = GameObject.Find("MainCamera");
         Camera = _camera;
+        Animator = Camera.GetComponent<Animator>();
         SetInitPos(_camera.transform.localPosition);
     }
 
@@ -75,40 +75,18 @@ public class PlayerCamera : MonoBehaviour
     {
         _camera.transform.localPosition += motion;
     }
-    
-    public void CameraShakeRacketSwing(float duration, float magnitude)
+    public void ShakeRacketSwing()
     {
-        PlayMotion(RacketSwingMotion());
-        //StartCoroutine(ShakeRacketSwing(duration, magnitude));
+        StartCoroutine(PlayAnimation("IsRacketSwing", "ShakeCamera"));
     }
-    private Vector3 RacketSwingMotion()
+    IEnumerator PlayAnimation(string param, string name)
     {
-        Vector3 pos = Vector3.zero;
-        pos.y += Mathf.Sin(Time.time * _frequencyRacketSwing) * _amplitudeRacketSwing;
-        pos.x += Mathf.Cos(Time.time * _frequencyRacketSwing / 4) * _amplitudeRacketSwing * 4;
-        return pos;
+        Animator.SetBool(param, true);
+        var clips = Animator.runtimeAnimatorController.animationClips;
+        float time = clips.First(x => x.name == name).length;
+        yield return new WaitForSeconds(time);
+        Animator.SetBool(param, false);
     }
-    public IEnumerator ShakeRacketSwing(float duration, float magnitude)
-    {
-
-        Vector3 originalPos = transform.localPosition;
-
-        float elapsed = 0.0f;
-
-        while (elapsed < duration)
-        {
-            float x = Random.Range(-0.1f, 0.1f) * magnitude;
-            float y = Random.Range(-0.1f, 0.1f) * magnitude;
-
-            transform.localPosition = new Vector3(originalPos.x + x, originalPos.y + y, originalPos.z);
-
-            elapsed += Time.deltaTime;
-
-            yield return null;
-        }
-
-    }
-
     public void CameraShakeDamage(float duration, float magnitude)
     {
         StartCoroutine(ShakeDamage(duration, magnitude));
