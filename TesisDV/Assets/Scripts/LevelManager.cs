@@ -74,7 +74,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         allDoorsAreClosed = true;
         InitialStockUFO = 5;
         UFOPrefab = Resources.Load<UFOGrayDeath>("UFOGrayDeath");
-        UFOsPool = new PoolObject<UFOGrayDeath>(UFOFactory, ActivateEnemy, DeactivateEnemy, InitialStockUFO, false);
+        UFOsPool = new PoolObject<UFOGrayDeath>(UFOFactory, ActivateEnemy, DeactivateEnemy, InitialStockUFO, true);
 
         /*YouWin = Instantiate(GameVars.Values.youWinScreen);
         YouWin.transform.SetParent(_panelMain.transform);
