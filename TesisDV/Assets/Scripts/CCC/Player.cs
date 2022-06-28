@@ -151,7 +151,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         {
             if (_inventory.ContainsID(3) && !IsCrafting) 
             {
-                Cam.ShakeRacketSwing();
                 _weapon.SetOwner(this);
                 _weapon.MeleeAttack();
             }

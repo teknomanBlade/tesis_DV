@@ -28,6 +28,7 @@ public class Racket : Melee
     IEnumerator Attack(string param, string name)
     {
         IsAttacking = true;
+        _player.Cam.ShakeRacketSwing();
         _trail.gameObject.SetActive(IsAttacking);
         _trail.Play();
         anim.SetBool(param, true);

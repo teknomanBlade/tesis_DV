@@ -77,16 +77,43 @@ public class PlayerCamera : MonoBehaviour
     }
     public void ShakeRacketSwing()
     {
-        StartCoroutine(PlayAnimation("IsRacketSwing", "ShakeCamera"));
+        StartCoroutine(ShakeCameraRacket(0.1f));
     }
-    IEnumerator PlayAnimation(string param, string name)
+    
+    public IEnumerator ShakeCameraRacket(float duration)
     {
-        Animator.SetBool(param, true);
-        var clips = Animator.runtimeAnimatorController.animationClips;
-        float time = clips.First(x => x.name == name).length;
-        yield return new WaitForSeconds(time);
-        Animator.SetBool(param, false);
+        Quaternion originalRot = transform.localRotation;
+
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            float x = Random.Range(0, 1.87f);
+            float y = Random.Range(0, -1.89f);
+            
+            transform.localRotation = Quaternion.Euler(CheckSign(transform.localRotation.x, x), CheckSign(transform.localRotation.y, y), transform.localRotation.z);
+
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
     }
+    public float CheckSign(float number, float sum)
+    {
+        var result = 0f;
+        if (Mathf.Sign(number) == 1f)
+        {
+            result = number + sum;
+        }
+        else
+        {
+            result = number - sum;
+        }
+
+        return result;
+    }
+
     public void CameraShakeDamage(float duration, float magnitude)
     {
         StartCoroutine(ShakeDamage(duration, magnitude));
