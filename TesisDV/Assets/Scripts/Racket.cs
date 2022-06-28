@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class Racket : Melee
 {
-    
+    [SerializeField]
+    private ParticleSystem _trail;
     // Start is called before the first frame update
     void Awake()
     {
+        //_trail = GetComponentInChildren<ParticleSystem>();
         //anim = transform.parent.GetComponent<Animator>();
     }
 
@@ -26,13 +28,17 @@ public class Racket : Melee
     IEnumerator Attack(string param, string name)
     {
         IsAttacking = true;
+        _trail.gameObject.SetActive(IsAttacking);
+        _trail.Play();
         anim.SetBool(param, true);
         GameVars.Values.soundManager.PlaySoundAtPoint("RacketSwing", transform.position, 0.09f);
         var clips = anim.runtimeAnimatorController.animationClips;
         float time = clips.First(x => x.name == name).length;
         yield return new WaitForSeconds(time);
         anim.SetBool(param, false);
+        _trail.Stop();
         IsAttacking = false;
+        _trail.gameObject.SetActive(IsAttacking);
     }
     /*public IEnumerator Attack()
     {

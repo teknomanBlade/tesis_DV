@@ -267,7 +267,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     {
         if (volume.profile.TryGetSettings(out postProcessAttention))
         {
-            StartCoroutine(LerpAttentionEffect(1f, 1f));
+            StartCoroutine(LerpAttentionEffect(0.75f, 1f));
         }
     }
 

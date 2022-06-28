@@ -14,10 +14,34 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     [Header("Wave Details")]
     [SerializeField]
     private int _currentRound;
+    public int CurrentRound
+    {
+        get { return _currentRound; }
+        set
+        {
+            if (_currentRound == value) return;
+            _currentRound = value;
+            OnRoundChanged?.Invoke(_currentRound);
+        }
+    }
     [SerializeField]
     private float _firstWaveDelay;
     [SerializeField]
     private float _timeBetweenWaves;
+
+    private bool _inRound;
+    [SerializeField]
+    private float _timeWaves = 0;
+    public float TimeWaves
+    {
+        get { return _timeWaves; }
+        set
+        {
+            if (_timeWaves == value) return;
+            _timeWaves = value;
+            OnTimeWaveChange?.Invoke(_timeWaves);
+        }
+    }
     [SerializeField]
     private int _totalRounds;
 
@@ -42,15 +66,33 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private GameObject UFOIndicatorPrefab;
     private GameObject UFOIndicator;
     private GameObject UFOIndicator2;
-
+    public delegate void OnRoundChangedDelegate(int newVal);
+    public event OnRoundChangedDelegate OnRoundChanged;
+    public delegate void OnTimeWaveChangeDelegate(float newVal);
+    public event OnTimeWaveChangeDelegate OnTimeWaveChange;
+    public delegate void OnRoundStartEndDelegate(bool roundStart);
+    public event OnRoundStartEndDelegate OnRoundStartEnd;
     void Awake()
     {
-        _currentCoroutine = StartCoroutine("WaitFirstDelay");
+        TimeWaves = _timeBetweenWaves;
+        //_currentCoroutine = StartCoroutine("WaitFirstDelay");
     }
 
     void Update()
     {
-
+        if (!_inRound)
+        {
+            TimeWaves -= Time.deltaTime;
+            if (TimeWaves <= 0)
+            {
+                DespawnUFOIndicators();
+                SpawnWave();
+                GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
+                _inRound = true;
+                OnRoundStartEnd?.Invoke(_inRound);
+                TimeWaves = _timeBetweenWaves;
+            }
+        }
     }
 
     IEnumerator WaitFirstDelay()
@@ -58,7 +100,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         DespawnUFOIndicators();
         yield return new WaitForSeconds(_firstWaveDelay);
         SpawnWave();
-        GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
+        
     }
 
     IEnumerator WaitBetweenWaves()
@@ -73,8 +115,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         InstantiateUFOIndicators();
         if (_currentRound <= _totalRounds)
         {
-            _currentRound++;
-            TriggerRoundChange("RoundChanged");
+            CurrentRound++;
+            //TriggerRoundChange("RoundChanged");
             Instantiate(_myUFO).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetTotalGrays(_totalGraysUFO1);//.SetRotation(new Vector3(-90f, 0f, 0f));
             Instantiate(_myUFO).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetTotalGrays(_totalGraysUFO2);//.SetRotation(new Vector3(-90f, 0f, 0f));
         }
@@ -87,8 +129,10 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     //Hacer por evento en lugar de void publico.
     public void SendNextRound()
     {
-        if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
-        _currentCoroutine = StartCoroutine("WaitBetweenWaves");
+        _inRound = false;
+        OnRoundStartEnd?.Invoke(_inRound);
+        //if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
+        //_currentCoroutine = StartCoroutine("WaitBetweenWaves");
     }
 
     private void DespawnUFOIndicators()

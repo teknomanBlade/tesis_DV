@@ -55,13 +55,13 @@ public class Cat : MonoBehaviour
     {
         _isHeld = true;
         _animator.SetBool("IsMad", true);
-        //_navMeshAgent.isStopped = true;
         _navMeshAgent.enabled = false;
     }
 
     public void CatHasBeenReleased()
     {
         _isHeld = false;
+        
         _animator.SetBool("IsIdle", false);
         _animator.SetBool("IsMad", false);
         _animator.SetBool("IsWalking", true);

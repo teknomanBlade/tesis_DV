@@ -53,6 +53,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private Vector3 _currentObjective;
     private Vector3 _doorPos;
     private Vector3 _trapPos;
+    public EMPAttack EMPAttack;
     private float nearestDoorDistance = 1000;
     private Transform nearestDoor;
     private Vector3 nearestDoorVector;
@@ -62,7 +63,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private bool _foundTrapInPath;
     private BaseballLauncher _currentObstacleTrap;
     private Coroutine _currentCoroutine;
-
+    public delegate void OnGrayAttackDelegate(bool attack);
+    public event OnGrayAttackDelegate OnGrayAttackChange;
     /*[SerializeField]
     private Material deathMaterial;*/
 
@@ -92,6 +94,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         AddObserver(_playerScript);
         AddObserverDoorGrayInteract(_playerScript);
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
+        //EMPAttack = GetComponentInChildren<EMPAttack>();
+        EMPAttack.SetOwner(this);
         //_isMoving = true;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
@@ -409,7 +413,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     private void AttackPlayer()
     {
-        TriggerPlayerDamage("DamagePlayer");
+        //TriggerPlayerDamage("DamagePlayer");
+        OnGrayAttackChange?.Invoke(attacking);
         attacking = false;
         _isMoving = true;
     }
@@ -544,7 +549,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     public void DropObjective()
     {
-        _lm.objective.transform.position = transform.position + new Vector3(0f, 0.75f, 0f);
         hasObjective = false;
         GameVars.Values.SetCatFree();
         _lm.CheckForObjective();

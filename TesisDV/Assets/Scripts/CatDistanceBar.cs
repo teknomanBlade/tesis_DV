@@ -17,6 +17,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     public Animator GraysAmountPerWaveTextAnim { get; private set; }
     public Text RoundText;
     public Text RestWaveTimeText;
+    public Animator RestWaveTimeAnim { get; private set; }
     public Animator RoundTextAnim { get; private set; }
     public float _valueToChange { get; private set; }
     
@@ -30,7 +31,11 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         GraysAmountPerWaveText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtGrayAmountPerWave")).FirstOrDefault();
         GraysAmountPerWaveTextAnim = GraysAmountPerWaveText.GetComponentInChildren<Image>().gameObject.GetComponent<Animator>();
         RestWaveTimeText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRestWaveTime")).FirstOrDefault();
+        RestWaveTimeAnim = RestWaveTimeText.gameObject.GetComponent<Animator>();
         GameVars.Values.WaveManager.AddObserver(this);
+        GameVars.Values.WaveManager.OnRoundChanged += RoundChanged;
+        GameVars.Values.WaveManager.OnTimeWaveChange += TimeWaveChanged;
+        GameVars.Values.WaveManager.OnRoundStartEnd += RoundStartEnd;
         GameVars.Values.LevelManager.OnGrayAmountChange += GrayAmountChanged;
         _fillImage = Fill.GetComponent<Image>();
         _maxDistance = GameVars.Values.GetCatDistance();
@@ -41,6 +46,22 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         _currentDistance = _maxDistance;
         _mySlider.value = _currentDistance;
         
+    }
+
+    private void RoundChanged(int newVal)
+    {
+        RoundText.text = "Round: " + newVal;
+        StartCoroutine(ShowAnimRoundChanged());
+    }
+
+    private void RoundStartEnd(bool roundStart)
+    {
+        RestWaveTimeAnim.SetBool("InRound", roundStart);
+    }
+
+    private void TimeWaveChanged(float newVal)
+    {
+        RestWaveTimeText.text = "Rest wave time: " + newVal.ToString("F0");
     }
 
     private void GrayAmountChanged(int newVal)
