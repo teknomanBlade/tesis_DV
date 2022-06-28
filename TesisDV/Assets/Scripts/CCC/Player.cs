@@ -703,11 +703,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     }
     private void SetOnItem(Item item)
     {
-        if (item is null)
+        if (item == null)
             return;
 
         var outLine = item.gameObject.GetComponent<Outline>();
-        if (outLine is null)
+        if (outLine == null)
             return;
         outLine.OutlineColor = Color.green;
         outLine.OutlineWidth = 6f;
@@ -715,11 +715,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
 
     private void SetOffItem(Item item)
     {
-        if (item is null)
+        if (item == null)
             return;
 
         var outLine = item.gameObject.GetComponent<Outline>();
-        if (outLine is null)
+        if (outLine == null)
             return;
 
         outLine.OutlineWidth = 0f;
