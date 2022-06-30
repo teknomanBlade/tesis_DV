@@ -2,7 +2,7 @@ using System.Runtime.Versioning;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 public class BaseballLauncher : Item, IMovable
 {
     private float _maxLife = 100f;
@@ -20,8 +20,9 @@ public class BaseballLauncher : Item, IMovable
     public int shotsLeft;
     public bool IsEmpty
     {
-        get {
-            if(shotsLeft == 0)
+        get
+        {
+            if (shotsLeft == 0)
                 GameVars.Values.ShowNotification("You need a Tennis Ball Box to reload!");
 
             return shotsLeft == 0;
@@ -60,7 +61,7 @@ public class BaseballLauncher : Item, IMovable
     public override void Interact()
     {
         if (HasPlayerTennisBallBox)
-                Reload();
+            Reload();
 
         if (!active)
         {
@@ -71,14 +72,14 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
-        if(active)
+        if (active)
         {
             FieldOfView();
         }
         else
         {
             Inactive();
-        }        
+        }
     }
     public void Reload()
     {
@@ -87,20 +88,20 @@ public class BaseballLauncher : Item, IMovable
     }
     IEnumerator ActiveCoroutine()
     {
-        if(active)
+        if (active)
         {
             shotsLeft--;
             shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
             ChangeBallsState(shotsLeft);
             yield return new WaitForSeconds(interval);
             if (shotsLeft != 0) StartCoroutine("ActiveCoroutine");
-            else active = false;    
+            else active = false;
         }
         else
         {
             yield return new WaitForSeconds(0.01f);
         }
-        
+
     }
 
     public void InstantiateBall()
@@ -117,7 +118,7 @@ public class BaseballLauncher : Item, IMovable
 
     public void TakeDamage(float dmgAmount)
     {
-        _currentLife =- dmgAmount;
+        _currentLife = -dmgAmount;
 
         if (_currentLife <= 0)
         {
@@ -151,34 +152,39 @@ public class BaseballLauncher : Item, IMovable
 
     void FieldOfView()
     {
-       Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
+        Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
-        if(allTargets.Length == 0)
+        if (allTargets.Length == 0)
         {
             Inactive();
             active = false;
         }
 
         //Si no tenemos objetivo actual buscamos el más cercano y lo hacemos objetivo.
-        if(_currentObjective == null || _currentObjective.GetComponent<Gray>().dead || _currentObjectiveDistance > viewRadius)
+        if (_currentObjective == null || _currentObjective.GetComponent<Gray>().dead || _currentObjectiveDistance > viewRadius)
         {
-            foreach (var item in allTargets)
-            {
-                if(Vector3.Distance(transform.position, item.transform.position) < _currentObjectiveDistance)
-                {
-                    if(!item.GetComponent<Gray>().dead)
-                    {
-                        _currentObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
-                        _currentObjective = item;
-                    }
-                }
-            }
+
+
+
+            //foreach (var item in allTargets)
+            //{
+            //    if (Vector3.Distance(transform.position, item.transform.position) < _currentObjectiveDistance)
+            //    {
+            var item = GetNearestTarget(allTargets);
+
+            if (item == null)
+                return;
+            _currentObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
+            _currentObjective = item;
+            //}
+            //    }
+            //}
         }
-        
+
 
         //foreach (var item in allTargets)
         //{
-        if(_currentObjectiveDistance < viewRadius && _currentObjective != null)
+        if (_currentObjectiveDistance < viewRadius && _currentObjective != null)
         {
             Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<Gray>().GetVelocity() * _futureTime * Time.deltaTime);
             //Vector3 dir = item.transform.position - transform.position;
@@ -188,25 +194,41 @@ public class BaseballLauncher : Item, IMovable
 
             //if (Vector3.Angle(transform.forward, dir.normalized) < viewAngle / 2)
             //{
-                if(Physics.Raycast(transform.position, dir, out RaycastHit hit, dir.magnitude, obstacleMask) == false)
-                {
-                    //auxVector = new Vector3(item.tra)
-                    //myCannon.transform.LookAt(item.transform.position);
-                    
-                    Quaternion lookRotation = Quaternion.LookRotation(dir);
-                    Vector3 rotation = lookRotation.eulerAngles;
-                    //myCannonSupport.rotation = Quaternion.Euler(0f, rotation.y + 90f, 0f);
+            if (Physics.Raycast(transform.position, dir, out RaycastHit hit, dir.magnitude, obstacleMask) == false)
+            {
+                //auxVector = new Vector3(item.tra)
+                //myCannon.transform.LookAt(item.transform.position);
 
-                    //myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f);
-                    myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, rotation.y, 0f), _shootSpeed * Time.deltaTime);
-                    myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y, rotation.z), _shootSpeed * Time.deltaTime);
-                    Debug.DrawLine(transform.position, _currentObjective.transform.position, Color.red);
-                }
+                Quaternion lookRotation = Quaternion.LookRotation(dir);
+                Vector3 rotation = lookRotation.eulerAngles;
+                //myCannonSupport.rotation = Quaternion.Euler(0f, rotation.y + 90f, 0f);
+
+                //myCannon.rotation = Quaternion.Euler(0f, rotation.y + 90f, rotation.z - 5f);
+                myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, rotation.y, 0f), _shootSpeed * Time.deltaTime);
+                myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y, rotation.z), _shootSpeed * Time.deltaTime);
+                Debug.DrawLine(transform.position, _currentObjective.transform.position, Color.red);
+            }
         }
-            //}
+        //}
         //}
     }
 
+    //IA2 -P1
+    //IATP2 -P1
+    //IA-TP2 -P1
+    private Collider GetNearestTarget(Collider[] allTargets)
+    {
+        var target = allTargets.Where(x => x.gameObject.GetComponent<Gray>() != null && Vector3.Distance(x.gameObject.transform.position, this.gameObject.transform.position) < _currentObjectiveDistance).OrderBy(x => Vector3.Distance(x.gameObject.transform.position, this.gameObject.transform.position)).FirstOrDefault();
+
+
+        if (target == null)
+            Debug.Log(target is null);
+        else
+            Debug.Log("GetNearestTarget " + target.name);
+
+        return target;
+
+    }
     private void Inactive()
     {
         //myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(myCannon.rotation.x, myCannon.rotation.y, 35f), speed * Time.deltaTime);
@@ -230,10 +252,10 @@ public class BaseballLauncher : Item, IMovable
     public void DestroyThisTrap()
     {
         Quaternion finalRotation = transform.rotation;
-        Vector3 aux = new Vector3(0,0.4f,0);
-        for(int i = 0; i < _myItems.Count; i++)
+        Vector3 aux = new Vector3(0, 0.4f, 0);
+        for (int i = 0; i < _myItems.Count; i++)
         {
-            Vector3 itemPos = new Vector3(Random.Range(0.3f,1.3f), 0, Random.Range(0.3f,1.3f));
+            Vector3 itemPos = new Vector3(Random.Range(0.3f, 1.3f), 0, Random.Range(0.3f, 1.3f));
             Instantiate(_myItems[i], transform.position + aux + itemPos, Quaternion.identity);
         }
         Instantiate(trapDestroyPrefab, transform.position, finalRotation);
@@ -243,8 +265,8 @@ public class BaseballLauncher : Item, IMovable
     void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, viewRadius);
-        Vector3 lineA = GetVectorFromAngle(viewAngle /2 + transform.eulerAngles.y);
-        Vector3 lineB = GetVectorFromAngle(-viewAngle /2 + transform.eulerAngles.y);
+        Vector3 lineA = GetVectorFromAngle(viewAngle / 2 + transform.eulerAngles.y);
+        Vector3 lineB = GetVectorFromAngle(-viewAngle / 2 + transform.eulerAngles.y);
 
         Gizmos.DrawLine(transform.position, transform.position + lineA * viewRadius);
         Gizmos.DrawLine(transform.position, transform.position + lineB * viewRadius);
@@ -254,4 +276,7 @@ public class BaseballLauncher : Item, IMovable
     {
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
+
+
+
 }

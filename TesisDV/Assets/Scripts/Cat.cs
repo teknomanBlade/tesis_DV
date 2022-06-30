@@ -30,9 +30,9 @@ public class Cat : MonoBehaviour
     void Update()
     {
 
-        if(_isHeld == false && Vector3.Distance(transform.position, _startingPosition) > 3f)
+        if (_isHeld == false && Vector3.Distance(transform.position, _startingPosition) > 3f)
         {
-            
+
             Vector3 dest = default(Vector3);
             dest = _startingPosition;
             var dir = dest - transform.position;
@@ -44,6 +44,13 @@ public class Cat : MonoBehaviour
             }*/
             _navMeshAgent.destination = dest;
             //transform.rotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
+        }
+
+        if (/*_isHeld &&*/
+            Input.GetKeyDown(KeyCode.Z))
+        {
+            Debug.Log("GATO GRITA");
+            CatScreeming();
         }
         //else
         //{
@@ -61,7 +68,7 @@ public class Cat : MonoBehaviour
     public void CatHasBeenReleased()
     {
         _isHeld = false;
-        
+
         _animator.SetBool("IsIdle", false);
         _animator.SetBool("IsMad", false);
         _animator.SetBool("IsWalking", true);
@@ -86,6 +93,16 @@ public class Cat : MonoBehaviour
             //Debug.Log("ENTRA EN TRIGGER??");
             _animator.SetBool("IsIdle", true);
         }
+    }
+
+    public void CatScreeming()
+    {
+        var allEnemis = FindObjectsOfType<Gray>();
+
+        var enemiesTodie = allEnemis.Take(allEnemis.Where(x => Vector3.Distance(x.gameObject.transform.position, this.transform.position) < 100f).Count()).ToList();
+
+        enemiesTodie.ForEach(x => Debug.Log(x.name));
+
     }
 
 }

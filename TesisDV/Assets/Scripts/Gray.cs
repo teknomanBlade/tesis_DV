@@ -35,7 +35,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public float attackDisengageThreshold = 3f;
     [SerializeField]
     //private List<Vector3> _waypoints;
-    private Vector3[] _waypoints;
+    public Vector3[] _waypoints;
     private int _currentWaypoint = 0;
     private int _currentCorner = 0;
     public Coroutine attackCoroutine;
@@ -65,6 +65,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private Coroutine _currentCoroutine;
     public delegate void OnGrayAttackDelegate(bool attack);
     public event OnGrayAttackDelegate OnGrayAttackChange;
+
+    public MiniMap miniMap;
     /*[SerializeField]
     private Material deathMaterial;*/
 
@@ -80,7 +82,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private ParticleSystem _hitEffect;
 
     private float timePassed = 0;
-
+    public Vector3[] navMeshPoints;
+    public LineRenderer myLineRenderer;
     private void Awake()
     {
         canCreatePath = false;
@@ -101,10 +104,16 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         nearestDoorDistance = 1000;
         _lm.AddGray(this);
+        miniMap = FindObjectOfType<MiniMap>();
+        miniMap.grays.Add(this);
+        myLineRenderer.startWidth = 0.15f;
+        myLineRenderer.endWidth = 0.15f;
+        myLineRenderer.positionCount = 0;
+        miniMap.AddLineRenderer(myLineRenderer);
 
         //Exit pos lo setea el UFO en el instantiate.
-       /*  Vector3 aux = _lm.allUfos[0].transform.position;
-        _exitPos = new Vector3(aux.x, 0f, aux.z); */
+        /*  Vector3 aux = _lm.allUfos[0].transform.position;
+         _exitPos = new Vector3(aux.x, 0f, aux.z); */
     }
 
     private void Start()
@@ -163,16 +172,16 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
                     //_anim.SetBool("IsWalking", false); Ahora en MovingAnimations()
                 }
 
-                if(canCreatePath)
+                if (canCreatePath)
                 {
                     _navMeshAgent.ResetPath();
                     CalculatePath(_currentObjective);
-                   //_currentCorner = 0;
+                    //_currentCorner = 0;
                     canCreatePath = false;
                     pathIsCreated = false;
                 }
 
-                if(_isMoving)
+                if (_isMoving)
                 {
                     //ReliableMove();
                     Move();
@@ -220,7 +229,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             _currentObjective = _trapPos;
             canCreatePath = true;
             BreakTrap(_currentObstacleTrap);
-            MoveTo();    
+            MoveTo();
             //Poner en falso al final.
         }
         else if (pursue)
@@ -228,42 +237,42 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             //CalculatePath(_player.transform.position);
             _currentObjective = _player.transform.position;
             canCreatePath = true;
-            
+
             MoveTo();
             //dest = _player.transform.position;
         }
-        else if (_lm.enemyHasObjective) 
+        else if (_lm.enemyHasObjective)
         {
             //CalculatePath(_exitPos);
             _currentObjective = _exitPos;
             canCreatePath = true;
-            
+
             MoveTo();
             //dest = _exitPos;
         }
         //else if (_lm.allDoorsAreClosed)
         //{
-            /*StartCoroutine(FindClosestDoor());
-            
-            dest = nearestDoor.position;
-            if (Vector3.Distance(transform.position, nearestDoorVector) < 3f)
-            {
-                //_anim.SetBool("IsAttacking", true);
-                currentCoroutine = StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
-                nearestDoor.GetComponent<AuxDoor>().Interact();
-                GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(nearestDoor.GetComponent<AuxDoor>().myDoor.itemName));
-                TriggerDoorGrayInteract("GrayDoorInteract");
-                StartCoroutine(LerpOutlineWidthAndColor(8f,2f, Color.red));
-                _lm.ChangeDoorsStatus();
-            } COMENTAR HASTA SOLUCIONAR EL TEMA DE LAS PUERTAS*/
-            
+        /*StartCoroutine(FindClosestDoor());
+
+        dest = nearestDoor.position;
+        if (Vector3.Distance(transform.position, nearestDoorVector) < 3f)
+        {
+            //_anim.SetBool("IsAttacking", true);
+            currentCoroutine = StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
+            nearestDoor.GetComponent<AuxDoor>().Interact();
+            GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(nearestDoor.GetComponent<AuxDoor>().myDoor.itemName));
+            TriggerDoorGrayInteract("GrayDoorInteract");
+            StartCoroutine(LerpOutlineWidthAndColor(8f,2f, Color.red));
+            _lm.ChangeDoorsStatus();
+        } COMENTAR HASTA SOLUCIONAR EL TEMA DE LAS PUERTAS*/
+
         //}
         else
         {
             //CalculatePath(_lm.objective.transform.position);
             _currentObjective = _lm.objective.transform.position;
             canCreatePath = true;
-            
+
             MoveTo();
             //dest = _lm.objective.transform.position;
         }
@@ -285,10 +294,10 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     public void MovingAnimations()
     {
-        if(_isMoving)
-        _anim.SetBool("IsWalking", true);
+        if (_isMoving)
+            _anim.SetBool("IsWalking", true);
         else
-        _anim.SetBool("IsWalking", false);
+            _anim.SetBool("IsWalking", false);
     }
 
     public string GetDoorAccessName(string name)
@@ -311,7 +320,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     public void CheckPathStatus()
     {
-        if(_navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial || _navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid)
+        if (_navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial || _navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid)
         {
             //_isMoving = false;
 
@@ -324,11 +333,11 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     public IEnumerator PlayGraySound()
     {
-        GameVars.Values.soundManager.PlaySoundOnce(_as,"VoiceWhispering", 0.4f, true);
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "VoiceWhispering", 0.4f, true);
         yield return new WaitForSeconds(.01f);
         _isWalkingSoundPlaying = true;
     }
-    
+
     /*public IEnumerator PlayGrayDeathSound()
     {
          _anim.SetBool("IsDead", true);
@@ -343,7 +352,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         //Dead();
     }*/
 
-   
+
     private bool IsInSight()
     {
         LayerMask layermask = 1 << 12;
@@ -386,7 +395,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     IEnumerator Attack()
     {
-        
+
         //Verifica el booleano antes de atacar, este booleano se desactiva en Die y Stun. Se vuelve a activar al final del Stun.
         attacking = true;
         _isMoving = false;
@@ -398,17 +407,17 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         //yield return new WaitForSeconds(_attackWindup);
         //if(_canAttack)
         //{
-            //TriggerPlayerDamage("DamagePlayer");
-            //PlayParticleSystemShader();
-            //attacking = false;
-           //_isMoving = true;
-           
+        //TriggerPlayerDamage("DamagePlayer");
+        //PlayParticleSystemShader();
+        //attacking = false;
+        //_isMoving = true;
+
         //}
-        
+
         //attackCoroutine = StartCoroutine("Attack");
         //_anim.SetBool("IsAttacking", false);
-        
-        
+
+
     }
 
     private void AttackPlayer()
@@ -450,7 +459,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     private void MoveTo()
     {
-        if(pathIsCreated)
+        if (pathIsCreated)
         {
             Vector3 dir = _waypoints[_currentWaypoint] - transform.position;
             transform.forward = dir;
@@ -468,31 +477,31 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
                 {
                     _currentWaypoint++;
                 }
-                    
+
             }
         }
 
-            /* if (_currentCorner < _navMeshAgent.path.corners.Length)
-                {
-                    Vector3 dir = _navMeshAgent.path.corners[_currentCorner] - transform.position;
-                    transform.forward = dir;
-                    transform.position += transform.forward * _movingSpeed * Time.deltaTime;
-                }
-
-            if (Vector3.Distance(transform.position, _navMeshAgent.path.corners[_currentCorner]) <= .1f)  //dir.magnitude < 0.1f
+        /* if (_currentCorner < _navMeshAgent.path.corners.Length)
             {
-                if(_currentCorner + 1 > _navMeshAgent.path.corners.Length)
-                {
-                    canCreatePath = true;
-                    _currentCorner = 0;
-                }
-                else
-                {
-                    Mathf.Clamp(_currentCorner, 0 , _navMeshAgent.path.corners.Length);
-                    _currentCorner++;
-                    Mathf.Clamp(_currentCorner, 0 , _navMeshAgent.path.corners.Length);
-                }
-            } PROBANDO OTRO METODO USANDO FOR PARA REUNIR LOS PUNTOS EN UNA LISTA DE WAYPOINTS*/
+                Vector3 dir = _navMeshAgent.path.corners[_currentCorner] - transform.position;
+                transform.forward = dir;
+                transform.position += transform.forward * _movingSpeed * Time.deltaTime;
+            }
+
+        if (Vector3.Distance(transform.position, _navMeshAgent.path.corners[_currentCorner]) <= .1f)  //dir.magnitude < 0.1f
+        {
+            if(_currentCorner + 1 > _navMeshAgent.path.corners.Length)
+            {
+                canCreatePath = true;
+                _currentCorner = 0;
+            }
+            else
+            {
+                Mathf.Clamp(_currentCorner, 0 , _navMeshAgent.path.corners.Length);
+                _currentCorner++;
+                Mathf.Clamp(_currentCorner, 0 , _navMeshAgent.path.corners.Length);
+            }
+        } PROBANDO OTRO METODO USANDO FOR PARA REUNIR LOS PUNTOS EN UNA LISTA DE WAYPOINTS*/
     }
 
     public void UnStun()
@@ -544,7 +553,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void MoveObjective()
     {
         //CAMBIAR PARA QUE EL GATO QUEDE ENTRE LAS MANOS.
-        if(_lm.objective != null) _lm.objective.transform.position = transform.position + new Vector3(0f, 1.8f - 0.35f, -0.87f);
+        if (_lm.objective != null) _lm.objective.transform.position = transform.position + new Vector3(0f, 1.8f - 0.35f, -0.87f);
     }
 
     public void DropObjective()
@@ -586,7 +595,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void FoundTrapInPath(GameObject trap) //Después cambiar cuando haya un script Trap.
     {
         _trapPos = trap.transform.position;
-        _currentObstacleTrap = trap.GetComponent<BaseballLauncher>(); 
+        _currentObstacleTrap = trap.GetComponent<BaseballLauncher>();
         _foundTrapInPath = true;
     }
 
@@ -594,12 +603,12 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     {
         //Si la distancia a la trampa es menor que tanto ataca, espera unos segundos y vuelve a atacar hasta destruir la trampa. Ahi pone en falso el Foundtrap.
         Vector3 dir = _trapPos - transform.position;
-        if(dir.magnitude < 0.6f)
+        if (dir.magnitude < 0.6f)
         {
             float timeToAttack = 5f;
             float timePassed = 0f;
 
-            if(timePassed > 0)
+            if (timePassed > 0)
             {
                 timePassed -= Time.deltaTime;
             }
@@ -698,7 +707,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             //_anim.SetBool("IsHitted", true);
             currentCoroutine = StartCoroutine(PlayAnimation("IsHitted", "Hit"));
             ActiveInnerEffect();
-            StartCoroutine(LerpSphereHitEffect(2f,2f));
+            StartCoroutine(LerpSphereHitEffect(2f, 2f));
             GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
             Damage();
             Stun(5f);
@@ -805,7 +814,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     {
         Vector3 aux = exitPosition;
         _exitPos = new Vector3(aux.x, 0f, aux.z);
-        
+
         return this;
     }
 
@@ -813,22 +822,24 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     {
         //_waypoints = new List<Vector3>();
         //_waypoints = null;
-        
 
-        _navMeshAgent.ResetPath();  
+
+        _navMeshAgent.ResetPath();
         NavMeshPath path = new NavMeshPath();
         //_navMeshAgent.CalculatePath(targetPosition, path);
-        if(NavMesh.CalculatePath(transform.position, _currentObjective, NavMesh.AllAreas, path))
+        if (NavMesh.CalculatePath(transform.position, _currentObjective, NavMesh.AllAreas, path))
         {
             _navMeshAgent.SetPath(path);
 
-            for(int i = 0; i > _navMeshAgent.path.corners.Length; i++)
+            for (int i = 0; i > _navMeshAgent.path.corners.Length; i++)
             {
                 _waypoints[i] = _navMeshAgent.path.corners[i];
             }
             pathIsCreated = true;
+            _waypoints = path.corners;
+            miniMap.DrawWayPointInMiniMap();
         }
-        
+
         //NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, _navMeshPath)
     }
 

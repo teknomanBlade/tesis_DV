@@ -172,6 +172,8 @@ public class UFO : MonoBehaviour, IInRoundObserver
         }
     }
 
+
+
     public void ExitPlanet()
     {
         Vector3 dir = _spawnPos - transform.position;
