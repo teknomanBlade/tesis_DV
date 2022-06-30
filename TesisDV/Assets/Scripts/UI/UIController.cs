@@ -5,17 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class UIController : MonoBehaviour
 {
+    private void Awake()
+    {
+        
+    }
+
     void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.Tab))
-            //{
-                //var screenCrafting = Instantiate(Resources.Load<CraftingScreen>("CraftingCanvas"));
-                //ScreenManager.Instance.Push(screenCrafting);
-            //}
-
-        if(Input.GetKeyDown(KeyCode.R))
+        if (GameVars.Values.LevelManager.YouWin.activeSelf || GameVars.Values.LevelManager.YouLose.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.M))
             {
-                SceneManager.LoadScene("MainFloor_Upgrade");
+                SceneManager.LoadScene(0);
             }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(1);
+            }
+        }
     }
 }

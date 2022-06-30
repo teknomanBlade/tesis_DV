@@ -2,12 +2,15 @@ using System.Runtime.Versioning;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class BaseballLauncher : Item, IMovable
 {
     private float _maxLife = 100f;
     [SerializeField]
     private float _currentLife;
+    private bool _isDestroyed;
+    
     public GameObject projectilePrefab;
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
@@ -230,13 +233,23 @@ public class BaseballLauncher : Item, IMovable
     public void DestroyThisTrap()
     {
         Quaternion finalRotation = transform.rotation;
-        Vector3 aux = new Vector3(0,0.4f,0);
-        for(int i = 0; i < _myItems.Count; i++)
+        
+        var trapDestroyGO = Instantiate(trapDestroyPrefab, transform.position, finalRotation);
+        trapDestroyGO.GetComponent<BaseballLauncherDestroyAnim>().OnDestroyed += OnDestroyed;
+    }
+
+    private void OnDestroyed(bool destroyed)
+    {
+        _isDestroyed = destroyed;
+        Vector3 aux = new Vector3(0, 0.4f, 0);
+        if (_isDestroyed)
         {
-            Vector3 itemPos = new Vector3(Random.Range(0.3f,1.3f), 0, Random.Range(0.3f,1.3f));
-            Instantiate(_myItems[i], transform.position + aux + itemPos, Quaternion.identity);
+            for (int i = 0; i < _myItems.Count; i++)
+            {
+                Vector3 itemPos = new Vector3(UnityEngine.Random.Range(0.3f, 1.3f), 0, UnityEngine.Random.Range(0.3f, 1.3f));
+                Instantiate(_myItems[i], transform.position + aux + itemPos, Quaternion.identity);
+            }
         }
-        Instantiate(trapDestroyPrefab, transform.position, finalRotation);
         Destroy(this.gameObject);
     }
 

@@ -78,6 +78,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     [SerializeField]
     private ParticleSystem _hitEffect;
+    [SerializeField]
+    private GameObject _hitWave;
 
     private float timePassed = 0;
 
@@ -280,6 +282,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         var clips = _anim.runtimeAnimatorController.animationClips;
         float time = clips.First(x => x.name == name).length;
         yield return new WaitForSeconds(time);
+        _navMeshAgent.speed = 1;
         _anim.SetBool(param, false);
     }
 
@@ -390,6 +393,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         //Verifica el booleano antes de atacar, este booleano se desactiva en Die y Stun. Se vuelve a activar al final del Stun.
         attacking = true;
         _isMoving = false;
+        _navMeshAgent.speed = 0;
         StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
         yield return null;
         //_anim.SetBool("IsAttacking", true);
@@ -424,9 +428,9 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         //_anim.SetBool("IsHitted", false);
         _canAttack = false;
         _rb.isKinematic = true;
-        _rb.velocity = Vector3.zero;
         _isMoving = false;
         stun = true;
+        _navMeshAgent.speed = 0;
         currentCoroutine = StartCoroutine(PlayAnimation("IsStunned", "Stun"));
         //_anim.SetBool("IsStunned", true);
         Invoke("UnStun", time);
@@ -438,6 +442,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _canAttack = false;
         stun = true;
         _isMoving = false;
+        _navMeshAgent.speed = 0;
         _navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
@@ -570,17 +575,21 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     {
         _doorPos = door.gameObject.transform.position;
         _foundDoorInPath = true;
+        attacking = true;
+        _isMoving = false;
+        _navMeshAgent.speed = 0;
+        StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
         OpenDoor(door);
     }
-
+    
     private void OpenDoor(Door door)
     {
-        currentCoroutine = StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
         door.Interact();
         GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
         TriggerDoorGrayInteract("GrayDoorInteract");
         //StartCoroutine(LerpOutlineWidthAndColor(8f,2f, Color.red));
         _foundDoorInPath = false;
+        attacking = false;
     }
 
     public void FoundTrapInPath(GameObject trap) //Después cambiar cuando haya un script Trap.
@@ -698,7 +707,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             //_anim.SetBool("IsHitted", true);
             currentCoroutine = StartCoroutine(PlayAnimation("IsHitted", "Hit"));
             ActiveInnerEffect();
-            StartCoroutine(LerpSphereHitEffect(2f,2f));
             GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
             Damage();
             Stun(5f);
@@ -709,7 +717,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             {
                 currentCoroutine = StartCoroutine(PlayAnimation("IsHitted", "Hit"));
                 ActiveInnerEffect();
-                StartCoroutine(LerpSphereHitEffect(2f, 2f));
                 GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
                 Damage();
                 Stun(5f);
@@ -721,9 +728,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     {
         _hitEffect.Play();
         _hasHitEffectActive = true;
-        var meshRenderer = _hitEffect.gameObject.transform.GetComponentInChildren<MeshRenderer>();
-        meshRenderer.enabled = _hasHitEffectActive;
-        sphereEffectMaterial = meshRenderer.sharedMaterials.FirstOrDefault();
+        _hitWave.SetActive(!_hitWave.activeSelf);
+        _hitWave.GetComponent<Animator>().SetBool("IsHit", true);
     }
 
     IEnumerator FindClosestDoor()
@@ -742,27 +748,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
         }
         yield return new WaitForSeconds(0.5f);
-    }
-
-    IEnumerator LerpSphereHitEffect(float endValue, float duration)
-    {
-        float time = 0;
-        float startValue = _valueToChange;
-
-        while (time < duration)
-        {
-            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
-            time += Time.deltaTime;
-
-            sphereEffectMaterial.SetFloat("_Interpolator", _valueToChange);
-            yield return null;
-        }
-
-        _valueToChange = endValue;
-        yield return new WaitForSeconds(1.5f);
-        sphereEffectMaterial.SetFloat("_Interpolator", 0);
-        _hasHitEffectActive = false;
-        _hitEffect.gameObject.transform.GetComponentInChildren<MeshRenderer>().enabled = _hasHitEffectActive;
     }
 
     IEnumerator LerpScaleDissolve(float endValue, float duration)

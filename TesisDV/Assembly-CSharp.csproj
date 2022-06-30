@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -121,7 +121,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IInRoundObserver.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInteractable.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
-    <Compile Include="Assets\EMPAttack.cs" />
+    <Compile Include="Assets\Scripts\EMPAttack.cs" />
     <Compile Include="Assets\Scripts\PathFinding\Node.cs" />
     <Compile Include="Assets\Scripts\DoorTrigger.cs" />
     <Compile Include="Assets\Scripts\BaseballLauncher.cs" />
@@ -246,7 +246,7 @@
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Templates\SRP (Legacy)\README.txt" />
     <None Include="Assets\Models\Materials\House\HouseFloor.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_SimpleSubtractOpNode.shader" />
-    <None Include="Assets\Models\Materials\Gray\SphereMask.shader" />
+    <None Include="Assets\Models\Materials\Gray\HitWaveExpansion.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_TriplanarNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ComputeScreenPos.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ProjectionParams.shader" />

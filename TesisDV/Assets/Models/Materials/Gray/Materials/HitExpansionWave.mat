@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SphereMask
-  m_Shader: {fileID: 4800000, guid: 77f2de72e1e0fff4b9136502c20f4427, type: 3}
+  m_Name: HitExpansionWave
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: 
-  m_LightmapFlags: 0
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f24f3de37ffd16b408fa050bf5383d1b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -55,50 +55,24 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _TextureSample0:
-        m_Texture: {fileID: 2800000, guid: 9e8d0545d8103314f84f30035a0825c2, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _texcoord:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _ASEOutlineWidth: 0.01
-    - _Bias: 1
     - _BumpScale: 1
-    - _Cutoff: 0.8
+    - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _Distance: 0
     - _DstBlend: 0
-    - _EdgeLength: 2
-    - _FallOff: 18.57
-    - _FallOff2: 0
-    - _Float0: 2
-    - _Float1: 1
-    - _Float2: 0.08055985
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Interpolator: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Power: 1
-    - _Radio: 2
-    - _Radio2: 0
-    - _Scale: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - __dirty: 0
     m_Colors:
-    - _ASEOutlineColor: {r: 1, g: 0.9647913, b: 0.3443396, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PlayerPosition: {r: 30.77255, g: -0.031, b: 4.026925, a: 0}
-    - _PlayerPosition2: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
