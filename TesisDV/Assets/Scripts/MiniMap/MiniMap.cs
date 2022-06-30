@@ -46,7 +46,7 @@ public class MiniMap : MonoBehaviour
     //IA-TP2 -P1
     public void DrawWayPointInMiniMap()
     {
-        wayPointsOfAllGrey = grays.Where(x => x != x.dead).OrderBy(x => Vector3.Distance(x.gameObject.transform.position, player.transform.position)).SelectMany(x => x._waypoints).ToList();
+        wayPointsOfAllGrey = grays.Where(x => x != x.dead && x != null).OrderBy(x => Vector3.Distance(x.gameObject.transform.position, player.transform.position)).SelectMany(x => x._waypoints).ToList();
 
         grayWithGreyPoints = grays.Aggregate(new List<Tuple<Gray, List<Vector3>>>(), (myGrayWithWayPoint, myGray) =>
         {
@@ -63,17 +63,21 @@ public class MiniMap : MonoBehaviour
         if (grayWithGreyPoints == null || grayWithGreyPoints.Count == 0)
             yield return new WaitForSeconds(0.5f);
 
-        for (int i = 0; i < grayWithGreyPoints.Count; i++)
-        {
-            Debug.Log(grayWithGreyPoints[i].Item1 + " " + grayWithGreyPoints[i].Item2.Count);
-        }
+        //for (int i = 0; i < grayWithGreyPoints.Count; i++)
+        //{
+        //    Debug.Log(grayWithGreyPoints[i].Item1 + " " + grayWithGreyPoints[i].Item2.Count);
+        //}
 
         for (int x = 0; x < grayWithGreyPoints.Count; x++)
         {
+            Debug.Log("grayWithGreyPoints " + grayWithGreyPoints.Count);
             var waypoints = grayWithGreyPoints[x].Item2;
 
-            if (waypoints.Count < 1)
+            if (waypoints == null || waypoints.Count < 1)
                 yield return new WaitForSeconds(0.5f);
+
+            Debug.Log("lineRenderers " + lineRenderers.Count);
+            
 
             lineRenderers[x].GetComponent<LineRenderer>().positionCount = waypoints.Count;
             lineRenderers[x].GetComponent<LineRenderer>().SetPosition(0, waypoints[0]);
