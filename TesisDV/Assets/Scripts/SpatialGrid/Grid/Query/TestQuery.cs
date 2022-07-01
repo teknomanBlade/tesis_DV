@@ -10,9 +10,9 @@ public class TestQuery : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            var result = query.Query().Select(x => x as Enemy).Where(x => x != null);
+            var result = query.Query().Select(x => x as Gray).Where(x => x != null);
 
-            var result2 = query.Query().Select(x => x as Enemy).Where(x => x != null).Where(enemy => enemy.hp < 5);
+            var result2 = query.Query().Select(x => x as Gray).Where(x => x != null).Where(enemy => enemy.hp < 3);
 
             foreach (var item in result)
             {
