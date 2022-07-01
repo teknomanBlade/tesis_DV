@@ -29,11 +29,6 @@ public class Racket : Melee
         
     }
 
-    public void ActiveHit()
-    {
-        hitStateActive = true;
-    }
-
     public override void MeleeAttack()
     {
         if(!IsAttacking)
@@ -42,7 +37,7 @@ public class Racket : Melee
     IEnumerator Attack(string param, string name)
     {
         IsAttacking = true;
-        //_player.Cam.ShakeRacketSwing();
+        _player.Cam.ShakeRacketSwing();
         _trail.gameObject.SetActive(IsAttacking);
         _trail.Play();
         anim.SetBool(param, true);
@@ -62,7 +57,7 @@ public class Racket : Melee
 
     protected override void OnContactEffect(Collider other)
     {
-        if (hitStateActive && IsAttacking)
+        if (IsAttacking)
         {
             if (other.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             {
@@ -77,11 +72,11 @@ public class Racket : Melee
                     OnRacketDestroyed?.Invoke(_isDestroyed);
                     _player.RacketInventoryRemoved();
                 }
-                OnRacketHit?.Invoke(_isHitted);
-                OnRacketHit += other.gameObject.GetComponent<Gray>().RacketHit;
+                //OnRacketHit?.Invoke(_isHitted);
+                //OnRacketHit += other.gameObject.GetComponent<Gray>().RacketHit;
                 //_isHitted = false;
-                //AddObserver(other.gameObject.GetComponent<Gray>());
-                //TriggerHit("RacketHit");
+                AddObserver(other.gameObject.GetComponent<Gray>());
+                TriggerHit("RacketHit");
             }
         }
     }

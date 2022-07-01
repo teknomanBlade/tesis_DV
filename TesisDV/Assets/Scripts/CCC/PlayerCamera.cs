@@ -10,6 +10,7 @@ public class PlayerCamera : MonoBehaviour
     public GameObject Camera { get; set; }
     public Animator Animator { get; set; }
     private Quaternion targetAngle;
+    private Quaternion targetAngleShake;
     private float smoothing = 20f;
     private Vector3 offset = new Vector3(0f, 0.75f, 0f);
 
@@ -18,11 +19,13 @@ public class PlayerCamera : MonoBehaviour
     private float _toggleSpeed = 0.3f;
     private float _amplitude = 0.005f;
     private float _frequency = 10.0f;
+    private float _valueToChange;
 
     private void Awake()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _camera = GameObject.Find("MainCamera");
+        targetAngleShake = Quaternion.Euler(0.005f, -0.005f, 0f);
         Camera = _camera;
         Animator = Camera.GetComponent<Animator>();
         SetInitPos(_camera.transform.localPosition);
@@ -77,10 +80,25 @@ public class PlayerCamera : MonoBehaviour
     }
     public void ShakeRacketSwing()
     {
-        StartCoroutine(ShakeCameraRacket(0.1f));
+        StartCoroutine(ShakeCameraRacket(0.05f, 0.1f));
     }
-    
-    public IEnumerator ShakeCameraRacket(float duration)
+    IEnumerator ShakeCameraRacket(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _valueToChange;
+
+        while (time < duration)
+        {
+            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            transform.localRotation = Quaternion.Slerp(transform.localRotation, targetAngleShake, _valueToChange);
+            yield return null;
+        }
+
+        _valueToChange = endValue;
+    }
+    /*public IEnumerator ShakeCameraRacket(float duration)
     {
         Quaternion originalRot = transform.localRotation;
 
@@ -88,17 +106,17 @@ public class PlayerCamera : MonoBehaviour
 
         while (elapsed < duration)
         {
-            float x = Random.Range(0, 1.87f);
-            float y = Random.Range(0, -1.89f);
-            
-            transform.localRotation = Quaternion.Euler(transform.localRotation.x + x, transform.localRotation.y + y, transform.localRotation.z);
+            //float x = Random.Range(-0.20f, 0.20f);
+            //float y = Random.Range(-0.20f, 0.20f);
+
+            //transform.localRotation = Quaternion.Slerp();
 
             elapsed += Time.deltaTime;
 
             yield return null;
         }
 
-    }
+    }*/
     /*public float CheckSign(float number, float sum)
     {
         var result = 0f;

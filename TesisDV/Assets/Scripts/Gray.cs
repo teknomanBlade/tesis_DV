@@ -720,7 +720,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             Damage();
             Stun(5f);
         }
-        /*else if (message.Equals("RacketHit"))
+        else if (message.Equals("RacketHit"))
         {
             if (_anim)
             {
@@ -730,7 +730,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
                 Damage();
                 Stun(5f);
             }
-        }*/
+        }
     }
     public void RacketHit(bool hit)
     {

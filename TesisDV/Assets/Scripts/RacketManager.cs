@@ -22,9 +22,5 @@ public class RacketManager : MonoBehaviour
     {
         
     }
-
-    public void ActiveHit()
-    {
-        racket.ActiveHit();
-    }
+   
 }
