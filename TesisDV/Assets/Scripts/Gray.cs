@@ -35,8 +35,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public float attackThreshold = 2.5f;
     public float attackDisengageThreshold = 3f;
     [SerializeField]
-    //private List<Vector3> _waypoints;
-    private Vector3[] _waypoints;
+    public Vector3[] _waypoints;
     private int _currentWaypoint = 0;
     private int _currentCorner = 0;
     public Coroutine attackCoroutine;
@@ -87,6 +86,9 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private GameObject _hitWave;
 
     private float timePassed = 0;
+    [SerializeField]
+    private LineRenderer lineRenderer;
+    MiniMap miniMap;
 
     private void Awake()
     {
@@ -108,10 +110,10 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         nearestDoorDistance = 1000;
         _lm.AddGray(this);
-
+        miniMap = FindObjectOfType<MiniMap>();
         //Exit pos lo setea el UFO en el instantiate.
-       /*  Vector3 aux = _lm.allUfos[0].transform.position;
-        _exitPos = new Vector3(aux.x, 0f, aux.z); */
+        /*  Vector3 aux = _lm.allUfos[0].transform.position;
+         _exitPos = new Vector3(aux.x, 0f, aux.z); */
     }
 
     private void Start()
