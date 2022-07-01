@@ -60,7 +60,7 @@ public class MiniMap : MonoBehaviour
             });
         }
         catch (Exception ex)
-        { }
+        { Debug.Log(ex.ToString()); }
     }
 
     IEnumerator DrayLGrayineRenderer()

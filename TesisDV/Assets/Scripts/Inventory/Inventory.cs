@@ -106,6 +106,7 @@ public class Inventory : MonoBehaviour
                 //itemSlots[i].Item = null;
                 itemSlots[i].RemoveItem();
                 _trapHotBar.CheckRecipeRequirements(this);
+                break;
             }
         }  
     }
