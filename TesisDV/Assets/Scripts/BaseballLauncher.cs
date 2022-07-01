@@ -21,7 +21,6 @@ public class BaseballLauncher : Item, IMovable
     public float viewRadius;
     public float viewAngle;
     public int shotsLeft;
-    private bool _canShoot = true;
     public bool IsEmpty
     {
         get {
@@ -39,8 +38,10 @@ public class BaseballLauncher : Item, IMovable
     Vector3 auxVector;
     Transform myCannon;
     Transform myCannonSupport;
-    private float _futureTime = 30f;
+    private float _futureTime = 1f; //era 30f.
     private float _shootSpeed = 5f;
+    private float _searchSpeed = 2.5f;
+    private bool isWorking = true;
     private float _inactiveSpeed = 0.3f;
     private Collider _currentObjective = null;
     private float _currentObjectiveDistance = 1000;
@@ -92,15 +93,15 @@ public class BaseballLauncher : Item, IMovable
     {
         if(active)
         {
-            if(_canShoot)
-            {
+           
+            
                 shotsLeft--;
                 shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
                 ChangeBallsState(shotsLeft);
                 yield return new WaitForSeconds(interval);
                 if (shotsLeft != 0) StartCoroutine("ActiveCoroutine");
                 else active = false;  
-            }
+            
               
         }
         else
@@ -124,11 +125,12 @@ public class BaseballLauncher : Item, IMovable
 
     public void TakeDamage(float dmgAmount)
     {
-        _currentLife =- dmgAmount;
+        _currentLife -= dmgAmount;
 
         if (_currentLife <= 0)
         {
             //Hacer animacion de destrucción, instanciar sus objetos de construcción y destruirse.
+            isWorking = false;  
             DestroyThisTrap();
         }
     }
@@ -163,12 +165,8 @@ public class BaseballLauncher : Item, IMovable
         if(allTargets.Length == 0)
         {
             //Inactive();
-            SearchingForObjectives();
-            _canShoot = false;
-        }
-        else
-        {
-            _canShoot = true;
+            //SearchingForObjectives();
+
         }
 
         //Si no tenemos objetivo actual buscamos el más cercano y lo hacemos objetivo.
@@ -196,6 +194,7 @@ public class BaseballLauncher : Item, IMovable
             //Vector3 dir = item.transform.position - transform.position;
 
             Vector3 dir = futurePos - transform.position;
+            
             _currentObjectiveDistance = Vector3.Distance(transform.position, _currentObjective.transform.position);
 
             //if (Vector3.Angle(transform.forward, dir.normalized) < viewAngle / 2)
@@ -227,10 +226,15 @@ public class BaseballLauncher : Item, IMovable
         
     }
 
+    public bool IsWorking()
+    {
+        return isWorking;
+    }
+
     private void SearchingForObjectives()
     {
-        myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, viewAngle/2, 0f), _shootSpeed * Time.deltaTime);
-        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, -viewAngle/2, 0f), _shootSpeed * Time.deltaTime);
+        myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(myCannonSupport.rotation.x +10, myCannonSupport.rotation.y +10, myCannonSupport.rotation.z +10), _searchSpeed * Time.deltaTime);
+        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(myCannon.rotation.x + 10, myCannon.rotation.y + 10, myCannon.rotation.z + 10), _searchSpeed * Time.deltaTime);
     }
 
     public void ActiveDeactivateBallStates(bool state1, bool state2, bool state3)

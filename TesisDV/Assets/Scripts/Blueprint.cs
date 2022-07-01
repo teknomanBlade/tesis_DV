@@ -23,9 +23,11 @@ public class Blueprint : MonoBehaviour
     private Renderer[] _myChildrenRenderers;
     public LayerMask LayerMaskWall;
     int layerMask;
+    private GameObject parent;  
 
     void Start()
     {
+        parent = GameObject.Find("MainGame");
         _player = GameObject.Find("Player").GetComponent<Player>();
         int layerMask = GameVars.Values.GetWallLayer();
         layerMask = ~layerMask;
@@ -115,7 +117,7 @@ public class Blueprint : MonoBehaviour
         canBuild = false;
         GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
         yield return new WaitForSeconds(2f);
-        GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation);
+        GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, parent.transform);
         //Destroy(aux.GetComponent<InventoryItem>());
         craftingRecipe.RemoveItems();
         craftingRecipe.RestoreBuildAmount();
