@@ -7,7 +7,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
 
     private Coroutine _currentCoroutine;
-
+    private GameObject parent;  
     [SerializeField]
     private UFO _myUFO;
 
@@ -78,6 +78,11 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         //_currentCoroutine = StartCoroutine("WaitFirstDelay");
     }
 
+    void Start()
+    {
+        parent = GameObject.Find("MainGame");
+    }
+
     void Update()
     {
         if (!_inRound)
@@ -113,12 +118,12 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private void SpawnWave()
     {
         InstantiateUFOIndicators();
-        if (_currentRound <= _totalRounds)
+        if (_currentRound < _totalRounds)
         {
             CurrentRound++;
             //TriggerRoundChange("RoundChanged");
-            Instantiate(_myUFO).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetTotalGrays(_totalGraysUFO1);//.SetRotation(new Vector3(-90f, 0f, 0f));
-            Instantiate(_myUFO).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetTotalGrays(_totalGraysUFO2);//.SetRotation(new Vector3(-90f, 0f, 0f));
+            Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetTotalGrays(_totalGraysUFO1);//.SetRotation(new Vector3(-90f, 0f, 0f));
+            Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetTotalGrays(_totalGraysUFO2);//.SetRotation(new Vector3(-90f, 0f, 0f));
         }
         else
         {

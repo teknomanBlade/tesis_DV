@@ -79,6 +79,11 @@ public class Cat : MonoBehaviour
         return Vector3.Distance(transform.position, _exitPos);
     }
 
+    public bool GetCatHeld()
+    {
+        return _isHeld;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Equals("StartingPosition"))

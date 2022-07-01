@@ -203,17 +203,30 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     public void WinGame()
     {
-        Debug.Log("You Win!");
-        YouWin.SetActive(true);
+        //Debug.Log("You Win!");
+        //YouWin.SetActive(true);
         //SceneManager.LoadScene("MainFloor_Upgrade");
+
+        var screenWin = Instantiate(Resources.Load<YouWinScreen>("YouWinCanvas"));
+        ScreenManager.Instance.Push(screenWin);
+        _player.SwitchKinematics();
     } 
 
     public void LoseGame()
     {
         //playing = false;
-        YouLose.SetActive(true);
-        Debug.Log("Loser");
+
+
+        //YouLose.SetActive(true);
+        //Debug.Log("Loser");
+
+
         //SceneManager.LoadScene("MainFloor_Upgrade");
+
+        var screenLose = Instantiate(Resources.Load<YouLoseScreen>("YouLoseCanvas"));
+        ScreenManager.Instance.Push(screenLose);
+        _player.SwitchKinematics();
+        
     }
 
     public void RemoveUFO(UFO ufo)

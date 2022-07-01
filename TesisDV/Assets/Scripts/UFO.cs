@@ -44,6 +44,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
     [SerializeField]
     private bool _inPosition;
     private bool _canLeavePlanet;
+    private GameObject parent;
 
 
     private void Awake()
@@ -67,6 +68,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
 
     void Start()
     {
+        parent = GameObject.Find("MainGame");
         //Vector3 auxVector = new Vector3(_finalPos.x, 0f, _finalPos.z);
         //UFOIndicator = Instantiate(UFOIndicatorPrefab);
         //UFOIndicator.transform.position = auxVector;
@@ -162,7 +164,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
         {
             if (!Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
             {
-                currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity).GetComponent<Gray>().SetExitUFO(transform.position);
+                currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Gray>().SetExitUFO(transform.position);
                 //_lm.EnemySpawned();
                 //SpawnGreyLerp();
                 spawning = false;

@@ -21,6 +21,7 @@ public class BaseballLauncher : Item, IMovable
     public float viewRadius;
     public float viewAngle;
     public int shotsLeft;
+    private bool _canShoot = true;
     public bool IsEmpty
     {
         get {
@@ -74,11 +75,10 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
-        if(active)
-        {
-            FieldOfView();
-        }
-        else
+        
+        FieldOfView();
+        
+        if(shotsLeft == 0)
         {
             Inactive();
         }        
@@ -92,12 +92,16 @@ public class BaseballLauncher : Item, IMovable
     {
         if(active)
         {
-            shotsLeft--;
-            shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
-            ChangeBallsState(shotsLeft);
-            yield return new WaitForSeconds(interval);
-            if (shotsLeft != 0) StartCoroutine("ActiveCoroutine");
-            else active = false;    
+            if(_canShoot)
+            {
+                shotsLeft--;
+                shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
+                ChangeBallsState(shotsLeft);
+                yield return new WaitForSeconds(interval);
+                if (shotsLeft != 0) StartCoroutine("ActiveCoroutine");
+                else active = false;  
+            }
+              
         }
         else
         {
@@ -158,8 +162,13 @@ public class BaseballLauncher : Item, IMovable
 
         if(allTargets.Length == 0)
         {
-            Inactive();
-            active = false;
+            //Inactive();
+            SearchingForObjectives();
+            _canShoot = false;
+        }
+        else
+        {
+            _canShoot = true;
         }
 
         //Si no tenemos objetivo actual buscamos el más cercano y lo hacemos objetivo.
@@ -213,8 +222,15 @@ public class BaseballLauncher : Item, IMovable
     private void Inactive()
     {
         //myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(myCannon.rotation.x, myCannon.rotation.y, 35f), speed * Time.deltaTime);
-        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(35f, myCannon.rotation.y, myCannon.rotation.z), _inactiveSpeed * Time.deltaTime);
         myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, myCannonSupport.rotation.y, myCannonSupport.rotation.z), _inactiveSpeed * Time.deltaTime);
+        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(35f, myCannon.rotation.y, myCannon.rotation.z), _inactiveSpeed * Time.deltaTime);
+        
+    }
+
+    private void SearchingForObjectives()
+    {
+        myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, viewAngle/2, 0f), _shootSpeed * Time.deltaTime);
+        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, -viewAngle/2, 0f), _shootSpeed * Time.deltaTime);
     }
 
     public void ActiveDeactivateBallStates(bool state1, bool state2, bool state3)

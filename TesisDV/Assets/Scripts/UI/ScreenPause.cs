@@ -1,28 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class YouLoseScreen : MonoBehaviour, IScreen
+public class ScreenPause : MonoBehaviour, IScreen
 {
     Button[] _buttons;
+    Player player;
+    string _result;
 
     private void Awake()
     {
         _buttons = GetComponentsInChildren<Button>();
-
+        player = GameObject.Find("Player").GetComponent<Player>();
         foreach(var button in _buttons)
         {
             button.interactable = false;
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
+        {
+            BTN_Back();
+            player.SwitchKinematics();
+        }    
+    }
+
     public void BTN_Back()
     {
         ScreenManager.Instance.Pop();
     }
-
     public void Activate()
     {
         foreach(var button in _buttons)
@@ -42,17 +51,6 @@ public class YouLoseScreen : MonoBehaviour, IScreen
     public string Free()
     {
         Destroy(gameObject);
-        return "WinScreen ded :c";
-    }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene("MainFloor_Upgrade");
-        }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-                SceneManager.LoadScene(0);
-        }
+        return _result;
     }
 }

@@ -216,6 +216,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
             //GameVars.Values.TVTrapAgain.Craft(_inventory);
         }
 
+        if(Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
+        {
+            var screenPause = Instantiate(Resources.Load<ScreenPause>("PauseCanvas"));
+            ScreenManager.Instance.Push(screenPause);
+            _rb.velocity = Vector3.zero;
+            _rb.isKinematic = true;
+        }
+
         //if (Input.GetKeyDown(GameVars.Values.dropKey))
         //{
         //    _inventory.DropItem();
@@ -245,6 +253,18 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         if (volume.profile.TryGetSettings(out postProcessDamage))
         {
             StartCoroutine(LerpDamageEffect(0.6f,1f));
+        }
+    }
+
+    public void SwitchKinematics()
+    {
+        if(_rb.isKinematic == false)
+        {
+            _rb.isKinematic = true;
+        }
+        else
+        {
+            _rb.isKinematic = false;
         }
     }
 

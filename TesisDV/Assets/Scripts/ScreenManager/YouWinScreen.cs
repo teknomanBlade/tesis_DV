@@ -2,43 +2,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class YouWinScreen : MonoBehaviour, IScreen
 {
+    Button[] _buttons;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
+        _buttons = GetComponentsInChildren<Button>();
 
+        foreach(var button in _buttons)
+        {
+            button.interactable = false;
+        }
+    }
+
+    public void BTN_Back()
+    {
+        ScreenManager.Instance.Pop();
     }
 
     public void Activate()
     {
-
+        foreach(var button in _buttons)
+        {
+            button.interactable = true;
+        }
     }
 
     public void Deactivate()
     {
-        
+        foreach(var button in _buttons)
+        {
+            button.interactable = false;
+        }
     }
 
     public string Free()
     {
         Destroy(gameObject);
-        return "YouWin";
+        return "WinScreen ded :c";
     }
-
-    public void ActiveScreen()
-    {
-        gameObject.SetActive(true);
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene("MainFloor_Upgrade");
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+                SceneManager.LoadScene(0);
         }
     }
 }
