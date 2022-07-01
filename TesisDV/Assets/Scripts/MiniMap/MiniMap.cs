@@ -46,16 +46,21 @@ public class MiniMap : MonoBehaviour
     //IA-TP2 -P1
     public void DrawWayPointInMiniMap()
     {
-        wayPointsOfAllGrey = grays.Where(x => x != x.dead && x != null).OrderBy(x => Vector3.Distance(x.gameObject.transform.position, player.transform.position)).SelectMany(x => x._waypoints).ToList();
-
-        grayWithGreyPoints = grays.Aggregate(new List<Tuple<Gray, List<Vector3>>>(), (myGrayWithWayPoint, myGray) =>
+        try
         {
-            if (myGray != myGray.dead)
-                myGrayWithWayPoint.Add(new Tuple<Gray, List<Vector3>>(myGray, myGray._waypoints.ToList()));
+            wayPointsOfAllGrey = grays.Where(x => x != x.dead || x != null || x.gameObject != null).OrderBy(x => Vector3.Distance(x.gameObject.transform.position, player.transform.position)).SelectMany(x => x._waypoints).ToList();
+
+            grayWithGreyPoints = grays.Aggregate(new List<Tuple<Gray, List<Vector3>>>(), (myGrayWithWayPoint, myGray) =>
+            {
+                if (myGray != myGray.dead)
+                    myGrayWithWayPoint.Add(new Tuple<Gray, List<Vector3>>(myGray, myGray._waypoints.ToList()));
 
 
-            return myGrayWithWayPoint;
-        });
+                return myGrayWithWayPoint;
+            });
+        }
+        catch (Exception ex)
+        { }
     }
 
     IEnumerator DrayLGrayineRenderer()
@@ -78,19 +83,19 @@ public class MiniMap : MonoBehaviour
 
             Debug.Log("lineRenderers " + lineRenderers.Count);
 
-
-            lineRenderers[x].GetComponent<LineRenderer>().positionCount = waypoints.Count;
-            lineRenderers[x].GetComponent<LineRenderer>().SetPosition(0, waypoints[0]);
-
-            for (int i = 1; i < waypoints.Count; i++)
+            if (lineRenderers.Count > x)
             {
-                Vector3 pointPosition = new Vector3(waypoints[i].x, waypoints[i].y, waypoints[i].z);
-                lineRenderers[x].GetComponent<LineRenderer>().SetPosition(i, pointPosition);
+                lineRenderers[x].GetComponent<LineRenderer>().positionCount = waypoints.Count;
+                lineRenderers[x].GetComponent<LineRenderer>().SetPosition(0, waypoints[0]);
+
+                for (int i = 1; i < waypoints.Count; i++)
+                {
+                    Vector3 pointPosition = new Vector3(waypoints[i].x, waypoints[i].y, waypoints[i].z);
+                    lineRenderers[x].GetComponent<LineRenderer>().SetPosition(i, pointPosition);
+                }
             }
         }
-
         yield return new WaitForSeconds(0.5f);
-
     }
 
     public void AddLineRenderer(LineRenderer lineRenderer)
@@ -100,4 +105,11 @@ public class MiniMap : MonoBehaviour
 
         lineRenderers.Add(lineRenderer.gameObject);
     }
+
+    public void RemoveGray(Gray gray)
+    {
+        grays.Remove(gray);
+
+    }
+
 }

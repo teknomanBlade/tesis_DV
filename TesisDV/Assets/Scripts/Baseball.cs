@@ -14,7 +14,6 @@ public class Baseball : Projectile
     {
         if (effectUp)
         {
-            Debug.Log("Hit " + collider.transform.name);
             if (collider.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             {
                 effectUp = false;
