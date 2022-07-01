@@ -1,4 +1,5 @@
 //using System.Numerics;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private int _currentCorner = 0;
     public Coroutine attackCoroutine;
     public Coroutine currentCoroutine;
+    public Coroutine dissolveCoroutine;
     public bool dead = false;
     public bool attacking = false;
     public bool pursue = false;
@@ -70,6 +72,9 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     [SerializeField]
     private Material dissolveMaterial;
+
+    
+
     [SerializeField]
     private Material sphereEffectMaterial;
 
@@ -636,18 +641,12 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         yield return new WaitForSeconds(time);
         _anim.SetBool(param, false);
     }
-    public void PlayGrayDeathSound()
-    {
-        _anim.SetBool("IsDead", true);
-        SwitchDissolveMaterial(dissolveMaterial);
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
-    }
     public void Die()
     {
         dead = true;
         _canAttack = false;
-        var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);
-        var UFO = GameVars.Values.LevelManager.UFOsPool.GetObject().InitializePosition(spawnPos);
+        //var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);
+        //var UFO = GameVars.Values.LevelManager.UFOsPool.GetObject().InitializePosition(spawnPos);
         GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
         StartCoroutine(PlayAnimationsDeathPostDeath("IsDead", "Death"));
         _navMeshAgent.destination = transform.position;
@@ -668,7 +667,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     IEnumerator PlayShaderDissolve()
     {
         SwitchDissolveMaterial(dissolveMaterial);
-        _currentCoroutine = StartCoroutine(LerpScaleDissolve(0f, 1.5f));
+        dissolveCoroutine = StartCoroutine(LerpScaleDissolve(0f, 1f));
         yield return new WaitForSeconds(1.5f);
         Dead();
     }
@@ -711,7 +710,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             Damage();
             Stun(5f);
         }
-        else if (message.Equals("RacketHit"))
+        /*else if (message.Equals("RacketHit"))
         {
             if (_anim)
             {
@@ -721,9 +720,19 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
                 Damage();
                 Stun(5f);
             }
+        }*/
+    }
+    public void RacketHit(bool hit)
+    {
+        if (hit)
+        {
+            currentCoroutine = StartCoroutine(PlayAnimation("IsHitted", "Hit"));
+            Stun(5f);
+            ActiveInnerEffect();
+            GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
+            Damage();
         }
     }
-
     public void ActiveInnerEffect()
     {
         _hitEffect.Play();

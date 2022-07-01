@@ -1,15 +1,17 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObserver, IDoorGrayInteractObserver
 {
     //---------
     private Rigidbody _rb;
-
+    
     private PlayerCamera _cam;
     public PlayerCamera Cam {
         get { return _cam; }
@@ -87,6 +89,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     public int maxHp = 4;
     public bool HasContextualMenu = false;
     public bool IsCrafting = false;
+
+    
     //Gizmos
     public float gizmoScale = 1f;
     public LayerMask itemMask;
@@ -754,4 +758,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
             ActiveAttentionEffect();
         }
     }
+
+    public void RacketInventoryRemoved()
+    {
+        _inventory.RemoveItemByID(3);
+    }
+
 }

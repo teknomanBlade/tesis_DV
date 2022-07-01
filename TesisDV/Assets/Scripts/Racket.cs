@@ -7,9 +7,18 @@ public class Racket : Melee
 {
     [SerializeField]
     private ParticleSystem _trail;
+    private bool hitStateActive;
+    private bool _isDestroyed;
+    private bool _isHitted;
+    public delegate void OnRacketDestroyedDelegate(bool destroyed);
+    public event OnRacketDestroyedDelegate OnRacketDestroyed;
+    public delegate void OnRacketHitDelegate(bool hit);
+    public event OnRacketHitDelegate OnRacketHit;
     // Start is called before the first frame update
     void Awake()
     {
+        hitsRemaining = 3;
+        //OnRacketInventoryRemoved += _player.RacketInventoryRemoved;
         //_trail = GetComponentInChildren<ParticleSystem>();
         //anim = transform.parent.GetComponent<Animator>();
     }
@@ -18,6 +27,11 @@ public class Racket : Melee
     void Update()
     {
         
+    }
+
+    public void ActiveHit()
+    {
+        hitStateActive = true;
     }
 
     public override void MeleeAttack()
@@ -39,27 +53,32 @@ public class Racket : Melee
         anim.SetBool(param, false);
         _trail.Stop();
         IsAttacking = false;
+        hitStateActive = false;
         _trail.gameObject.SetActive(IsAttacking);
     }
-    /*public IEnumerator Attack()
-    {
-        IsAttacking = true;
-        anim.SetBool("IsAttacking", true);
-        yield return new WaitForSeconds(1f);
-        TriggerHit("RacketHit");
-        anim.SetBool("IsAttacking", false);
-        IsAttacking = false;
-    }*/
 
     protected override void OnContactEffect(Collider other)
     {
-        if (IsAttacking)
+        if (hitStateActive && IsAttacking)
         {
             if (other.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             {
                 //Debug.Log("Hit WITH RACKET TO GRAY?" + other.transform.name);
-                AddObserver(other.gameObject.GetComponent<Gray>());
-                TriggerHit("RacketHit");
+                _isHitted = true;
+                hitsRemaining--;
+                if (hitsRemaining <= 0)
+                {
+                    _isDestroyed = true;
+                    GameVars.Values.soundManager.PlaySoundAtPoint("RacketBroken", transform.position, 0.09f);
+                    GameVars.Values.ShowNotification("Oh no! The racket has broken!");
+                    OnRacketDestroyed?.Invoke(_isDestroyed);
+                    _player.RacketInventoryRemoved();
+                }
+                OnRacketHit?.Invoke(_isHitted);
+                OnRacketHit += other.gameObject.GetComponent<Gray>().RacketHit;
+                //_isHitted = false;
+                //AddObserver(other.gameObject.GetComponent<Gray>());
+                //TriggerHit("RacketHit");
             }
         }
     }

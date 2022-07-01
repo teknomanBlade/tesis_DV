@@ -86,6 +86,17 @@ public class Inventory : MonoBehaviour
         }  
     } */
 
+    public void RemoveItemByID(int itemID)
+    {
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if (itemSlots[i].HasItemID(itemID))
+            {
+                itemSlots[i].RemoveItem();
+            }
+        }
+    }
+
     public void RemoveItemID(int itemID)
     {
         for (int i = 0; i < itemSlots.Length; i++)

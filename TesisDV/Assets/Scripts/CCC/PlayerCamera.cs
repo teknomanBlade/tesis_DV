@@ -91,7 +91,7 @@ public class PlayerCamera : MonoBehaviour
             float x = Random.Range(0, 1.87f);
             float y = Random.Range(0, -1.89f);
             
-            transform.localRotation = Quaternion.Euler(CheckSign(transform.localRotation.x, x), CheckSign(transform.localRotation.y, y), transform.localRotation.z);
+            transform.localRotation = Quaternion.Euler(transform.localRotation.x + x, transform.localRotation.y + y, transform.localRotation.z);
 
             elapsed += Time.deltaTime;
 
@@ -99,7 +99,7 @@ public class PlayerCamera : MonoBehaviour
         }
 
     }
-    public float CheckSign(float number, float sum)
+    /*public float CheckSign(float number, float sum)
     {
         var result = 0f;
         if (Mathf.Sign(number) == 1f)
@@ -112,7 +112,7 @@ public class PlayerCamera : MonoBehaviour
         }
 
         return result;
-    }
+    }*/
 
     public void CameraShakeDamage(float duration, float magnitude)
     {
