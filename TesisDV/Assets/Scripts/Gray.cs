@@ -90,6 +90,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private LineRenderer lineRenderer;
     MiniMap miniMap;
 
+    public Transform CatGrabPos; 
+
     private void Awake()
     {
         canCreatePath = false;
@@ -558,7 +560,9 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void MoveObjective()
     {
         //CAMBIAR PARA QUE EL GATO QUEDE ENTRE LAS MANOS.
-        if (_lm.objective != null) _lm.objective.transform.position = transform.position + new Vector3(0f, 1.8f - 0.35f, -0.87f);
+        //if (_lm.objective != null) _lm.objective.transform.position = transform.position + new Vector3(0f, 1.8f - 0.35f, -0.87f);
+        if (_lm.objective != null) _lm.objective.transform.position = CatGrabPos.transform.position;
+
     }
 
     public void DropObjective()

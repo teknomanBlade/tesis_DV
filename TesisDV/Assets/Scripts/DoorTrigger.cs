@@ -10,7 +10,7 @@ public class DoorTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player")) { 
             this.gameObject.GetComponentInParent<Door>().IsFront = (enumDoor == EnumDoor.IsPlayerFront ? true : false);
-            Debug.Log("Player is inside" + this.gameObject.name);
+            //Debug.Log("Player is inside" + this.gameObject.name);
         }
     }
 
