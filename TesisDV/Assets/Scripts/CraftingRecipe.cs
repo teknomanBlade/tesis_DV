@@ -26,7 +26,7 @@ using UnityEngine;
         
         public bool HasBaseballTrapItems(Inventory inventory)
         {
-            return inventory.ContainsID(1) && inventory.ContainsID(2);
+            return inventory.ContainsID(5) && inventory.ContainsID(2) && inventory.ContainsID(8);
         }
         public bool HasTVTrapItems(Inventory inventory)
         {

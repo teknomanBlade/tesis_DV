@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3861253924358264624}
   - component: {fileID: 2632709413722482004}
   - component: {fileID: 8622832083812791110}
+  - component: {fileID: 4102294912073017817}
   m_Layer: 10
   m_Name: BaseballMachine
   m_TagString: Untagged
@@ -73,9 +74,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   active: 0
+  _currentObjective: {fileID: 0}
+  _currentObjectiveDistance: 1000
   _myItems:
-  - {fileID: 4622797999073881461, guid: aa752df10be493443b5cfd6ce76fa576, type: 3}
+  - {fileID: 3347486647281790323, guid: f34fc2fba773253438b72b7339ead9bc, type: 3}
   - {fileID: 4600965342611424314, guid: a36cf15f5d57e674889c8b7138c2a37d, type: 3}
+  - {fileID: 3877556373250478930, guid: 84d87ae8aae7f434a949463f34c1b1e6, type: 3}
+  collidersObjectives: []
 --- !u!65 &3861253924358264624
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -123,6 +128,25 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!95 &4102294912073017817
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 923361385767164133}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8abcc0d9667772241b86d3a2e3b5244b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3833961311044510519
 GameObject:
   m_ObjectHideFlags: 0

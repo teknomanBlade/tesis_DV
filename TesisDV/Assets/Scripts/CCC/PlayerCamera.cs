@@ -80,7 +80,7 @@ public class PlayerCamera : MonoBehaviour
     }
     public void ShakeRacketSwing()
     {
-        StartCoroutine(ShakeCameraRacket(0.05f, 0.1f));
+        StartCoroutine(ShakeCameraRacket(0.04f, 0.08f));
     }
     IEnumerator ShakeCameraRacket(float endValue, float duration)
     {

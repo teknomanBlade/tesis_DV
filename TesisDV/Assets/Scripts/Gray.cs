@@ -634,7 +634,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
                 //_anim.SetBool("IsAttacking", true);
                 trap.TakeDamage(_dmg);
                 timePassed = timeToAttack;
-                //PlayParticleSystemShader();
                 attacking = false;
                 _isMoving = true;
                 _foundTrapInPath = false;

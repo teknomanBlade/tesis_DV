@@ -572,7 +572,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         {
             if (baseballLauncher.IsEmpty)
             {
-                baseballLauncher.HasPlayerTennisBallBox = _inventory.ContainsID(4);
+                baseballLauncher.HasPlayerTennisBallBox = _inventory.ContainsID(8);
                 crosshair.sprite = GameVars.Values.crosshairReloadTrap1;
             }
             else
@@ -618,10 +618,25 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
             return;
         }
         lookingAt.Interact();
+        if (lookingAt.gameObject.TryGetComponent<BaseballLauncher>(out BaseballLauncher auxBL))
+        {
+            if (auxBL.IsEmpty)
+            {
+                GameVars.Values.ShowNotification("You need a Tennis Ball Box to reload!");
+                auxBL.OnReload += OnBaseballMachineReload;
+            }
+        }
+
         if (lookingAt.TryGetComponent<Door>(out Door door))
         {
             _lm.ChangeDoorsStatus();
         }
+    }
+
+    private void OnBaseballMachineReload()
+    {
+        if (_inventory.ContainsID(8))
+            _inventory.RemoveItemByID(8);
     }
 
     public void MoveTrap()

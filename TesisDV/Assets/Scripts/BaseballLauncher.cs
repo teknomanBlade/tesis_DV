@@ -11,7 +11,8 @@ public class BaseballLauncher : Item, IMovable
     [SerializeField]
     private float _currentLife;
     private bool _isDestroyed;
-
+    public delegate void OnReloadDelegate();
+    public event OnReloadDelegate OnReload;
     public GameObject projectilePrefab;
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
@@ -26,8 +27,6 @@ public class BaseballLauncher : Item, IMovable
     {
         get
         {
-            if (shotsLeft == 0)
-                GameVars.Values.ShowNotification("You need a Tennis Ball Box to reload!");
 
             return shotsLeft == 0;
         }
@@ -46,6 +45,8 @@ public class BaseballLauncher : Item, IMovable
     private bool isWorking = true;
     private float _inactiveSpeed = 0.3f;
     public Collider _currentObjective = null;
+    private Coroutine ReloadCoroutine;
+    private Coroutine ShootCoroutine;
     public float _currentObjectiveDistance = 1000;
     [SerializeField]
     private List<GameObject> _myItems;
@@ -55,7 +56,7 @@ public class BaseballLauncher : Item, IMovable
     {
         _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
-
+        _animator.SetBool("HasNoBalls", false);
         myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
 
@@ -67,14 +68,27 @@ public class BaseballLauncher : Item, IMovable
     public override void Interact()
     {
         if (HasPlayerTennisBallBox)
-            Reload();
+        {
+            if (ReloadCoroutine != null) StopCoroutine(ReloadCoroutine);
+            ReloadCoroutine = StartCoroutine(ReloadTurret());
+        }
 
         if (!active)
         {
             active = true;
             _currentObjectiveDistance = 1000;
-            StartCoroutine("ActiveCoroutine");
+            if(ShootCoroutine != null) StopCoroutine(ShootCoroutine);
+            ShootCoroutine = StartCoroutine("ActiveCoroutine");
         }
+    }
+
+    IEnumerator ReloadTurret()
+    {
+        GameVars.Values.ShowNotification("Reloading turret...");
+        GameVars.Values.soundManager.PlaySoundAtPoint("ReloadingTurret1", transform.position, 0.8f);
+        yield return new WaitForSeconds(2.5f);
+        Debug.Log("LLEGA A RELOAD?");
+        Reload();
     }
 
     void Update()
@@ -90,14 +104,16 @@ public class BaseballLauncher : Item, IMovable
     public void Reload()
     {
         shotsLeft = shots;
+        _animator.enabled = true;
+        _animator.SetBool("HasNoBalls", false);
         ActiveDeactivateBallStates(true, false, false);
+        OnReload?.Invoke();
+        GameVars.Values.ShowNotification("The Turret has been reloaded.");
     }
     IEnumerator ActiveCoroutine()
     {
         if (active)
         {
-            shotsLeft--;
-            shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
             InstantiateBall();
             yield return new WaitForSeconds(interval);
             if (shotsLeft != 0) StartCoroutine("ActiveCoroutine");
@@ -112,9 +128,11 @@ public class BaseballLauncher : Item, IMovable
 
     public void InstantiateBall()
     {
-        if (_currentObjective == null || _currentObjective.GetComponent<Gray>().dead)
+        if (shotsLeft == 0 || _currentObjective == null || _currentObjective.GetComponent<Gray>().dead)
             return;
 
+        shotsLeft--;
+        shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
         ChangeBallsState(shotsLeft);
         GameObject aux = Instantiate(projectilePrefab, exitPoint.transform.position, Quaternion.identity);
         aux.GetComponent<Rigidbody>().AddForce(35f * exitPoint.transform.forward, ForceMode.Impulse); //era 20f
@@ -171,10 +189,12 @@ public class BaseballLauncher : Item, IMovable
             //SearchingForObjectives();
 
         }
-
+        
         //Si no tenemos objetivo actual buscamos el más cercano y lo hacemos objetivo.
         if (_currentObjective == null || _currentObjective.GetComponent<Gray>().dead || _currentObjectiveDistance > viewRadius)
         {
+            _animator.enabled = true;
+            _animator.SetBool("HasNoBalls", false);
             foreach (var item in allTargets)
             {
                 if (Vector3.Distance(transform.position, item.transform.position) < _currentObjectiveDistance)
@@ -183,11 +203,11 @@ public class BaseballLauncher : Item, IMovable
                     {
                         _currentObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
                         _currentObjective = item;
+                        _animator.enabled = false;
                     }
                 }
             }
         }
-
 
         //foreach (var item in allTargets)
         //{
@@ -224,15 +244,8 @@ public class BaseballLauncher : Item, IMovable
 
     private void Inactive()
     {
-        //myCannon.rotation = Quaternion.Slerp(myCannon.rotation, Quaternion.Euler(myCannon.rotation.x, myCannon.rotation.y, 35f), speed * Time.deltaTime);
-        myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, myCannonSupport.rotation.y, myCannonSupport.rotation.z), _inactiveSpeed * Time.deltaTime);
-        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(35f, myCannon.rotation.y, myCannon.rotation.z), _inactiveSpeed * Time.deltaTime);
-
-    }
-
-    public bool IsWorking()
-    {
-        return isWorking;
+        _animator.enabled = true;
+        _animator.SetBool("HasNoBalls", true);
     }
 
     private void SearchingForObjectives()

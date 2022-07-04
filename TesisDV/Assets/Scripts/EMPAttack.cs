@@ -35,7 +35,7 @@ public class EMPAttack : MonoBehaviour
     {
         if (_isAttacking && other.gameObject.GetComponent<Player>() != null)
         {
-            Debug.Log("ENTRO EN TRIGGER DAMAGE PLAYER??");
+            //Debug.Log("ENTRO EN TRIGGER DAMAGE PLAYER??");
             _owner.TriggerPlayerDamage("DamagePlayer");
         }
     }
