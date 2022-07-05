@@ -11,6 +11,8 @@ public class BaseballLauncher : Item, IMovable
     [SerializeField]
     private float _currentLife;
     private bool _isDestroyed;
+    public ParticleSystem HitTurret;
+    private AudioSource _as;
     public delegate void OnReloadDelegate();
     public event OnReloadDelegate OnReload;
     public GameObject projectilePrefab;
@@ -47,6 +49,7 @@ public class BaseballLauncher : Item, IMovable
     public Collider _currentObjective = null;
     private Coroutine ReloadCoroutine;
     private Coroutine ShootCoroutine;
+    private Coroutine SFXDetectionCoroutine;
     public float _currentObjectiveDistance = 1000;
     [SerializeField]
     private List<GameObject> _myItems;
@@ -59,7 +62,7 @@ public class BaseballLauncher : Item, IMovable
         _animator.SetBool("HasNoBalls", false);
         myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
-
+        _as = GetComponent<AudioSource>();
         //Debug.Log(transform.GetChild(2));
         shotsLeft = shots;
         ActiveBallsState1();
@@ -85,7 +88,7 @@ public class BaseballLauncher : Item, IMovable
     IEnumerator ReloadTurret()
     {
         GameVars.Values.ShowNotification("Reloading turret...");
-        GameVars.Values.soundManager.PlaySoundAtPoint("ReloadingTurret1", transform.position, 0.8f);
+        GameVars.Values.soundManager.PlaySoundOnce(_as,"ReloadingTurret1", 0.8f, false);
         yield return new WaitForSeconds(2.5f);
         Debug.Log("LLEGA A RELOAD?");
         Reload();
@@ -147,7 +150,9 @@ public class BaseballLauncher : Item, IMovable
     public void TakeDamage(float dmgAmount)
     {
         _currentLife -= dmgAmount;
-
+        GameVars.Values.soundManager.PlaySoundOnce(_as,"TurretHitDamage", 0.45f, false);
+        HitTurret.gameObject.SetActive(true);
+        HitTurret.Play();
         if (_currentLife <= 0)
         {
             //Hacer animacion de destrucción, instanciar sus objetos de construcción y destruirse.
@@ -189,12 +194,12 @@ public class BaseballLauncher : Item, IMovable
             //SearchingForObjectives();
 
         }
-        
         //Si no tenemos objetivo actual buscamos el más cercano y lo hacemos objetivo.
         if (_currentObjective == null || _currentObjective.GetComponent<Gray>().dead || _currentObjectiveDistance > viewRadius)
         {
             _animator.enabled = true;
             _animator.SetBool("HasNoBalls", false);
+            
             foreach (var item in allTargets)
             {
                 if (Vector3.Distance(transform.position, item.transform.position) < _currentObjectiveDistance)
@@ -242,6 +247,12 @@ public class BaseballLauncher : Item, IMovable
         //}
     }
 
+    /*IEnumerator PlayDetectionSound()
+    {
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "TurretScanning", 0.25f, true);
+        yield return new WaitForSeconds(0.2f);
+        GameVars.Values.soundManager.StopSound();
+    }*/
     private void Inactive()
     {
         _animator.enabled = true;

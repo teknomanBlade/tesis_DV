@@ -9,9 +9,13 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObserver, IDoorGrayInteractObserver
 {
-    //---------
+    #region Events
+    public delegate void OnNewRacketGrabbedDelegate();
+    public event OnNewRacketGrabbedDelegate OnNewRacketGrabbed;
+    #endregion
+
+    #region Components
     private Rigidbody _rb;
-    
     private PlayerCamera _cam;
     public PlayerCamera Cam {
         get { return _cam; }
@@ -22,23 +26,17 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     public AttentionPlayerPPSSettings postProcessAttention;
     [SerializeField]
     private Inventory _inventory;
-
     public GameObject _weaponGO;
-
     [SerializeField]
     private Melee _weapon;
-    public GameObject contextualMenu { get; private set; }
-    public ContextualTrapMenu contextualMenuScript { get; private set; }
-    public Animator contextualMenuAnim { get; private set; }
     public string typeFloor { get; private set; }
     
-
     private AudioSource _audioSource;
     private GameObject _craftingScreen;
     private LevelManager _lm;
+    #endregion
 
-    // Movement
-    //public CraftingRecipe craftingRecipe;
+    #region Movement
     private float speed = 5f;
     private float crouchSpeed = 2.5f;
     private float walkSpeed = 5f;
@@ -53,7 +51,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     private Coroutine preventCheckCoroutine;
     [SerializeField]
     public bool isCrouchingSound = false;
-
     public bool isGrounded = true;
     [SerializeField]
     private bool isCrouching = false;
@@ -67,7 +64,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     private bool isAttacking = false;
     private Vector3 _originalScale;
     private Vector3 _originalCamPos;
+    #endregion
 
+    #region Mouse
     // Mouse
     public bool canMoveCamera = true;
     public Image crosshair;
@@ -75,8 +74,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     private float yaw = 0f;
     private float pitch = 0f;
     private float lookAngle = 80f;
+    #endregion
 
-    // Interactions
+    #region Interactions
 
     [SerializeField]
     public Item lookingAt;
@@ -89,8 +89,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     public int maxHp = 4;
     public bool HasContextualMenu = false;
     public bool IsCrafting = false;
+    #endregion
 
-    
     //Gizmos
     public float gizmoScale = 1f;
     public LayerMask itemMask;
@@ -570,9 +570,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         }
         if (lookingAt.gameObject.TryGetComponent<BaseballLauncher>(out BaseballLauncher baseballLauncher))
         {
+            baseballLauncher.HasPlayerTennisBallBox = _inventory.ContainsID(8);
             if (baseballLauncher.IsEmpty)
             {
-                baseballLauncher.HasPlayerTennisBallBox = _inventory.ContainsID(8);
                 crosshair.sprite = GameVars.Values.crosshairReloadTrap1;
             }
             else
@@ -730,16 +730,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         Gizmos.DrawLine(start + new Vector3(-gizmoScaleSin, 0f, -gizmoScaleSin), start + new Vector3(-gizmoScaleSin, 0f, -gizmoScaleSin) + down);
     }
 
-    public void ContextualMenuEnter()
-    {
-        contextualMenuAnim.SetBool("HasTraps", true);
-        HasContextualMenu = true;
-    }
-    public void ContextualMenuExit()
-    {
-        contextualMenuAnim.SetBool("HasTraps", false);
-        HasContextualMenu = false;
-    }
     private void SetOnItem(Item item)
     {
         if (item == null)
@@ -773,6 +763,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
             {
                 _weaponGO.SetActive(true);
                 _weaponGO.transform.GetComponentInChildren<Racket>().gameObject.layer = 0;
+                OnNewRacketGrabbed += _weaponGO.transform.GetComponentInChildren<Racket>().OnNewRacketGrabbed;
+                OnNewRacketGrabbed?.Invoke();
             }
         }
     }

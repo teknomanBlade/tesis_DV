@@ -8,6 +8,7 @@ public abstract class Melee : MonoBehaviour
     public Animator anim;
     protected Player _player;
     protected bool IsAttacking = false;
+    [SerializeField]
     protected int hitsRemaining;
     protected virtual void OnContactEffect(Collider other)
     {

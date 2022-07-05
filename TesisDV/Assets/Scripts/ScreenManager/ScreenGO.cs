@@ -24,7 +24,8 @@ public class ScreenGO : IScreen
     {
         foreach(var keyValue in _before)
         {
-            keyValue.Key.enabled = keyValue.Value;
+            if(keyValue.Key != null)
+                keyValue.Key.enabled = keyValue.Value;
         }
 
         _before.Clear();

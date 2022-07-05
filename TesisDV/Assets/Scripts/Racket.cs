@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,19 +9,22 @@ public class Racket : Melee
     [SerializeField]
     private ParticleSystem _trail;
     private bool hitStateActive;
+    [SerializeField]
     private bool _isDestroyed;
-    private bool _isHitted;
     public delegate void OnRacketDestroyedDelegate(bool destroyed);
     public event OnRacketDestroyedDelegate OnRacketDestroyed;
-    public delegate void OnRacketHitDelegate(bool hit);
-    public event OnRacketHitDelegate OnRacketHit;
+   
     // Start is called before the first frame update
     void Awake()
     {
         hitsRemaining = 7;
-        //OnRacketInventoryRemoved += _player.RacketInventoryRemoved;
-        //_trail = GetComponentInChildren<ParticleSystem>();
-        //anim = transform.parent.GetComponent<Animator>();
+    }
+
+    public void OnNewRacketGrabbed()
+    {
+        _isDestroyed = false;
+        hitsRemaining = 7;
+        OnRacketDestroyed?.Invoke(_isDestroyed);
     }
 
     // Update is called once per frame
@@ -43,7 +47,6 @@ public class Racket : Melee
         anim.SetBool(param, true);
         GameVars.Values.soundManager.PlaySoundAtPoint("RacketSwing", transform.position, 0.09f);
 
-
         var clips = anim.runtimeAnimatorController.animationClips;
         float time = clips.First(x => x.name == name).length;
         yield return new WaitForSeconds(time);
@@ -62,7 +65,6 @@ public class Racket : Melee
             if (other.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             {
                 //Debug.Log("Hit WITH RACKET TO GRAY?" + other.transform.name);
-                _isHitted = true;
                 hitsRemaining--;
                 if (hitsRemaining <= 0)
                 {
@@ -72,9 +74,6 @@ public class Racket : Melee
                     OnRacketDestroyed?.Invoke(_isDestroyed);
                     _player.RacketInventoryRemoved();
                 }
-                //OnRacketHit?.Invoke(_isHitted);
-                //OnRacketHit += other.gameObject.GetComponent<Gray>().RacketHit;
-                //_isHitted = false;
                 AddObserver(other.gameObject.GetComponent<Gray>());
                 TriggerHit("RacketHit");
             }

@@ -98,40 +98,6 @@ public class PlayerCamera : MonoBehaviour
 
         _valueToChange = endValue;
     }
-    /*public IEnumerator ShakeCameraRacket(float duration)
-    {
-        Quaternion originalRot = transform.localRotation;
-
-        float elapsed = 0.0f;
-
-        while (elapsed < duration)
-        {
-            //float x = Random.Range(-0.20f, 0.20f);
-            //float y = Random.Range(-0.20f, 0.20f);
-
-            //transform.localRotation = Quaternion.Slerp();
-
-            elapsed += Time.deltaTime;
-
-            yield return null;
-        }
-
-    }*/
-    /*public float CheckSign(float number, float sum)
-    {
-        var result = 0f;
-        if (Mathf.Sign(number) == 1f)
-        {
-            result = number + sum;
-        }
-        else
-        {
-            result = number - sum;
-        }
-
-        return result;
-    }*/
-
     public void CameraShakeDamage(float duration, float magnitude)
     {
         StartCoroutine(ShakeDamage(duration, magnitude));
