@@ -32,13 +32,13 @@ public class GoapPlanner {
     
     public static FiniteStateMachine ConfigureFSM(IEnumerable<GOAPAction> plan, Func<IEnumerator, Coroutine> startCoroutine){
         var prevState = plan.First().linkedState;
-            
+        
         var fsm = new FiniteStateMachine(prevState, startCoroutine);
 
         foreach (var action in plan.Skip(1)){
             if (prevState == action.linkedState) continue;
             fsm.AddTransition("On" + action.linkedState.Name, prevState, action.linkedState);
-                
+            fsm.AddTransition("On" + prevState.Name, action.linkedState, prevState);
             prevState = action.linkedState;
         }
 

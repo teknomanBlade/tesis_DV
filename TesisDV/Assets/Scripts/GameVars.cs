@@ -24,6 +24,10 @@ public class GameVars : MonoBehaviour
     [SerializeField]
     private Cat cat;
 
+    public Cat Cat{
+        get { return cat; }
+    }
+
     [SerializeField]
     private bool _isCatCaptured;
     public bool IsCatCaptured { get { return _isCatCaptured; } }
@@ -77,7 +81,7 @@ public class GameVars : MonoBehaviour
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
 
-    public List<List<Node>> levelRoutes;
+    //public List<List<Node>> levelRoutes;
 
     private void Awake()
     {
