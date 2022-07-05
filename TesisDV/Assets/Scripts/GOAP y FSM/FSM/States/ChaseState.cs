@@ -50,11 +50,7 @@ public class ChaseState : MonoBaseState
     {
         _playerDistance = Vector3.Distance(_player.transform.position, transform.position);
 
-        if(_playerDistance >= _disengageThreshold) //&& Transitions.ContainsKey("OnChaseCatState");
-        {
-            return Transitions["OnChaseCatState"];
-        }
-        else if(_playerDistance <= _attackThreshold)
+        if(_playerDistance <= _attackThreshold)
         {
             return Transitions["OnAttackState"];
         }

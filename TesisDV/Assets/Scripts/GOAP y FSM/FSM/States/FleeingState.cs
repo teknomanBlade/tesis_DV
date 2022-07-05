@@ -4,10 +4,10 @@ using FSM;
 using UnityEngine.AI;
 public class FleeingState : MonoBaseState
 {
-    private Cat _cat;
+    public Cat _cat;
     public float movingSpeed;
-    private Vector3 _exitPos;
-    private Vector3 _shipDistance;
+    public Vector3 _exitPos;
+    public float _shipDistance;
     private NavMeshAgent _navMeshAgent;
     public Vector3[] _waypoints;
     private bool pathIsCreated;
@@ -28,6 +28,10 @@ public class FleeingState : MonoBaseState
     }
     public override void UpdateLoop()
     {
+        _cat.transform.position = transform.position + new Vector3(0f, 1.8f - 0.35f, -0.87f);
+
+
+
         canCreatePath = true;
         if (canCreatePath)
                 {
@@ -38,11 +42,22 @@ public class FleeingState : MonoBaseState
                     pathIsCreated = false;
                 }
         Move();
-        _cat.transform.position = transform.position + new Vector3(0f, 1.8f - 0.35f, -0.87f);
+
+
+        //if (_shipDistance < 3f)
+        //{
+        //    Destroy(_cat);
+        //}
     }
 
      public override IState ProcessInput()
     {
+        _shipDistance = Vector3.Distance(_exitPos, transform.position);
+        if (_shipDistance < 3f)
+        {
+            Destroy(_cat.gameObject);
+            return Transitions["OnChaseState"];
+        }
        return this;
     }
 

@@ -9,7 +9,7 @@ public class GoapMiniTest : MonoBehaviour
     public AttackState      attackState;
     public ChaseCatState    chaseCatState;
     public FleeingState     fleeingState;
-    public CelebrationState celebrationState;
+    public EscapeState      escapeState;
 
     private FiniteStateMachine _fsm;
     
@@ -93,18 +93,11 @@ public class GoapMiniTest : MonoBehaviour
     private void PlanAndExecute() {
         var actions = new List<GOAPAction>{
                                               new GOAPAction("Escape")
-                                                 .Pre("isAlienGoingToDie", false)
-                                                 .Effect("catIsGone", true)
-                                                 .LinkedState(chaseCatState),  
-
-                                              new GOAPAction("Celebrate")
-                                                 .Pre("isPlayerAlive", false)
-                                                 .Effect("alienWins", true)
-                                                 .LinkedState(chaseCatState),  
+                                                 .Pre("isAlienGoingToDie", true)
+                                                 .Effect("isPlayerNear", true)
+                                                 .LinkedState(escapeState),  
 
                                               new GOAPAction("ChaseCat")
-                                                 .Pre("isPlayerInSight", false)
-                                                 .Pre("hasCat", false)
                                                  .Effect("hasCat", true)
                                                  .LinkedState(chaseCatState),
 
@@ -116,8 +109,9 @@ public class GoapMiniTest : MonoBehaviour
                                               new GOAPAction("Attack")
                                                  .Pre("isPlayerNear",   true)
                                                  .Effect("isPlayerAlive", false)
-                                                 .LinkedState(attackState).
-                                                 Cost(2),
+                                                 .Effect("alienWins", true)
+                                                 .LinkedState(attackState),
+                                                 //.Cost(2),
 
                                               new GOAPAction("Fleeing")
                                                  .Pre("hasCat", true)
@@ -131,11 +125,8 @@ public class GoapMiniTest : MonoBehaviour
         from.values["isPlayerAlive"]      = true;
         from.values["isPlayerNear"]       = false;
         from.values["hasCat"]             = false;
-        from.values["foundDoorInPath"]    = false;
-        from.values["foundTrapInPath"]    = false;
+        from.values["catIsGone"]          = false;
         from.values["alienIsGone"]        = false;
-        from.values["isStuned"]           = false;
-        from.values["isAlive"]            = true;
         from.values["alienWins"]          = false;
         from.values["isAlienGoingToDie"]  = false;
 

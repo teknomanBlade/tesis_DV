@@ -5,11 +5,14 @@ using UnityEngine.AI;
 
 public class EscapeState : MonoBaseState
 {
-    public float healRate = .5f;
+    public float healRate = 3f;
     private Player _player;
     private float _lastHealTime; 
+    private EnemyHealth _myHealth;
+    public float movingSpeed;
     void Start()
     {
+        _myHealth = GetComponent<EnemyHealth>();
         _player = GameVars.Values.Player;
     }
 
@@ -19,12 +22,23 @@ public class EscapeState : MonoBaseState
         {
             _lastHealTime = Time.time;
 
-            //_player.Damage();
+            if(_myHealth.hp < 5)
+            {
+                _myHealth.hp++;
+            }
         }
+
+        var dir = (_player.transform.position - transform.position).normalized;
+        transform.forward = dir;
+        transform.position += transform.forward * movingSpeed * Time.deltaTime;
     }
     
     public override IState ProcessInput()
     {
+        if(_myHealth.hp == 5)
+        {
+            return Transitions["AttackState"];
+        }
         return this;
     }
 }

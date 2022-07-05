@@ -71,15 +71,10 @@ public class ChaseCatState : MonoBaseState
 
      public override IState ProcessInput()
     {
-        _playerDistance = Vector3.Distance(_player.transform.position, transform.position);
 
         if(_hasCat)
         {
             return Transitions["OnFleeingState"];
-        }
-        else if(_playerDistance <= _engageThreshold)
-        {
-            return Transitions["OnChaseState"];
         }
 
         return this;

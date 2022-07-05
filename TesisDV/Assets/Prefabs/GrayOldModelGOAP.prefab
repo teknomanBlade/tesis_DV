@@ -6079,6 +6079,7 @@ GameObject:
   - component: {fileID: -7380425718466754531}
   - component: {fileID: 9064886271849846761}
   - component: {fileID: 5447272380540474675}
+  - component: {fileID: 4256129117479685718}
   m_Layer: 12
   m_Name: GrayOldModelGOAP
   m_TagString: Untagged
@@ -6268,7 +6269,7 @@ MonoBehaviour:
   attackState: {fileID: 7107032743317760007}
   chaseCatState: {fileID: -3122725484293292686}
   fleeingState: {fileID: -7380425718466754531}
-  celebrationState: {fileID: 0}
+  escapeState: {fileID: 4256129117479685718}
 --- !u!114 &-5916812422674074840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6359,6 +6360,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 5
+--- !u!114 &4256129117479685718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5620792506208950563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82792625f8c5f54c93ea9e4cd75adf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healRate: 3
+  movingSpeed: 1
 --- !u!1 &5685346073406636324
 GameObject:
   m_ObjectHideFlags: 0
