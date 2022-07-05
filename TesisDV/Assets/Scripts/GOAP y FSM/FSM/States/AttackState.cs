@@ -20,7 +20,8 @@ public class AttackState : MonoBaseState
         if (Time.time >= _lastAttackTime + attackRate) 
         {
             _lastAttackTime = Time.time;
-            Debug.Log("Ataco");
+            //Debug.Log("Ataco");
+            _player.Damage();
         }
     }
 
@@ -31,6 +32,10 @@ public class AttackState : MonoBaseState
         if(_playerDistance >= _attackThreshold)
         {        
             return Transitions["OnChaseState"];
+        }
+        else if(_player.isDead)
+        {
+            return Transitions["OnCelebrationState"];
         }
         return this;
     }

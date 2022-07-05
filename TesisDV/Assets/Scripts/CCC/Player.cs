@@ -290,8 +290,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
 
     public void Damage()
     {
-        _cam.CameraShakeDamage(1f, 0.8f);
-        ActiveDamageEffect();
+        //_cam.CameraShakeDamage(1f, 0.8f);
+        //ActiveDamageEffect();
         StartCoroutine(PlayDamageSound(3.4f));
         hp--;
         GameVars.Values.ShowLivesRemaining(hp, maxHp);
@@ -304,7 +304,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         _audioSource.enabled = false;
         _rb.isKinematic = true;
         canMoveCamera = false;
-        Invoke("Dead", 3f);
+        Invoke("Dead", 0.3f);
     }
 
     public void SwitchIsCrafting()

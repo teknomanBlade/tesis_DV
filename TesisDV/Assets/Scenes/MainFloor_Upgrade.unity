@@ -2013,6 +2013,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GrayOldModelGOAP
       objectReference: {fileID: 0}
+    - target: {fileID: 9064886271849846761, guid: 87bf7043c07709a46a266d7c09c287dd, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87bf7043c07709a46a266d7c09c287dd, type: 3}
 --- !u!850595691 &187140074
@@ -16645,7 +16649,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5366968834443794819, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00006363176
+      value: 0.00023749928
       objectReference: {fileID: 0}
     - target: {fileID: 5466993242151055038, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
       propertyPath: m_Name
@@ -36815,8 +36819,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _myUFO: {fileID: 3984112344886893057, guid: 6ec4a5b1bb7f77a449a8bb78ae2bbdc4, type: 3}
   _currentRound: 0
-  _firstWaveDelay: 2
-  _timeBetweenWaves: 2
+  _firstWaveDelay: 100
+  _timeBetweenWaves: 100
   _timeWaves: 0
   _totalRounds: 2
   _startingPos: {x: 0, y: 133.7, z: -135.1}

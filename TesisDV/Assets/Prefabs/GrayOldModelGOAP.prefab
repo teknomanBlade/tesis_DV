@@ -6073,15 +6073,12 @@ GameObject:
   - component: {fileID: 2756828370694884898}
   - component: {fileID: 3590700537783239107}
   - component: {fileID: 589638144940740364}
-  - component: {fileID: 1348362547979620462}
-  - component: {fileID: -2124461494483710798}
-  - component: {fileID: -2188322781823793273}
   - component: {fileID: -5916812422674074840}
   - component: {fileID: 7107032743317760007}
   - component: {fileID: -3122725484293292686}
   - component: {fileID: -7380425718466754531}
-  - component: {fileID: 7217246037869299349}
   - component: {fileID: 9064886271849846761}
+  - component: {fileID: 5447272380540474675}
   m_Layer: 12
   m_Name: GrayOldModelGOAP
   m_TagString: Untagged
@@ -6271,42 +6268,7 @@ MonoBehaviour:
   attackState: {fileID: 7107032743317760007}
   chaseCatState: {fileID: -3122725484293292686}
   fleeingState: {fileID: -7380425718466754531}
---- !u!114 &1348362547979620462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5620792506208950563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ac0b9ba3c07b62428f9bbbe6a9f421b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-2124461494483710798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5620792506208950563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca5ac8056e8de754ea52c866e8af8271, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-2188322781823793273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5620792506208950563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 916fcc09af4f6e8438fb5c34eea1a9ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  celebrationState: {fileID: 0}
 --- !u!114 &-5916812422674074840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6361,18 +6323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movingSpeed: 0
---- !u!114 &7217246037869299349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5620792506208950563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a20b0effcefdbb46b62551269c0c471, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _waypoints: []
 --- !u!195 &9064886271849846761
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -6395,6 +6346,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &5447272380540474675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5620792506208950563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77389849da970534a91fd4235ce4d997, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 5
 --- !u!1 &5685346073406636324
 GameObject:
   m_ObjectHideFlags: 0

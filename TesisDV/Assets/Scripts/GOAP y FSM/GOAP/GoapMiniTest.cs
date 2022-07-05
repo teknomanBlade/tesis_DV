@@ -9,7 +9,8 @@ public class GoapMiniTest : MonoBehaviour
     public AttackState      attackState;
     public ChaseCatState    chaseCatState;
     public FleeingState     fleeingState;
-    
+    public CelebrationState celebrationState;
+
     private FiniteStateMachine _fsm;
     
     
@@ -47,13 +48,13 @@ public class GoapMiniTest : MonoBehaviour
                                                  ,
 
                                               new GOAPAction("Attack")
-                                                 .Pre("isStuned", false)
+
                                                  .Pre("isPlayerNear",   true)
                                                  .Effect("isPlayerAlive", false)
                                                  ,
 
                                               new GOAPAction("FleeingState")
-                                                 .Pre("isStuned", false)
+
                                                  .Pre("hasCat", true)
 
                                                  .Effect("alienIsGone", true)
@@ -91,54 +92,52 @@ public class GoapMiniTest : MonoBehaviour
 
     private void PlanAndExecute() {
         var actions = new List<GOAPAction>{
-                                               new GOAPAction("Resting")
-                                                 .Pre("isPlayerInSight", false)
-                                                 .Pre("hasCat", false)
-                                                 .Effect("hasCat", true)
-                                                 .Effect("isPlayerInSight", true)
+                                              new GOAPAction("Escape")
+                                                 .Pre("isAlienGoingToDie", false)
+                                                 .Effect("catIsGone", true)
+                                                 .LinkedState(chaseCatState),  
+
+                                              new GOAPAction("Celebrate")
+                                                 .Pre("isPlayerAlive", false)
+                                                 .Effect("alienWins", true)
                                                  .LinkedState(chaseCatState),  
 
                                               new GOAPAction("ChaseCat")
                                                  .Pre("isPlayerInSight", false)
                                                  .Pre("hasCat", false)
                                                  .Effect("hasCat", true)
-                                                 .Effect("isPlayerInSight", true)
                                                  .LinkedState(chaseCatState),
 
                                               new GOAPAction("Chase")
-                                                 .Pre("isPlayerInSight", true)
+                                                 .Pre("catIsGone", true)
                                                  .Effect("isPlayerNear", true)
-                                                 .Effect("isPlayerInSight", false)
-                                                 .Effect("hasCat", false)
                                                  .LinkedState(chaseState),
 
                                               new GOAPAction("Attack")
                                                  .Pre("isPlayerNear",   true)
                                                  .Effect("isPlayerAlive", false)
-                                                 .Effect("isPlayerInSight", true)
-                                                 .Effect("alienWins" , true)
-                                                 .LinkedState(attackState),
+                                                 .LinkedState(attackState).
+                                                 Cost(2),
 
                                               new GOAPAction("Fleeing")
                                                  .Pre("hasCat", true)
-                                                 .Effect("alienIsGone", true)
-                                                 .Effect("alienWins" , true)
-                                                 .LinkedState(fleeingState)
-                                                 .Cost(3f),
+                                                 .Effect("catIsGone", true)
+                                                 .LinkedState(fleeingState),
                                               
                                           };
         
         var from = new GOAPState();
-        from.values["isPlayerInSight"] = false;
-        from.values["isPlayerAlive"]   = true;
-        from.values["isPlayerNear"]    = false;
-        from.values["hasCat"]          = false;
-        from.values["foundDoorInPath"] = false;
-        from.values["foundTrapInPath"] = false;
-        from.values["alienIsGone"]     = false;
-        from.values["isStuned"]        = false;
-        from.values["isAlive"]         = true;
-        from.values["alienWins"]       = false;
+        from.values["isPlayerInSight"]    = false;
+        from.values["isPlayerAlive"]      = true;
+        from.values["isPlayerNear"]       = false;
+        from.values["hasCat"]             = false;
+        from.values["foundDoorInPath"]    = false;
+        from.values["foundTrapInPath"]    = false;
+        from.values["alienIsGone"]        = false;
+        from.values["isStuned"]           = false;
+        from.values["isAlive"]            = true;
+        from.values["alienWins"]          = false;
+        from.values["isAlienGoingToDie"]  = false;
 
         var to = new GOAPState();
         //to.values["isPlayerAlive"]     = false;
