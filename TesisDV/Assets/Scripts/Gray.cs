@@ -103,7 +103,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _navMeshAgent = GetComponent<NavMeshAgent>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         nearestDoorDistance = 1000;
-        _lm.AddGray(this);
+        //_lm.AddGray(this);
         miniMap = FindObjectOfType<MiniMap>();
         miniMap.grays.Add(this);
         myLineRenderer.startWidth = 0.15f;
@@ -570,7 +570,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             _lm.LoseGame();
             Destroy(_lm.objective);
         }
-        _lm.RemoveGray(this);
+        //_lm.RemoveGray(this);
         //_lm.EnemyCameBack();
         Destroy(gameObject);
     }
@@ -658,7 +658,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         awake = false;
         _rb.isKinematic = true;
         _cc.enabled = false;
-        _lm.RemoveGray(this);
+        //_lm.RemoveGray(this);
         _lm.CheckForObjective();
     }
     public void Dissolve()

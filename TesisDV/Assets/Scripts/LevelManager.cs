@@ -64,7 +64,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     public int enemiesAlive = 0;
     public int enemiesToSpawn = 0; */
 
-    public List<Gray> enemiesInScene = new List<Gray>();
+    public List<EnemyHealth> enemiesInScene = new List<EnemyHealth>();
     public bool enemyHasObjective = false;
 
     private void Start()
@@ -90,6 +90,8 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         
         //Invoke("EndRound",8f);
     }
+
+    
 
     private void DeactivateEnemy(UFOGrayDeath o)
     {
@@ -134,7 +136,10 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         AmountEnemiesInScene = enemiesInScene.Count;
         //No se checkea en update.
         if (_player.isDead) LoseGame();
-
+        if (enemiesInScene.Count <= 0)
+        {
+            WinGame();
+        }
         /* if (playing)
         {
             if (inRound && enemiesInScene.Count <= 0 && enemiesToSpawn <= 0 && !EnemiesSpawning()) EndRound();
@@ -225,12 +230,12 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         AllUFOs.Add(ufo);
     }
 
-    public void AddGray(Gray gray)
+    public void AddGray(EnemyHealth gray)
     {
          enemiesInScene.Add(gray);
     }
 
-    public void RemoveGray(Gray gray)
+    public void RemoveGray(EnemyHealth gray)
     {
         enemiesInScene.Remove(gray);
         if(!InRound)
@@ -243,13 +248,14 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     {
         if (enemiesInScene.Count <= 0)
         {
+            WinGame();
             enemyHasObjective = false;
             canSpawn = !enemyHasObjective;
             return;
         }
-        foreach (Gray gray in enemiesInScene)
+        foreach (EnemyHealth gray in enemiesInScene)
         {
-            enemyHasObjective = gray.hasObjective;
+            //enemyHasObjective = gray.hasObjective;
             
             if (enemyHasObjective == true) 
             canSpawn = !enemyHasObjective;
@@ -259,7 +265,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     private void KillAllEnemiesInScene()
     {
-        if (enemiesInScene.Count != 0) enemiesInScene[0].Die();
+        //if (enemiesInScene.Count != 0) enemiesInScene[0].Die();
     }
 
     public void ChangeDoorsStatus()

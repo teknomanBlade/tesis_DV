@@ -95,9 +95,11 @@ public class Cat : MonoBehaviour
         }
     }
 
+    //IA2-P1
+
     public void CatScreeming()
     {
-        var allEnemis = FindObjectsOfType<Gray>();
+        var allEnemis = FindObjectsOfType<EnemyHealth>();
 
         var enemiesTodie = allEnemis.Take(allEnemis.Where(x => Vector3.Distance(x.gameObject.transform.position, this.transform.position) < 100f).Count()).ToList();
 

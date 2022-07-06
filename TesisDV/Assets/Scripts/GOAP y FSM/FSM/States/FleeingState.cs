@@ -29,6 +29,7 @@ public class FleeingState : MonoBaseState
     }
     public override void UpdateLoop()
     {
+        if(_cat != null)
         _cat.transform.position = transform.position + new Vector3(0f, 1.8f - 0.35f, -0.87f);
 
 
@@ -56,7 +57,11 @@ public class FleeingState : MonoBaseState
         _shipDistance = Vector3.Distance(_exitPos, transform.position);
         if (_shipDistance < 3f)
         {
-            Destroy(_cat.gameObject);
+            if(_cat != null)
+            {
+                Destroy(_cat.gameObject);
+            }
+            
             return Transitions["OnChaseState"];
         }
        return this;

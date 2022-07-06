@@ -13,6 +13,8 @@ public class TestQuery : MonoBehaviour
         squareQuery = GameObject.Find("Query").GetComponent<SquareQuery>();
     }
 
+    //IA2-P1
+
     public EnemyHealth GetClosestEnemy(Vector3 trapPosition)
     {
         transform.position = trapPosition;

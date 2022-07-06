@@ -11,6 +11,7 @@ public class EnemyHealth : MonoBehaviour, IHittableObserver, IGridEntity
     public bool dead = false;
     private NavMeshAgent _navMeshAgent;
     private SpatialGrid _sg;
+    private LevelManager _lm;
     public Vector3 Position
     {
         get => transform.position;
@@ -23,6 +24,8 @@ public class EnemyHealth : MonoBehaviour, IHittableObserver, IGridEntity
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _sg = GameObject.Find("Grid").GetComponent<SpatialGrid>();
+        _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
+        _lm.enemiesInScene.Add(this);
     }
 
     void Start()
@@ -60,6 +63,7 @@ public class EnemyHealth : MonoBehaviour, IHittableObserver, IGridEntity
 
     private void Die()
     {
+        _lm.RemoveGray(this);
         _sg.Remove(this);
         Destroy(this.gameObject);
     }
