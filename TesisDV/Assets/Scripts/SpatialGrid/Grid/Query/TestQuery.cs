@@ -2,23 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class TestQuery : MonoBehaviour
 {
-    [SerializeField] SquareQuery query;
+    [SerializeField] SquareQuery squareQuery;
+    
+    void Awake()
+    {
+        squareQuery = GameObject.Find("Query").GetComponent<SquareQuery>();
+    }
+
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            var result = query.Query().Select(x => x as Gray).Where(x => x != null);
-
-            var result2 = query.Query().Select(x => x as Gray).Where(x => x != null).Where(enemy => enemy.hp < 3);
-
-            foreach (var item in result)
-            {
-                Debug.Log(item.name);
-            }
-        }
         
     }
+
+    public EnemyHealth GetClosestEnemy(Vector3 trapPosition)
+    {
+        transform.position = trapPosition;
+        squareQuery.transform.position = trapPosition;
+
+        EnemyHealth closestEnemy = null;
+        float maxDistance = 1000f;
+
+        var closestEnemyQuery = squareQuery.Query().Select(x => x as EnemyHealth);
+
+        foreach (var enemy in closestEnemyQuery)
+        {
+            var distance = Vector3.Distance(transform.position, enemy.transform.position);
+
+            if (distance < maxDistance)
+            {
+                maxDistance = distance;
+                closestEnemy = enemy;
+            }
+        }
+        if(closestEnemy != null)
+        Debug.Log(closestEnemy.gameObject.name);
+        return closestEnemy;
+    }
+
+    
 }

@@ -14,12 +14,12 @@ public class Baseball : Projectile
     {
         if (effectUp)
         {
-            Debug.Log("Hit " + collider.transform.name);
+            //Debug.Log("Hit " + collider.transform.name);
             if (collider.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             {
                 effectUp = false;
                 dieOnImpact = true;
-                AddObserver(collider.gameObject.GetComponent<Gray>());
+                AddObserver(collider.gameObject.GetComponent<EnemyHealth>());
                 TriggerHit("TennisBallHit");
             }
             if (dieOnImpact) Destroy(gameObject);

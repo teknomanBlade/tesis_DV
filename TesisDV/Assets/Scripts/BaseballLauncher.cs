@@ -18,6 +18,7 @@ public class BaseballLauncher : Item, IMovable
     public float viewRadius;
     public float viewAngle;
     public int shotsLeft;
+    private TestQuery _myQuery;
     public bool IsEmpty
     {
         get
@@ -36,7 +37,7 @@ public class BaseballLauncher : Item, IMovable
     Vector3 auxVector;
     Transform myCannon;
     Transform myCannonSupport;
-    private float _futureTime = 30f;
+    private float _futureTime = 0f; //30f
     private float _shootSpeed = 5f;
     private float _inactiveSpeed = 0.3f;
     private Collider _currentObjective = null;
@@ -56,6 +57,8 @@ public class BaseballLauncher : Item, IMovable
         //Debug.Log(transform.GetChild(2));
         shotsLeft = shots;
         ActiveBallsState1();
+        //_myQuery = GetComponent<TestQuery>();
+        _myQuery = GameObject.Find("TestQuery").GetComponent<TestQuery>();
     }
 
     public override void Interact()
@@ -161,7 +164,7 @@ public class BaseballLauncher : Item, IMovable
         }
 
         //Si no tenemos objetivo actual buscamos el más cercano y lo hacemos objetivo.
-        if (_currentObjective == null || _currentObjective.GetComponent<Gray>().dead || _currentObjectiveDistance > viewRadius)
+        if (_currentObjective == null || _currentObjective.GetComponent<EnemyHealth>().dead || _currentObjectiveDistance > viewRadius)
         {
 
 
@@ -170,12 +173,13 @@ public class BaseballLauncher : Item, IMovable
             //{
             //    if (Vector3.Distance(transform.position, item.transform.position) < _currentObjectiveDistance)
             //    {
-            var item = GetNearestTarget(allTargets);
+            //var item = GetNearestTarget(allTargets);
+            var item = _myQuery.GetClosestEnemy(transform.position);
 
             if (item == null)
                 return;
             _currentObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
-            _currentObjective = item;
+            _currentObjective = item.GetComponent<Collider>();
             //}
             //    }
             //}
@@ -186,7 +190,7 @@ public class BaseballLauncher : Item, IMovable
         //{
         if (_currentObjectiveDistance < viewRadius && _currentObjective != null)
         {
-            Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<Gray>().GetVelocity() * _futureTime * Time.deltaTime);
+            Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<EnemyHealth>().GetVelocity() * _futureTime * Time.deltaTime);
             //Vector3 dir = item.transform.position - transform.position;
 
             Vector3 dir = futurePos - transform.position;

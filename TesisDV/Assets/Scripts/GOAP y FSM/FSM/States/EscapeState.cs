@@ -10,6 +10,7 @@ public class EscapeState : MonoBaseState
     private float _lastHealTime; 
     private EnemyHealth _myHealth;
     public float movingSpeed;
+    
     void Start()
     {
         _myHealth = GetComponent<EnemyHealth>();
@@ -31,6 +32,7 @@ public class EscapeState : MonoBaseState
         var dir = (_player.transform.position - transform.position).normalized;
         transform.forward = dir;
         transform.position += transform.forward * movingSpeed * Time.deltaTime;
+        _myHealth.SetPosition(transform.position);
     }
     
     public override IState ProcessInput()

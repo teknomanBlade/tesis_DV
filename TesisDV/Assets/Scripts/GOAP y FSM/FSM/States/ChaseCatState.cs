@@ -21,9 +21,12 @@ public class ChaseCatState : MonoBaseState
     private MiniMap miniMap;
     private int _currentWaypoint = 0;
     private bool canCreatePath;
+    private EnemyHealth _myHealth;
+
 
     void Awake()
     {
+        _myHealth = GetComponent<EnemyHealth>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
         //_player = GameVars.Values.Player;
         //_cat = GameVars.Values.Cat;
@@ -41,11 +44,11 @@ public class ChaseCatState : MonoBaseState
 
     public override void UpdateLoop()
     {
-        foreach(KeyValuePair<string, FSM.IState> pair in Transitions)
+        /* foreach(KeyValuePair<string, FSM.IState> pair in Transitions)
         {
             Debug.Log(pair.Key);
             Debug.Log(pair.Value);
-        }
+        } */
 
 
         _catDistance = Vector3.Distance(_cat.transform.position, transform.position);
@@ -105,6 +108,8 @@ public class ChaseCatState : MonoBaseState
             Vector3 dir = _waypoints[_currentWaypoint] - transform.position;
             transform.forward = dir;
             transform.position += transform.forward * movingSpeed * Time.deltaTime;
+
+            _myHealth.SetPosition(transform.position);
 
             if (dir.magnitude < 0.5f)
             {

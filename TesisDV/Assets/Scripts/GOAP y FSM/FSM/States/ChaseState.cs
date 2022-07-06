@@ -16,17 +16,18 @@ public class ChaseState : MonoBaseState
     private MiniMap miniMap;
     private int _currentWaypoint = 0;
     private bool canCreatePath;
+    private EnemyHealth _myHealth;
 
     void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        _myHealth = GetComponent<EnemyHealth>();
     }
 
     void Start()
     {
         _player = GameVars.Values.Player;
         miniMap = FindObjectOfType<MiniMap>();
-        
     }
 
     public override void UpdateLoop()
@@ -83,6 +84,7 @@ public class ChaseState : MonoBaseState
             Vector3 dir = _waypoints[_currentWaypoint] - transform.position;
             transform.forward = dir;
             transform.position += transform.forward * movingSpeed * Time.deltaTime;
+            _myHealth.SetPosition(transform.position);
 
             if (dir.magnitude < 0.5f)
             {

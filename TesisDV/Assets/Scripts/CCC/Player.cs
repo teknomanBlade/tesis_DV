@@ -20,7 +20,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     public AttentionPlayerPPSSettings postProcessAttention;
     [SerializeField]
     private Inventory _inventory;
-
     public GameObject _weaponGO;
 
     [SerializeField]

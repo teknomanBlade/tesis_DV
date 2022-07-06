@@ -19,6 +19,7 @@ public class AttackState : MonoBaseState
 
     public override void UpdateLoop()
     {
+        _myHealth.SetPosition(transform.position);
         if (Time.time >= _lastAttackTime + attackRate) 
         {
             _lastAttackTime = Time.time;
