@@ -82,7 +82,7 @@ public class FleeingState : MonoBaseState
             }
             pathIsCreated = true;
             _waypoints = path.corners;
-            miniMap.DrawWayPointInMiniMap();
+            //miniMap.DrawWayPointInMiniMap();
         }
     }
 

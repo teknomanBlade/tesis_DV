@@ -89,7 +89,7 @@ public class GoapMiniTest : MonoBehaviour
 
         planner.Run(from, to, actions, StartCoroutine);
     }
-
+    //IA2-P3
     private void PlanAndExecute() {
         var actions = new List<GOAPAction>{
                                               new GOAPAction("Escape")

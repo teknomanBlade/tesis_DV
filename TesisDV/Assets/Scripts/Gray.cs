@@ -644,6 +644,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     }
     public void Die()
     {
+        miniMap.isActive = false;
         dead = true;
         _canAttack = false;
         var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);

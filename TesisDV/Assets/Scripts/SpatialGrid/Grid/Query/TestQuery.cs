@@ -14,7 +14,7 @@ public class TestQuery : MonoBehaviour
     }
 
     //IA2-P1
-
+    //IA2-P2
     public EnemyHealth GetClosestEnemy(Vector3 trapPosition)
     {
         transform.position = trapPosition;

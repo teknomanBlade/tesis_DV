@@ -73,7 +73,7 @@ public class ChaseState : MonoBaseState
             }
             pathIsCreated = true;
             _waypoints = path.corners;
-            miniMap.DrawWayPointInMiniMap();
+            //miniMap.DrawWayPointInMiniMap();
         }
     }
 

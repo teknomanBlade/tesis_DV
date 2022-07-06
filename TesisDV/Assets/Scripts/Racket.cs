@@ -58,7 +58,11 @@ public class Racket : Melee
             if (other.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             {
                 //Debug.Log("Hit WITH RACKET TO GRAY?" + other.transform.name);
+                if(other.gameObject.GetComponent<EnemyHealth>() != null)
                 AddObserver(other.gameObject.GetComponent<EnemyHealth>());
+                TriggerHit("RacketHit");
+                if (other.gameObject.GetComponent<Gray>() != null)
+                    AddObserver(other.gameObject.GetComponent<Gray>());
                 TriggerHit("RacketHit");
             }
         }

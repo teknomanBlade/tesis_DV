@@ -17,6 +17,7 @@ public class MiniMap : MonoBehaviour
     public List<GameObject> lineRenderers = new List<GameObject>();
 
     public GameObject prefabIndicador;
+    public bool isActive = true;
     public int ShowGreyCount;
     void Start()
     {
@@ -38,7 +39,7 @@ public class MiniMap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (grayWithGreyPoints != null)
+        if (grayWithGreyPoints != null && isActive)
             StartCoroutine("DrawIndicator");
     }
     //IA2 -P1
@@ -77,7 +78,6 @@ public class MiniMap : MonoBehaviour
                 yield return new WaitForSeconds(0.5f);
 
             Debug.Log("lineRenderers " + lineRenderers.Count);
-            
 
             lineRenderers[x].GetComponent<LineRenderer>().positionCount = waypoints.Count;
             lineRenderers[x].GetComponent<LineRenderer>().SetPosition(0, waypoints[0]);

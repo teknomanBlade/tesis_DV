@@ -118,11 +118,11 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             CurrentRound++;
             //TriggerRoundChange("RoundChanged");
             Instantiate(_myUFO).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetTotalGrays(_totalGraysUFO1);//.SetRotation(new Vector3(-90f, 0f, 0f));
-            Instantiate(_myUFO).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetTotalGrays(_totalGraysUFO2);//.SetRotation(new Vector3(-90f, 0f, 0f));
+            //Instantiate(_myUFO).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetTotalGrays(_totalGraysUFO2);//.SetRotation(new Vector3(-90f, 0f, 0f));
         }
         else
         {
-            GameVars.Values.LevelManager.WinGame();
+            //GameVars.Values.LevelManager.WinGame();
         }
     }
 
