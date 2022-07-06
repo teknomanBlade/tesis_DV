@@ -13,12 +13,6 @@ public class TestQuery : MonoBehaviour
         squareQuery = GameObject.Find("Query").GetComponent<SquareQuery>();
     }
 
-
-    void Update()
-    {
-        
-    }
-
     public EnemyHealth GetClosestEnemy(Vector3 trapPosition)
     {
         transform.position = trapPosition;
@@ -31,7 +25,7 @@ public class TestQuery : MonoBehaviour
 
         foreach (var enemy in closestEnemyQuery)
         {
-            var distance = Vector3.Distance(transform.position, enemy.transform.position);
+            var distance = Vector3.Distance(trapPosition, enemy.transform.position);
 
             if (distance < maxDistance)
             {
@@ -39,8 +33,7 @@ public class TestQuery : MonoBehaviour
                 closestEnemy = enemy;
             }
         }
-        if(closestEnemy != null)
-        Debug.Log(closestEnemy.gameObject.name);
+        //Debug.Log(closestEnemy.gameObject.name);
         return closestEnemy;
     }
 
