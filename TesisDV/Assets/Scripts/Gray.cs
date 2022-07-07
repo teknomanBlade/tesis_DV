@@ -39,6 +39,9 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private int _currentWaypoint = 0;
     private int _currentCorner = 0;
     public Coroutine attackCoroutine;
+    public Coroutine EMPAttackCoroutine;
+    public Coroutine stunCoroutine;
+    public Coroutine hitCoroutine;
     public Coroutine currentCoroutine;
     public Coroutine dissolveCoroutine;
     public bool dead = false;
@@ -144,7 +147,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             //_anim.SetBool("IsEMP", false);
             if (!stun)
             {
-                _anim.SetBool("IsStunned", false);
                 distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
 
                 if (IsInSight() && !_lm.enemyHasObjective)
@@ -287,12 +289,14 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         //_navMeshAgent.destination = dest;
     }
 
-    IEnumerator PlayAnimation(string param, string name)
+    IEnumerator PlayAnimation(string param, string name, float moreSpeed = 1f, Action action = null)
     {
         _anim.SetBool(param, true);
+        _anim.speed = moreSpeed;
         var clips = _anim.runtimeAnimatorController.animationClips;
         float time = clips.First(x => x.name == name).length;
         yield return new WaitForSeconds(time);
+        if(action != null) action.Invoke();
         _navMeshAgent.speed = 1;
         _anim.SetBool(param, false);
     }
@@ -300,7 +304,10 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void MovingAnimations()
     {
         if (_isMoving)
+        {
+            _anim.speed = 1;
             _anim.SetBool("IsWalking", true);
+        }
         else
             _anim.SetBool("IsWalking", false);
     }
@@ -405,7 +412,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         attacking = true;
         _isMoving = false;
         _navMeshAgent.speed = 0;
-        StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
+        StartCoroutine(PlayAnimation("IsAttacking", "Attack", 1f));
         yield return null;
         //_anim.SetBool("IsAttacking", true);
 
@@ -436,32 +443,28 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
 
     public void Stun(float time)
     {
-        //_anim.SetBool("IsHitted", false);
+        _navMeshAgent.speed = 0;
+        stun = true;
+        stunCoroutine = StartCoroutine(PlayAnimation("IsStunned", "Stun",3f));
         _canAttack = false;
         _rb.isKinematic = true;
         _isMoving = false;
-        stun = true;
-        _navMeshAgent.speed = 0;
-        currentCoroutine = StartCoroutine(PlayAnimation("IsStunned", "Stun"));
-        //_anim.SetBool("IsStunned", true);
-        Invoke("UnStun", time);
     }
 
     public void SecondStun(float time)
     {
-        //_anim.SetBool("IsHitted", false);
+        _navMeshAgent.speed = 0;
         _canAttack = false;
         stun = true;
         _isMoving = false;
-        _navMeshAgent.speed = 0;
         _navMeshAgent.destination = transform.position;
         if (hasObjective)
         {
             DropObjective();
         }
-        currentCoroutine = StartCoroutine(PlayAnimation("IsStunned", "Stun"));
+        stunCoroutine = StartCoroutine(PlayAnimation("IsStunned", "Stun",3f));
         _rb.isKinematic = true;
-        Invoke("SecondUnStun", time);
+        //Invoke("SecondUnStun", time);
     }
 
     private void MoveTo()
@@ -515,7 +518,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     {
         _rb.isKinematic = false;
         stun = false;
-        _isMoving = false;
+        _isMoving = true;
         _canAttack = true;
     }
 
@@ -592,7 +595,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         attacking = true;
         _isMoving = false;
         _navMeshAgent.speed = 0;
-        StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
+        StartCoroutine(PlayAnimation("IsAttacking", "Attack",1f));
         OpenDoor(door);
     }
 
@@ -619,6 +622,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         Vector3 dir = _trapPos - transform.position;
         if (dir.magnitude < 0.6f)
         {
+            _navMeshAgent.speed = 0;
             float timeToAttack = 5f;
             float timePassed = 0f;
 
@@ -630,9 +634,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             {
                 attacking = true;
                 _isMoving = false;
-                StartCoroutine(PlayAnimation("IsAttacking", "Attack"));
-                //_anim.SetBool("IsAttacking", true);
-                trap.TakeDamage(_dmg);
+                EMPAttackCoroutine = StartCoroutine(PlayAnimation("IsEMP", "EMPSkill", 4f, () => { trap.TakeDamage(_dmg); }));
                 timePassed = timeToAttack;
                 attacking = false;
                 _isMoving = true;
@@ -644,6 +646,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     IEnumerator PlayAnimationsDeathPostDeath(string param, string name)
     {
         _anim.SetBool(param, true);
+        _anim.speed = 1f;
         var clips = _anim.runtimeAnimatorController.animationClips;
         float time = clips.First(x => x.name == name).length;
         yield return new WaitForSeconds(time);
@@ -713,7 +716,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         if (message.Equals("TennisBallHit"))
         {
             //_anim.SetBool("IsHitted", true);
-            currentCoroutine = StartCoroutine(PlayAnimation("IsHitted", "Hit"));
+            hitCoroutine = StartCoroutine(PlayAnimation("IsHitted", "Hit", 1.5f));
             ActiveInnerEffect();
             GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
             Damage();
@@ -723,7 +726,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         {
             if (_anim)
             {
-                currentCoroutine = StartCoroutine(PlayAnimation("IsHitted", "Hit"));
+                hitCoroutine = StartCoroutine(PlayAnimation("IsHitted", "Hit", 1.5f));
                 ActiveInnerEffect();
                 GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
                 Damage();

@@ -12,6 +12,7 @@ public class BaseballLauncher : Item, IMovable
     private float _currentLife;
     private bool _isDestroyed;
     public ParticleSystem HitTurret;
+    public ParticleSystem ShootEffect;
     private AudioSource _as;
     public delegate void OnReloadDelegate();
     public event OnReloadDelegate OnReload;
@@ -133,7 +134,7 @@ public class BaseballLauncher : Item, IMovable
     {
         if (shotsLeft == 0 || _currentObjective == null || _currentObjective.GetComponent<Gray>().dead)
             return;
-
+        ShootEffect.Play();
         shotsLeft--;
         shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
         ChangeBallsState(shotsLeft);
@@ -294,8 +295,8 @@ public class BaseballLauncher : Item, IMovable
         {
             for (int i = 0; i < _myItems.Count; i++)
             {
-                Vector3 itemPos = new Vector3(UnityEngine.Random.Range(0.3f, 1.3f), 0, UnityEngine.Random.Range(0.3f, 1.3f));
-                Instantiate(_myItems[i], transform.position + aux + itemPos, Quaternion.identity);
+                Vector3 itemPos = new Vector3(UnityEngine.Random.Range(0.1f, 2.3f), 0, UnityEngine.Random.Range(0.1f, 2.3f));
+                Instantiate(_myItems[i], transform.position + aux + itemPos, Quaternion.Euler(-90f,0f,0f));
             }
         }
         Destroy(this.gameObject);
