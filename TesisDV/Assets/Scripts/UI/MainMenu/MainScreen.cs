@@ -11,6 +11,8 @@ public class MainScreen : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         _as = GetComponent<AudioSource>();
     }
 

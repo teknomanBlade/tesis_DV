@@ -168,7 +168,7 @@ public class BaseballLauncher : Item, IMovable
     public void TakeDamage(float dmgAmount)
     {
         _currentLife -= dmgAmount;
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "TurretHitDamage", 0.45f, false);
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "TurretHitDamage", 0.25f, false);
         HitTurret.gameObject.SetActive(true);
         HitTurret.Play();
         if (_currentLife <= 0)
@@ -291,7 +291,7 @@ public class BaseballLauncher : Item, IMovable
     IEnumerator PlayShutdownSound()
     {
         _isDisabledSFX = false;
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "TurretShutDown", 0.4f, false);
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "TurretShutDown", 0.16f, false);
         yield return new WaitForSeconds(1f);
         GameVars.Values.soundManager.StopSound();
         _isDisabledSFX = true;

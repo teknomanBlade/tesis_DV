@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -85,6 +85,7 @@
     <Compile Include="Assets\Scripts\UI\MainMenu\MainScreen.cs" />
     <Compile Include="Assets\Scripts\Outline.cs" />
     <Compile Include="Assets\Scripts\CCC\Player.cs" />
+    <Compile Include="Assets\Laser.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IPlayerDamageObserver.cs" />
     <Compile Include="Assets\Scripts\Inventory\ContextualTrapMenu.cs" />
     <Compile Include="Assets\Scripts\SoundManager\SoundManager.cs" />

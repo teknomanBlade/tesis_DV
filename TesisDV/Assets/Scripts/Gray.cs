@@ -443,10 +443,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     {
         _navMeshAgent.speed = 0;
         stun = true;
-        stunCoroutine = StartCoroutine(PlayAnimation("IsStunned", "Stun"));
-        _canAttack = false;
-        _rb.isKinematic = true;
-        _isMoving = false;
+        stunCoroutine = StartCoroutine(PlayAnimation("IsStunned", "Stun", () => { UnStun(); }));
     }
 
     public void SecondStun(float time)
@@ -460,7 +457,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         {
             DropObjective();
         }
-        stunCoroutine = StartCoroutine(PlayAnimation("IsStunned", "Stun"));
+        stunCoroutine = StartCoroutine(PlayAnimation("IsStunned", "Stun", () => { UnStun(); }));
         _rb.isKinematic = true;
         //Invoke("SecondUnStun", time);
     }
@@ -517,7 +514,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _rb.isKinematic = false;
         stun = false;
         _isMoving = true;
-        _canAttack = true;
+        attacking = false;
+        _canAttack = false;
     }
 
     public void SecondUnStun()
