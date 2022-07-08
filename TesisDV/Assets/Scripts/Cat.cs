@@ -80,7 +80,8 @@ public class Cat : MonoBehaviour
     {
         if(!_isHeld)
         {
-            transform.position = _myPos[Random.Range(0, 3)];
+            transform.position = _myPos[Random.Range(0, 2)];
+            //transform.position = _myPos[1];
             _startingPositionGameObject.transform.position = transform.position;
             _startingPosition = _startingPositionGameObject.transform.position;
         }
