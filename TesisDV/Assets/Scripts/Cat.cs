@@ -10,21 +10,28 @@ public class Cat : MonoBehaviour
     private bool _isWalking;
     [SerializeField]
     private Vector3 _startingPosition;
+    private GameObject _startingPositionGameObject;
     private NavMeshAgent _navMeshAgent;
     private LevelManager _lm;
     private Vector3 _exitPos;
     private Animator _animator;
-
+    [SerializeField]
+    private List<Vector3> _myPos = new List<Vector3>();
     void Awake()
     {
-
-        _startingPosition = GameObject.Find("StartingPosition").transform.position;
+        _startingPositionGameObject = GameObject.Find("StartingPosition");
+        _startingPosition = _startingPositionGameObject.transform.position;
         _isHeld = false;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.speed = 0.6f;
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _animator = GetComponent<Animator>();
         _animator.SetBool("IsIdle", true);
+    }
+
+    void Start()
+    {
+        SetPositionBetweenWaves();
     }
 
     void Update()
@@ -67,6 +74,16 @@ public class Cat : MonoBehaviour
         _animator.SetBool("IsWalking", true);
         //_navMeshAgent.isStopped = false;
         _navMeshAgent.enabled = true;
+    }
+
+    public void SetPositionBetweenWaves()
+    {
+        if(!_isHeld)
+        {
+            transform.position = _myPos[Random.Range(0, 3)];
+            _startingPositionGameObject.transform.position = transform.position;
+            _startingPosition = _startingPositionGameObject.transform.position;
+        }
     }
 
     public void SetExitPos(Vector3 exitPos)

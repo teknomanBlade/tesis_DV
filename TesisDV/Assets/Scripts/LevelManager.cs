@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     public GameObject NewHouse;
     public GameObject OldHouse;
-
+    private Cat _cat;
     [SerializeField]
     public List<UFO> AllUFOs = new List<UFO>();
     public Transform[] allDoors;
@@ -37,7 +37,9 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         {
             if (enemiesInScene.Count == 0)
             {
+                //_cat.SetPositionBetweenWaves();
                 TriggerHitInRound("EndRound");
+                
             }
             
             return enemiesInScene.Count > 0;
@@ -75,7 +77,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         InitialStockUFO = 5;
         UFOPrefab = Resources.Load<UFOGrayDeath>("UFOGrayDeath");
         UFOsPool = new PoolObject<UFOGrayDeath>(UFOFactory, ActivateEnemy, DeactivateEnemy, InitialStockUFO, true);
-
+        _cat = objective.GetComponent<Cat>();
         /*YouWin = Instantiate(GameVars.Values.youWinScreen);
         YouWin.transform.SetParent(_panelMain.transform);
         YouLose = Instantiate(GameVars.Values.youLoseScreen);
