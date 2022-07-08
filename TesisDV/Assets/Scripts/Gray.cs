@@ -93,7 +93,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     private LineRenderer lineRenderer;
     MiniMap miniMap;
 
-    public Transform CatGrabPos; 
+    public Transform CatGrabPos;
 
     private void Awake()
     {
@@ -660,6 +660,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         //var spawnPos = new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z);
         //var UFO = GameVars.Values.LevelManager.UFOsPool.GetObject().InitializePosition(spawnPos);
         GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
+        GetComponent<CapsuleCollider>().enabled = false;
         StartCoroutine(PlayAnimationsDeathPostDeath("IsDead", "Death"));
         _navMeshAgent.destination = transform.position;
         if (hasObjective)

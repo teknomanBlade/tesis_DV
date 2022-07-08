@@ -409,16 +409,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: Baseball Launcher
   _itemImage: {fileID: 21300000, guid: 45b425e2ff917154282094ac35d1da19, type: 3}
+  _currentLife: 0
+  HitTurret: {fileID: 0}
+  ShootEffect: {fileID: 0}
   projectilePrefab: {fileID: 5947256333315532305, guid: 03814f5085065604fbbe6067433ea571, type: 3}
   blueprintPrefab: {fileID: 5532286412760341279, guid: 7b53e3b0651edf14aa0a8792627baeae, type: 3}
   exitPoint: {fileID: 8337342206166871292}
   ballsState1: {fileID: 8590172455016296627}
   ballsState2: {fileID: 525925034722744037}
   ballsState3: {fileID: 7046872255838045146}
+  trapDestroyPrefab: {fileID: 0}
   shots: 15
+  viewRadius: 0
+  viewAngle: 0
   shotsLeft: 0
   interval: 0.5
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
   active: 0
+  _currentObjective: {fileID: 0}
+  _currentObjectiveDistance: 1000
+  _myItems: []
+  collidersObjectives: []
+  collidersObjectivesDisabled: []
 --- !u!65 &8337342207286034101
 BoxCollider:
   m_ObjectHideFlags: 0

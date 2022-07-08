@@ -10,7 +10,7 @@ Material:
   m_Name: BaseballMachinePart2
   m_Shader: {fileID: 4800000, guid: 6d16922cb6095d84e915672f46b1af13, type: 3}
   m_ShaderKeywords: _NORMALMAP
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -35,8 +35,20 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Emission:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emission_One:
+        m_Texture: {fileID: 2800000, guid: 01ec50876154c394ca995932af07b874, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emission_Two:
+        m_Texture: {fileID: 2800000, guid: 071f42d22d483cc4a87dbfb261c9d155, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -68,6 +80,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _Float0: 1
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _Glossiness2: 7.48
@@ -85,6 +98,7 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
+    - _Active: {r: 1, g: 1, b: 1, a: 0}
     - _AmbientColor2: {r: 0.5660378, g: 0.5580278, b: 0.5580278, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
