@@ -34,6 +34,7 @@ public class BaseballLauncherDestroyAnim : MonoBehaviour
     public void ActiveExplosionEffect()
     {
         explosionParticle.gameObject.SetActive(!explosionParticle.gameObject.activeSelf);
+        explosionParticle.transform.SetParent(null, true);
         explosionParticle.Play();
     }
     IEnumerator DestroyThisTrapAnim(string name)

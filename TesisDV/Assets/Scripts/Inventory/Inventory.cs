@@ -93,6 +93,7 @@ public class Inventory : MonoBehaviour
             if (itemSlots[i].HasItemID(itemID))
             {
                 itemSlots[i].RemoveItem();
+                break;
             }
         }
     }

@@ -58,19 +58,22 @@ public class BaseballLauncher : Item, IMovable
     public Collider[] collidersObjectives;
     public Collider[] collidersObjectivesDisabled;
     public const float MAX_CURRENT_OBJETIVE_DISTANCE = 1000;
-
+    private bool isFirstTime;
+    public Laser laser;
+    private Coroutine searchingForTargetCoroutine;
 
     public void Awake()
     {
         _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
-        _animator.SetBool("HasNoBalls", false);
-
+        _animator.SetBool("HasNoBalls", true);
+        isFirstTime = true;
         myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
         _as = GetComponent<AudioSource>();
         //Debug.Log(transform.GetChild(2));
         shotsLeft = shots;
+        laser.gameObject.SetActive(false);
         ActiveBallsState1();
     }
 
@@ -80,10 +83,15 @@ public class BaseballLauncher : Item, IMovable
         {
             if (ReloadCoroutine != null) StopCoroutine(ReloadCoroutine);
             ReloadCoroutine = StartCoroutine(ReloadTurret());
+            return;
         }
 
         if (!active)
         {
+            Debug.Log("Active la torreta");
+
+            if (isFirstTime) { isFirstTime = false; _animator.SetBool("HasNoBalls", false); }
+
             active = true;
             _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
             if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
@@ -141,6 +149,8 @@ public class BaseballLauncher : Item, IMovable
     {
         if (shotsLeft == 0 || _currentObjective == null || _currentObjective.GetComponent<Gray>().dead)
             return;
+        
+        laser.gameObject.SetActive(true);
         ShootEffect.Play();
         shotsLeft--;
         shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
@@ -232,7 +242,6 @@ public class BaseballLauncher : Item, IMovable
             //Vector3 dir = item.transform.position - transform.position;
 
             Vector3 dir = futurePos - transform.position;
-
             _currentObjectiveDistance = Vector3.Distance(transform.position, _currentObjective.transform.position);
 
             //if (Vector3.Angle(transform.forward, dir.normalized) < viewAngle / 2)
@@ -250,15 +259,18 @@ public class BaseballLauncher : Item, IMovable
                 myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, rotation.y, 0f), _shootSpeed * Time.deltaTime);
                 myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y, rotation.z), _shootSpeed * Time.deltaTime);
                 Debug.DrawLine(transform.position, _currentObjective.transform.position, Color.red);
-
+                return;
             }
         }
-        else
+
+
+        if (allTargets.Length == 0 && _currentObjective == null)
         {
-            //StartCoroutine("RoutineSearchingForObjectives");
+            if (searchingForTargetCoroutine != null) StopCoroutine(searchingForTargetCoroutine);
+            
+            searchingForTargetCoroutine = StartCoroutine("RoutineSearchingForObjectives");
+            laser.gameObject.SetActive(false);
         }
-        //}
-        //}
     }
 
     /*IEnumerator PlayDetectionSound()
@@ -272,6 +284,9 @@ public class BaseballLauncher : Item, IMovable
         if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
         _animator.enabled = true;
         _animator.SetBool("HasNoBalls", true);
+        _animator.SetBool("IsDetectingTarget", false);
+        laser.gameObject.SetActive(false);
+
     }
     IEnumerator PlayShutdownSound()
     {
@@ -284,14 +299,12 @@ public class BaseballLauncher : Item, IMovable
 
     IEnumerator RoutineSearchingForObjectives()
     {
-        Debug.Log("RoutineSearchingForObjectives");
         SearchingForObjectives();
         yield return new WaitForSeconds(0.9f);
     }
 
     IEnumerator RoutineEndSearchingForObjectives()
     {
-        Debug.Log("RoutineSearchingForObjectives");
 
         EndSearchingForObjective();
         yield return new WaitForSeconds(0.9f);
@@ -299,16 +312,14 @@ public class BaseballLauncher : Item, IMovable
     private void SearchingForObjectives()
     {
         _animator.enabled = true;
-        _animator.SetBool("IsSearchingForObjectives", true);
+        _animator.SetBool("IsDetectingTarget", true);
 
     }
 
     private void EndSearchingForObjective()
     {
-        _animator.SetBool("IsSearchingForObjectives", false);
         _animator.enabled = false;
-
-
+        _animator.SetBool("IsDetectingTarget", false);
     }
 
     public void ActiveDeactivateBallStates(bool state1, bool state2, bool state3)
