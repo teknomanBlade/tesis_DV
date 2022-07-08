@@ -11,6 +11,7 @@ public class BaseballLauncher : Item, IMovable
     [SerializeField]
     private float _currentLife;
     private bool _isDestroyed;
+    private bool _isDisabledSFX;
     public ParticleSystem HitTurret;
     public ParticleSystem ShootEffect;
     private AudioSource _as;
@@ -30,7 +31,6 @@ public class BaseballLauncher : Item, IMovable
     {
         get
         {
-
             return shotsLeft == 0;
         }
     }
@@ -71,7 +71,7 @@ public class BaseballLauncher : Item, IMovable
 
     public override void Interact()
     {
-        if (HasPlayerTennisBallBox)
+        if (HasPlayerTennisBallBox && IsEmpty)
         {
             if (ReloadCoroutine != null) StopCoroutine(ReloadCoroutine);
             ReloadCoroutine = StartCoroutine(ReloadTurret());
@@ -107,6 +107,7 @@ public class BaseballLauncher : Item, IMovable
     }
     public void Reload()
     {
+        _isDisabledSFX = false;
         shotsLeft = shots;
         _animator.enabled = true;
         _animator.SetBool("HasNoBalls", false);
@@ -256,10 +257,18 @@ public class BaseballLauncher : Item, IMovable
     }*/
     private void Inactive()
     {
+        if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
         _animator.enabled = true;
         _animator.SetBool("HasNoBalls", true);
     }
-
+    IEnumerator PlayShutdownSound()
+    {
+        _isDisabledSFX = false;
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "TurretShutDown", 0.4f, false);
+        yield return new WaitForSeconds(1f);
+        GameVars.Values.soundManager.StopSound();
+        _isDisabledSFX = true;
+    }
     private void SearchingForObjectives()
     {
         myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(myCannonSupport.rotation.x + 10, myCannonSupport.rotation.y + 10, myCannonSupport.rotation.z + 10), _searchSpeed * Time.deltaTime);

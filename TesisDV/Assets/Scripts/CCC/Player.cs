@@ -33,6 +33,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     
     private AudioSource _audioSource;
     private GameObject _craftingScreen;
+    [SerializeField]
+    private GameObject _miniMapDisplay;
     private LevelManager _lm;
     #endregion
 
@@ -103,6 +105,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         volume = _cam.Camera.GetComponent<PostProcessVolume>();
 
         _craftingScreen = GameObject.Find("CraftingContainer");
+        _miniMapDisplay = GameObject.Find("MiniMapDisplay");
         //_inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
         _inventory = _craftingScreen.gameObject.GetComponentInChildren<Inventory>();
         _weapon = _weaponGO.transform.GetChild(0).GetComponent<Racket>();
@@ -184,10 +187,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         if(Input.GetKeyDown(GameVars.Values.inventoryKey) && _craftingScreen.activeInHierarchy)
         {
             _craftingScreen.SetActive(false);
+            _miniMapDisplay.SetActive(true);
         }
         else if(Input.GetKeyDown(GameVars.Values.inventoryKey) && !_craftingScreen.activeInHierarchy)
         {
             _craftingScreen.SetActive(true);
+            _miniMapDisplay.SetActive(false);
         }
 
         //if (!IsCrafting) //Va al TrapHotBar.

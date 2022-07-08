@@ -39,6 +39,7 @@ public class BaseballLauncherDestroyAnim : MonoBehaviour
     IEnumerator DestroyThisTrapAnim(string name)
     {
         _anim.SetBool("IsDestroyed", true);
+        GameVars.Values.soundManager.PlaySoundAtPoint("TurretDestroyed", transform.position, 0.6f);
         var clips = _anim.runtimeAnimatorController.animationClips;
         float time = clips.First(x => x.name == name).length;
         yield return new WaitForSeconds(time);
