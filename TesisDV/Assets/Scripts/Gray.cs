@@ -86,6 +86,8 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     [SerializeField]
     private ParticleSystem _hitEffect;
     [SerializeField]
+    private ParticleSystem _deathEffect;
+    [SerializeField]
     private GameObject _hitWave;
 
     private float timePassed = 0;
@@ -439,6 +441,12 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _isMoving = true;
     }
 
+    public void PlayDeathParticleEffect()
+    {
+        _deathEffect.gameObject.SetActive(true);
+        _deathEffect.Play();
+    }
+
     public void Stun(float time)
     {
         _navMeshAgent.speed = 0;
@@ -677,6 +685,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     }
     IEnumerator PlayShaderDissolve()
     {
+        _deathEffect.Stop();
         SwitchDissolveMaterial(dissolveMaterial);
         dissolveCoroutine = StartCoroutine(LerpScaleDissolve(0f, 1f));
         yield return new WaitForSeconds(1.5f);

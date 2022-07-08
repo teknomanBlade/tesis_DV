@@ -331,6 +331,7 @@ public class BaseballLauncher : Item, IMovable
 
     public void BecomeMovable()
     {
+        GameVars.Values.currentShotsTrap1 = shotsLeft;
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
     }

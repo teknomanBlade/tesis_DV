@@ -76,7 +76,7 @@ public class GameVars : MonoBehaviour
     private bool _isFaded;
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
-
+    public int currentShotsTrap1;
     public List<List<Node>> levelRoutes;
 
     private void Awake()

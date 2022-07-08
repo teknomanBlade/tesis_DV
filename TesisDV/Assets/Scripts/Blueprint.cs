@@ -106,7 +106,7 @@ public class Blueprint : MonoBehaviour
 
     private IEnumerator BuildTrap()
     {
-        Instantiate(particles, transform.position, transform.rotation);
+        var particlesInstantiated = Instantiate(particles, transform.position, transform.rotation);
         //myRenderer.enabled = false; //Probar despues de arreglar posicionamiento.
 
         //Renderer[] rs = GetComponentsInChildren<Renderer>();
@@ -121,6 +121,7 @@ public class Blueprint : MonoBehaviour
         //Destroy(aux.GetComponent<InventoryItem>());
         craftingRecipe.RemoveItems();
         craftingRecipe.RestoreBuildAmount();
+        Destroy(particlesInstantiated);
         Destroy(gameObject);
 
     }
