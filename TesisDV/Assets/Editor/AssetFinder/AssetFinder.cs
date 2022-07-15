@@ -7,6 +7,7 @@ using UnityEngine;
 public class AssetFinder : EditorWindow
 {
     private string _searchParamAsset;
+    private string _searchParamFilter;
     private bool _isNullOrEmptyFinder;
     private List<UnityEngine.Object> _foundObjects;
     private bool _hasNoResults;
@@ -40,7 +41,10 @@ public class AssetFinder : EditorWindow
     public void AssetSearch()
     {
         EditorGUILayout.BeginHorizontal();
-        var aux = _searchParamAsset;
+        EditorGUILayout.LabelField("Filter Type: ", GUILayout.Width(80));
+        _searchParamFilter = EditorGUILayout.TextField(_searchParamFilter, GUILayout.Width(200));
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Search Asset: ", GUILayout.Width(80));
         _searchParamAsset = EditorGUILayout.TextField(_searchParamAsset, GUILayout.Width(200));
         if (GUILayout.Button("Begin Search"))
@@ -87,10 +91,34 @@ public class AssetFinder : EditorWindow
         if (_isNullOrEmptyFinder)
             EditorGUILayout.HelpBox("Por favor ingrese un valor", MessageType.Error);
 
+        if (!string.IsNullOrEmpty(_searchParamFilter))
+        {
+            _foundObjects = FilterFoundObjects(_foundObjects, _searchParamFilter);
+        }
+
         if (_foundObjects != null && _foundObjects.Count > 0)
         {
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(250));
-            for (int i = 0; i < _foundObjects.Count; i++)
+            _foundObjects.ForEach(x => 
+            {
+                EditorGUILayout.BeginHorizontal();
+                if (x != null)
+                {
+                    EditorGUILayout.LabelField(x.name + " - " + x.GetType().Name);
+
+                    if (GUILayout.Button("Manage"))
+                    {
+                        _myObj = x;
+                        assetOperations = GetWindow<AssetOperations>();
+                        assetOperations.maxSize = new Vector2(580, 280);
+                        assetOperations.Initialize(_myObj);
+                        assetOperations.Show();
+                    }
+                }
+
+                EditorGUILayout.EndHorizontal();
+            });
+            /*for (int i = 0; i < _foundObjects.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
                 if (_foundObjects[i] != null)
@@ -108,11 +136,16 @@ public class AssetFinder : EditorWindow
                 }
 
                 EditorGUILayout.EndHorizontal();
-            }
+            }*/
             EditorGUILayout.EndScrollView();
         }
         if (_hasNoResults)
             EditorGUILayout.HelpBox("No se han encontrado Assets con ese nombre", MessageType.Warning);
 
+    }
+
+    public List<Object> FilterFoundObjects(List<Object> foundObjects, string typeName)
+    {
+        return foundObjects.Where(x => x.GetType().Name == typeName).ToList();
     }
 }
