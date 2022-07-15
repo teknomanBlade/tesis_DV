@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using System.Linq;
 using UnityEngine;
 
 public class AssetFinder : EditorWindow
@@ -50,7 +51,19 @@ public class AssetFinder : EditorWindow
                 _foundObjects.Clear();
                 string[] path = AssetDatabase.FindAssets(_searchParamAsset);
 
-                for (int i = 0; i < path.Length; i++)
+                path.ToList().ForEach(x => 
+                {
+                    x = AssetDatabase.GUIDToAssetPath(x);
+                    var obj = AssetDatabase.LoadAssetAtPath(x, typeof(UnityEngine.Object));
+
+                    if (obj != null)
+                    {
+                        _foundObjects.Add(obj);
+                    }
+
+                });
+
+                /*for (int i = 0; i < path.Length; i++)
                 {
                     path[i] = AssetDatabase.GUIDToAssetPath(path[i]);
                     var obj = AssetDatabase.LoadAssetAtPath(path[i], typeof(UnityEngine.Object));
@@ -59,7 +72,7 @@ public class AssetFinder : EditorWindow
                     {
                         _foundObjects.Add(obj);
                     }
-                }
+                }*/
                 _hasNoResults = _foundObjects.Count == 0;
                 //Debug.Log("Lista Objetos tiene algo? " + (_foundObjects.Count > 0) + " - Cantidad: " + _foundObjects.Count);
 

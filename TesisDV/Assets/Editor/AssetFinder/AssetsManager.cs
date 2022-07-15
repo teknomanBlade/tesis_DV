@@ -7,6 +7,10 @@ using UnityEngine;
 public class AssetsManager : EditorWindow
 {
     #region Properties
+    public const string DIALOG_TITLE = "¡ATENCIÓN!";
+    public const string DIALOG_MESSAGE = "¿Está seguro de borrar la carpeta seleccionada?";
+    public const string DIALOG_OK = "OK";
+    public const string DIALOG_CANCEL = "Cancelar";
     private string _folderName;
     private string _folderNameDelete;
     private string _folderSource;
@@ -19,6 +23,7 @@ public class AssetsManager : EditorWindow
     private bool _isSlash;
     private bool _onlySlashesAllowedCreate;
     private bool _onlySlashesAllowedDelete;
+    private bool _isNullOrEmptyDelete;
     private bool _isNullOrEmptyCreate;
     private bool _isNullOrEmptyMove;
     private bool _originAndDestinyEquals;
@@ -180,48 +185,68 @@ public class AssetsManager : EditorWindow
         _folderNameDelete = EditorGUILayout.TextField("Folder Name To Delete: ", _folderNameDelete);
         if (GUILayout.Button("Delete Folder"))
         {
+            
             var projectPath = Directory.GetCurrentDirectory();
             var assetsPath = projectPath + "\\Assets\\";
             try
             {
-                slash = "";
-                string[] folders = GetFolders(_folderNameDelete, false);
-
-                if (folders != null)
+                if (!string.IsNullOrEmpty(_folderNameDelete))
                 {
-                    for (int i = 0; i < folders.Length; i++)
+                    var okPressed = EditorUtility.DisplayDialog(DIALOG_TITLE,DIALOG_MESSAGE,DIALOG_OK, DIALOG_CANCEL);
+                    if (okPressed)
                     {
-                        int j = i;
-                        if (j > 0)
+                        slash = "";
+                   
+                        _isNullOrEmptyDelete = false;
+                        string[] folders = GetFolders(_folderNameDelete, false);
+
+                        if (folders != null)
                         {
-                            j--;
-                            slash = "\\";
-                            prevAlt += folders[j] + slash;
+                            for (int i = 0; i < folders.Length; i++)
+                            {
+                                int j = i;
+                                if (j > 0)
+                                {
+                                    j--;
+                                    slash = "\\";
+                                    prevAlt += folders[j] + slash;
+                                }
+                                var path = assetsPath + prevAlt + folders[i];
+                                if (Directory.Exists(path) && i == folders.Length - 1)
+                                {
+                                    FileUtil.DeleteFileOrDirectory(path);
+                                    //Directory.Delete(path);
+                                    _directoryNotExists = false;
+                                }
+                                else
+                                {
+                                    _directoryNotExists = true;
+                                }
+                            }
                         }
-                        var path = assetsPath + prevAlt + folders[i];
-                        if (Directory.Exists(path) && i == folders.Length - 1)
-                        {
-                            Directory.Delete(path);
-                            _directoryNotExists = false;
-                        }
-                        else
-                        {
-                            _directoryNotExists = true;
-                        }
+                        prevAlt = "";
+
+                        _directoryNotEmpty = false;
+                    
                     }
                 }
-                prevAlt = "";
-
-                _directoryNotEmpty = false;
+                else
+                {
+                    _isNullOrEmptyDelete = true;
+                }
             }
             catch (IOException e)
             {
-                //Debug.Log(e.Message);
+                EditorGUILayout.HelpBox(e.Message, MessageType.Error);
                 _directoryNotEmpty = true;
             }
 
             AssetDatabase.Refresh();
         }
+
+        if (_isNullOrEmptyDelete)
+            EditorGUILayout.HelpBox("Debe ingresar un valor", MessageType.Error);
+
         if (_onlySlashesAllowedDelete)
             EditorGUILayout.HelpBox("Ingrese sólo barra o barra invertida", MessageType.Error);
 
