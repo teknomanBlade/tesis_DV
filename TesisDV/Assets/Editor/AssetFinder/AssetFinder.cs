@@ -16,6 +16,7 @@ public class AssetFinder : EditorWindow
     private GUIStyle _guiStyleError;
     private Vector2 scrollPos;
     private AssetOperations assetOperations;
+    private NodeFilterManagerWindow _nodeFilterManagerWindow;
     private void OnGUI()
     {
         AssetSearch();
@@ -41,9 +42,17 @@ public class AssetFinder : EditorWindow
     public void AssetSearch()
     {
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Filter Type: ", GUILayout.Width(80));
-        _searchParamFilter = EditorGUILayout.TextField(_searchParamFilter, GUILayout.Width(200));
+            EditorGUILayout.LabelField("Filter Type: ", GUILayout.Width(80));
+            _searchParamFilter = EditorGUILayout.TextField(_searchParamFilter, GUILayout.Width(200));
+            if (GUILayout.Button("Filter"))
+            {
+                _nodeFilterManagerWindow = GetWindow<NodeFilterManagerWindow>();
+                _nodeFilterManagerWindow.maxSize = new Vector2(500, 250);
+                _nodeFilterManagerWindow.Initialize();
+                _nodeFilterManagerWindow.Show();
+            }
         EditorGUILayout.EndHorizontal();
+
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Search Asset: ", GUILayout.Width(80));
         _searchParamAsset = EditorGUILayout.TextField(_searchParamAsset, GUILayout.Width(200));
