@@ -9,15 +9,9 @@ public class NodeFilterManagerWindow : EditorWindow
     private bool _isCurrentNameEmpty;
     private NodeDisplayWindow _nodeWindow;
     private string _currentName;
+    public delegate void OnFilterListReadyDelegate(List<FilterNode> list);
+    public event OnFilterListReadyDelegate OnFilterListReady;
 
-    /*public static void OpenWindow()
-    {
-        var myWindow = GetWindow<NodeFilterManagerWindow>();
-
-        myWindow._nodeWindow = GetWindow<NodeDisplayWindow>();
-        myWindow._nodeWindow.SetInitialStates();
-        myWindow._nodeWindow.Show();
-    }*/
     public void Initialize()
     {
         _myStyle = new GUIStyle
@@ -56,6 +50,8 @@ public class NodeFilterManagerWindow : EditorWindow
 
     private void OnDestroy()
     {
-       if(_nodeWindow != null) _nodeWindow.Close();
+        var filterCriteria = _nodeWindow.GetFilterCriteria();
+        OnFilterListReady?.Invoke(filterCriteria);
+        if (_nodeWindow != null) _nodeWindow.Close();
     }
 }

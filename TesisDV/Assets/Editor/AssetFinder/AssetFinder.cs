@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using System.Linq;
 using UnityEngine;
+using System;
+using Object = UnityEngine.Object;
 
 public class AssetFinder : EditorWindow
 {
@@ -10,7 +12,9 @@ public class AssetFinder : EditorWindow
     private string _searchParamFilter;
     private bool _isNullOrEmptyFinder;
     private List<UnityEngine.Object> _foundObjects;
+    private List<FilterNode> filterList;
     private bool _hasNoResults;
+    private GUIStyle _guiStyleLabel;
     private GUIStyle _guiStyleInfo;
     private UnityEngine.Object _myObj;
     private GUIStyle _guiStyleError;
@@ -25,6 +29,13 @@ public class AssetFinder : EditorWindow
     public void Initialize()
     {
         _foundObjects = new List<UnityEngine.Object>();
+        filterList = new List<FilterNode>();
+        _guiStyleLabel = new GUIStyle()
+        {
+            fontSize = 14,
+            fontStyle = FontStyle.Bold,
+            alignment = TextAnchor.UpperLeft
+        };
         _guiStyleInfo = new GUIStyle()
         {
             fontSize = 12,
@@ -42,20 +53,36 @@ public class AssetFinder : EditorWindow
     public void AssetSearch()
     {
         EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Filter Type: ", GUILayout.Width(80));
-            _searchParamFilter = EditorGUILayout.TextField(_searchParamFilter, GUILayout.Width(200));
-            if (GUILayout.Button("Filter"))
-            {
-                _nodeFilterManagerWindow = GetWindow<NodeFilterManagerWindow>();
-                _nodeFilterManagerWindow.maxSize = new Vector2(500, 250);
-                _nodeFilterManagerWindow.Initialize();
-                _nodeFilterManagerWindow.Show();
-            }
+            EditorGUILayout.LabelField("Filter Type: ", _guiStyleLabel, GUILayout.Width(80));
+            if(!string.IsNullOrEmpty(_searchParamFilter))
+                EditorGUILayout.LabelField(_searchParamFilter, _guiStyleInfo ,GUILayout.Width(200));
         EditorGUILayout.EndHorizontal();
-
+        EditorGUILayout.Space();
+        EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("Clean Filter", GUILayout.Width(80)))
+                {
+                       _searchParamFilter = "";
+                       filterList.Clear(); 
+                }
+                if (GUILayout.Button("Filter", GUILayout.Width(80)))
+                {
+                    _nodeFilterManagerWindow = GetWindow<NodeFilterManagerWindow>();
+                    _nodeFilterManagerWindow.maxSize = new Vector2(500, 250);
+                    _nodeFilterManagerWindow.OnFilterListReady += FilterListReady;
+                    _nodeFilterManagerWindow.Initialize();
+                    _nodeFilterManagerWindow.Show();
+                }
+        EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Search Asset: ", GUILayout.Width(80));
-        _searchParamAsset = EditorGUILayout.TextField(_searchParamAsset, GUILayout.Width(200));
+        _searchParamAsset = EditorGUILayout.TextField(_searchParamAsset, GUILayout.Width(320));
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Clean Search"))
+        {
+            _searchParamAsset = "";
+            _foundObjects.Clear();
+        }
         if (GUILayout.Button("Begin Search"))
         {
             _isNullOrEmptyFinder = string.IsNullOrEmpty(_searchParamAsset);
@@ -64,7 +91,7 @@ public class AssetFinder : EditorWindow
                 _foundObjects.Clear();
                 string[] path = AssetDatabase.FindAssets(_searchParamAsset);
 
-                path.ToList().ForEach(x => 
+                path.ToList().ForEach(x =>
                 {
                     x = AssetDatabase.GUIDToAssetPath(x);
                     var obj = AssetDatabase.LoadAssetAtPath(x, typeof(UnityEngine.Object));
@@ -76,16 +103,6 @@ public class AssetFinder : EditorWindow
 
                 });
 
-                /*for (int i = 0; i < path.Length; i++)
-                {
-                    path[i] = AssetDatabase.GUIDToAssetPath(path[i]);
-                    var obj = AssetDatabase.LoadAssetAtPath(path[i], typeof(UnityEngine.Object));
-
-                    if (obj != null)
-                    {
-                        _foundObjects.Add(obj);
-                    }
-                }*/
                 _hasNoResults = _foundObjects.Count == 0;
                 //Debug.Log("Lista Objetos tiene algo? " + (_foundObjects.Count > 0) + " - Cantidad: " + _foundObjects.Count);
 
@@ -102,7 +119,7 @@ public class AssetFinder : EditorWindow
 
         if (!string.IsNullOrEmpty(_searchParamFilter))
         {
-            _foundObjects = FilterFoundObjects(_foundObjects, _searchParamFilter);
+            _foundObjects = FilterFoundObjects(_foundObjects, filterList);
         }
 
         if (_foundObjects != null && _foundObjects.Count > 0)
@@ -127,25 +144,7 @@ public class AssetFinder : EditorWindow
 
                 EditorGUILayout.EndHorizontal();
             });
-            /*for (int i = 0; i < _foundObjects.Count; i++)
-            {
-                EditorGUILayout.BeginHorizontal();
-                if (_foundObjects[i] != null)
-                {
-                    EditorGUILayout.LabelField(_foundObjects[i].name + " - " + _foundObjects[i].GetType().Name);
-
-                    if (GUILayout.Button("Manage"))
-                    {
-                        _myObj = _foundObjects[i];
-                        assetOperations = GetWindow<AssetOperations>();
-                        assetOperations.maxSize = new Vector2(580, 280);
-                        assetOperations.Initialize(_myObj);
-                        assetOperations.Show();
-                    }
-                }
-
-                EditorGUILayout.EndHorizontal();
-            }*/
+            
             EditorGUILayout.EndScrollView();
         }
         if (_hasNoResults)
@@ -153,8 +152,19 @@ public class AssetFinder : EditorWindow
 
     }
 
-    public List<Object> FilterFoundObjects(List<Object> foundObjects, string typeName)
+    private void FilterListReady(List<FilterNode> list)
     {
-        return foundObjects.Where(x => x.GetType().Name == typeName).ToList();
+        if (list == null || list.Count == 0) return;
+
+        filterList = list;
+        filterList.ForEach(x => _searchParamFilter += x.nodeName + ";");
+    }
+
+    public List<Object> FilterFoundObjects(List<Object> foundObjects, List<FilterNode> filterList)
+    {
+        if (foundObjects == null || foundObjects.Count == 0) return new List<Object>();
+
+        var filterBy = filterList.SelectMany(type => foundObjects.Where(x => x.GetType().Name == type.nodeName));
+        return filterBy.DefaultIfEmpty().ToList();
     }
 }

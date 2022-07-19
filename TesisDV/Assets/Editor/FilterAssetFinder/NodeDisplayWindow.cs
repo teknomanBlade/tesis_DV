@@ -24,7 +24,7 @@ public class NodeDisplayWindow : EditorWindow
     public void SetInitialStates()
     {
         _allNodes = new List<FilterNode>();
-
+        _allConnected = new List<FilterNode>();
         _graphRect = new Rect(_graphRectXMin / 2, _graphRectYMin / 2, _graphRectXMax / 2, _graphRectYMax / 2);
     }
 
@@ -49,16 +49,18 @@ public class NodeDisplayWindow : EditorWindow
         var oriCol = GUI.backgroundColor;
         for (int i = 0; i < _allNodes.Count; i++)
         {
-            foreach (var c in _allNodes[i].connected)
-            {
-                Handles.color = Color.green;
-                Handles.DrawLine(
-                new Vector2(_allNodes[i].myRect.position.x + _allNodes[i].myRect.width / 2f,
-                            _allNodes[i].myRect.position.y + _allNodes[i].myRect.height / 2f),
-                new Vector2(c.myRect.position.x + c.myRect.width / 2f,
-                            c.myRect.position.y + c.myRect.height / 2f), 0.25f);
-
-            }
+            //foreach (var c in _allNodes[i].connected)
+           // {
+                _allNodes[i].connected.ForEach(c => 
+                {
+                    Handles.color = Color.green;
+                    Handles.DrawLine(
+                    new Vector2(_allNodes[i].myRect.position.x + _allNodes[i].myRect.width / 2f,
+                                _allNodes[i].myRect.position.y + _allNodes[i].myRect.height / 2f),
+                    new Vector2(c.myRect.position.x + c.myRect.width / 2f,
+                                c.myRect.position.y + c.myRect.height / 2f), 2f);
+                });
+            //}
         }
 
         for (int i = 0; i < _allNodes.Count; i++)
@@ -160,7 +162,7 @@ public class NodeDisplayWindow : EditorWindow
         _allNodes.ForEach(x => { if(x.nodeName == nodeName) return; });
         _allNodes.Add(new FilterNode(Mathf.Abs(_graphRectXMin) / 2 - (Mathf.Abs(_graphRectXMin) / 2 - Mathf.Abs(_graphRect.x)),
                                    Mathf.Abs(_graphRectYMin) / 2 - (Mathf.Abs(_graphRectYMin) / 2 - Mathf.Abs(_graphRect.y)),
-                                   200, 150, nodeName));
+                                   200, 120, nodeName));
         Repaint();
     }
 
@@ -173,7 +175,10 @@ public class NodeDisplayWindow : EditorWindow
         //_allNodes[id].dialogo = EditorGUILayout.TextField(_allNodes[id].dialogo, GUILayout.Height(50));
         EditorGUILayout.EndHorizontal();
         //_allNodes[id].duration = EditorGUILayout.FloatField("Duration", _allNodes[id].duration);
-        _allNodes[id].nodeToInteractName = EditorGUILayout.TextField("Nodo:", _allNodes[id].nodeToInteractName);
+        EditorGUILayout.LabelField("Nodo", GUILayout.Width(60));
+        _allNodes[id].nodeToInteractName = EditorGUILayout.TextField("", _allNodes[id].nodeToInteractName);
+        if(_allNodes[id].previous != null)
+            EditorGUILayout.LabelField("Previous:" + _allNodes[id].previous.nodeName);
 
         var n = _allNodes[id].nodeToInteractName;
 
@@ -220,7 +225,6 @@ public class NodeDisplayWindow : EditorWindow
             {
                 if (!_allNodes[id].connected.Contains(_allNodes[i])) //Si no lo contiene agrego
                 {
-                    _allConnected.Add(_allNodes[i]);
                     _allNodes[id].connected.Add(_allNodes[i]); //Conecto el seleccionado con el target
                     _allNodes[i].connected.Add(_allNodes[id]); //Conecto el target con el seleccionado
                     _allNodes[i].previous = _allNodes[id];
@@ -239,7 +243,6 @@ public class NodeDisplayWindow : EditorWindow
             {
                 if (_allNodes[id].connected.Contains(_allNodes[i])) //Si lo contiene remuevo
                 {
-                    _allConnected.Remove(_allNodes[i]);
                     _allNodes[id].connected.Remove(_allNodes[i]); //Desconecto el seleccionado con el target
                     _allNodes[i].connected.Remove(_allNodes[id]); //Desconecto el target con el seleccionado
                     _allNodes[i].previous = null;
@@ -252,8 +255,10 @@ public class NodeDisplayWindow : EditorWindow
 
     public List<FilterNode> GetFilterCriteria()
     {
-        /*var lastNode = _allNodes.Where(x => x.connected.Count == 0).FirstOrDefault();
-        _allConnected.Add(lastNode);*/
+        var firstNode = _allNodes.Where(x => x.previous == null).FirstOrDefault();
+        if(firstNode != null) _allConnected.Add(firstNode);
+        var nodesConnected = _allNodes.Where(x => x.previous != null);
+        _allConnected.AddRange(nodesConnected);
         return _allConnected;
     }
 }
