@@ -6,19 +6,46 @@ using UnityEngine.AI;
 
 public class Cat : MonoBehaviour
 {
+    private string _description;
+    public string Description
+    {
+        get { return _description; }
+        set { _description = value; }
+    }
     private bool _isHeld;
+    public bool IsHeld
+    {
+        get { return _isHeld; }
+        set { _isHeld = value; }
+    }
     private bool _isWalking;
+    public bool IsWalking
+    {
+        get { return _isWalking; }
+        set { _isWalking = value; }
+    }
     [SerializeField]
     private Vector3 _startingPosition;
+    public Vector3 StartingPosition
+    {
+        get { return _startingPosition; }
+        set { _startingPosition = value; }
+    }
     private GameObject _startingPositionGameObject;
     private NavMeshAgent _navMeshAgent;
     private LevelManager _lm;
     private Vector3 _exitPos;
+    public Vector3 ExitPos
+    {
+        get { return _exitPos; }
+        set { _exitPos = value; }
+    }
     private Animator _animator;
     [SerializeField]
     private List<Vector3> _myPos = new List<Vector3>();
     void Awake()
     {
+        Description = "Main character's Pet. Objective of the Grays.";
         _startingPositionGameObject = GameObject.Find("StartingPosition");
         _startingPosition = _startingPositionGameObject.transform.position;
         _isHeld = false;

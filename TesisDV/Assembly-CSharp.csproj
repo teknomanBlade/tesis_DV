@@ -54,6 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\UFOGrayDeath.cs" />
+    <Compile Include="Assets\Scripts\EditorFilterNode\FilterNode.cs" />
     <Compile Include="Assets\Scripts\PathFinding\PriorityQueue.cs" />
     <Compile Include="Assets\Scripts\ObstacleDetector.cs" />
     <Compile Include="Assets\Scripts\MiniMap\MiniMap.cs" />
@@ -132,7 +133,8 @@
     <Compile Include="Assets\Scripts\UFO.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
-    <Compile Include="Assets\Scripts\EditorFilterNode\FilterNode.cs" />
+    <Compile Include="Assets\Resources\ScriptableObjects\InventoryDatabase.cs" />
+    <Compile Include="Assets\Resources\ScriptableObjects\ItemConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
