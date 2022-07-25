@@ -14,13 +14,7 @@ public class ItemConfig : ScriptableObject
     public string Description;
     public int HealthRecovery;
     public float Damage;
-    public TypeItem TypeItem;
+    public int TypeChoice;
+    public string[] ItemType = { "Heal", "Weapon", "Crafting" };
 }
 
-public enum TypeItem
-{
-    None,
-    Heal,
-    Weapon,
-    Crafting
-}

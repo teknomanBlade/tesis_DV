@@ -71,20 +71,25 @@ public class InventoryDatabaseInspector : Editor
             EditorGUILayout.BeginVertical();
             EditorGUI.indentLevel++;
             EditorGUILayout.LabelField("ID: ", item.ID.ToString());
+            if (item.TypeChoice == 2)
+            {
+                item.CraftingID = EditorGUILayout.IntField("Crafting ID: ", item.CraftingID);
+            }
             item.ItemName = EditorGUILayout.TextField("Name: ", item.ItemName);
             item.Description = EditorGUILayout.TextField("Description: ", item.Description);
             item.PrefabItem = (GameObject)EditorGUILayout.ObjectField("Item Prefab: ", item.PrefabItem, typeof(GameObject), false);
             item.ItemSprite = (Sprite)EditorGUILayout.ObjectField("Sprite: ", item.ItemSprite, typeof(Sprite), false);
-            EditorGUILayout.BeginToggleGroup("Health", (int)item.TypeItem == 1);
-            item.HealthRecovery = EditorGUILayout.IntField("Health Recovery: ", item.HealthRecovery);
-            EditorGUILayout.EndToggleGroup();
-            EditorGUILayout.BeginToggleGroup("Damage", (int)item.TypeItem == 2);
-            item.Damage = EditorGUILayout.FloatField("Damage: ", item.Damage);
-            EditorGUILayout.EndToggleGroup();
-            EditorGUILayout.BeginToggleGroup("Crafting ID", (int)item.TypeItem == 3);
-            item.CraftingID = EditorGUILayout.IntField("Crafting ID: ", item.CraftingID);
-            EditorGUILayout.EndToggleGroup();
-            item.TypeItem = (TypeItem)EditorGUILayout.EnumFlagsField("Type: ", item.TypeItem);
+            item.TypeChoice = EditorGUILayout.Popup("Item Type", item.TypeChoice, item.ItemType);
+
+            if(item.TypeChoice == 0)
+            {
+                item.HealthRecovery = EditorGUILayout.IntField("Health Recovery: ", item.HealthRecovery);
+            }
+            if (item.TypeChoice == 1)
+            {
+                item.Damage = EditorGUILayout.FloatField("Damage: ", item.Damage);
+            }
+            
             EditorGUILayout.EndVertical();
 
             EditorUtility.SetDirty(item);

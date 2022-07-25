@@ -264,6 +264,7 @@
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Vertex\TangentSignVertexDataNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Operators\SignOpNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Operators\FractNode.cs" />
+    <Compile Include="Assets\Editor\ObjectsEditorGUI\CatEditor.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Textures\TexturePropertyNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\Vector2Node.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Utils\UpperLeftWidgetHelper.cs" />
@@ -297,8 +298,9 @@
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\StaticSwitch.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Operators\GradientSampleNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\ShaderVariables\CameraAndScreen\WorldSpaceCameraPos.cs" />
-    <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\ShaderVariables\Transform\ViewMatrixNode.cs" />
+    <Compile Include="Assets\Editor\ObjectsEditorGUI\ItemEditor.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Templates\TemplateModulesData.cs" />
+    <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\ShaderVariables\Transform\ViewMatrixNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Templates\TemplatePostProcessor.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\ShaderVariables\Time\TimeNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Vertex\VertexTangentNode.cs" />
@@ -497,8 +499,7 @@
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Utils\ASEPackageManagerHelper.cs" />
     <Compile Include="Assets\Editor\AssetFinder\AssetFinder.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\SimpleNodes\SimpleDivideOpNode.cs" />
-    <Compile Include="Assets\Editor\ObjectsEditorGUI\ItemEditor.cs" />
-    <Compile Include="Assets\Editor\ObjectsEditorGUI\CatEditor.cs" />
+    <Compile Include="Assets\Editor\InventoryDatabase\InventoryItemInspector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
