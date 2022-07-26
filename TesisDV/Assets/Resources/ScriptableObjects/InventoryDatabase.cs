@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "InventoryDatabase", menuName = "Inventory/InventoryDatabase")]
@@ -31,6 +32,11 @@ public class InventoryDatabase : ScriptableObject
         ItemConfig m = ItemDatabase[index];
         ItemDatabase.Remove(m);
         Reseed();
+    }
+
+    public bool ContainsItem(string name)
+    {
+        return ItemDatabase.Any(x => x.ItemName == name);
     }
 
     public ItemConfig GetItemConfig(int index)

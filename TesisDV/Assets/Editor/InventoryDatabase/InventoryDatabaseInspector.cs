@@ -9,6 +9,7 @@ public class InventoryDatabaseInspector : Editor
     private GUIStyle myStyle;
     private InventoryDatabase _target;
     private bool IsNullOrEmptyNameScriptable { get; set; }
+    private bool IsScriptableRepeated { get; set; }
     private string _nameScriptable { get; set; }
     public Vector2 _scrollPos { get; private set; }
 
@@ -39,13 +40,23 @@ public class InventoryDatabaseInspector : Editor
             if (!string.IsNullOrEmpty(_nameScriptable))
             {
                 IsNullOrEmptyNameScriptable = false;
-                var newItem = CreateInstance<ItemConfig>();
-                var path = "Assets/Resources/ScriptableObjects/" + _nameScriptable + ".asset";
-                path = AssetDatabase.GenerateUniqueAssetPath(path);
-                AssetDatabase.CreateAsset(newItem, path);
-                _target.Add(newItem);
-                EditorUtility.SetDirty(newItem);
-                Save();
+                if (!_target.ContainsItem(_nameScriptable))
+                {
+                    IsScriptableRepeated = false;
+                    var newItem = CreateInstance<ItemConfig>();
+                    var path = "Assets/Resources/ScriptableObjects/" + _nameScriptable + ".asset";
+                    path = AssetDatabase.GenerateUniqueAssetPath(path);
+                    AssetDatabase.CreateAsset(newItem, path);
+                    _target.Add(newItem);
+                    EditorUtility.SetDirty(newItem);
+                    EditorUtility.SetDirty(_target);
+                    Save();
+                }
+                else
+                {
+                    IsScriptableRepeated = true;
+                }
+                
             }
             else
             {
@@ -58,6 +69,12 @@ public class InventoryDatabaseInspector : Editor
         if (IsNullOrEmptyNameScriptable)
         {
             EditorGUILayout.HelpBox("Por favor ingrese un nombre válido.", MessageType.Error);
+        }
+
+        if (IsScriptableRepeated)
+        {
+            EditorGUILayout.HelpBox("No se permite el ingreso de valores repetidos. " +
+                "Por favor ingresar un valor distinto.", MessageType.Error);
         }
         #endregion
         DrawUILine(Color.grey);
@@ -99,6 +116,7 @@ public class InventoryDatabaseInspector : Editor
                 var path = AssetDatabase.GetAssetPath(item);
                 AssetDatabase.DeleteAsset(path);
                 _target.RemoveAtReseed(i);
+                EditorUtility.SetDirty(_target);
                 Save();
             }
 
@@ -107,8 +125,7 @@ public class InventoryDatabaseInspector : Editor
             EditorGUI.indentLevel--;
             EditorGUILayout.EndScrollView();
         }
-
-
+        
     }
     public void DrawUILine(Color color, int thickness = 2, int padding = 10)
     {

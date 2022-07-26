@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95dbac82290a2d3479bfcf8616e2b570, type: 3}
+  m_Name: TarBucket
+  m_EditorClassIdentifier: 
+  ID: 4
+  CraftingID: 4
+  PrefabItem: {fileID: 2824098275551455077, guid: 9d43f25a027c2ee4cb809c3d1669c5fa, type: 3}
+  ItemSprite: {fileID: 21300000, guid: 210dc476e5f180044be97207423cedde, type: 3}
+  ItemName: Tar Bucket
+  Description: A tar bucket for slowing down enemies.
+  HealthRecovery: 0
+  Damage: 0
+  TypeChoice: 2
+  ItemType:
+  - Heal
+  - Weapon
+  - Crafting

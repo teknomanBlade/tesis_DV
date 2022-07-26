@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95dbac82290a2d3479bfcf8616e2b570, type: 3}
+  m_Name: Screwdriver
+  m_EditorClassIdentifier: 
+  ID: 5
+  CraftingID: 5
+  PrefabItem: {fileID: 3877556373250478930, guid: 84d87ae8aae7f434a949463f34c1b1e6, type: 3}
+  ItemSprite: {fileID: 21300000, guid: 2ae4dfdf0c5b8134cb67b35af0148de0, type: 3}
+  ItemName: Screwdriver
+  Description: A screwdriver for building things.
+  HealthRecovery: 0
+  Damage: 0
+  TypeChoice: 2
+  ItemType:
+  - Heal
+  - Weapon
+  - Crafting

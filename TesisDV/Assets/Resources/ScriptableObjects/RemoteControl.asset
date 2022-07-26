@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95dbac82290a2d3479bfcf8616e2b570, type: 3}
+  m_Name: RemoteControl
+  m_EditorClassIdentifier: 
+  ID: 1
+  CraftingID: 1
+  PrefabItem: {fileID: 7828175701847657899, guid: d9a4101c610f793419ee3af9dcb3cc46, type: 3}
+  ItemSprite: {fileID: 21300000, guid: a3bda8a6fe5fffe4cb425b983183d2e5, type: 3}
+  ItemName: Remote Control
+  Description: A remote control for manipulating the TV Trap.
+  HealthRecovery: 0
+  Damage: 0
+  TypeChoice: 2
+  ItemType:
+  - Heal
+  - Weapon
+  - Crafting
