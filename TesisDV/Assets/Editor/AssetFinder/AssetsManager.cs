@@ -39,7 +39,7 @@ public class AssetsManager : EditorWindow
     public static void OpenWindow()
     {
         var assetsFolderManager = GetWindow<AssetsManager>();
-        assetsFolderManager.maxSize = new Vector2(900, 650);
+        assetsFolderManager.maxSize = new Vector2(900, 500);
         assetsFolderManager.Initialize();
         assetsFolderManager.Show();
     }

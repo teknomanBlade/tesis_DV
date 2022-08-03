@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public abstract class Item : MonoBehaviour
 {
+    public ItemConfig itemConfig;
     [SerializeField]
     protected string _itemName;
     public string itemName { get { return _itemName; } }

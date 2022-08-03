@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [CustomEditor(typeof(InventoryItem))]
 public class ItemEditor : Editor
@@ -38,6 +40,7 @@ public class ItemEditor : Editor
     {
         //Obtenemos el target para despues poder usarlo y poder obtener los 4 posiciones necesarias para dibujar el bezier
         _target = (InventoryItem)target;
+        _target.itemConfig = Resources.Load<ItemConfig>("ScriptableObjects/" + _target.name);
         BtnMoveForwardText = "Move Forward";
         BtnMoveBackText = "Move Back";
         BtnMoveUpText = "Move Up";
@@ -68,19 +71,22 @@ public class ItemEditor : Editor
 
         var v = EditorWindow.GetWindow<SceneView>().camera.pixelRect;
         //calculamos posición...
-        /*var r = new Rect(v.width / 45, v.height - 80, 100, 40);
-        if (GUI.Button(r, "Cat Info"))
+        var r = new Rect(v.width / 45, v.height - 80, 100, 40);
+        if (GUI.Button(r, "Item Info"))
         {
             _showData = !_showData;
-        }*/
+            #if UNITY_EDITOR
+            SceneView.lastActiveSceneView.FrameSelected();
+            #endif
+        }
         var r2 = new Rect(v.width / 8, v.height - 80, 150, 40);
         if (GUI.Button(r2, "Activate Unit Handles"))
         {
             _showUnitHandles = !_showUnitHandles;
         }
 
-        /*if (_showData)
-            DrawInspectorInScene();*/
+        if (_showData)
+            DrawInspectorInScene();
 
         if (_showUnitHandles)
         {
@@ -96,6 +102,44 @@ public class ItemEditor : Editor
         Handles.EndGUI();
 
 
+    }
+
+    private void DrawInspectorInScene()
+    {
+        EditorGUI.BeginChangeCheck();
+        GUILayout.BeginArea(new Rect(10, 10, 350, 250));
+        var rec = EditorGUILayout.BeginVertical();
+        //me crea un fondo de color que ocupa todo el rect creado por el Begin/EndVertical
+        GUI.Box(rec, GUIContent.none);
+
+        EditorGUILayout.LabelField(_target.itemConfig.ItemName, _guiStyleTitle);
+        EditorGUILayout.LabelField("ID", _target.itemConfig.ID.ToString());
+        if (_target.itemConfig.TypeChoice == 2)
+        {
+            EditorGUILayout.LabelField("Crafting ID", _target.itemConfig.ID.ToString());
+        }
+        EditorGUILayout.LabelField("Description: ", _target.itemConfig.Description, _guiStyleSubTitle);
+        _target.itemConfig.PrefabItem = (GameObject)EditorGUILayout.ObjectField("Item Prefab: ", _target.itemConfig.PrefabItem, typeof(GameObject), false);
+        _target.itemConfig.ItemSprite = (Sprite)EditorGUILayout.ObjectField("Sprite: ", _target.itemConfig.ItemSprite, typeof(Sprite), false);
+        _target.itemConfig.TypeChoice = EditorGUILayout.Popup("Item Type", _target.itemConfig.TypeChoice, _target.itemConfig.ItemType);
+        
+        if (_target.itemConfig.TypeChoice == 0)
+        {
+            _target.itemConfig.HealthRecovery = EditorGUILayout.IntField("Health Recovery: ", _target.itemConfig.HealthRecovery);
+        }
+        if (_target.itemConfig.TypeChoice == 1)
+        {
+            _target.itemConfig.Damage = EditorGUILayout.FloatField("Damage: ", _target.itemConfig.Damage);
+        }
+        EditorGUILayout.EndVertical();
+        GUILayout.EndArea();
+        if (!Application.isPlaying)
+        {
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            }
+        }
     }
 
     private void DrawButton(string text, Vector3 position, Vector3 dir, ButtonType typ)

@@ -52,6 +52,7 @@ public class AssetFinder : EditorWindow
 
     public void AssetSearch()
     {
+        Event e = Event.current;
         EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Filter Type: ", _guiStyleLabel, GUILayout.Width(80));
             if(!string.IsNullOrEmpty(_searchParamFilter))
@@ -62,7 +63,8 @@ public class AssetFinder : EditorWindow
                 if (GUILayout.Button("Clean Filter"))
                 {
                        _searchParamFilter = "";
-                       filterList.Clear(); 
+                       filterList.Clear();
+                       BeginSearch();
                 }
                 if (GUILayout.Button("Filter"))
                 {
@@ -83,34 +85,9 @@ public class AssetFinder : EditorWindow
             _searchParamAsset = "";
             _foundObjects.Clear();
         }
-        if (GUILayout.Button("Begin Search"))
+        if (e.keyCode == KeyCode.Return || GUILayout.Button("Begin Search"))
         {
-            _isNullOrEmptyFinder = string.IsNullOrEmpty(_searchParamAsset);
-            if (!_isNullOrEmptyFinder)
-            {
-                _foundObjects.Clear();
-                string[] path = AssetDatabase.FindAssets(_searchParamAsset);
-
-                path.ToList().ForEach(x =>
-                {
-                    x = AssetDatabase.GUIDToAssetPath(x);
-                    var obj = AssetDatabase.LoadAssetAtPath(x, typeof(UnityEngine.Object));
-
-                    if (obj != null)
-                    {
-                        _foundObjects.Add(obj);
-                    }
-
-                });
-
-                _hasNoResults = _foundObjects.Count == 0;
-                //Debug.Log("Lista Objetos tiene algo? " + (_foundObjects.Count > 0) + " - Cantidad: " + _foundObjects.Count);
-
-            }
-            else
-            {
-                _foundObjects.Clear();
-            }
+            BeginSearch();
         }
         EditorGUILayout.EndHorizontal();
 
@@ -152,6 +129,36 @@ public class AssetFinder : EditorWindow
         if (_hasNoResults)
             EditorGUILayout.HelpBox("No se han encontrado Assets con ese nombre", MessageType.Warning);
 
+    }
+
+    private void BeginSearch()
+    {
+        _isNullOrEmptyFinder = string.IsNullOrEmpty(_searchParamAsset);
+        if (!_isNullOrEmptyFinder)
+        {
+            _foundObjects.Clear();
+            string[] path = AssetDatabase.FindAssets(_searchParamAsset);
+
+            path.ToList().ForEach(x =>
+            {
+                x = AssetDatabase.GUIDToAssetPath(x);
+                var obj = AssetDatabase.LoadAssetAtPath(x, typeof(UnityEngine.Object));
+
+                if (obj != null)
+                {
+                    _foundObjects.Add(obj);
+                }
+
+            });
+
+            _hasNoResults = _foundObjects.Count == 0;
+            //Debug.Log("Lista Objetos tiene algo? " + (_foundObjects.Count > 0) + " - Cantidad: " + _foundObjects.Count);
+
+        }
+        else
+        {
+            _foundObjects.Clear();
+        }
     }
 
     private void FilterListReady(List<FilterNode> list)

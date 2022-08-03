@@ -41,8 +41,6 @@ public class NodeFilterManagerWindow : EditorWindow
             {
                 if(!_nodeWindow.ContainsNode(_currentName))
                     _nodeWindow.AddNode(_currentName);
-
-                GUIUtility.keyboardControl = 0;
             }
         }
 

@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class NodeDisplayWindow : EditorWindow
 {
+    public const string DIALOG_TITLE = "¡ATENCIÓN!";
+    public const string DIALOG_MESSAGE = "Elimine las conexiones existentes antes de eliminar el Nodo";
+    public const string DIALOG_OK = "OK";
     private List<FilterNode> _allNodes;
     private List<FilterNode> _allConnected;
     private FilterNode _selectedNode;
@@ -20,6 +23,8 @@ public class NodeDisplayWindow : EditorWindow
     private float _graphRectXMax = 1000000;
     private float _graphRectYMin = -100000;
     private float _graphRectYMax = 1000000;
+
+    private bool _hasConnections;
 
     public void SetInitialStates()
     {
@@ -182,6 +187,10 @@ public class NodeDisplayWindow : EditorWindow
             EditorGUILayout.Space();
         }
     }
+    public bool IsNodeConnected(string nodeName)
+    {
+        return _allNodes.SelectMany(x => x.connected.Where(z => z.nodeName == nodeName)).ToList().Count > 0;
+    }
 
     private void DrawNode(int id)
     {
@@ -189,53 +198,76 @@ public class NodeDisplayWindow : EditorWindow
         Event e = Event.current;
         EditorGUILayout.BeginHorizontal();
         Spaces(8);
-        if (e.keyCode == KeyCode.Delete || GUILayout.Button("X"))
+        if (GUILayout.Button("X"))
         {
             if (_allNodes.Count == 0) return;
-            RemoveNode(_allNodes[id].nodeName, _allNodes[id]);
+
+            if (!IsNodeConnected(_allNodes[id].nodeName))
+            {
+                _hasConnections = false;
+                RemoveNode(_allNodes[id].nodeName, _allNodes[id]);
+            }
+            else
+            {
+                _hasConnections = true;
+            }
+
         }
+       
         EditorGUILayout.EndHorizontal();
         if (_allNodes.Count == 0) return;
         EditorGUILayout.LabelField("Node To Connect", GUILayout.Width(100));
-        _allNodes[id].nodeToInteractName = EditorGUILayout.TextField("", _allNodes[id].nodeToInteractName);
-        if(_allNodes[id].previous != null)
-            EditorGUILayout.LabelField("Previous:" + _allNodes[id].previous.nodeName);
 
-        var n = _allNodes[id].nodeToInteractName;
-
-        EditorGUILayout.BeginHorizontal();
-        //Conecto un nodo
-        if (n != "" && _allNodes[id].nodeName != n)
+        if (id < _allNodes.Count)
         {
-            if (GUILayout.Button("Connect"))
+            _allNodes[id].nodeToInteractName = EditorGUILayout.TextField("", _allNodes[id].nodeToInteractName);
+
+            if (_allNodes[id].previous != null)
+                EditorGUILayout.LabelField("Previous:" + _allNodes[id].previous.nodeName);
+
+            var n = _allNodes[id].nodeToInteractName;
+
+            EditorGUILayout.BeginHorizontal();
+            //Conecto un nodo
+            if (n != "" && _allNodes[id].nodeName != n)
             {
-                ConnectNode(id, n);
+                if (GUILayout.Button("Connect"))
+                {
+                    ConnectNode(id, n);
+                }
+            }
+            //Desconecto un nodo
+            if (n != "" && _allNodes[id].nodeName != n)
+            {
+                if (GUILayout.Button("Disconnect"))
+                {
+                    DisconnectNode(id, n);
+                }
+            }
+        
+        
+            EditorGUILayout.EndHorizontal();
+            //Si no estamos paneando todos los nodos
+            //Arrastramos un nodo en particular
+            if (!_panningScreen)
+            {
+                //esto habilita el arrastre del nodo.
+                //pasandole como parámetro un Rect podemos setear que la zona "agarrable" a una específica.
+                GUI.DragWindow();
+
+                if (!_allNodes[id].OverNode) return;
+
+                //clampeamos los valores para asegurarnos que no se puede arrastrar el nodo por fuera del 
+                //"área" que nosotros podemos panear
+
+                _allNodes[id].myRect.x = Mathf.Clamp(_allNodes[id].myRect.x, _graphRectXMin / 2, _graphRectXMax / 2);
+                _allNodes[id].myRect.y = Mathf.Clamp(_allNodes[id].myRect.y, _graphRectYMin / 2, _graphRectYMax / 2);
             }
         }
-        //Desconecto un nodo
-        if (n != "" && _allNodes[id].nodeName != n)
+        if (_hasConnections)
         {
-            if (GUILayout.Button("Disconnect"))
-            {
-                DisconnectNode(id, n);
-            }
-        }
-        EditorGUILayout.EndHorizontal();
-        //Si no estamos paneando todos los nodos
-        //Arrastramos un nodo en particular
-        if (!_panningScreen)
-        {
-            //esto habilita el arrastre del nodo.
-            //pasandole como parámetro un Rect podemos setear que la zona "agarrable" a una específica.
-            GUI.DragWindow();
-
-            if (!_allNodes[id].OverNode) return;
-
-            //clampeamos los valores para asegurarnos que no se puede arrastrar el nodo por fuera del 
-            //"área" que nosotros podemos panear
-
-            _allNodes[id].myRect.x = Mathf.Clamp(_allNodes[id].myRect.x, _graphRectXMin / 2, _graphRectXMax / 2);
-            _allNodes[id].myRect.y = Mathf.Clamp(_allNodes[id].myRect.y, _graphRectYMin / 2, _graphRectYMax / 2);
+           var okPressed = EditorUtility.DisplayDialog(DIALOG_TITLE, DIALOG_MESSAGE, DIALOG_OK);
+            if (okPressed) _hasConnections = false;
         }
     }
 

@@ -84,7 +84,7 @@ public class AssetOperations : EditorWindow
         EditorGUILayout.EndHorizontal();
 
         LoadSpaces(2);
-
+        EditorGUILayout.BeginHorizontal();
         _newName = EditorGUILayout.TextField("Rename Asset: ", _newName);
         if (GUILayout.Button("Rename"))
         {
@@ -101,10 +101,11 @@ public class AssetOperations : EditorWindow
             }
 
         }
+        EditorGUILayout.EndHorizontal();
         if (_isNullOrEmptyRename)
             EditorGUILayout.HelpBox("Debe ingresar un valor para renombrar", MessageType.Error);
 
-
+        EditorGUILayout.BeginHorizontal();
         _newPath = EditorGUILayout.TextField("Move Asset: ", _newPath);
         if (GUILayout.Button("Move"))
         {
@@ -124,6 +125,7 @@ public class AssetOperations : EditorWindow
                 _isNullOrEmptyMove = true;
             }
         }
+        EditorGUILayout.EndHorizontal();
         if (_isNullOrEmptyMove)
             EditorGUILayout.HelpBox("Debe ingresar un valor", MessageType.Error);
 

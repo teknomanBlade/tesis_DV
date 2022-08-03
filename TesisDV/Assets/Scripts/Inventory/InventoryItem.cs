@@ -15,6 +15,7 @@ public class InventoryItem : Item, IInteractableItemObservable
 
     protected override void Start()
     {
+        itemConfig = Resources.Load<ItemConfig>("ScriptableObjects/" + gameObject.name);
         timeLimit = GameVars.Values.itemPickUpLerpSpeed;
     }
 
