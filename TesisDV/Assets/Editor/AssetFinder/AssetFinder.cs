@@ -59,15 +59,15 @@ public class AssetFinder : EditorWindow
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("Clean Filter", GUILayout.Width(80)))
+                if (GUILayout.Button("Clean Filter"))
                 {
                        _searchParamFilter = "";
                        filterList.Clear(); 
                 }
-                if (GUILayout.Button("Filter", GUILayout.Width(80)))
+                if (GUILayout.Button("Filter"))
                 {
                     _nodeFilterManagerWindow = GetWindow<NodeFilterManagerWindow>();
-                    _nodeFilterManagerWindow.maxSize = new Vector2(500, 250);
+                    _nodeFilterManagerWindow.maxSize = new Vector2(500, 100);
                     _nodeFilterManagerWindow.OnFilterListReady += FilterListReady;
                     _nodeFilterManagerWindow.Initialize();
                     _nodeFilterManagerWindow.Show();
@@ -119,13 +119,14 @@ public class AssetFinder : EditorWindow
 
         if (!string.IsNullOrEmpty(_searchParamFilter))
         {
+            _hasNoResults = _foundObjects.Count == 0;
             _foundObjects = FilterFoundObjects(_foundObjects, filterList);
         }
 
         if (_foundObjects != null && _foundObjects.Count > 0)
         {
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(250));
-            _foundObjects.ForEach(x => 
+            _foundObjects.ForEach(x =>
             {
                 EditorGUILayout.BeginHorizontal();
                 if (x != null)
@@ -144,9 +145,10 @@ public class AssetFinder : EditorWindow
 
                 EditorGUILayout.EndHorizontal();
             });
-            
+
             EditorGUILayout.EndScrollView();
         }
+        
         if (_hasNoResults)
             EditorGUILayout.HelpBox("No se han encontrado Assets con ese nombre", MessageType.Warning);
 
@@ -162,7 +164,7 @@ public class AssetFinder : EditorWindow
 
     public List<Object> FilterFoundObjects(List<Object> foundObjects, List<FilterNode> filterList)
     {
-        if (foundObjects == null || foundObjects.Count == 0) return new List<Object>();
+        if (foundObjects == null || foundObjects.Count == 0 || foundObjects.Any(x => x == null)) return new List<Object>();
 
         var filterBy = filterList.SelectMany(type => foundObjects.Where(x => x.GetType().Name == type.nodeName));
         return filterBy.DefaultIfEmpty().ToList();

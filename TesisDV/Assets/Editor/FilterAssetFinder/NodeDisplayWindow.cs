@@ -158,30 +158,52 @@ public class NodeDisplayWindow : EditorWindow
     */
     public void AddNode(string nodeName)
     {
-        //Para evitar crear mas de un nodo con el mismo nombre
-        _allNodes.ForEach(x => { if(x.nodeName == nodeName) return; });
         _allNodes.Add(new FilterNode(Mathf.Abs(_graphRectXMin) / 2 - (Mathf.Abs(_graphRectXMin) / 2 - Mathf.Abs(_graphRect.x)),
                                    Mathf.Abs(_graphRectYMin) / 2 - (Mathf.Abs(_graphRectYMin) / 2 - Mathf.Abs(_graphRect.y)),
-                                   200, 120, nodeName));
+                                   200, 140, nodeName));
         Repaint();
+    }
+
+    public void RemoveNode(string nodeName, FilterNode node)
+    {
+        if (ContainsNode(nodeName))
+            _allNodes.Remove(node);
+    }
+
+    public bool ContainsNode(string nodeName)
+    {
+        return _allNodes.Any(x => x.nodeName == nodeName);
+    }
+
+    private void Spaces(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            EditorGUILayout.Space();
+        }
     }
 
     private void DrawNode(int id)
     {
         //le dibujamos lo que queramos al nodo...
+        Event e = Event.current;
         EditorGUILayout.BeginHorizontal();
-        //EditorGUILayout.LabelField("Dialogo", GUILayout.Width(100));
-
-        //_allNodes[id].dialogo = EditorGUILayout.TextField(_allNodes[id].dialogo, GUILayout.Height(50));
+        Spaces(8);
+        if (e.keyCode == KeyCode.Delete || GUILayout.Button("X"))
+        {
+            if (_allNodes.Count == 0) return;
+            RemoveNode(_allNodes[id].nodeName, _allNodes[id]);
+        }
         EditorGUILayout.EndHorizontal();
-        //_allNodes[id].duration = EditorGUILayout.FloatField("Duration", _allNodes[id].duration);
-        EditorGUILayout.LabelField("Nodo", GUILayout.Width(60));
+        if (_allNodes.Count == 0) return;
+        EditorGUILayout.LabelField("Node To Connect", GUILayout.Width(100));
         _allNodes[id].nodeToInteractName = EditorGUILayout.TextField("", _allNodes[id].nodeToInteractName);
         if(_allNodes[id].previous != null)
             EditorGUILayout.LabelField("Previous:" + _allNodes[id].previous.nodeName);
 
         var n = _allNodes[id].nodeToInteractName;
 
+        EditorGUILayout.BeginHorizontal();
         //Conecto un nodo
         if (n != "" && _allNodes[id].nodeName != n)
         {
@@ -198,7 +220,7 @@ public class NodeDisplayWindow : EditorWindow
                 DisconnectNode(id, n);
             }
         }
-
+        EditorGUILayout.EndHorizontal();
         //Si no estamos paneando todos los nodos
         //Arrastramos un nodo en particular
         if (!_panningScreen)

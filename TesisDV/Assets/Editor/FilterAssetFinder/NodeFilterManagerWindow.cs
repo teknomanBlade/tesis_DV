@@ -27,18 +27,22 @@ public class NodeFilterManagerWindow : EditorWindow
     }
     private void OnGUI()
     {
+        Event e = Event.current;
         EditorGUILayout.LabelField("Assets Filter", _myStyle);
         EditorGUILayout.Space();
 
         _currentName = EditorGUILayout.TextField("Nombre: ", _currentName);
         EditorGUILayout.Space();
-        if (GUILayout.Button("Create Filter Node", GUILayout.Width(150), GUILayout.Height(30)))
+        EditorGUILayout.BeginHorizontal();
+        if (e.keyCode == KeyCode.Return || GUILayout.Button("Create Filter Node", GUILayout.Width(150), GUILayout.Height(30)))
         {
             _isCurrentNameEmpty = string.IsNullOrEmpty(_currentName);
             if (!_isCurrentNameEmpty)
             {
-                _nodeWindow.AddNode(_currentName);
-                _currentName = "";
+                if(!_nodeWindow.ContainsNode(_currentName))
+                    _nodeWindow.AddNode(_currentName);
+
+                GUIUtility.keyboardControl = 0;
             }
         }
 
@@ -46,6 +50,7 @@ public class NodeFilterManagerWindow : EditorWindow
         {
             EditorGUILayout.HelpBox("Por favor ingrese un valor", MessageType.Error);
         }
+        EditorGUILayout.EndHorizontal();
     }
 
     private void OnDestroy()
