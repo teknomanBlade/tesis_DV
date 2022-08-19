@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum ItemType { Crafting, Heal, Weapon }
 public abstract class Item : MonoBehaviour
 {
     [SerializeField]
@@ -20,6 +21,8 @@ public abstract class Item : MonoBehaviour
             return default(Sprite);
         }
     }
+    public ItemType itemType;
+    
 
     protected virtual void Start() { }
     protected virtual void Update() { }

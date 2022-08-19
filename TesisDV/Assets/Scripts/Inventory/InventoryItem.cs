@@ -5,6 +5,7 @@ using UnityEngine;
 public class InventoryItem : Item, IInteractableItemObservable
 {
     private List<IInteractableItemObserver> _interactableItemObservers = new List<IInteractableItemObserver>();
+    
     public int myCraftingID; //pasar a get set en Item
     public GameObject myPrefab; //pasar a get set en Item
     public float timeLimit = 3f;
@@ -12,7 +13,7 @@ public class InventoryItem : Item, IInteractableItemObservable
     protected Vector3 startPos;
     protected bool startDying = false;
     protected float distanceLimit = 0.3f;
-
+    
     protected override void Start()
     {
         timeLimit = GameVars.Values.itemPickUpLerpSpeed;
@@ -45,7 +46,7 @@ public class InventoryItem : Item, IInteractableItemObservable
     public void Die()
     {
         TriggerInteractableItem("ItemGrabbed");
-        GameVars.Values.ShowNotification("You've grabbed a " + itemName);
+        GameVars.Values.ShowNotification("You've grabbed a " + itemName + ((itemType == 0) ? ". <<Press Tab to see Blueprints>>" : ". <<Press Tab to see Inventory>>"));
         GameVars.Values.PlayPickUpSound();
         gameObject.SetActive(false);
         
