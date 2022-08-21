@@ -24,6 +24,7 @@ public class ScreenPause : MonoBehaviour, IScreen
         if (Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
         {
             BTN_Back();
+            Cursor.lockState = CursorLockMode.Locked;
             player.SwitchKinematics();
         }    
     }
