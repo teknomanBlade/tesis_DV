@@ -10,7 +10,7 @@ Material:
   m_Name: BaseballMachinePart3
   m_Shader: {fileID: 4800000, guid: e2a077d7f3124cc42b8adea1a06f23a7, type: 3}
   m_ShaderKeywords: _NORMALMAP
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -65,6 +65,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
+    - _ColorInterpolator2: 0
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -90,5 +91,6 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _RimColor2: {r: 0.8396226, g: 0.8396226, b: 0.8396226, a: 0}
     - _SpecularColor2: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 0}
+    - _TintActive2: {r: 1, g: 0.9813726, b: 0, a: 0}
     - _TintColor1: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 0}
   m_BuildTextureStacks: []
