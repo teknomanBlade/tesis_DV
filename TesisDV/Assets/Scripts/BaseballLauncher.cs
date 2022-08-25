@@ -15,10 +15,6 @@ public class BaseballLauncher : Item, IMovable
     private bool _isDisabledSFX;
     public ParticleSystem HitTurret;
     public ParticleSystem ShootEffect;
-    public Material MaterialBaseballBase;
-    public Material MaterialBaseballBattery;
-    public Material MaterialBaseballPivotableBase;
-    public Material MaterialBaseballBallShooter;
     private AudioSource _as;
     public delegate void OnReloadDelegate();
     public event OnReloadDelegate OnReload;
@@ -53,7 +49,6 @@ public class BaseballLauncher : Item, IMovable
     private bool isWorking = true;
     private float _inactiveSpeed = 0.3f;
     public Collider _currentObjective = null;
-    private Coroutine InactiveCoroutine;
     private Coroutine ReloadCoroutine;
     private Coroutine ShootCoroutine;
     private Coroutine SFXDetectionCoroutine;
@@ -73,11 +68,8 @@ public class BaseballLauncher : Item, IMovable
         _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
         _animator.SetBool("HasNoBalls", true);
+        GameVars.Values.ShowNotification("The Turret is inactive. Get near until you see the Active Button Icon.");
         isFirstTime = true;
-        MaterialBaseballBase = transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material;
-        MaterialBaseballBattery = transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material;
-        MaterialBaseballPivotableBase = transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material;
-        MaterialBaseballBallShooter = transform.GetChild(2).GetChild(0).gameObject.GetComponent<MeshRenderer>().material;
         myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
         _as = GetComponent<AudioSource>();
@@ -108,25 +100,6 @@ public class BaseballLauncher : Item, IMovable
             ShootCoroutine = StartCoroutine("ActiveCoroutine");
         }
     }
-    IEnumerator LerpInactiveShine(float endValue, float duration)
-    {
-        float time = 0;
-        float startValue = _valueToChange;
-
-        while (time < duration)
-        {
-            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
-            time += Time.deltaTime;
-            MaterialBaseballBase.SetFloat("_ColorInterpolator", _valueToChange);
-            MaterialBaseballBattery.SetFloat("_ColorInterpolator", _valueToChange);
-            MaterialBaseballPivotableBase.SetFloat("_ColorInterpolator", _valueToChange);
-            MaterialBaseballBallShooter.SetFloat("_ColorInterpolator", _valueToChange);
-            yield return null;
-        }
-
-        _valueToChange = endValue;
-        InactiveCoroutine = StartCoroutine(LerpInactiveShine(0f, 1f));
-    }
     IEnumerator ReloadTurret()
     {
         GameVars.Values.ShowNotification("Reloading turret...");
@@ -140,13 +113,9 @@ public class BaseballLauncher : Item, IMovable
     {
         if (active)
         {
+            Debug.Log("ENTRA EN ACTIVA?");
             FieldOfView();
         }
-        /*else
-        {
-            if (InactiveCoroutine != null) StopCoroutine(InactiveCoroutine);
-            InactiveCoroutine = StartCoroutine(LerpInactiveShine(0.8f, 1f));
-        }*/
         
 
         if (shotsLeft == 0)
