@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -111,7 +111,6 @@
     <Compile Include="Assets\Scripts\Interfaces\IScreen.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IController.cs" />
     <Compile Include="Assets\Scripts\Door.cs" />
-    <Compile Include="Assets\Models\Materials\PostProcess\DamagePlayerPPSSettings.cs" />
     <Compile Include="Assets\Scripts\TVBlueprint.cs" />
     <Compile Include="Assets\Scripts\Enemy\GrayView.cs" />
     <Compile Include="Assets\Models\Materials\PostProcess\AttentionPlayerPPSSettings.cs" />
@@ -144,6 +143,7 @@
     <Compile Include="Assets\Scripts\FSM\States\Gray\CatState.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
+    <Compile Include="Assets\Models\Materials\PostProcess\FadeInOutScenesPPSSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
@@ -348,7 +348,7 @@
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_DecodeDepthNormalNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ReflectOpNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_LengthOpNode.shader" />
-    <None Include="Assets\Models\Materials\PostProcess\DamagePlayer.shader" />
+    <None Include="Assets\Models\Materials\PostProcess\FadeInOutScenes.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_StepOpNode.shader" />
     <None Include="Assets\Models\Materials\Kitchen\Microwave.shader" />
     <None Include="Assets\Models\Materials\UI\CatDistanceBarShader.shader" />

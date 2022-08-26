@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -24,6 +25,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
     public PostProcessVolume volume;
     public Vignette postProcessDamage;
     public AttentionPlayerPPSSettings postProcessAttention;
+    public FadeInOutScenesPPSSettings postProcessFadeInOutScenes;
+    private Coroutine FadeOutSceneCoroutine;
+    private Coroutine FadeInSceneCoroutine;
     [SerializeField]
     private Inventory _inventory;
     public GameObject _weaponGO;
@@ -116,6 +120,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
         hp = maxHp;
         GameVars.Values.ShowLivesRemaining(hp, maxHp);
+        ActiveFadeInEffect(1f);
+        
     }
 
     private void Start()
@@ -316,7 +322,78 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         _valueToChange = endValue;
         StartCoroutine(LerpAttentionEffect(0f, 1f));
     }
+    public void ActiveFadeInEffect(float duration)
+    {
+        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        {
+            if (FadeInSceneCoroutine != null) StopCoroutine(FadeInSceneCoroutine);
+            FadeInSceneCoroutine = StartCoroutine(LerpFadeInEffect(duration));
+        }
+    }
+    public void ActiveFadeOutEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        {
+            if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
+            FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(1f));
+        }
+    }
+    public void ActiveFadeOutRestartEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        {
+            if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
+            FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutRestartEffect(1f));
+        }
+    }
+    IEnumerator LerpFadeInEffect(float duration)
+    {
+        float time = 0f;
 
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
+        }
+    }
+    IEnumerator LerpFadeOutEffect(float duration)
+    {
+        float time = 0.98f;
+
+        while (time > 0 && time < duration)
+        {
+            time -= Time.deltaTime;
+
+            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
+        }
+
+        if (time < 0f)
+        {
+            Debug.Log("LLEGO AL FINAL??");
+            SceneManager.LoadScene(0);
+        }
+    }
+    IEnumerator LerpFadeOutRestartEffect(float duration)
+    {
+        float time = 0.98f;
+
+        while (time > 0 && time < duration)
+        {
+            time -= Time.deltaTime;
+
+            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
+        }
+
+        if (time < 0f)
+        {
+            Debug.Log("LLEGO AL FINAL??");
+            SceneManager.LoadScene(1);
+        }
+    }
     public void Damage()
     {
         _cam.CameraShakeDamage(1f, 0.8f);

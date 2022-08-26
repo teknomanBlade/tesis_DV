@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -207,6 +207,7 @@
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Operators\DdxOpNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Master\UsePassHelper.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Templates\TemplateInterpData.cs" />
+    <Compile Include="Assets\Editor\Assets Manager\AssetsManager.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\SimpleNodes\SimpleSubtractOpNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\ShaderVariables\Various\LODFadeNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\HelperFuncs\DiffuseAndSpecularFromMetallicNode.cs" />
@@ -330,6 +331,7 @@
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Templates\TemplateOptionsDefinesContainer.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Master\OutlineOpHelper.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\ShaderVariables\Various\VertexIdVariableNode.cs" />
+    <Compile Include="Assets\Editor\Assets Manager\AssetFinder.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\ISignalGenerator.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\GlobalArrayNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Menu\AutoPanData.cs" />
@@ -446,6 +448,7 @@
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Master\FallbackPickerHelper.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Operators\Exp2OpNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\ImageEffects\SimplexNoiseNode.cs" />
+    <Compile Include="Assets\Editor\Assets Manager\AssetOperations.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\ShaderVariables\Transform\InverseViewMatrixNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Native\FallbackFloat.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\ShaderVariables\CameraAndScreen\OrthoParams.cs" />
@@ -490,9 +493,6 @@
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Textures\TFHCFlipBookUVAnimation.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Utils\ASEPackageManagerHelper.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\SimpleNodes\SimpleDivideOpNode.cs" />
-    <Compile Include="Assets\Editor\Assets Manager\AssetsManager.cs" />
-    <Compile Include="Assets\Editor\Assets Manager\AssetFinder.cs" />
-    <Compile Include="Assets\Editor\Assets Manager\AssetOperations.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

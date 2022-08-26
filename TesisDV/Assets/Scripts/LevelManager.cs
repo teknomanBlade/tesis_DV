@@ -210,6 +210,8 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         //SceneManager.LoadScene("MainFloor_Upgrade");
 
         var screenWin = Instantiate(Resources.Load<YouWinScreen>("YouWinCanvas"));
+        screenWin.OnBackToMainMenuEvent += _player.ActiveFadeOutEffect;
+        screenWin.OnRestartEvent += _player.ActiveFadeOutRestartEffect;
         ScreenManager.Instance.Push(screenWin);
         _player.SwitchKinematics();
     } 
@@ -226,6 +228,8 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         //SceneManager.LoadScene("MainFloor_Upgrade");
 
         var screenLose = Instantiate(Resources.Load<YouLoseScreen>("YouLoseCanvas"));
+        screenLose.OnBackToMainMenuEvent += _player.ActiveFadeOutEffect;
+        screenLose.OnRestartEvent += _player.ActiveFadeOutRestartEffect;
         ScreenManager.Instance.Push(screenLose);
         _player.SwitchKinematics();
         
