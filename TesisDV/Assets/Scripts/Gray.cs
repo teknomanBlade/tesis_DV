@@ -75,8 +75,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     [SerializeField]
     private Material dissolveMaterial;
 
-
-
     [SerializeField]
     private Material sphereEffectMaterial;
 

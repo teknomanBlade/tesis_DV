@@ -23,6 +23,10 @@ public class GameVars : MonoBehaviour
 
     [SerializeField]
     private Cat cat;
+    public Cat Cat
+    {
+        get { return cat; }
+    }
 
     [SerializeField]
     private bool _isCatCaptured;

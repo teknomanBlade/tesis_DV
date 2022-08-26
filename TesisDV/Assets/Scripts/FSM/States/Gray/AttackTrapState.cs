@@ -15,11 +15,11 @@ public class AttackTrapState : IState
 
     public void OnStart()
     {
-        Debug.Log("Entré a Patrol");
+        Debug.Log("Entre a Patrol");
     }
     public void OnUpdate()
     {
-
+        _enemy.AttackTrap();
     }
     public void OnExit()
     {

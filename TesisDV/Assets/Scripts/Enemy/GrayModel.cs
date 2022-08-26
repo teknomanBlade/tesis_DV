@@ -7,17 +7,22 @@ using UnityEngine.AI;
 
 public class GrayModel : MonoBehaviour
 {
-    private List<IPlayerDamageObserver> _myObserversPlayerDamage = new List<IPlayerDamageObserver>();
-    private List<IDoorGrayInteractObserver> _myObserversDoorGrayInteract = new List<IDoorGrayInteractObserver>();
-
+    private float _movingSpeed;
+    private bool hasObjective;
     public StateMachine _fsm;
 
     IController _myController;
 
     public Player _player { get; private set; }
+    public Cat _cat { get; private set; }
 
     private NavMeshAgent _navMeshAgent;
     private NavMeshPath _navMeshPath;
+
+    public float pursueThreshold = 10f;
+    public float disengageThreshold = 15f;
+    public float attackThreshold = 2.5f;
+    public float attackDisengageThreshold = 3f;
 
     [SerializeField]
     public Vector3[] _waypoints;
@@ -28,6 +33,14 @@ public class GrayModel : MonoBehaviour
     [SerializeField]
     private LineRenderer lineRenderer;
     MiniMap miniMap;
+
+    public Vector3 _exitPos;
+    public Vector3 trapPos;
+
+    [SerializeField] private Transform CatGrabPos;
+    private Vector3 currentObjective;
+    private BaseballLauncher currentObstacleTrap;
+    public bool foundTrapInPath = false;
 
     #region Events
     public event Action<float> onGetDmgHUD = delegate { };
@@ -53,6 +66,7 @@ public class GrayModel : MonoBehaviour
         _myController = new GrayController(this, GetComponent<GrayView>());
 
         _player = GameVars.Values.Player;
+        _cat = GameVars.Values.Cat;
 
         _navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -63,6 +77,11 @@ public class GrayModel : MonoBehaviour
         miniMap.AddLineRenderer(lineRenderer);
     }
 
+    public void SetObjective(Vector3 targetPosition)
+    {
+        currentObjective = targetPosition;
+    }
+
     public void ResetPathAndSetObjective(Vector3 targetPosition)
     {
         _navMeshAgent.ResetPath();
@@ -71,13 +90,8 @@ public class GrayModel : MonoBehaviour
 
     private void CalculatePath(Vector3 targetPosition)
     {
-        //_waypoints = new List<Vector3>();
-        //_waypoints = null;
-
-
         _navMeshAgent.ResetPath();
         NavMeshPath path = new NavMeshPath();
-        //_navMeshAgent.CalculatePath(targetPosition, path);
         if (NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, path))
         {
             _navMeshAgent.SetPath(path);
@@ -86,11 +100,85 @@ public class GrayModel : MonoBehaviour
             {
                 _waypoints[i] = _navMeshAgent.path.corners[i];
             }
-            //pathIsCreated = true;
             DrawLineRenderer(path.corners);
         }
+    }
 
-        //NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, _navMeshPath)
+    public void Move()
+    {
+        //if (pathIsCreated) Probar sin bool
+        //{
+            Vector3 dir = _waypoints[_currentWaypoint] - transform.position;
+            transform.forward = dir;
+            transform.position += transform.forward * _movingSpeed * Time.deltaTime;
+
+            if (dir.magnitude < 0.5f)
+            {
+                //_currentWaypoint++; Lo sumamos despu�s de verificar.
+                if (_currentWaypoint + 1 > _waypoints.Length) //-1
+                {
+                    _currentWaypoint = 0;
+                    //canCreatePath = true; probar con ResetAndSet directo.
+                    ResetPathAndSetObjective(currentObjective);
+                }
+                else
+                {
+                    _currentWaypoint++;
+                }
+
+            }
+        //}
+    }
+
+    public void GetDoor(Door door)
+    {
+        OpenDoor(door);
+    }
+
+    public void GrabCat()
+    {
+        //_anim.SetBool("IsGrab", true); Para el view
+        GameVars.Values.TakeCat(_exitPos); //Ver que corno es esto
+        hasObjective = true;
+        _lm.CheckForObjective();
+    }
+
+    public void GoBackToShip()
+    {
+        if (hasObjective)
+        {
+            _lm.LoseGame();
+            Destroy(_lm.objective);
+        }
+        //_lm.RemoveGray(this);
+        //miniMap.RemoveGray(this);
+
+        Destroy(gameObject);
+    }
+    
+    public void AttackPlayer()
+    {
+        //hacer animacion de AttackPlayer y que el collidertrigger haga el daño.
+    }
+
+    public void AttackTrap()
+    {
+        //hacer animación de EMPAttack y asignarle daño al trigger del EMPAttackGO.
+    }
+
+    public void FoundTrapInPath(GameObject trap)
+    {
+        trapPos = trap.transform.position;
+        currentObstacleTrap = trap.GetComponent<BaseballLauncher>();
+        foundTrapInPath = true;
+    }
+
+    private void OpenDoor(Door door)
+    {
+        door.Interact();
+
+        //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
+        //TriggerDoorGrayInteract("GrayDoorInteract");
     }
 
     private void DrawLineRenderer(Vector3[] waypoints)
@@ -104,5 +192,14 @@ public class GrayModel : MonoBehaviour
             lineRenderer.SetPosition(i, pointPosition);
         }
     }
+
+    public GrayModel SetExitUFO(Vector3 exitPosition)
+    {
+        Vector3 aux = exitPosition;
+        _exitPos = new Vector3(aux.x, 0f, aux.z);
+
+        return this;
+    }
+    
 
 }

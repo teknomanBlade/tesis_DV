@@ -20,6 +20,7 @@ public class ObstacleDetector : MonoBehaviour
 
         if (door && !other.GetComponent<Door>().GetDoorStatus())
         {
+            //_myOwner.GetDoor(other.GetComponent<Door>());
             _myOwner.FoundDoorInPath(other.GetComponent<Door>());
         }
         else if (bTrap && other.GetComponent<BaseballLauncher>())

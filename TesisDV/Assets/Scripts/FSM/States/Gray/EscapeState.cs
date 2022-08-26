@@ -15,14 +15,22 @@ public class EscapeState : IState
 
     public void OnStart()
     {
-        Debug.Log("Entré a Patrol");
+        Debug.Log("Entre a Escape");
+        
+        _enemy.SetObjective(_enemy._exitPos);
+        _enemy.ResetPathAndSetObjective(_enemy._exitPos);
     }
     public void OnUpdate()
     {
+        _enemy.Move();
 
+        if (Vector3.Distance(_enemy.transform.position, _enemy._exitPos) < 3f)
+        {
+            _enemy.GoBackToShip();
+        }
     }
     public void OnExit()
     {
-        Debug.Log("Sali de Patrol");
+        Debug.Log("Sali de Escape");
     }
 }
