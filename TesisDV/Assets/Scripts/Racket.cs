@@ -8,16 +8,21 @@ public class Racket : Melee
 {
     [SerializeField]
     private ParticleSystem _trail;
+    private MeshRenderer _renderer;
     private bool hitStateActive;
     [SerializeField]
     private bool _isDestroyed;
     public delegate void OnRacketDestroyedDelegate(bool destroyed);
     public event OnRacketDestroyedDelegate OnRacketDestroyed;
-   
+    public Texture textureState1;
+    public Texture textureState2;
+    public Texture textureState3;
     // Start is called before the first frame update
     void Awake()
     {
         hitsRemaining = 7;
+        SetStateRacketDamaged(hitsRemaining);
+        _renderer = GetComponent<MeshRenderer>();
     }
 
     public void OnNewRacketGrabbed()
@@ -66,6 +71,7 @@ public class Racket : Melee
             {
                 //Debug.Log("Hit WITH RACKET TO GRAY?" + other.transform.name);
                 hitsRemaining--;
+                SetStateRacketDamaged(hitsRemaining);
                 if (hitsRemaining <= 0)
                 {
                     _isDestroyed = true;
@@ -77,6 +83,25 @@ public class Racket : Melee
                 AddObserver(other.gameObject.GetComponent<Gray>());
                 TriggerHit("RacketHit");
             }
+        }
+    }
+
+    public void SetStateRacketDamaged(int hitsRemaining)
+    {
+        if (hitsRemaining == 5)
+        {
+            Debug.Log("HITS 5");
+            _renderer.material.SetTexture("_MainTexture", textureState1);
+        }
+        else if (hitsRemaining == 3)
+        {
+            Debug.Log("HITS 3");
+            _renderer.material.SetTexture("_MainTexture", textureState2);
+        }
+        else if (hitsRemaining == 1)
+        {
+            Debug.Log("HITS 1");
+            _renderer.material.SetTexture("_MainTexture", textureState3);
         }
     }
     
