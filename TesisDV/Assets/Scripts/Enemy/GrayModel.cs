@@ -43,11 +43,10 @@ public class GrayModel : MonoBehaviour
     public bool foundTrapInPath = false;
 
     #region Events
-    public event Action<float> onGetDmgHUD = delegate { };
-    public event Action<bool> onGetDmg = delegate { };
-    public event Action onDeath = delegate { };
     public event Action<bool> onWalk = delegate { };
-    public event Action<bool> onJump = delegate { };
+    public event Action onDeath = delegate { };
+    public event Action onHit = delegate { };
+
     #endregion Events
 
     private void Awake()
@@ -108,6 +107,7 @@ public class GrayModel : MonoBehaviour
     {
         //if (pathIsCreated) Probar sin bool
         //{
+            onWalk(true);
             Vector3 dir = _waypoints[_currentWaypoint] - transform.position;
             transform.forward = dir;
             transform.position += transform.forward * _movingSpeed * Time.deltaTime;
@@ -156,6 +156,11 @@ public class GrayModel : MonoBehaviour
         Destroy(gameObject);
     }
     
+    public void TakeDamage()
+    {
+
+    }
+
     public void AttackPlayer()
     {
         //hacer animacion de AttackPlayer y que el collidertrigger haga el daño.

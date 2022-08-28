@@ -18,20 +18,18 @@ public class AttackPlayerState : IState
         Debug.Log("Entre a AttackPlayer");
         _enemy.SetObjective(_enemy._player.transform.position);
         _enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+        _enemy.AttackPlayer();
     }
 
-    public void OnUpdate()
+    public void OnUpdate() //Chequear que la animacion de ataque no se solape.
     {
-        _enemy.Move();
-
-        if (Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) > _enemy.disengageThreshold)
-        {
-            _fsm.ChangeState(EnemyStatesEnum.CatState);
-        }
-
         if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.attackThreshold)
         {
             _enemy.AttackPlayer();
+        }
+        else
+        {
+            _fsm.ChangeState(EnemyStatesEnum.ChaseState);
         }
     }
 

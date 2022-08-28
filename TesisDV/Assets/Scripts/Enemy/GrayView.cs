@@ -21,4 +21,20 @@ public class GrayView : MonoBehaviour
         _myMaterial = GetComponent<Renderer>().material;
         _myAnimator = GetComponent<Animator>();
     }
+
+    public void WalkAnimation(bool value)
+    {
+        _myAnimator.SetBool("IsWalking", true);
+    }
+
+    public void DeathAnimation()
+    {
+        _myAnimator.SetBool("IsDead", true);
+    }
+
+    public void HitAnimation()
+    {
+        _myAnimator.Play("Hit");
+    }
+
 }
