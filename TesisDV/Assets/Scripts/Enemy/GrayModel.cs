@@ -9,10 +9,12 @@ public class GrayModel : MonoBehaviour
 {
     [SerializeField] private int _hp;
     [SerializeField] private float _movingSpeed;
-    private bool hasObjective;
+    public bool hasObjective;
     private bool pathIsCreated;
     private bool canCreatePath;
     private bool isAttacking = false;
+    public bool isDead = false;
+
     public StateMachine _fsm;
 
     IController _myController;
@@ -78,9 +80,9 @@ public class GrayModel : MonoBehaviour
         _navMeshAgent = GetComponent<NavMeshAgent>();
 
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        //_lm.AddGray(this);  //Cambiar a GrayModel
+        _lm.AddGray(this);  //Cambiar a GrayModel
         miniMap = FindObjectOfType<MiniMap>();
-        //miniMap.grays.Add(this); // Cambiar a GrayModel
+        miniMap.grays.Add(this); // Cambiar a GrayModel
         miniMap.AddLineRenderer(lineRenderer);
 
         _fsm.ChangeState(EnemyStatesEnum.CatState); //Cambiar estado siempre al final del Start para tener las referencias ya asignadas.
@@ -114,7 +116,6 @@ public class GrayModel : MonoBehaviour
 
     private void CalculatePath(Vector3 targetPosition)
     {
-        Debug.Log("calculating");
         _navMeshAgent.ResetPath();
         NavMeshPath path = new NavMeshPath();
         if (NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, path))
@@ -195,6 +196,7 @@ public class GrayModel : MonoBehaviour
         
         if(_hp <= 0)
         {
+            isDead = true;
             onDeath();
             //Desabilitar colliders y lo que haga falta.
         }
@@ -227,6 +229,7 @@ public class GrayModel : MonoBehaviour
     public void RevertAttackBool() //Esto se llama por la animación de ataque.
     {
         isAttacking = false;
+        onAttack();
     }
 
     private void OpenDoor(Door door)
@@ -235,6 +238,11 @@ public class GrayModel : MonoBehaviour
 
         //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
         //TriggerDoorGrayInteract("GrayDoorInteract");
+    }
+
+    public Vector3 GetVelocity()
+    {
+        return _navMeshAgent.velocity;
     }
 
     private void DrawLineRenderer(Vector3[] waypoints)
@@ -256,8 +264,4 @@ public class GrayModel : MonoBehaviour
 
         return this;
     }
-
-    
-    
-
 }

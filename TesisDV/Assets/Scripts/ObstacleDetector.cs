@@ -6,7 +6,7 @@ using UnityEngine;
 public class ObstacleDetector : MonoBehaviour
 {
     [SerializeField]
-    private Gray _myOwner;
+    private GrayModel _myOwner;
     void Start()
     {
         //_myOwner = transform.transform.GetComponent<Gray>();
@@ -21,7 +21,7 @@ public class ObstacleDetector : MonoBehaviour
         if (door && !other.GetComponent<Door>().GetDoorStatus())
         {
             //_myOwner.GetDoor(other.GetComponent<Door>());
-            _myOwner.FoundDoorInPath(other.GetComponent<Door>());
+            _myOwner.GetDoor(other.GetComponent<Door>());
         }
         else if (bTrap && other.GetComponent<BaseballLauncher>())
         {

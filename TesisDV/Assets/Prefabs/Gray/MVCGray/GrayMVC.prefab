@@ -11008,7 +11008,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f1c4cc106a05dc4a8bc1b2486b8c8d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movingSpeed: 0
+  _hp: 3
+  _movingSpeed: 1
+  hasObjective: 0
+  isDead: 0
   pursueThreshold: 10
   disengageThreshold: 15
   attackThreshold: 2.5
@@ -12418,7 +12421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 520b804d0cc98e44aa89095ab49fe4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myOwner: {fileID: 0}
+  _myOwner: {fileID: 8552485591303705428}
 --- !u!1001 &5200077159841138853
 PrefabInstance:
   m_ObjectHideFlags: 0

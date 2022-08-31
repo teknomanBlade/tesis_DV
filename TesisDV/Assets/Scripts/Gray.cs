@@ -114,9 +114,19 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _navMeshAgent = GetComponent<NavMeshAgent>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         nearestDoorDistance = 1000;
-        _lm.AddGray(this);
+
+        //CAMBIO PARA MVC
+        //Esta lista ahora referencia GrayModel, no Gray.
+        //_lm.AddGray(this);
+
+
         miniMap = FindObjectOfType<MiniMap>();
-        miniMap.grays.Add(this);
+
+        //CAMBIO PARA MVC
+        //Esta lista ahora referencia GrayModel, no Gray.
+        //miniMap.grays.Add(this);
+
+
         miniMap.AddLineRenderer(lineRenderer);
         //Exit pos lo setea el UFO en el instantiate.
         /*  Vector3 aux = _lm.allUfos[0].transform.position;
@@ -583,8 +593,13 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             _lm.LoseGame();
             Destroy(_lm.objective);
         }
-        _lm.RemoveGray(this);
-        miniMap.RemoveGray(this);
+
+        //CAMBIO PARA MVC
+        //Esta lista ahora referencia GrayModel, no Gray.
+        //_lm.RemoveGray(this);
+        //miniMap.RemoveGray(this);
+
+
         //_lm.EnemyCameBack();
         Destroy(gameObject);
     }
@@ -673,7 +688,11 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         awake = false;
         _rb.isKinematic = true;
         _cc.enabled = false;
-        _lm.RemoveGray(this);
+
+        //CAMBIO PARA MVC
+        //Esta lista ahora referencia GrayModel, no Gray.
+        //_lm.RemoveGray(this);
+
         _lm.CheckForObjective();
     }
     public void Dissolve()
@@ -697,7 +716,12 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void Dead()
     {
         //dissolveMaterial.SetFloat("_ScaleDissolveGray", 1);
-        miniMap.RemoveGray(this);
+
+        //CAMBIO PARA MVC
+        //Esta lista ahora referencia GrayModel, no Gray.
+        //miniMap.RemoveGray(this);
+
+
         Destroy(gameObject);
     }
 
