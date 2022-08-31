@@ -17,8 +17,9 @@ public class CatState : IState
     {
         Debug.Log("Entre a CatState");
 
-        _enemy.SetObjective(_enemy._cat.transform.position);
-        _enemy.ResetPathAndSetObjective(_enemy._cat.transform.position);
+        _enemy.SetObjective(_enemy._cat.gameObject);
+        //_enemy.ResetPathAndSetObjective(_enemy._cat.transform.position);
+        _enemy.ResetPathAndSetObjective();
     }
     public void OnUpdate()
     {

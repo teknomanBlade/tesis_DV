@@ -16,8 +16,9 @@ public class ChaseState : IState
     public void OnStart()
     {
         Debug.Log("Entre a Chase");
-        _enemy.SetObjective(_enemy._player.transform.position);
-        _enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+        _enemy.SetObjective(_enemy._player.gameObject);
+        //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+        _enemy.ResetPathAndSetObjective();
     }
 
     public void OnUpdate()

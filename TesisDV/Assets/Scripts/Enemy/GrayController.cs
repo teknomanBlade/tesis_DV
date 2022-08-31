@@ -10,9 +10,11 @@ public class GrayController : IController
     {
         _m = m;
 
-        _m.onWalk   +=  v.WalkAnimation;
-        _m.onHit    +=  v.HitAnimation;
-        _m.onDeath  +=  v.DeathAnimation;
+        _m.onWalk       +=  v.WalkAnimation;
+        _m.onHit        +=  v.HitAnimation;
+        _m.onDeath      +=  v.DeathAnimation;
+        _m.onAttack     +=  v.AttackAnimation;
+        _m.onCatGrab    +=  v.CatGrabAnimation;
     }
 
     public void OnUpdate()

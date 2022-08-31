@@ -7,8 +7,12 @@ using UnityEngine.AI;
 
 public class GrayModel : MonoBehaviour
 {
-    private float _movingSpeed;
+    [SerializeField] private int _hp;
+    [SerializeField] private float _movingSpeed;
     private bool hasObjective;
+    private bool pathIsCreated;
+    private bool canCreatePath;
+    private bool isAttacking = false;
     public StateMachine _fsm;
 
     IController _myController;
@@ -38,14 +42,18 @@ public class GrayModel : MonoBehaviour
     public Vector3 trapPos;
 
     [SerializeField] private Transform CatGrabPos;
-    private Vector3 currentObjective;
+    private GameObject currentObjective;
     private BaseballLauncher currentObstacleTrap;
     public bool foundTrapInPath = false;
 
     #region Events
+
     public event Action<bool> onWalk = delegate { };
+    public event Action<bool> onCatGrab = delegate { };
     public event Action onDeath = delegate { };
     public event Action onHit = delegate { };
+    public event Action onAttack = delegate { };
+
 
     #endregion Events
 
@@ -57,7 +65,7 @@ public class GrayModel : MonoBehaviour
         _fsm.AddState(EnemyStatesEnum.AttackPlayerState, new AttackPlayerState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.AttackTrapState, new AttackTrapState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.EscapeState, new EscapeState(_fsm, this));
-        _fsm.ChangeState(EnemyStatesEnum.CatState);
+        //_fsm.ChangeState(EnemyStatesEnum.CatState);
     }
 
     private void Start()
@@ -74,21 +82,39 @@ public class GrayModel : MonoBehaviour
         miniMap = FindObjectOfType<MiniMap>();
         //miniMap.grays.Add(this); // Cambiar a GrayModel
         miniMap.AddLineRenderer(lineRenderer);
+
+        _fsm.ChangeState(EnemyStatesEnum.CatState); //Cambiar estado siempre al final del Start para tener las referencias ya asignadas.
     }
 
-    public void SetObjective(Vector3 targetPosition)
+    void Update()
+    {
+        //_fsm.OnUpdate();
+        _myController.OnUpdate();
+        ResetPathAndSetObjective(); //Horrible resetear en Update, pero con el pathfinding no va a hacer falta.
+
+        /* if(Input.GetKeyDown(KeyCode.L))
+        {
+            ResetPathAndSetObjective();     PARA TESTEO.
+        } */
+    }
+
+    public void SetObjective(GameObject targetPosition)
     {
         currentObjective = targetPosition;
     }
 
-    public void ResetPathAndSetObjective(Vector3 targetPosition)
+    public void ResetPathAndSetObjective()//Vector3 targetPosition)
     {
         _navMeshAgent.ResetPath();
-        CalculatePath(targetPosition);   
+        //CalculatePath(targetPosition);  
+        CalculatePath(currentObjective.transform.position);
+        _currentWaypoint = 0;
+        pathIsCreated = false;
     }
 
     private void CalculatePath(Vector3 targetPosition)
     {
+        Debug.Log("calculating");
         _navMeshAgent.ResetPath();
         NavMeshPath path = new NavMeshPath();
         if (NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, path))
@@ -99,27 +125,32 @@ public class GrayModel : MonoBehaviour
             {
                 _waypoints[i] = _navMeshAgent.path.corners[i];
             }
-            DrawLineRenderer(path.corners);
+            pathIsCreated = true;
+            DrawLineRenderer(path.corners);  
         }
     }
 
     public void Move()
     {
-        //if (pathIsCreated) Probar sin bool
-        //{
+        if (pathIsCreated) //Probar sin bool. No funciona, entra a Move cuando el waypoint todavia no tiene valor asignado.
+        {
             onWalk(true);
             Vector3 dir = _waypoints[_currentWaypoint] - transform.position;
             transform.forward = dir;
             transform.position += transform.forward * _movingSpeed * Time.deltaTime;
-
+            Debug.Log(dir.magnitude);
             if (dir.magnitude < 0.5f)
             {
                 //_currentWaypoint++; Lo sumamos despu�s de verificar.
                 if (_currentWaypoint + 1 > _waypoints.Length) //-1
                 {
-                    _currentWaypoint = 0;
                     //canCreatePath = true; probar con ResetAndSet directo.
-                    ResetPathAndSetObjective(currentObjective);
+                    ResetPathAndSetObjective();
+                    Debug.Log("Reseted");
+                    
+                        
+                    
+                    //_currentWaypoint = 0; Reseteamos el current waypoint en la funcion de arriba ^_^                   
                 }
                 else
                 {
@@ -127,7 +158,8 @@ public class GrayModel : MonoBehaviour
                 }
 
             }
-        //}
+            
+        }
     }
 
     public void GetDoor(Door door)
@@ -137,7 +169,8 @@ public class GrayModel : MonoBehaviour
 
     public void GrabCat()
     {
-        //_anim.SetBool("IsGrab", true); Para el view
+        //_anim.SetBool("IsGrab", true); Ahora se usa el evento de abajo.
+        onCatGrab(true);
         GameVars.Values.TakeCat(_exitPos); //Ver que corno es esto
         hasObjective = true;
         _lm.CheckForObjective();
@@ -156,14 +189,27 @@ public class GrayModel : MonoBehaviour
         Destroy(gameObject);
     }
     
-    public void TakeDamage()
+    public void TakeDamage(int DamageAmount)
     {
-
+        _hp -= DamageAmount;
+        
+        if(_hp <= 0)
+        {
+            onDeath();
+            //Desabilitar colliders y lo que haga falta.
+        }
     }
 
-    public void AttackPlayer()
+    public void AttackPlayer() //Verifica que no estemos atacando para mirar hacia el jugador y envia nuevamente la animacion de ataque. El booleano se resetea con un AnimEvent.
     {
-        //hacer animacion de AttackPlayer y que el collidertrigger haga el daño.
+        if(!isAttacking)
+        {
+            isAttacking = true;
+            var dir = _player.transform.position - transform.position;
+            transform.forward = dir;
+            onAttack();
+        }
+       
     }
 
     public void AttackTrap()
@@ -176,6 +222,11 @@ public class GrayModel : MonoBehaviour
         trapPos = trap.transform.position;
         currentObstacleTrap = trap.GetComponent<BaseballLauncher>();
         foundTrapInPath = true;
+    }
+
+    public void RevertAttackBool() //Esto se llama por la animación de ataque.
+    {
+        isAttacking = false;
     }
 
     private void OpenDoor(Door door)
@@ -205,6 +256,8 @@ public class GrayModel : MonoBehaviour
 
         return this;
     }
+
+    
     
 
 }

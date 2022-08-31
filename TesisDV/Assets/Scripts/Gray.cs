@@ -488,7 +488,6 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
                 {
                     _currentWaypoint++;
                 }
-
             }
         }
 

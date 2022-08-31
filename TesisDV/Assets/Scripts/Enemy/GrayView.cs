@@ -18,13 +18,18 @@ public class GrayView : MonoBehaviour
 
     void Start()
     {
-        _myMaterial = GetComponent<Renderer>().material;
+        //_myMaterial = GetComponent<Renderer>().material;
         _myAnimator = GetComponent<Animator>();
     }
 
     public void WalkAnimation(bool value)
     {
         _myAnimator.SetBool("IsWalking", true);
+    }
+
+    public void AttackAnimation()
+    {
+        _myAnimator.Play("Attack");
     }
 
     public void DeathAnimation()
@@ -35,6 +40,11 @@ public class GrayView : MonoBehaviour
     public void HitAnimation()
     {
         _myAnimator.Play("Hit");
+    }
+
+    public void CatGrabAnimation(bool value)
+    {
+        _myAnimator.SetBool("IsGrab", true);
     }
 
 }

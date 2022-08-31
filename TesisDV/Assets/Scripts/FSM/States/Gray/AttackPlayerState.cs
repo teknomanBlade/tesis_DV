@@ -16,8 +16,9 @@ public class AttackPlayerState : IState
     public void OnStart()
     {
         Debug.Log("Entre a AttackPlayer");
-        _enemy.SetObjective(_enemy._player.transform.position);
-        _enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+        _enemy.SetObjective(_enemy._player.gameObject);
+        //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+        _enemy.ResetPathAndSetObjective();
         _enemy.AttackPlayer();
     }
 
