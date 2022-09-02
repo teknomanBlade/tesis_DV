@@ -11035,10 +11035,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4e738f40bc84e48a0c588c5aa56b5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dissolveMaterial: {fileID: 0}
-  sphereEffectMaterial: {fileID: 0}
-  _hitEffect: {fileID: 0}
-  _deathEffect: {fileID: 0}
+  dissolveMaterial: {fileID: 2100000, guid: 692cfd8edbf1f9341a9f823bb400229e, type: 2}
+  sphereEffectMaterial: {fileID: 2100000, guid: 7be8a71e69411474b90722aaf39ca989, type: 2}
+  _hitEffect: {fileID: 1599742001145485040}
+  _deathEffect: {fileID: 1874793657888937727}
+  _hitWave: {fileID: 5748750279412306119}
 --- !u!1 &5685346073406636324
 GameObject:
   m_ObjectHideFlags: 0
@@ -12484,6 +12485,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 110c86ea10cf51047be419ce710e39f9, type: 3}
+--- !u!1 &5748750279412306119 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 571336254725576802, guid: 110c86ea10cf51047be419ce710e39f9, type: 3}
+  m_PrefabInstance: {fileID: 5200077159841138853}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5748750279412306115 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 571336254725576806, guid: 110c86ea10cf51047be419ce710e39f9, type: 3}

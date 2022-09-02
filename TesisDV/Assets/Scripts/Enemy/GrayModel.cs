@@ -43,6 +43,8 @@ public class GrayModel : MonoBehaviour
     public Vector3 _exitPos;
     public Vector3 trapPos;
 
+    private AudioSource _as;
+
     [SerializeField] private Transform CatGrabPos;
     private GameObject currentObjective;
     private BaseballLauncher currentObstacleTrap;
@@ -55,7 +57,7 @@ public class GrayModel : MonoBehaviour
     public event Action onDeath = delegate { };
     public event Action onHit = delegate { };
     public event Action<bool> onAttack = delegate { };
-
+    public event Action onDisolve = delegate { };
 
     #endregion Events
 
@@ -73,6 +75,8 @@ public class GrayModel : MonoBehaviour
     private void Start()
     {
         _myController = new GrayController(this, GetComponent<GrayView>());
+
+        _as = GetComponent<AudioSource>();
 
         _player = GameVars.Values.Player;
         _cat = GameVars.Values.Cat;
@@ -193,8 +197,8 @@ public class GrayModel : MonoBehaviour
     
     public void TakeDamage(int DamageAmount)
     {
-        
         _hp -= DamageAmount;
+        GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
         
         if(_hp > 0)
         {
@@ -203,6 +207,7 @@ public class GrayModel : MonoBehaviour
         else
         {
             isDead = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
             //Desabilitar colliders y lo que haga falta.
         }
@@ -247,6 +252,11 @@ public class GrayModel : MonoBehaviour
 
         //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
         //TriggerDoorGrayInteract("GrayDoorInteract");
+    }
+
+    public void Dissolve()
+    {
+        onDisolve();
     }
 
     public Vector3 GetVelocity()

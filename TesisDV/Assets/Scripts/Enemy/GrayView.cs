@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GrayView : MonoBehaviour
 {
+    private float _valueToChange;
     Material _myMaterial;
     Animator _myAnimator;
-
+    [SerializeField] private Coroutine dissolveCoroutine;
+    private SkinnedMeshRenderer skinned;
     [SerializeField]
     private Material dissolveMaterial;
     [SerializeField]
@@ -15,10 +18,13 @@ public class GrayView : MonoBehaviour
     private ParticleSystem _hitEffect;
     [SerializeField]
     private ParticleSystem _deathEffect;
+    [SerializeField]
+    private GameObject _hitWave;
 
     void Start()
     {
         //_myMaterial = GetComponent<Renderer>().material;
+        skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
     }
 
@@ -49,4 +55,58 @@ public class GrayView : MonoBehaviour
         _myAnimator.SetBool("IsGrab", value);
     }
 
+    public void DissolveAnimation()
+    {
+        StartCoroutine(PlayShaderDissolve());
+    }
+
+    public void InnerEffectAnimation()
+    {
+        _hitEffect.Play();
+        _hitWave.SetActive(!_hitWave.activeSelf);
+        _hitWave.GetComponent<Animator>().SetBool("IsHit", true);
+    }
+
+#region Shaders
+    public void SwitchDissolveMaterial(Material material)       
+    {
+        var materials = skinned.sharedMaterials.ToList();
+        materials.Clear();
+        materials.Add(material);
+        skinned.sharedMaterials = materials.ToArray();
+    }
+
+    IEnumerator LerpScaleDissolve(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _valueToChange;
+
+        while (time < duration)
+        {
+            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            skinned.material.SetFloat("_ScaleDissolveGray", _valueToChange);
+            yield return null;
+        }
+
+        _valueToChange = endValue;
+    }
+
+    IEnumerator PlayShaderDissolve()
+    {
+        _deathEffect.Stop();
+        SwitchDissolveMaterial(dissolveMaterial);
+        dissolveCoroutine = StartCoroutine(LerpScaleDissolve(0f, 1f));
+        yield return new WaitForSeconds(1.5f);
+        Dead();
+    }
+
+#endregion
+
+    public void Dead()
+    {
+        Destroy(gameObject);
+    }
+    
 }
