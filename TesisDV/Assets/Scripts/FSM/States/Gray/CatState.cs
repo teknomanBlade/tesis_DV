@@ -24,7 +24,7 @@ public class CatState : IState
     public void OnUpdate()
     {
         _enemy.Move();
-        
+
         if(Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 3f) 
         {
             _enemy.GrabCat();
@@ -37,7 +37,7 @@ public class CatState : IState
         }
         else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold) //Agregar Raycast para ver al player
         {
-            _fsm.ChangeState(EnemyStatesEnum.AttackPlayerState);
+            _fsm.ChangeState(EnemyStatesEnum.ChaseState);
         }
         else if(_enemy.foundTrapInPath)
         {

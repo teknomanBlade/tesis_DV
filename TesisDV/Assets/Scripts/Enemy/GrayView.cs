@@ -24,12 +24,14 @@ public class GrayView : MonoBehaviour
 
     public void WalkAnimation(bool value)
     {
-        _myAnimator.SetBool("IsWalking", true);
+        _myAnimator.SetBool("IsWalking", value);
     }
 
-    public void AttackAnimation()
+    public void AttackAnimation(bool value)
     {
-        _myAnimator.Play("Attack");
+        //_myAnimator.PlayInFixedTime("Attack");
+        //_myAnimator.Play("Attack");
+        _myAnimator.SetBool("IsAttacking", value);
     }
 
     public void DeathAnimation()
@@ -44,7 +46,7 @@ public class GrayView : MonoBehaviour
 
     public void CatGrabAnimation(bool value)
     {
-        _myAnimator.SetBool("IsGrab", true);
+        _myAnimator.SetBool("IsGrab", value);
     }
 
 }

@@ -12,7 +12,7 @@ public class GrayModel : MonoBehaviour
     public bool hasObjective;
     private bool pathIsCreated;
     private bool canCreatePath;
-    private bool isAttacking = false;
+    [SerializeField] private bool isAttacking = false;
     public bool isDead = false;
 
     public StateMachine _fsm;
@@ -54,7 +54,7 @@ public class GrayModel : MonoBehaviour
     public event Action<bool> onCatGrab = delegate { };
     public event Action onDeath = delegate { };
     public event Action onHit = delegate { };
-    public event Action onAttack = delegate { };
+    public event Action<bool> onAttack = delegate { };
 
 
     #endregion Events
@@ -86,6 +86,7 @@ public class GrayModel : MonoBehaviour
         miniMap.AddLineRenderer(lineRenderer);
 
         _fsm.ChangeState(EnemyStatesEnum.CatState); //Cambiar estado siempre al final del Start para tener las referencias ya asignadas.
+        onWalk(true);
     }
 
     void Update()
@@ -135,7 +136,7 @@ public class GrayModel : MonoBehaviour
     {
         if (pathIsCreated) //Probar sin bool. No funciona, entra a Move cuando el waypoint todavia no tiene valor asignado.
         {
-            onWalk(true);
+            onWalk(true); //Esta llamada de evento no funciona por el NavMeshAgent.
             Vector3 dir = _waypoints[_currentWaypoint] - transform.position;
             transform.forward = dir;
             transform.position += transform.forward * _movingSpeed * Time.deltaTime;
@@ -147,7 +148,7 @@ public class GrayModel : MonoBehaviour
                 {
                     //canCreatePath = true; probar con ResetAndSet directo.
                     ResetPathAndSetObjective();
-                    Debug.Log("Reseted");
+                    //Debug.Log("Reseted");
                     
                         
                     
@@ -192,9 +193,14 @@ public class GrayModel : MonoBehaviour
     
     public void TakeDamage(int DamageAmount)
     {
+        
         _hp -= DamageAmount;
         
-        if(_hp <= 0)
+        if(_hp > 0)
+        {
+            onHit();
+        }
+        else
         {
             isDead = true;
             onDeath();
@@ -206,10 +212,11 @@ public class GrayModel : MonoBehaviour
     {
         if(!isAttacking)
         {
-            isAttacking = true;
             var dir = _player.transform.position - transform.position;
             transform.forward = dir;
-            onAttack();
+            onWalk(isAttacking);
+            onAttack(!isAttacking);
+            isAttacking = true; 
         }
        
     }
@@ -228,13 +235,15 @@ public class GrayModel : MonoBehaviour
 
     public void RevertAttackBool() //Esto se llama por la animación de ataque.
     {
-        isAttacking = false;
-        onAttack();
+        onAttack(!isAttacking);
+        onWalk(isAttacking);
+        isAttacking = false;   
     }
 
     private void OpenDoor(Door door)
     {
         door.Interact();
+        //Refeencia a View donde hace un play de la animacion de abrir la puerta.
 
         //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
         //TriggerDoorGrayInteract("GrayDoorInteract");

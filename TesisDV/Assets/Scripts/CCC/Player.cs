@@ -8,7 +8,9 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObserver, IDoorGrayInteractObserver
+//CAMBIO PARA MVC
+//No tomamos daño por observer, quito el IPlayerDamageObserver.
+public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInteractObserver
 {
     #region Events
     public delegate void OnNewRacketGrabbedDelegate();
@@ -394,12 +396,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
             SceneManager.LoadScene(1);
         }
     }
-    public void Damage()
+    public void Damage(int damageAmount)
     {
         _cam.CameraShakeDamage(1f, 0.8f);
         ActiveDamageEffect();
         StartCoroutine(PlayDamageSound(3.4f));
-        hp--;
+        hp -= damageAmount;
         GameVars.Values.ShowLivesRemaining(hp, maxHp);
         if (hp <= 0) Die();
     }
@@ -851,13 +853,16 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IPlayerDamageObs
         }
     }
 
-    public void OnNotifyPlayerDamage(string message)
-    {
-        if (message.Equals("DamagePlayer"))
-        {
-            Damage();
-        }
-    }
+    //CAMBIO PARA MVC
+    //No usamos observer para recibir daño, tomamos el daño directamente a traves de la funcion Damage().
+    
+    //public void OnNotifyPlayerDamage(string message)
+    //{
+        //if (message.Equals("DamagePlayer"))
+        //{
+            //Damage();
+        //}
+    //}
 
     public void OnNotifyDoorGrayInteract(string message)
     {

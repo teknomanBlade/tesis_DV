@@ -6,7 +6,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, IDoorGrayInteractObservable
+//CAMBIO PARA MVC
+//No hacemos daño por observer, quito el IPlayerDamageObserver.
+public class Gray : MonoBehaviour, IHittableObserver, IDoorGrayInteractObservable
 {
     private List<IPlayerDamageObserver> _myObserversPlayerDamage = new List<IPlayerDamageObserver>();
     private List<IDoorGrayInteractObserver> _myObserversDoorGrayInteract = new List<IDoorGrayInteractObserver>();
@@ -105,12 +107,23 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _as = GetComponent<AudioSource>();
         _player = GameVars.Values.Player.gameObject;
         _playerScript = GameVars.Values.Player;
-        AddObserver(_playerScript);
+
+        //CAMBIO PARA MVC
+        //No hacemos daño por observer, quito el IPlayerDamageObserver.
+        //AddObserver(_playerScript);
+
         AddObserverDoorGrayInteract(_playerScript);
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         //EMPAttack = GetComponentInChildren<EMPAttack>();
-        EMPAttack.SetOwner(this);
+
+
+        //CAMBIO PARA MVC
+        //El EMPAttack funciona por trigger.
+
+        //EMPAttack.SetOwner(this);
         //_isMoving = true;
+
+
         _navMeshAgent = GetComponent<NavMeshAgent>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         nearestDoorDistance = 1000;
@@ -879,10 +892,12 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         if (_myObserversPlayerDamage.Contains(obs)) _myObserversPlayerDamage.Remove(obs);
     }
 
-    public void TriggerPlayerDamage(string triggerMessage)
-    {
-        _myObserversPlayerDamage.ForEach(x => x.OnNotifyPlayerDamage(triggerMessage));
-    }
+    //CAMBIO PARA MVC
+        //No usamos observer para daño, todo pasa por el triggerCollider del ataque en cuestion.
+    //public void TriggerPlayerDamage(string triggerMessage)
+    //{
+    //    _myObserversPlayerDamage.ForEach(x => x.OnNotifyPlayerDamage(triggerMessage));
+    //}
 
     public void AddObserverDoorGrayInteract(IDoorGrayInteractObserver obs)
     {

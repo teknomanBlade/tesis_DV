@@ -11011,6 +11011,7 @@ MonoBehaviour:
   _hp: 3
   _movingSpeed: 1
   hasObjective: 0
+  isAttacking: 0
   isDead: 0
   pursueThreshold: 10
   disengageThreshold: 15
@@ -12495,6 +12496,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4993016087989928857}
     m_Modifications:
+    - target: {fileID: 2732650447250823226, guid: 0f0492d8f961c454abbb39139dbb8f0c, type: 3}
+      propertyPath: _myOwner
+      value: 
+      objectReference: {fileID: 8552485591303705428}
+    - target: {fileID: 2732650447250823226, guid: 0f0492d8f961c454abbb39139dbb8f0c, type: 3}
+      propertyPath: _damageAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6607024354992803781, guid: 0f0492d8f961c454abbb39139dbb8f0c, type: 3}
       propertyPath: m_RootOrder
       value: 2

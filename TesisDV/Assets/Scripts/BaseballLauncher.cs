@@ -111,6 +111,13 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("hola");
+            Inactive();
+        }
+
+
         if (active)
         {
             Debug.Log("ENTRA EN ACTIVA?");
@@ -289,7 +296,7 @@ public class BaseballLauncher : Item, IMovable
         yield return new WaitForSeconds(0.2f);
         GameVars.Values.soundManager.StopSound();
     }*/
-    private void Inactive()
+    public void Inactive()
     {
         if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
         _animator.enabled = true;
