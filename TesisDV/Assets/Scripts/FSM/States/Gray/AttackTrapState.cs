@@ -20,6 +20,11 @@ public class AttackTrapState : IState
     public void OnUpdate()
     {
         _enemy.AttackTrap();
+        
+        if(!_enemy.foundTrapInPath)
+        {
+            _fsm.ChangeState(EnemyStatesEnum.CatState);
+        }
     }
     public void OnExit()
     {

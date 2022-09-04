@@ -18,6 +18,12 @@ public class GrayModel : MonoBehaviour
 
     public StateMachine _fsm;
 
+    [SerializeField] private float _trapViewRadius;
+    [SerializeField] private LayerMask _trapMask;
+    public Collider _currentTrapObjective { get; private set; }
+    private float _currentTrapObjectiveDistance = 1000f;
+    public const float MAX_CURRENT_OBJECTIVE_DISTANCE = 1000;
+
     IController _myController;
 
     public Player _player { get; private set; }
@@ -30,6 +36,7 @@ public class GrayModel : MonoBehaviour
     public float disengageThreshold = 15f;
     public float attackThreshold = 2.5f;
     public float attackDisengageThreshold = 3f;
+    public float attackTrapThreshold = 2f;
 
     [SerializeField]
     public Vector3[] _waypoints;
@@ -68,6 +75,7 @@ public class GrayModel : MonoBehaviour
         _fsm.AddState(EnemyStatesEnum.CatState, new CatState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.ChaseState, new ChaseState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.AttackPlayerState, new AttackPlayerState(_fsm, this));
+        _fsm.AddState(EnemyStatesEnum.ChaseTrapState, new ChaseTrapState(_fsm ,this));
         _fsm.AddState(EnemyStatesEnum.AttackTrapState, new AttackTrapState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.EscapeState, new EscapeState(_fsm, this));
         //_fsm.ChangeState(EnemyStatesEnum.CatState);
@@ -102,12 +110,6 @@ public class GrayModel : MonoBehaviour
             _myController.OnUpdate();
             ResetPathAndSetObjective(); //Horrible resetear en Update, pero con el pathfinding no va a hacer falta.
         }
-        
-
-        /* if(Input.GetKeyDown(KeyCode.L))
-        {
-            ResetPathAndSetObjective();     PARA TESTEO.
-        } */
     }
 
     public void SetObjective(GameObject targetPosition)
@@ -173,6 +175,43 @@ public class GrayModel : MonoBehaviour
         }
     }
 
+    public void DetectTraps()
+    {
+       
+        Collider[] allTargets = Physics.OverlapSphere(transform.position, _trapViewRadius, _trapMask);
+
+        if (allTargets.Length == 0 || _currentTrapObjective == null)
+        {
+            _currentTrapObjective = null;
+            _currentTrapObjectiveDistance = MAX_CURRENT_OBJECTIVE_DISTANCE;
+        }
+
+        if (_currentTrapObjective == null || !_currentTrapObjective.GetComponent<BaseballLauncher>().active || _currentTrapObjectiveDistance > _trapViewRadius) //cambiar el baseballLauncher por clase padre de trampas.
+        {
+            
+            foreach (var item in allTargets)
+            {
+                
+                if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance)
+                {
+                    if (item.GetComponent<BaseballLauncher>().active) //cambiar el baseballLauncher por clase padre de trampas.
+                    {
+                        _currentTrapObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
+                        _currentTrapObjective = item;
+                        
+                    }
+                }
+            }
+            
+        }
+
+        if (_currentTrapObjectiveDistance < _trapViewRadius && _currentTrapObjective != null)
+        {
+            foundTrapInPath = true;
+        }
+        
+    }
+
     public void GetDoor(Door door)
     {
         OpenDoor(door);
@@ -182,7 +221,7 @@ public class GrayModel : MonoBehaviour
     {
         //_anim.SetBool("IsGrab", true); Ahora se usa el evento de abajo.
         onCatGrab(true);
-        GameVars.Values.TakeCat(_exitPos); //Ver que corno es esto
+        GameVars.Values.TakeCat(_exitPos);
         hasObjective = true;
         _lm.CheckForObjective();
     }
@@ -224,6 +263,7 @@ public class GrayModel : MonoBehaviour
         {
             var dir = _player.transform.position - transform.position;
             transform.forward = dir;
+            _navMeshAgent.speed = 0;
             onWalk(isAttacking);
             onAttack(!isAttacking);
             isAttacking = true; 
@@ -233,19 +273,25 @@ public class GrayModel : MonoBehaviour
 
     public void AttackTrap()
     {
-        //hacer animación de EMPAttack y asignarle daño al trigger del EMPAttackGO.
-    }
-
-    public void FoundTrapInPath(GameObject trap)
-    {
-        trapPos = trap.transform.position;
-        currentObstacleTrap = trap.GetComponent<BaseballLauncher>();
-        foundTrapInPath = true;
+        if(!isAttacking)
+        {
+            var dir = _currentTrapObjective.transform.position - transform.position;
+            transform.forward = dir;
+            _navMeshAgent.speed = 0;
+            onWalk(isAttacking);
+            onAttack(!isAttacking);
+            isAttacking = true; 
+        }
+        if(!_currentTrapObjective.GetComponent<BaseballLauncher>().active) //cambiar el baseballLauncher por clase padre de trampas.
+        {
+            foundTrapInPath = false;
+        }
     }
 
     public void RevertAttackBool() //Esto se llama por la animación de ataque.
     {
         onAttack(!isAttacking);
+        _navMeshAgent.speed = 1;
         onWalk(isAttacking);
         isAttacking = false;   
     }

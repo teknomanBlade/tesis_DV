@@ -11013,10 +11013,15 @@ MonoBehaviour:
   hasObjective: 0
   isAttacking: 0
   isDead: 0
+  _trapViewRadius: 5
+  _trapMask:
+    serializedVersion: 2
+    m_Bits: 1024
   pursueThreshold: 10
   disengageThreshold: 15
   attackThreshold: 2.5
   attackDisengageThreshold: 3
+  attackTrapThreshold: 2
   _waypoints: []
   lineRenderer: {fileID: 2830093908131666664}
   _exitPos: {x: 0, y: 0, z: 0}

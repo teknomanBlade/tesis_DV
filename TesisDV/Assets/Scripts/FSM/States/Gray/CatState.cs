@@ -24,6 +24,7 @@ public class CatState : IState
     public void OnUpdate()
     {
         _enemy.Move();
+        _enemy.DetectTraps();
 
         if(Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 3f) 
         {
@@ -41,7 +42,7 @@ public class CatState : IState
         }
         else if(_enemy.foundTrapInPath)
         {
-            _fsm.ChangeState(EnemyStatesEnum.AttackTrapState);
+            _fsm.ChangeState(EnemyStatesEnum.ChaseTrapState);
         }
     }
     public void OnExit()

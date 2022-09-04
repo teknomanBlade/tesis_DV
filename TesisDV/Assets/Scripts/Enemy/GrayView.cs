@@ -67,6 +67,11 @@ public class GrayView : MonoBehaviour
         _hitWave.GetComponent<Animator>().SetBool("IsHit", true);
     }
 
+    public void Dead()
+    {
+        Destroy(gameObject);
+    }
+    
 #region Shaders
     public void SwitchDissolveMaterial(Material material)       
     {
@@ -104,9 +109,6 @@ public class GrayView : MonoBehaviour
 
 #endregion
 
-    public void Dead()
-    {
-        Destroy(gameObject);
-    }
+    
     
 }
