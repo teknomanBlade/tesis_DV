@@ -7,7 +7,7 @@ public class GrayView : MonoBehaviour
 {
     private float _valueToChange;
     Material _myMaterial;
-    Animator _myAnimator;
+    [SerializeField] Animator _myAnimator;
     [SerializeField] private Coroutine dissolveCoroutine;
     private SkinnedMeshRenderer skinned;
     [SerializeField]

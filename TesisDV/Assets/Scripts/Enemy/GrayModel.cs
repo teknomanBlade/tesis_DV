@@ -12,6 +12,7 @@ public class GrayModel : MonoBehaviour
     public bool hasObjective;
     private bool pathIsCreated;
     private bool canCreatePath;
+    private bool isAwake = false;
     [SerializeField] private bool isAttacking = false;
     public bool isDead = false;
 
@@ -96,8 +97,12 @@ public class GrayModel : MonoBehaviour
     void Update()
     {
         //_fsm.OnUpdate();
-        _myController.OnUpdate();
-        ResetPathAndSetObjective(); //Horrible resetear en Update, pero con el pathfinding no va a hacer falta.
+        if(isAwake)
+        {
+            _myController.OnUpdate();
+            ResetPathAndSetObjective(); //Horrible resetear en Update, pero con el pathfinding no va a hacer falta.
+        }
+        
 
         /* if(Input.GetKeyDown(KeyCode.L))
         {
@@ -274,6 +279,16 @@ public class GrayModel : MonoBehaviour
             Vector3 pointPosition = new Vector3(waypoints[i].x, waypoints[i].y, waypoints[i].z);
             lineRenderer.SetPosition(i, pointPosition);
         }
+    }
+
+    public void SetPos(Vector3 pos)
+    {
+        transform.position = pos;
+    }
+
+    public void AwakeGray()
+    {
+        isAwake = true;
     }
 
     public GrayModel SetExitUFO(Vector3 exitPosition)
