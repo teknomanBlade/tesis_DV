@@ -12,6 +12,8 @@ public class Racket : Melee
     private bool hitStateActive;
     [SerializeField]
     private bool _isDestroyed;
+    [SerializeField]
+    private int _damageAmount = 1;
     public delegate void OnRacketDestroyedDelegate(bool destroyed);
     public event OnRacketDestroyedDelegate OnRacketDestroyed;
     public Texture textureState1;
@@ -67,7 +69,10 @@ public class Racket : Melee
     {
         if (IsAttacking)
         {
-            if (other.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
+            var enemyGray = other.GetComponent<GrayModel>(); //Cambiar a la clase padre despues como todo lo que use para hacer daño.
+
+            //if (other.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
+            if (enemyGray)
             {
                 //Debug.Log("Hit WITH RACKET TO GRAY?" + other.transform.name);
                 hitsRemaining--;
@@ -80,8 +85,12 @@ public class Racket : Melee
                     OnRacketDestroyed?.Invoke(_isDestroyed);
                     _player.RacketInventoryRemoved();
                 }
-                AddObserver(other.gameObject.GetComponent<Gray>());
-                TriggerHit("RacketHit");
+                other.GetComponent<GrayModel>().TakeDamage(_damageAmount);
+                IsAttacking = false; //Lo dejo en falso para que no repita el daño, veremos.
+
+                //No usamos observer para hacer daño.
+                //AddObserver(other.gameObject.GetComponent<Gray>());
+                //TriggerHit("RacketHit");
             }
         }
     }

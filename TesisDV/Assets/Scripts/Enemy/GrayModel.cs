@@ -269,7 +269,7 @@ public class GrayModel : MonoBehaviour
         return _navMeshAgent.velocity;
     }
 
-    private void DrawLineRenderer(Vector3[] waypoints)
+    private void DrawLineRenderer(Vector3[] waypoints)  //Esto deberia ir en el view T.T Apenas este todo bien lindo lo cambio
     {
         lineRenderer.positionCount = waypoints.Length;
         lineRenderer.SetPosition(0, waypoints[0]);
