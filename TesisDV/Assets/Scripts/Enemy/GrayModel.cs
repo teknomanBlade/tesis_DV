@@ -32,12 +32,17 @@ public class GrayModel : MonoBehaviour
     private NavMeshAgent _navMeshAgent;
     private NavMeshPath _navMeshPath;
 
+    //Distancia a la que empieza a perseguir al Player
     public float pursueThreshold = 10f;
+    //Distancia a la que deja de perseguir al Player
     public float disengageThreshold = 15f;
+    //Distancia a la que empieza a atacar al Player
     public float attackThreshold = 2.5f;
+    //Distancia a la que deja de atacar al Player pero lo sigue persiguiendo
     public float attackDisengageThreshold = 3f;
+    //Distancia a la que empieza a atacar a la trampa
     public float attackTrapThreshold = 2f;
-    
+
     [SerializeField]
     public Vector3[] _waypoints;
     private int _currentWaypoint = 0;
