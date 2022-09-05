@@ -37,7 +37,7 @@ public class GrayModel : MonoBehaviour
     public float attackThreshold = 2.5f;
     public float attackDisengageThreshold = 3f;
     public float attackTrapThreshold = 2f;
-
+    
     [SerializeField]
     public Vector3[] _waypoints;
     private int _currentWaypoint = 0;
@@ -192,7 +192,7 @@ public class GrayModel : MonoBehaviour
             foreach (var item in allTargets)
             {
                 
-                if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance)
+                if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance && item.GetComponent<BaseballLauncher>())
                 {
                     if (item.GetComponent<BaseballLauncher>().active) //cambiar el baseballLauncher por clase padre de trampas.
                     {
