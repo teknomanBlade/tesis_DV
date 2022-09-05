@@ -19,7 +19,7 @@ public class AttackPlayerState : IState
         _enemy.SetObjective(_enemy._player.gameObject);
         //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
         _enemy.ResetPathAndSetObjective();
-        _enemy.AttackPlayer();
+        //_enemy.AttackPlayer();
     }
 
     public void OnUpdate() //Chequear que la animacion de ataque no se solape.
@@ -30,6 +30,7 @@ public class AttackPlayerState : IState
         }
         else
         {
+            _enemy.RevertAttackBool();
             _fsm.ChangeState(EnemyStatesEnum.ChaseState);
         }
     }

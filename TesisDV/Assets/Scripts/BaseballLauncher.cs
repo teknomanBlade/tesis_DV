@@ -111,6 +111,13 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("hola");
+            Inactive();
+        }
+
+
         if (active)
         {
             Debug.Log("ENTRA EN ACTIVA?");
@@ -152,7 +159,7 @@ public class BaseballLauncher : Item, IMovable
 
     public void InstantiateBall()
     {
-        if (shotsLeft == 0 || _currentObjective == null || _currentObjective.GetComponent<Gray>().dead)
+        if (shotsLeft == 0 || _currentObjective == null || _currentObjective.GetComponent<GrayModel>().isDead)
             return;
         
         laser.gameObject.SetActive(true);
@@ -210,9 +217,12 @@ public class BaseballLauncher : Item, IMovable
     void FieldOfView()
     {
         Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
-        collidersObjectives = allTargets.Where(x => x.GetComponent<Gray>().isActiveAndEnabled == true).ToArray();
 
-        collidersObjectivesDisabled = allTargets.Where(x => x.GetComponent<Gray>().isActiveAndEnabled == false).ToArray();
+        //CAMBIOS PARA MVC
+        //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
+        collidersObjectives = allTargets.Where(x => x.GetComponent<GrayModel>().isActiveAndEnabled == true).ToArray();
+        //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
+        collidersObjectivesDisabled = allTargets.Where(x => x.GetComponent<GrayModel>().isActiveAndEnabled == false).ToArray();
 
 
         if (allTargets.Length == 0 || _currentObjective == null)
@@ -221,13 +231,14 @@ public class BaseballLauncher : Item, IMovable
             _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
         }
         //Si no tenemos objetivo actual buscamos el más cercano y lo hacemos objetivo.
-        if (_currentObjective == null || _currentObjective.GetComponent<Gray>().dead || _currentObjectiveDistance > viewRadius)
+        //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
+        if (_currentObjective == null || _currentObjective.GetComponent<GrayModel>().isDead || _currentObjectiveDistance > viewRadius)
         {
             foreach (var item in allTargets)
             {
                 if (Vector3.Distance(transform.position, item.transform.position) < _currentObjectiveDistance)
                 {
-                    if (!item.GetComponent<Gray>().dead)
+                    if (!item.GetComponent<GrayModel>().isDead)
                     {
                         _currentObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
                         _currentObjective = item;
@@ -243,7 +254,8 @@ public class BaseballLauncher : Item, IMovable
         {
             //StartCoroutine("RoutineEndSearchingForObjectives");
 
-            Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<Gray>().GetVelocity() * _futureTime * Time.deltaTime);
+            //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
+            Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<GrayModel>().GetVelocity() * _futureTime * Time.deltaTime);
             //Vector3 dir = item.transform.position - transform.position;
 
             Vector3 dir = futurePos - transform.position;
@@ -284,7 +296,7 @@ public class BaseballLauncher : Item, IMovable
         yield return new WaitForSeconds(0.2f);
         GameVars.Values.soundManager.StopSound();
     }*/
-    private void Inactive()
+    public void Inactive()
     {
         if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
         _animator.enabled = true;

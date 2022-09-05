@@ -34,7 +34,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
     [SerializeField]
     private GameObject UFOIndicatorPrefab;
     private GameObject UFOIndicator;
-    public Gray currentGray;
+    public GrayModel currentGray;
     public float timeLimit;
     public float timer;
     public bool spawning = false;
@@ -124,7 +124,11 @@ public class UFO : MonoBehaviour, IInRoundObserver
         {
             if(currentGray != null)
             {
+                //CAMBIO PARA MVC
+                //Creo que no hace faltar hacer awake con el Gray nuevo, ampliaremos.
+                //Estaba equivocado, hace falta para que el NavMesh busque path despues del awake.
                 currentGray.AwakeGray();
+
                 BeginSpawn();
             }
 
@@ -164,7 +168,10 @@ public class UFO : MonoBehaviour, IInRoundObserver
         {
             if (!Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
             {
-                currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Gray>().SetExitUFO(transform.position);
+                //CAMBIO PARA MVC
+                //La referencia cambia a GrayModel
+                currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<GrayModel>().SetExitUFO(transform.position);
+
                 //_lm.EnemySpawned();
                 //SpawnGreyLerp();
                 spawning = false;

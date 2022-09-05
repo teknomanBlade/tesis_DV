@@ -9,11 +9,20 @@ public class GrayModel : MonoBehaviour
 {
     [SerializeField] private int _hp;
     [SerializeField] private float _movingSpeed;
-    private bool hasObjective;
+    public bool hasObjective;
     private bool pathIsCreated;
     private bool canCreatePath;
-    private bool isAttacking = false;
+    private bool isAwake = false;
+    [SerializeField] private bool isAttacking = false;
+    public bool isDead = false;
+
     public StateMachine _fsm;
+
+    [SerializeField] private float _trapViewRadius;
+    [SerializeField] private LayerMask _trapMask;
+    public Collider _currentTrapObjective { get; private set; }
+    private float _currentTrapObjectiveDistance = 1000f;
+    public const float MAX_CURRENT_OBJECTIVE_DISTANCE = 1000;
 
     IController _myController;
 
@@ -27,6 +36,7 @@ public class GrayModel : MonoBehaviour
     public float disengageThreshold = 15f;
     public float attackThreshold = 2.5f;
     public float attackDisengageThreshold = 3f;
+    public float attackTrapThreshold = 2f;
 
     [SerializeField]
     public Vector3[] _waypoints;
@@ -41,6 +51,8 @@ public class GrayModel : MonoBehaviour
     public Vector3 _exitPos;
     public Vector3 trapPos;
 
+    private AudioSource _as;
+
     [SerializeField] private Transform CatGrabPos;
     private GameObject currentObjective;
     private BaseballLauncher currentObstacleTrap;
@@ -52,8 +64,8 @@ public class GrayModel : MonoBehaviour
     public event Action<bool> onCatGrab = delegate { };
     public event Action onDeath = delegate { };
     public event Action onHit = delegate { };
-    public event Action onAttack = delegate { };
-
+    public event Action<bool> onAttack = delegate { };
+    public event Action onDisolve = delegate { };
 
     #endregion Events
 
@@ -63,6 +75,7 @@ public class GrayModel : MonoBehaviour
         _fsm.AddState(EnemyStatesEnum.CatState, new CatState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.ChaseState, new ChaseState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.AttackPlayerState, new AttackPlayerState(_fsm, this));
+        _fsm.AddState(EnemyStatesEnum.ChaseTrapState, new ChaseTrapState(_fsm ,this));
         _fsm.AddState(EnemyStatesEnum.AttackTrapState, new AttackTrapState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.EscapeState, new EscapeState(_fsm, this));
         //_fsm.ChangeState(EnemyStatesEnum.CatState);
@@ -72,30 +85,31 @@ public class GrayModel : MonoBehaviour
     {
         _myController = new GrayController(this, GetComponent<GrayView>());
 
+        _as = GetComponent<AudioSource>();
+
         _player = GameVars.Values.Player;
         _cat = GameVars.Values.Cat;
 
         _navMeshAgent = GetComponent<NavMeshAgent>();
 
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        //_lm.AddGray(this);  //Cambiar a GrayModel
+        _lm.AddGray(this);  //Cambiar a GrayModel
         miniMap = FindObjectOfType<MiniMap>();
-        //miniMap.grays.Add(this); // Cambiar a GrayModel
+        miniMap.grays.Add(this); // Cambiar a GrayModel
         miniMap.AddLineRenderer(lineRenderer);
 
         _fsm.ChangeState(EnemyStatesEnum.CatState); //Cambiar estado siempre al final del Start para tener las referencias ya asignadas.
+        onWalk(true);
     }
 
     void Update()
     {
         //_fsm.OnUpdate();
-        _myController.OnUpdate();
-        ResetPathAndSetObjective(); //Horrible resetear en Update, pero con el pathfinding no va a hacer falta.
-
-        /* if(Input.GetKeyDown(KeyCode.L))
+        if(isAwake)
         {
-            ResetPathAndSetObjective();     PARA TESTEO.
-        } */
+            _myController.OnUpdate();
+            ResetPathAndSetObjective(); //Horrible resetear en Update, pero con el pathfinding no va a hacer falta.
+        }
     }
 
     public void SetObjective(GameObject targetPosition)
@@ -114,7 +128,6 @@ public class GrayModel : MonoBehaviour
 
     private void CalculatePath(Vector3 targetPosition)
     {
-        Debug.Log("calculating");
         _navMeshAgent.ResetPath();
         NavMeshPath path = new NavMeshPath();
         if (NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, path))
@@ -134,7 +147,7 @@ public class GrayModel : MonoBehaviour
     {
         if (pathIsCreated) //Probar sin bool. No funciona, entra a Move cuando el waypoint todavia no tiene valor asignado.
         {
-            onWalk(true);
+            onWalk(true); //Esta llamada de evento no funciona por el NavMeshAgent.
             Vector3 dir = _waypoints[_currentWaypoint] - transform.position;
             transform.forward = dir;
             transform.position += transform.forward * _movingSpeed * Time.deltaTime;
@@ -146,7 +159,7 @@ public class GrayModel : MonoBehaviour
                 {
                     //canCreatePath = true; probar con ResetAndSet directo.
                     ResetPathAndSetObjective();
-                    Debug.Log("Reseted");
+                    //Debug.Log("Reseted");
                     
                         
                     
@@ -162,6 +175,43 @@ public class GrayModel : MonoBehaviour
         }
     }
 
+    public void DetectTraps()
+    {
+       
+        Collider[] allTargets = Physics.OverlapSphere(transform.position, _trapViewRadius, _trapMask);
+
+        if (allTargets.Length == 0 || _currentTrapObjective == null)
+        {
+            _currentTrapObjective = null;
+            _currentTrapObjectiveDistance = MAX_CURRENT_OBJECTIVE_DISTANCE;
+        }
+
+        if (_currentTrapObjective == null || !_currentTrapObjective.GetComponent<BaseballLauncher>().active || _currentTrapObjectiveDistance > _trapViewRadius) //cambiar el baseballLauncher por clase padre de trampas.
+        {
+            
+            foreach (var item in allTargets)
+            {
+                
+                if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance)
+                {
+                    if (item.GetComponent<BaseballLauncher>().active) //cambiar el baseballLauncher por clase padre de trampas.
+                    {
+                        _currentTrapObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
+                        _currentTrapObjective = item;
+                        
+                    }
+                }
+            }
+            
+        }
+
+        if (_currentTrapObjectiveDistance < _trapViewRadius && _currentTrapObjective != null)
+        {
+            foundTrapInPath = true;
+        }
+        
+    }
+
     public void GetDoor(Door door)
     {
         OpenDoor(door);
@@ -171,7 +221,7 @@ public class GrayModel : MonoBehaviour
     {
         //_anim.SetBool("IsGrab", true); Ahora se usa el evento de abajo.
         onCatGrab(true);
-        GameVars.Values.TakeCat(_exitPos); //Ver que corno es esto
+        GameVars.Values.TakeCat(_exitPos);
         hasObjective = true;
         _lm.CheckForObjective();
     }
@@ -192,9 +242,16 @@ public class GrayModel : MonoBehaviour
     public void TakeDamage(int DamageAmount)
     {
         _hp -= DamageAmount;
+        GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
         
-        if(_hp <= 0)
+        if(_hp > 0)
         {
+            onHit();
+        }
+        else
+        {
+            isDead = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
             //Desabilitar colliders y lo que haga falta.
         }
@@ -204,40 +261,61 @@ public class GrayModel : MonoBehaviour
     {
         if(!isAttacking)
         {
-            isAttacking = true;
             var dir = _player.transform.position - transform.position;
             transform.forward = dir;
-            onAttack();
+            _navMeshAgent.speed = 0;
+            onWalk(isAttacking);
+            onAttack(!isAttacking);
+            isAttacking = true; 
         }
        
     }
 
     public void AttackTrap()
     {
-        //hacer animación de EMPAttack y asignarle daño al trigger del EMPAttackGO.
-    }
-
-    public void FoundTrapInPath(GameObject trap)
-    {
-        trapPos = trap.transform.position;
-        currentObstacleTrap = trap.GetComponent<BaseballLauncher>();
-        foundTrapInPath = true;
+        if(!isAttacking)
+        {
+            var dir = _currentTrapObjective.transform.position - transform.position;
+            transform.forward = dir;
+            _navMeshAgent.speed = 0;
+            onWalk(isAttacking);
+            onAttack(!isAttacking);
+            isAttacking = true; 
+        }
+        if(!_currentTrapObjective.GetComponent<BaseballLauncher>().active) //cambiar el baseballLauncher por clase padre de trampas.
+        {
+            foundTrapInPath = false;
+        }
     }
 
     public void RevertAttackBool() //Esto se llama por la animación de ataque.
     {
-        isAttacking = false;
+        onAttack(!isAttacking);
+        _navMeshAgent.speed = 1;
+        onWalk(isAttacking);
+        isAttacking = false;   
     }
 
     private void OpenDoor(Door door)
     {
         door.Interact();
+        //Refeencia a View donde hace un play de la animacion de abrir la puerta.
 
         //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
         //TriggerDoorGrayInteract("GrayDoorInteract");
     }
 
-    private void DrawLineRenderer(Vector3[] waypoints)
+    public void Dissolve()
+    {
+        onDisolve();
+    }
+
+    public Vector3 GetVelocity()
+    {
+        return _navMeshAgent.velocity;
+    }
+
+    private void DrawLineRenderer(Vector3[] waypoints)  //Esto deberia ir en el view T.T Apenas este todo bien lindo lo cambio
     {
         lineRenderer.positionCount = waypoints.Length;
         lineRenderer.SetPosition(0, waypoints[0]);
@@ -249,6 +327,16 @@ public class GrayModel : MonoBehaviour
         }
     }
 
+    public void SetPos(Vector3 pos)
+    {
+        transform.position = pos;
+    }
+
+    public void AwakeGray()
+    {
+        isAwake = true;
+    }
+
     public GrayModel SetExitUFO(Vector3 exitPosition)
     {
         Vector3 aux = exitPosition;
@@ -256,8 +344,4 @@ public class GrayModel : MonoBehaviour
 
         return this;
     }
-
-    
-    
-
 }

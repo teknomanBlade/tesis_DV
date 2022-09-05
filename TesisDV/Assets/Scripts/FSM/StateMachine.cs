@@ -7,6 +7,7 @@ public enum EnemyStatesEnum
     ChaseState,
     CatState,
     AttackPlayerState,
+    ChaseTrapState,
     AttackTrapState,
     EscapeState
 }

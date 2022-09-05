@@ -66,7 +66,10 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     public int enemiesAlive = 0;
     public int enemiesToSpawn = 0; */
 
-    public List<Gray> enemiesInScene = new List<Gray>();
+
+    //CAMBIOS PARA MVC
+    //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
+    public List<GrayModel> enemiesInScene = new List<GrayModel>();
     public bool enemyHasObjective = false;
 
     private void Start()
@@ -244,12 +247,12 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         AllUFOs.Add(ufo);
     }
 
-    public void AddGray(Gray gray)
+    public void AddGray(GrayModel gray)
     {
-         enemiesInScene.Add(gray);
+        enemiesInScene.Add(gray);
     }
 
-    public void RemoveGray(Gray gray)
+    public void RemoveGray(GrayModel gray)
     {
         enemiesInScene.Remove(gray);
         if(!InRound)
@@ -266,7 +269,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
             canSpawn = !enemyHasObjective;
             return;
         }
-        foreach (Gray gray in enemiesInScene)
+        foreach (GrayModel gray in enemiesInScene)
         {
             enemyHasObjective = gray.hasObjective;
             
@@ -278,7 +281,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     private void KillAllEnemiesInScene()
     {
-        if (enemiesInScene.Count != 0) enemiesInScene[0].Die();
+        if (enemiesInScene.Count != 0) enemiesInScene[0].TakeDamage(999);
     }
 
     public void ChangeDoorsStatus()

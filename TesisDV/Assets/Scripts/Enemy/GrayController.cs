@@ -12,9 +12,11 @@ public class GrayController : IController
 
         _m.onWalk       +=  v.WalkAnimation;
         _m.onHit        +=  v.HitAnimation;
+        _m.onHit        +=  v.InnerEffectAnimation;
         _m.onDeath      +=  v.DeathAnimation;
         _m.onAttack     +=  v.AttackAnimation;
         _m.onCatGrab    +=  v.CatGrabAnimation;
+        _m.onDisolve    +=  v.DissolveAnimation;
     }
 
     public void OnUpdate()

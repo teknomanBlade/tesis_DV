@@ -11008,11 +11008,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f1c4cc106a05dc4a8bc1b2486b8c8d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movingSpeed: 0
+  _hp: 3
+  _movingSpeed: 1
+  hasObjective: 0
+  isAttacking: 0
+  isDead: 0
+  _trapViewRadius: 5
+  _trapMask:
+    serializedVersion: 2
+    m_Bits: 1024
   pursueThreshold: 10
   disengageThreshold: 15
   attackThreshold: 2.5
   attackDisengageThreshold: 3
+  attackTrapThreshold: 2
   _waypoints: []
   lineRenderer: {fileID: 2830093908131666664}
   _exitPos: {x: 0, y: 0, z: 0}
@@ -11031,10 +11040,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4e738f40bc84e48a0c588c5aa56b5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dissolveMaterial: {fileID: 0}
-  sphereEffectMaterial: {fileID: 0}
-  _hitEffect: {fileID: 0}
-  _deathEffect: {fileID: 0}
+  _myAnimator: {fileID: 1388021197548754304}
+  dissolveMaterial: {fileID: 2100000, guid: 692cfd8edbf1f9341a9f823bb400229e, type: 2}
+  sphereEffectMaterial: {fileID: 2100000, guid: 7be8a71e69411474b90722aaf39ca989, type: 2}
+  _hitEffect: {fileID: 1599742001145485040}
+  _deathEffect: {fileID: 1874793657888937727}
+  _hitWave: {fileID: 5748750279412306119}
 --- !u!1 &5685346073406636324
 GameObject:
   m_ObjectHideFlags: 0
@@ -12418,7 +12429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 520b804d0cc98e44aa89095ab49fe4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myOwner: {fileID: 0}
+  _myOwner: {fileID: 8552485591303705428}
 --- !u!1001 &5200077159841138853
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12480,6 +12491,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 110c86ea10cf51047be419ce710e39f9, type: 3}
+--- !u!1 &5748750279412306119 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 571336254725576802, guid: 110c86ea10cf51047be419ce710e39f9, type: 3}
+  m_PrefabInstance: {fileID: 5200077159841138853}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5748750279412306115 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 571336254725576806, guid: 110c86ea10cf51047be419ce710e39f9, type: 3}
@@ -12492,6 +12508,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4993016087989928857}
     m_Modifications:
+    - target: {fileID: 2732650447250823226, guid: 0f0492d8f961c454abbb39139dbb8f0c, type: 3}
+      propertyPath: _myOwner
+      value: 
+      objectReference: {fileID: 8552485591303705428}
+    - target: {fileID: 2732650447250823226, guid: 0f0492d8f961c454abbb39139dbb8f0c, type: 3}
+      propertyPath: _damageAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6607024354992803781, guid: 0f0492d8f961c454abbb39139dbb8f0c, type: 3}
       propertyPath: m_RootOrder
       value: 2

@@ -6,11 +6,22 @@ public class Baseball : Projectile
 {
     protected override void Start()
     {
-        dieOnImpact = false;
         base.Start();
     }
 
-    protected override void OnContactEffect(Collider collider)
+    private void OnTriggerEnter(Collider other) 
+    {
+        var gray = other.GetComponent<GrayModel>(); //Cambiar a la clase padre de Gray cuando lo armemos.
+
+        if (gray)
+        {
+            //_myOwner.GetDoor(other.GetComponent<Door>());
+            other.GetComponent<GrayModel>().TakeDamage(_damageAmount);
+        }
+        
+    }
+
+    /* protected override void OnContactEffect(Collider collider)
     {
         if (effectUp)
         {
@@ -23,5 +34,5 @@ public class Baseball : Projectile
             }
             if (dieOnImpact) Destroy(gameObject);
         }
-    }
+    } */
 }

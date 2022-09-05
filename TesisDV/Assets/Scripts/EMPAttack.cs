@@ -1,43 +1,28 @@
-using System;
+using System.Runtime.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EMPAttack : MonoBehaviour
 {
-    private Gray _owner;
-    private bool _isAttacking;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private GrayModel _myOwner;
+    [SerializeField] private int _damageAmount;
 
-    public EMPAttack SetOwner(Gray owner)
+    void OnTriggerEnter(Collider other)
     {
-        _owner = owner;
-        _owner.OnGrayAttackChange += GrayAttackChanged;
-        return this;
-    }
+        var player = other.GetComponent<Player>();
+        var bTrap = other.GetComponent<BaseballLauncher>(); //Después cambiar cuando haya un script Trap.
 
-    private void GrayAttackChanged(bool attack)
-    {
-        _isAttacking = attack;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (_isAttacking && other.gameObject.GetComponent<Player>() != null)
+        if (player)
         {
-            //Debug.Log("ENTRO EN TRIGGER DAMAGE PLAYER??");
-            _owner.TriggerPlayerDamage("DamagePlayer");
+            //_myOwner.GetDoor(other.GetComponent<Door>());
+            other.GetComponent<Player>().Damage(_damageAmount);
+            
+        }
+        else if (bTrap && other.GetComponent<BaseballLauncher>())
+        {
+            other.GetComponent<BaseballLauncher>().Inactive();
         }
     }
-
 }

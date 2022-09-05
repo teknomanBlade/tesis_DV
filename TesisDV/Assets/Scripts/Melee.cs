@@ -4,7 +4,8 @@ using UnityEngine;
 
 public abstract class Melee : MonoBehaviour
 {
-    private List<IHittableObserver> _myHittableObservers = new List<IHittableObserver>();
+    //No usamos observer para hacer daño.
+    //private List<IHittableObserver> _myHittableObservers = new List<IHittableObserver>();
     public Animator anim;
     protected Player _player;
     protected bool IsAttacking = false;
@@ -37,7 +38,8 @@ public abstract class Melee : MonoBehaviour
         
     }
 
-    public void AddObserver(IHittableObserver obs)
+    //No usamos observer para hacer daño.
+    /* public void AddObserver(IHittableObserver obs)
     {
         _myHittableObservers.Add(obs);
     }
@@ -50,5 +52,5 @@ public abstract class Melee : MonoBehaviour
     public void TriggerHit(string triggerMessage)
     {
         _myHittableObservers.ForEach(x => x.OnNotify(triggerMessage));
-    }
+    } */
 }

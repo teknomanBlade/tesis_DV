@@ -6,7 +6,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, IDoorGrayInteractObservable
+//CAMBIO PARA MVC
+//No hacemos daño por observer, quito el IPlayerDamageObserver.
+public class Gray : MonoBehaviour, IHittableObserver, IDoorGrayInteractObservable
 {
     private List<IPlayerDamageObserver> _myObserversPlayerDamage = new List<IPlayerDamageObserver>();
     private List<IDoorGrayInteractObserver> _myObserversDoorGrayInteract = new List<IDoorGrayInteractObserver>();
@@ -105,18 +107,39 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         _as = GetComponent<AudioSource>();
         _player = GameVars.Values.Player.gameObject;
         _playerScript = GameVars.Values.Player;
-        AddObserver(_playerScript);
+
+        //CAMBIO PARA MVC
+        //No hacemos daño por observer, quito el IPlayerDamageObserver.
+        //AddObserver(_playerScript);
+
         AddObserverDoorGrayInteract(_playerScript);
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         //EMPAttack = GetComponentInChildren<EMPAttack>();
-        EMPAttack.SetOwner(this);
+
+
+        //CAMBIO PARA MVC
+        //El EMPAttack funciona por trigger.
+
+        //EMPAttack.SetOwner(this);
         //_isMoving = true;
+
+
         _navMeshAgent = GetComponent<NavMeshAgent>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         nearestDoorDistance = 1000;
-        _lm.AddGray(this);
+
+        //CAMBIO PARA MVC
+        //Esta lista ahora referencia GrayModel, no Gray.
+        //_lm.AddGray(this);
+
+
         miniMap = FindObjectOfType<MiniMap>();
-        miniMap.grays.Add(this);
+
+        //CAMBIO PARA MVC
+        //Esta lista ahora referencia GrayModel, no Gray.
+        //miniMap.grays.Add(this);
+
+
         miniMap.AddLineRenderer(lineRenderer);
         //Exit pos lo setea el UFO en el instantiate.
         /*  Vector3 aux = _lm.allUfos[0].transform.position;
@@ -583,8 +606,13 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
             _lm.LoseGame();
             Destroy(_lm.objective);
         }
-        _lm.RemoveGray(this);
-        miniMap.RemoveGray(this);
+
+        //CAMBIO PARA MVC
+        //Esta lista ahora referencia GrayModel, no Gray.
+        //_lm.RemoveGray(this);
+        //miniMap.RemoveGray(this);
+
+
         //_lm.EnemyCameBack();
         Destroy(gameObject);
     }
@@ -673,7 +701,11 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         awake = false;
         _rb.isKinematic = true;
         _cc.enabled = false;
-        _lm.RemoveGray(this);
+
+        //CAMBIO PARA MVC
+        //Esta lista ahora referencia GrayModel, no Gray.
+        //_lm.RemoveGray(this);
+
         _lm.CheckForObjective();
     }
     public void Dissolve()
@@ -697,7 +729,12 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
     public void Dead()
     {
         //dissolveMaterial.SetFloat("_ScaleDissolveGray", 1);
-        miniMap.RemoveGray(this);
+
+        //CAMBIO PARA MVC
+        //Esta lista ahora referencia GrayModel, no Gray.
+        //miniMap.RemoveGray(this);
+
+
         Destroy(gameObject);
     }
 
@@ -855,10 +892,12 @@ public class Gray : MonoBehaviour, IHittableObserver, IPlayerDamageObservable, I
         if (_myObserversPlayerDamage.Contains(obs)) _myObserversPlayerDamage.Remove(obs);
     }
 
-    public void TriggerPlayerDamage(string triggerMessage)
-    {
-        _myObserversPlayerDamage.ForEach(x => x.OnNotifyPlayerDamage(triggerMessage));
-    }
+    //CAMBIO PARA MVC
+        //No usamos observer para daño, todo pasa por el triggerCollider del ataque en cuestion.
+    //public void TriggerPlayerDamage(string triggerMessage)
+    //{
+    //    _myObserversPlayerDamage.ForEach(x => x.OnNotifyPlayerDamage(triggerMessage));
+    //}
 
     public void AddObserverDoorGrayInteract(IDoorGrayInteractObserver obs)
     {
