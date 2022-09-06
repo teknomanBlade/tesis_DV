@@ -225,10 +225,17 @@ public class GrayModel : MonoBehaviour
     public void GrabCat()
     {
         //_anim.SetBool("IsGrab", true); Ahora se usa el evento de abajo.
+        GetNearestUFO();
         onCatGrab(true);
         GameVars.Values.TakeCat(_exitPos);
         hasObjective = true;
         _lm.CheckForObjective();
+    }
+
+    //Le pide el UFO mas cerca al LevelManager y luego cambia el valor de _exitPos.
+    private void GetNearestUFO()
+    {
+        _exitPos = _lm.GetNearestUFO(transform.position);
     }
 
     public void GoBackToShip()
@@ -258,6 +265,7 @@ public class GrayModel : MonoBehaviour
             isDead = true;
             GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
+            _lm.RemoveGray(this);
             //Desabilitar colliders y lo que haga falta.
         }
     }

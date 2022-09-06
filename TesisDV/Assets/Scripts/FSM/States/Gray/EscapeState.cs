@@ -17,7 +17,7 @@ public class EscapeState : IState
     {
         Debug.Log("Entre a Escape");
         
-        //_enemy.SetObjective(_enemy._exitPos);
+        //_enemy.SetObjective(_enemy);
         //_enemy.ResetPathAndSetObjective(_enemy._exitPos);
         _enemy.ResetPathAndSetObjective();
     }

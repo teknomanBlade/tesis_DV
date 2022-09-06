@@ -238,6 +238,23 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         
     }
 
+    public Vector3 GetNearestUFO(Vector3 pos)
+    {
+        float currentDistance = 99999;
+        UFO nearestUFO = AllUFOs[0];
+
+        foreach (UFO ufo in AllUFOs)
+        {
+            if(Vector3.Distance(pos, ufo.transform.position) < currentDistance)
+            {
+                currentDistance = Vector3.Distance(pos, ufo.transform.position);
+                nearestUFO = ufo;
+            }    
+        }
+
+        return nearestUFO.transform.position;    
+    }
+
     public void RemoveUFO(UFO ufo)
     {
         if(AllUFOs.Contains(ufo)) AllUFOs.Remove(ufo);

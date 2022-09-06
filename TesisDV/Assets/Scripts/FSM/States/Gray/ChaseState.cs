@@ -24,15 +24,19 @@ public class ChaseState : IState
     public void OnUpdate()
     {
         _enemy.Move();
+        _enemy.DetectTraps();
 
         if (Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) > _enemy.disengageThreshold)
         {
             _fsm.ChangeState(EnemyStatesEnum.CatState);
         }
-
-        if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.attackThreshold)
+        else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.attackThreshold)
         {
             _fsm.ChangeState(EnemyStatesEnum.AttackPlayerState);
+        }
+        else if(_enemy.foundTrapInPath)
+        {
+            _fsm.ChangeState(EnemyStatesEnum.ChaseTrapState);
         }
     }
 
