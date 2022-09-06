@@ -16,14 +16,16 @@ public class AttackPlayerState : IState
     public void OnStart()
     {
         Debug.Log("Entre a AttackPlayer");
-        _enemy.SetObjective(_enemy._player.gameObject);
-        //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
-        _enemy.ResetPathAndSetObjective();
+        //_enemy.SetObjective(_enemy._player.gameObject);
+        _enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+        //_enemy.ResetPathAndSetObjective();
         //_enemy.AttackPlayer();
     }
 
     public void OnUpdate() //Chequear que la animacion de ataque no se solape.
     {
+        _enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+
         if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.attackThreshold)
         {
             _enemy.AttackPlayer();

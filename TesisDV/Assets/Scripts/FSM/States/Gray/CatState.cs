@@ -17,12 +17,13 @@ public class CatState : IState
     {
         Debug.Log("Entre a CatState");
 
-        _enemy.SetObjective(_enemy._cat.gameObject);
-        //_enemy.ResetPathAndSetObjective(_enemy._cat.transform.position);
-        _enemy.ResetPathAndSetObjective();
+        //_enemy.SetObjective(_enemy._cat.gameObject);
+        _enemy.ResetPathAndSetObjective(_enemy._cat.transform.position);
+        //_enemy.ResetPathAndSetObjective();
     }
     public void OnUpdate()
     {
+        _enemy.ResetPathAndSetObjective(_enemy._cat.transform.position);
         _enemy.Move();
         _enemy.DetectTraps();
 
@@ -30,6 +31,7 @@ public class CatState : IState
         {
             _enemy.GrabCat();
             GameVars.Values.ShowNotification("The cat has been captured! You must prevent the grays getting to the ship!");
+
             _fsm.ChangeState(EnemyStatesEnum.EscapeState);
         }
         else if (_enemy._lm.enemyHasObjective)

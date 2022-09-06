@@ -10,6 +10,7 @@ public class GrayModel : MonoBehaviour
     [SerializeField] private int _hp;
     [SerializeField] private float _movingSpeed;
     public bool hasObjective;
+    [SerializeField] private Transform _catGrabPos;
     private bool pathIsCreated;
     private bool canCreatePath;
     private bool isAwake = false;
@@ -113,7 +114,8 @@ public class GrayModel : MonoBehaviour
         if(isAwake)
         {
             _myController.OnUpdate();
-            ResetPathAndSetObjective(); //Horrible resetear en Update, pero con el pathfinding no va a hacer falta.
+            
+            //ResetPathAndSetObjective(); //Horrible resetear en Update, pero con el pathfinding no va a hacer falta. Se resetea en los States ahora.
         }
     }
 
@@ -122,11 +124,11 @@ public class GrayModel : MonoBehaviour
         currentObjective = targetPosition;
     }
 
-    public void ResetPathAndSetObjective()//Vector3 targetPosition)
+    public void ResetPathAndSetObjective(Vector3 targetPosition)
     {
         _navMeshAgent.ResetPath();
-        //CalculatePath(targetPosition);  
-        CalculatePath(currentObjective.transform.position);
+        CalculatePath(targetPosition);  
+        //CalculatePath(currentObjective.transform.position);
         _currentWaypoint = 0;
         pathIsCreated = false;
     }
@@ -163,7 +165,7 @@ public class GrayModel : MonoBehaviour
                 if (_currentWaypoint + 1 > _waypoints.Length) //-1
                 {
                     //canCreatePath = true; probar con ResetAndSet directo.
-                    ResetPathAndSetObjective();
+                    //ResetPathAndSetObjective(); Se resetea en los states ahora.
                     //Debug.Log("Reseted");
                     
                         
@@ -224,18 +226,38 @@ public class GrayModel : MonoBehaviour
 
     public void GrabCat()
     {
+        //GetNearestUFO(); Cuesta conseguir el Exit pos y despues escapar, despues lo arreglo.
         //_anim.SetBool("IsGrab", true); Ahora se usa el evento de abajo.
-        GetNearestUFO();
         onCatGrab(true);
         GameVars.Values.TakeCat(_exitPos);
         hasObjective = true;
         _lm.CheckForObjective();
     }
 
+    public void EscapeWithCat()
+    {
+        _lm.objective.transform.position = CatGrabPos.transform.position;
+    }
+
+    public void DropCat()
+    {
+        hasObjective = false;
+        GameVars.Values.SetCatFree();
+        _lm.CheckForObjective();
+    }
+
     //Le pide el UFO mas cerca al LevelManager y luego cambia el valor de _exitPos.
     private void GetNearestUFO()
     {
-        _exitPos = _lm.GetNearestUFO(transform.position);
+        float currentDistance = 99999;
+
+        foreach (UFO ufo in _lm.AllUFOs)
+        {
+            if(Vector3.Distance(transform.position, ufo.transform.position) < currentDistance)
+            {
+                currentDistance = Vector3.Distance(transform.position, ufo.transform.position);
+            } 
+        }
     }
 
     public void GoBackToShip()
@@ -262,10 +284,16 @@ public class GrayModel : MonoBehaviour
         }
         else
         {
+            isAwake= false;
             isDead = true;
             GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
             _lm.RemoveGray(this);
+            if(hasObjective)
+            {
+                DropCat();
+            }
+            _navMeshAgent.speed = 0;
             //Desabilitar colliders y lo que haga falta.
         }
     }

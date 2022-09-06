@@ -238,7 +238,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         
     }
 
-    public Vector3 GetNearestUFO(Vector3 pos)
+/*     public UFO GetNearestUFO(Vector3 pos)
     {
         float currentDistance = 99999;
         UFO nearestUFO = AllUFOs[0];
@@ -252,8 +252,8 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
             }    
         }
 
-        return nearestUFO.transform.position;    
-    }
+        return nearestUFO;    
+    } */
 
     public void RemoveUFO(UFO ufo)
     {

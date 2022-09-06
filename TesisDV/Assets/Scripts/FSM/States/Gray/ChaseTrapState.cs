@@ -17,11 +17,12 @@ public class ChaseTrapState : IState
     {
         Debug.Log("Entre a ChaseTrapState");
 
-        _enemy.SetObjective(_enemy._currentTrapObjective.gameObject);
-        _enemy.ResetPathAndSetObjective();
+        //_enemy.SetObjective(_enemy._currentTrapObjective.gameObject);
+        _enemy.ResetPathAndSetObjective(_enemy._currentTrapObjective.transform.position);
     }
     public void OnUpdate()
     {
+        _enemy.ResetPathAndSetObjective(_enemy._currentTrapObjective.transform.position);
         _enemy.Move();
 
         if(Vector3.Distance(_enemy._currentTrapObjective.transform.position, _enemy.transform.position) < _enemy.attackThreshold)

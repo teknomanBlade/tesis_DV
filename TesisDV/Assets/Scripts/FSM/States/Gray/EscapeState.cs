@@ -17,17 +17,24 @@ public class EscapeState : IState
     {
         Debug.Log("Entre a Escape");
         
-        //_enemy.SetObjective(_enemy);
+        //_enemy.SetObjective(_enemy.currentExitUFO);
         //_enemy.ResetPathAndSetObjective(_enemy._exitPos);
-        _enemy.ResetPathAndSetObjective();
+
+        _enemy.ResetPathAndSetObjective(_enemy._exitPos);
     }
     public void OnUpdate()
     {
+        _enemy.ResetPathAndSetObjective(_enemy._exitPos);
         _enemy.Move();
+        if (_enemy.hasObjective) _enemy.EscapeWithCat();
 
-        if (Vector3.Distance(_enemy.transform.position, _enemy._exitPos) < 3f)
+        if (Vector3.Distance(_enemy.transform.position, _enemy._exitPos) < 1.5f)
         {
             _enemy.GoBackToShip();
+        }
+        else if (!_enemy._lm.enemyHasObjective)
+        {
+            _fsm.ChangeState(EnemyStatesEnum.CatState);
         }
     }
     public void OnExit()
