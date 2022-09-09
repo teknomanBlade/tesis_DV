@@ -33,6 +33,11 @@ using UnityEngine;
             return inventory.ContainsID(2) && inventory.ContainsID(6);
         }
 
+        public bool HasSlowTrapItems(Inventory inventory)
+        {
+            return inventory.ContainsID(4);
+        }
+
         public bool CanCraft(Inventory inventory)
         {
             _inventory = inventory;

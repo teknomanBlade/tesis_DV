@@ -73,6 +73,7 @@ public class GameVars : MonoBehaviour
     [Header("Crafting Recipes")]
     public CraftingRecipe BaseballLauncher;
     public CraftingRecipe TVTrap;
+    public CraftingRecipe SlowTrap;
     public TVCraftingRecipe TVTrapAgain;
 
     [Header("Game")]

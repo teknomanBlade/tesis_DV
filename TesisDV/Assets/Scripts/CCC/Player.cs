@@ -229,6 +229,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             //GameVars.Values.TVTrapAgain.Craft(_inventory);
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            GameVars.Values.SlowTrap.Craft(_inventory);
+            //GameVars.Values.TVTrapAgain.Craft(_inventory);
+        }
+
         if(Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
         {
             var screenPause = Instantiate(Resources.Load<ScreenPause>("PauseCanvas"));

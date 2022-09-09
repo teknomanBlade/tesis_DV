@@ -61,5 +61,18 @@ public class TrapHotBar : MonoBehaviour
         {
             trapSlots[1].DeactivateImage();
         }
+
+        if (GameVars.Values.SlowTrap.HasSlowTrapItems(inventory))
+        {
+            if(isFaded)
+            {
+                Fade();
+            }
+            trapSlots[2].ActivateImage();
+        }
+        else
+        {
+            trapSlots[2].DeactivateImage();
+        }
     }
 }
