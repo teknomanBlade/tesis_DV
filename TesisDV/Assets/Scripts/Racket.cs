@@ -9,6 +9,7 @@ public class Racket : Melee
     [SerializeField]
     private ParticleSystem _trail;
     private MeshRenderer _renderer;
+    private MeshFilter _meshFilter;
     private bool hitStateActive;
     [SerializeField]
     private bool _isDestroyed;
@@ -16,6 +17,7 @@ public class Racket : Melee
     private int _damageAmount = 1;
     public delegate void OnRacketDestroyedDelegate(bool destroyed);
     public event OnRacketDestroyedDelegate OnRacketDestroyed;
+    [SerializeField] private Mesh _damagedRacketMesh;
     public Texture textureState1;
     public Texture textureState2;
     public Texture textureState3;
@@ -25,6 +27,7 @@ public class Racket : Melee
         hitsRemaining = 7;
         SetStateRacketDamaged(hitsRemaining);
         _renderer = GetComponent<MeshRenderer>();
+        _meshFilter = GetComponent<MeshFilter>();
     }
 
     public void OnNewRacketGrabbed()
@@ -111,7 +114,15 @@ public class Racket : Melee
         {
             Debug.Log("HITS 1");
             _renderer.material.SetTexture("_MainTexture", textureState3);
+            SetDamagedRacket();
         }
+    }
+
+    public void SetDamagedRacket()
+    {
+        _meshFilter.mesh = _damagedRacketMesh;
+        //transform.position -= 0.07f;
+        transform.localRotation = Quaternion.Euler(2.658f,42.094f,73.143f);
     }
     
 }

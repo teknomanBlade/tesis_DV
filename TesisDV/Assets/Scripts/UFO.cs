@@ -169,8 +169,16 @@ public class UFO : MonoBehaviour, IInRoundObserver
             {
                 //CAMBIO PARA MVC
                 //La referencia cambia a GrayModel
-                currentGray = Instantiate(_tallGrayPrefab, transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
 
+                if(_totalGrays == 1) //Por ahora hasta hacer el Pool.
+                {
+                    currentGray = Instantiate(_tallGrayPrefab, transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
+                }
+                else
+                {
+                    currentGray = Instantiate(_grayPrefab, transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
+                }
+                
                 //_lm.EnemySpawned();
                 //SpawnGreyLerp();
                 spawning = false;
