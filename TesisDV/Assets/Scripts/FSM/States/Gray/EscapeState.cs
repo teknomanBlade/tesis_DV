@@ -5,9 +5,9 @@ using UnityEngine;
 public class EscapeState : IState
 {
     private StateMachine _fsm;
-    private GrayModel _enemy;
+    private Enemy _enemy;
 
-    public EscapeState(StateMachine fsm, GrayModel p)
+    public EscapeState(StateMachine fsm, Enemy p)
     {
         _fsm = fsm;
         _enemy = p;

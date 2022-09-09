@@ -69,7 +69,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     //CAMBIOS PARA MVC
     //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
-    public List<GrayModel> enemiesInScene = new List<GrayModel>();
+    public List<Enemy> enemiesInScene = new List<Enemy>();
     public bool enemyHasObjective = false;
 
     private void Start()
@@ -264,12 +264,12 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         AllUFOs.Add(ufo);
     }
 
-    public void AddGray(GrayModel gray)
+    public void AddGray(Enemy gray)
     {
         enemiesInScene.Add(gray);
     }
 
-    public void RemoveGray(GrayModel gray)
+    public void RemoveGray(Enemy gray)
     {
         enemiesInScene.Remove(gray);
         if(!InRound)
@@ -286,7 +286,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
             canSpawn = !enemyHasObjective;
             return;
         }
-        foreach (GrayModel gray in enemiesInScene)
+        foreach (Enemy gray in enemiesInScene)
         {
             enemyHasObjective = gray.hasObjective;
             

@@ -220,9 +220,9 @@ public class BaseballLauncher : Item, IMovable
 
         //CAMBIOS PARA MVC
         //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
-        collidersObjectives = allTargets.Where(x => x.GetComponent<GrayModel>().isActiveAndEnabled == true).ToArray();
+        collidersObjectives = allTargets.Where(x => x.GetComponent<Enemy>().isActiveAndEnabled == true).ToArray();
         //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
-        collidersObjectivesDisabled = allTargets.Where(x => x.GetComponent<GrayModel>().isActiveAndEnabled == false).ToArray();
+        collidersObjectivesDisabled = allTargets.Where(x => x.GetComponent<Enemy>().isActiveAndEnabled == false).ToArray();
 
 
         if (allTargets.Length == 0 || _currentObjective == null)
@@ -232,13 +232,13 @@ public class BaseballLauncher : Item, IMovable
         }
         //Si no tenemos objetivo actual buscamos el más cercano y lo hacemos objetivo.
         //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
-        if (_currentObjective == null || _currentObjective.GetComponent<GrayModel>().isDead || _currentObjectiveDistance > viewRadius)
+        if (_currentObjective == null || _currentObjective.GetComponent<Enemy>().isDead || _currentObjectiveDistance > viewRadius)
         {
             foreach (var item in allTargets)
             {
                 if (Vector3.Distance(transform.position, item.transform.position) < _currentObjectiveDistance)
                 {
-                    if (!item.GetComponent<GrayModel>().isDead)
+                    if (!item.GetComponent<Enemy>().isDead)
                     {
                         _currentObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
                         _currentObjective = item;
@@ -255,7 +255,7 @@ public class BaseballLauncher : Item, IMovable
             //StartCoroutine("RoutineEndSearchingForObjectives");
 
             //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
-            Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<GrayModel>().GetVelocity() * _futureTime * Time.deltaTime);
+            Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<Enemy>().GetVelocity() * _futureTime * Time.deltaTime);
             //Vector3 dir = item.transform.position - transform.position;
 
             Vector3 dir = futurePos - transform.position;

@@ -10,12 +10,12 @@ public class MiniMap : MonoBehaviour
 
     //CAMBIOS PARA MVC
     //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
-    public List<GrayModel> grays;
+    public List<Enemy> grays;
     public List<Vector3> wayPointsOfAllGrey;
 
     //CAMBIOS PARA MVC
     //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
-    public List<Tuple<GrayModel, List<Vector3>>> grayWithGreyPoints;
+    public List<Tuple<Enemy, List<Vector3>>> grayWithGreyPoints;
 
     public GameObject player;
 
@@ -55,10 +55,10 @@ public class MiniMap : MonoBehaviour
         {
             wayPointsOfAllGrey = grays.Where(x => x != x.isDead || x != null || x.gameObject != null).OrderBy(x => Vector3.Distance(x.gameObject.transform.position, player.transform.position)).SelectMany(x => x._waypoints).ToList();
 
-            grayWithGreyPoints = grays.Aggregate(new List<Tuple<GrayModel, List<Vector3>>>(), (myGrayWithWayPoint, myGray) =>
+            grayWithGreyPoints = grays.Aggregate(new List<Tuple<Enemy, List<Vector3>>>(), (myGrayWithWayPoint, myGray) =>
             {
                 if (myGray != myGray.isDead)
-                    myGrayWithWayPoint.Add(new Tuple<GrayModel, List<Vector3>>(myGray, myGray._waypoints.ToList()));
+                    myGrayWithWayPoint.Add(new Tuple<Enemy, List<Vector3>>(myGray, myGray._waypoints.ToList()));
 
 
                 return myGrayWithWayPoint;

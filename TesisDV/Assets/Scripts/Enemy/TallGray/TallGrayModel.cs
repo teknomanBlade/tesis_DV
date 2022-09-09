@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GrayModel : Enemy
+public class TallGrayModel : Enemy
 {
     public StateMachine _fsm;
     IController _myController;
@@ -26,7 +26,7 @@ public class GrayModel : Enemy
 
     private void Start()
     {
-        _myController = new GrayController(this, GetComponent<GrayView>());
+        _myController = new TallGrayController(this, GetComponent<TallGrayView>());
 
         _as = GetComponent<AudioSource>();
 

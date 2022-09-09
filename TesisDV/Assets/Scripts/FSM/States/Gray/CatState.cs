@@ -5,9 +5,9 @@ using UnityEngine;
 public class CatState : IState
 {
     private StateMachine _fsm;
-    private GrayModel _enemy;
+    private Enemy _enemy;
 
-    public CatState(StateMachine fsm, GrayModel p)
+    public CatState(StateMachine fsm, Enemy p)
     {
         _fsm = fsm;
         _enemy = p;

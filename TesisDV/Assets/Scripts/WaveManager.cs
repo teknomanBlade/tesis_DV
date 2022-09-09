@@ -51,8 +51,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     [Header("UFO 1 Details")]
     [SerializeField]
     private Vector3 _finalPos1;
-    [SerializeField]
-    private int _totalGraysUFO1;
+    [SerializeField] private int _totalGraysUFO1;
 
     [Header("UFO 2 Details")]
 
@@ -62,8 +61,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     [SerializeField]
     private int _totalGraysUFO2;
 
-    [SerializeField]
-    private GameObject UFOIndicatorPrefab;
+    [SerializeField] private GameObject UFOIndicatorPrefab;
     private GameObject UFOIndicator;
     private GameObject UFOIndicator2;
     public delegate void OnRoundChangedDelegate(int newVal);

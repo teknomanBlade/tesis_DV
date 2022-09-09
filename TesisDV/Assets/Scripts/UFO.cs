@@ -30,11 +30,11 @@ public class UFO : MonoBehaviour, IInRoundObserver
     [Range(0,1)]
     public float sliderSoundVolume;
     private float _spawnTimer;
-    public GameObject grayPrefab;
-    [SerializeField]
-    private GameObject UFOIndicatorPrefab;
+    [SerializeField] private GameObject _grayPrefab;
+    [SerializeField] private GameObject _tallGrayPrefab;
+    [SerializeField] private GameObject UFOIndicatorPrefab;
     private GameObject UFOIndicator;
-    public GrayModel currentGray;
+    public Enemy currentGray;
     public float timeLimit;
     public float timer;
     public bool spawning = false;
@@ -45,7 +45,6 @@ public class UFO : MonoBehaviour, IInRoundObserver
     private bool _inPosition;
     private bool _canLeavePlanet;
     private GameObject parent;
-
 
     private void Awake()
     {
@@ -170,7 +169,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
             {
                 //CAMBIO PARA MVC
                 //La referencia cambia a GrayModel
-                currentGray = Instantiate(grayPrefab, transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<GrayModel>().SetExitUFO(transform.position);
+                currentGray = Instantiate(_tallGrayPrefab, transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
 
                 //_lm.EnemySpawned();
                 //SpawnGreyLerp();
@@ -245,6 +244,11 @@ public class UFO : MonoBehaviour, IInRoundObserver
         Gizmos.DrawWireCube(transform.position - checkCubePos, checkCubeExt);
         Gizmos.DrawWireCube(transform.position - startPos, new Vector3(0.5f, 0.5f, 0.5f));
         Gizmos.DrawWireCube(transform.position - endPos, new Vector3(0.5f, 0.5f, 0.5f));
+    }
+
+    public void NextGrayToSpawn(int totalGrays)
+    {
+        //if(totalGrays)
     }
 
     public UFO SetSpawnPos(Vector3 newPos)

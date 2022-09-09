@@ -5,9 +5,9 @@ using UnityEngine;
 public class ChaseTrapState : IState
 {
     private StateMachine _fsm;
-    private GrayModel _enemy;
+    private Enemy _enemy;
 
-    public ChaseTrapState(StateMachine fsm, GrayModel p)
+    public ChaseTrapState(StateMachine fsm, Enemy p)
     {
         _fsm = fsm;
         _enemy = p;

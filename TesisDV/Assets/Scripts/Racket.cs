@@ -69,7 +69,7 @@ public class Racket : Melee
     {
         if (IsAttacking)
         {
-            var enemyGray = other.GetComponent<GrayModel>(); //Cambiar a la clase padre despues como todo lo que use para hacer daño.
+            var enemyGray = other.GetComponent<Enemy>(); //Cambiar a la clase padre despues como todo lo que use para hacer daño.
 
             //if (other.gameObject.layer.Equals(GameVars.Values.GetEnemyLayer()))
             if (enemyGray)
@@ -85,7 +85,7 @@ public class Racket : Melee
                     OnRacketDestroyed?.Invoke(_isDestroyed);
                     _player.RacketInventoryRemoved();
                 }
-                other.GetComponent<GrayModel>().TakeDamage(_damageAmount);
+                other.GetComponent<Enemy>().TakeDamage(_damageAmount);
                 IsAttacking = false; //Lo dejo en falso para que no repita el daño, veremos.
 
                 //No usamos observer para hacer daño.

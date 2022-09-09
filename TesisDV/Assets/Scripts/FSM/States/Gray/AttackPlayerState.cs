@@ -5,9 +5,9 @@ using UnityEngine;
 public class AttackPlayerState : IState
 {
     private StateMachine _fsm;
-    private GrayModel _enemy;
+    private Enemy _enemy;
 
-    public AttackPlayerState(StateMachine fsm, GrayModel p)
+    public AttackPlayerState(StateMachine fsm, Enemy p)
     {
         _fsm = fsm;
         _enemy = p;
