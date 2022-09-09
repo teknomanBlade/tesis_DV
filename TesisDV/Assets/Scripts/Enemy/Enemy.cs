@@ -253,6 +253,8 @@ public abstract class Enemy : MonoBehaviour
 
     public void GoBackToShip()
     {
+        _lm.RemoveGray(this);
+
         if (hasObjective)
         {
             _lm.LoseGame();
