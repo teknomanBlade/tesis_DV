@@ -10,7 +10,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private int _hp;
     [SerializeField] private float _movingSpeed;
     [SerializeField] private Transform _catGrabPos;
-    
+
     protected bool isAwake = false;
     public bool isDead = false;
 
@@ -66,6 +66,7 @@ public abstract class Enemy : MonoBehaviour
     public event Action onHit = delegate { };
     public event Action<bool> onAttack = delegate { };
     public event Action onDisolve = delegate { };
+    public event Action onEndSpawn = delegate { };
 
     #endregion Events
 
@@ -271,6 +272,11 @@ public abstract class Enemy : MonoBehaviour
     public void AwakeGray()
     {
         isAwake = true;
+    }
+
+    public void EndSpawnAnim()
+    {
+        onEndSpawn();
     }
 
     public void SetPos(Vector3 pos)

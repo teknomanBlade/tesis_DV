@@ -11,12 +11,12 @@ public class Baseball : Projectile
 
     private void OnTriggerEnter(Collider other) 
     {
-        var gray = other.GetComponent<GrayModel>(); //Cambiar a la clase padre de Gray cuando lo armemos.
+        var gray = other.GetComponent<Enemy>(); //Cambiar a la clase padre de Gray cuando lo armemos.
 
         if (gray)
         {
             //_myOwner.GetDoor(other.GetComponent<Door>());
-            other.GetComponent<GrayModel>().TakeDamage(_damageAmount);
+            other.GetComponent<Enemy>().TakeDamage(_damageAmount);
         }
         
     }

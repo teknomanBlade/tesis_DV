@@ -90,4 +90,9 @@ public class TallGrayModel : Enemy
         //TriggerDoorGrayInteract("GrayDoorInteract");
     }
 
+    public void Destroy() //Se llama desde la animacion.
+    {
+        Destroy(gameObject);
+    }
+
 }

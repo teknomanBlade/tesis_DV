@@ -11010,25 +11010,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hp: 3
   _movingSpeed: 1
-  hasObjective: 0
   _catGrabPos: {fileID: 3281648521745189981}
-  isAttacking: 0
   isDead: 0
-  _trapViewRadius: 5
-  _trapMask:
-    serializedVersion: 2
-    m_Bits: 1024
   pursueThreshold: 10
   disengageThreshold: 15
   attackThreshold: 2
   attackDisengageThreshold: 3
   attackTrapThreshold: 2
-  _waypoints: []
-  lineRenderer: {fileID: 2830093908131666664}
+  _player: {fileID: 0}
+  _cat: {fileID: 0}
+  hasObjective: 0
+  isAttacking: 0
   _exitPos: {x: 0, y: 0, z: 0}
   trapPos: {x: 0, y: 0, z: 0}
-  CatGrabPos: {fileID: 3281648521745189981}
+  _waypoints: []
   foundTrapInPath: 0
+  _trapViewRadius: 5
+  _trapMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  _lm: {fileID: 0}
+  lineRenderer: {fileID: 2830093908131666664}
+  _timeToAwake: 5
 --- !u!114 &8188055648448647315
 MonoBehaviour:
   m_ObjectHideFlags: 0

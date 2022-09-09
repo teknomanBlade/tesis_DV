@@ -17,6 +17,7 @@ public class TallGrayController : IController
         _m.onAttack     +=  v.AttackAnimation;
         _m.onCatGrab    +=  v.CatGrabAnimation;
         _m.onDisolve    +=  v.DissolveAnimation;
+        _m.onEndSpawn   +=  v.EndSpawnAnim;
     }
 
     public void OnUpdate()

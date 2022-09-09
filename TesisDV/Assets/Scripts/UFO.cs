@@ -24,6 +24,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
     public Vector3 checkCubePos = new Vector3(0f, 4f, 0f);
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
+    public Vector3 startPosTall;
     private Vector3 _spawnPos;
     private Vector3 _finalPos;
     public Vector3 endPos;
@@ -126,6 +127,8 @@ public class UFO : MonoBehaviour, IInRoundObserver
                 //CAMBIO PARA MVC
                 //Creo que no hace faltar hacer awake con el Gray nuevo, ampliaremos.
                 //Estaba equivocado, hace falta para que el NavMesh busque path despues del awake.
+
+
                 currentGray.AwakeGray();
 
                 BeginSpawn();
@@ -172,7 +175,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
 
                 if(_totalGrays == 1) //Por ahora hasta hacer el Pool.
                 {
-                    currentGray = Instantiate(_tallGrayPrefab, transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
+                    currentGray = Instantiate(_tallGrayPrefab, transform.position - startPosTall, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
                 }
                 else
                 {

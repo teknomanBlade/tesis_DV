@@ -28,6 +28,11 @@ public class TallGrayView : MonoBehaviour
         _myAnimator = GetComponent<Animator>();
     }
 
+    public void EndSpawnAnim()
+    {
+        _myAnimator.SetBool("IsSpawning", false);
+    }
+
     public void WalkAnimation(bool value)
     {
         _myAnimator.SetBool("IsWalking", value);
