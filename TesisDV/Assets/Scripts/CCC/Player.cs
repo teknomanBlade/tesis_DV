@@ -658,6 +658,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(40f);
             return;
         }
+        if (lookingAt.gameObject.TryGetComponent<Drawer>(out Drawer drawer))
+        {
+            crosshair.sprite = GameVars.Values.crosshairHandHold;
+            ChangeCrosshairSize(40f);
+            return;
+        }
         if (lookingAt.gameObject.TryGetComponent<BaseballLauncher>(out BaseballLauncher baseballLauncher))
         {
             baseballLauncher.HasPlayerTennisBallBox = _inventory.ContainsID(8);

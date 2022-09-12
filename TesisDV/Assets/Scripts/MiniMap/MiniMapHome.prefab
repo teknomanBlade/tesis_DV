@@ -1134,6 +1134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: RemoteControl
   _itemImage: {fileID: 21300000, guid: a3bda8a6fe5fffe4cb425b983183d2e5, type: 3}
+  itemType: 0
   myCraftingID: 6
   myPrefab: {fileID: 7828175701847657899, guid: d9a4101c610f793419ee3af9dcb3cc46, type: 3}
   timeLimit: 3
@@ -1757,7 +1758,7 @@ Transform:
   m_LocalScale: {x: 1.395445, y: 2.0324204, z: 1.2333}
   m_Children: []
   m_Father: {fileID: 2539174413864556304}
-  m_RootOrder: 21
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: -90}
 --- !u!33 &4154861997865752049
 MeshFilter:
@@ -5668,6 +5669,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: Tennis Ball
   _itemImage: {fileID: 21300000, guid: 7f228ebb1835f10488bd7d9087480e2c, type: 3}
+  itemType: 0
   myCraftingID: 1
   myPrefab: {fileID: 4622797999073881461, guid: aa752df10be493443b5cfd6ce76fa576, type: 3}
   timeLimit: 3
@@ -15504,87 +15506,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &3156592268419759314
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2343463199012497000}
-  - component: {fileID: 1669283811526453709}
-  - component: {fileID: 3516901748097211655}
-  m_Layer: 17
-  m_Name: TVTrapCabinet
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2343463199012497000
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3156592268419759314}
-  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: -0.14976814, y: 0.22679354, z: -21.032326}
-  m_LocalScale: {x: 2.668161, y: 2.668161, z: 2.668161}
-  m_Children: []
-  m_Father: {fileID: 2539174413864556304}
-  m_RootOrder: 19
-  m_LocalEulerAnglesHint: {x: -90, y: -90, z: 0}
---- !u!33 &1669283811526453709
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3156592268419759314}
-  m_Mesh: {fileID: 6715375062900545627, guid: 1692e6d95f5b6d6439a27826a63fdcae, type: 3}
---- !u!23 &3516901748097211655
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3156592268419759314}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 157caa631d51a914bb4cc8de3e237da5, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &3156871899266172451
 GameObject:
   m_ObjectHideFlags: 0
@@ -16805,6 +16726,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startingPosition: {x: 0, y: 0, z: 0}
+  _myPos: []
 --- !u!195 &2463730750894923320
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -18411,6 +18333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: DoorWhite
   _itemImage: {fileID: 0}
+  itemType: 0
   IsFront: 0
   doorTriggers: []
 --- !u!95 &6705063531497854303
@@ -18581,6 +18504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: DoorWhite
   _itemImage: {fileID: 0}
+  itemType: 0
   IsFront: 0
   doorTriggers: []
 --- !u!95 &6722947544070552177
@@ -22833,7 +22757,7 @@ Transform:
   - {fileID: 5187857680698926227}
   - {fileID: 498752119012853580}
   m_Father: {fileID: 2539174413864556304}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: -180, y: 90, z: 0}
 --- !u!33 &109819299804052397
 MeshFilter:
@@ -22946,6 +22870,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: DoorBlack
   _itemImage: {fileID: 0}
+  itemType: 0
   IsFront: 0
   doorTriggers: []
 --- !u!114 &5112454978053911855
@@ -24123,6 +24048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: Screwdriver
   _itemImage: {fileID: 21300000, guid: 2ae4dfdf0c5b8134cb67b35af0148de0, type: 3}
+  itemType: 0
   myCraftingID: 0
   myPrefab: {fileID: 0}
   timeLimit: 3
@@ -27287,7 +27213,7 @@ Transform:
   m_LocalScale: {x: 1.4129512, y: 1.8146611, z: 1.277016}
   m_Children: []
   m_Father: {fileID: 2539174413864556304}
-  m_RootOrder: 22
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 90}
 --- !u!33 &8491605859505409906
 MeshFilter:
@@ -32057,7 +31983,6 @@ Transform:
   - {fileID: 5020359680822904786}
   - {fileID: 5222540708713288390}
   - {fileID: 7317893204054436919}
-  - {fileID: 2343463199012497000}
   - {fileID: 3902918313310843912}
   - {fileID: 1010727627327134292}
   - {fileID: 4789548640013975767}
@@ -38159,6 +38084,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: TV
   _itemImage: {fileID: 21300000, guid: cdfc1e4462db7ab42b1fe82c11547813, type: 3}
+  itemType: 0
   myCraftingID: 6
   myPrefab: {fileID: 7981981303272158861}
   timeLimit: 3
@@ -38176,6 +38102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: TV
   _itemImage: {fileID: 21300000, guid: cdfc1e4462db7ab42b1fe82c11547813, type: 3}
+  itemType: 0
   myCraftingID: 0
   myPrefab: {fileID: 0}
   timeLimit: 3
@@ -39114,6 +39041,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58489d74360154479967f09af073fb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grays: []
+  wayPointsOfAllGrey: []
+  player: {fileID: 0}
+  lineRenderers: []
+  prefabIndicador: {fileID: 0}
+  ShowGreyCount: 0
 --- !u!1 &8184140525240753616
 GameObject:
   m_ObjectHideFlags: 0
@@ -39690,6 +39623,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: DoorWhite
   _itemImage: {fileID: 0}
+  itemType: 0
   IsFront: 0
   doorTriggers: []
 --- !u!95 &2127089531304243987
@@ -42948,6 +42882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: Tennis Ball
   _itemImage: {fileID: 21300000, guid: 7f228ebb1835f10488bd7d9087480e2c, type: 3}
+  itemType: 0
   myCraftingID: 1
   myPrefab: {fileID: 4622797999073881461, guid: aa752df10be493443b5cfd6ce76fa576, type: 3}
   timeLimit: 3

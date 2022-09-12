@@ -56,9 +56,10 @@ public class GameVars : MonoBehaviour
     [Header("Resources")]
     public Sprite crosshair;
     public Sprite crosshairDoor;
-    public Sprite crosshairHandGrab;
     public Sprite crosshairActivation;
     public Sprite crosshairReloadTrap1;
+    public Sprite crosshairHandGrab;
+    public Sprite crosshairHandHold;
     public Sprite imageBaseballTrap;
     public CraftingScreen craftingScreen;
     public Text notifications;
@@ -128,6 +129,7 @@ public class GameVars : MonoBehaviour
         crosshair = Resources.Load<Sprite>("crosshair");
         crosshairDoor = Resources.Load<Sprite>("OpenDoor");
         crosshairHandGrab = Resources.Load<Sprite>("HandGrab");
+        crosshairHandHold = Resources.Load<Sprite>("HandHold");
         crosshairActivation = Resources.Load<Sprite>("ButtonPress");
         crosshairReloadTrap1 = Resources.Load<Sprite>("ReloadTrap1");
         imageBaseballTrap = Resources.Load<Sprite>("SpriteBaseballLauncher");
