@@ -5,6 +5,28 @@ using UnityEngine;
 public class SlowTrap : MonoBehaviour
 {
     [SerializeField] private float _slowAmount;
+    [SerializeField] private float _destroyTime;
+    Animator _animator;
+
+    void Start()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        _destroyTime -= Time.deltaTime;
+
+        if (_destroyTime <=0)
+        {
+            _animator.SetTrigger("IsDestroyed");
+        }
+    }
+
+    public void DestroyTrap()
+    {
+        Destroy(gameObject);
+    }
 
     void OnTriggerEnter(Collider other)
     {

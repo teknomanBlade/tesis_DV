@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5529201381889959271}
   - component: {fileID: 387412670029883746}
+  - component: {fileID: 8358821369440049629}
   - component: {fileID: 4858620004115943793}
   - component: {fileID: 6087161076260193707}
   - component: {fileID: 8743121779481527506}
@@ -42,6 +43,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2450129766235944469}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!95 &8358821369440049629
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2450129766235944469}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 782ac759d1cf8b243b45faaeb2b497c7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!23 &4858620004115943793
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -109,3 +129,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slowAmount: 0.4
+  _destroyTime: 25
