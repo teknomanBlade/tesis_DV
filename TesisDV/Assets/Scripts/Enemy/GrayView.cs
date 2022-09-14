@@ -7,6 +7,7 @@ public class GrayView : MonoBehaviour
 {
     private float _valueToChange;
     Material _myMaterial;
+    private AudioSource _as;
     [SerializeField] Animator _myAnimator;
     [SerializeField] private Coroutine dissolveCoroutine;
     private SkinnedMeshRenderer skinned;
@@ -26,6 +27,7 @@ public class GrayView : MonoBehaviour
         //_myMaterial = GetComponent<Renderer>().material;
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
+        _as = GetComponent<AudioSource>();
     }
 
     public void EndSpawnAnim()
@@ -44,6 +46,11 @@ public class GrayView : MonoBehaviour
         //_myAnimator.PlayInFixedTime("Attack");
         //_myAnimator.Play("Attack");
         _myAnimator.SetBool("IsAttacking", value);
+    }
+
+    public void EMPSkillAnimation(bool value)
+    {
+        _myAnimator.SetBool("IsEMP", value);
     }
 
     public void DeathAnimation()
@@ -77,8 +84,11 @@ public class GrayView : MonoBehaviour
     {
         Destroy(gameObject);
     }
-    
-#region Shaders
+    public void PlaySoundEMP()
+    {
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "EMP_SFX", 0.35f, false);
+    }
+    #region Shaders
     public void SwitchDissolveMaterial(Material material)       
     {
         var materials = skinned.sharedMaterials.ToList();

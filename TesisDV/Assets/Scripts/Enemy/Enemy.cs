@@ -65,6 +65,7 @@ public abstract class Enemy : MonoBehaviour
     public event Action onDeath = delegate { };
     public event Action onHit = delegate { };
     public event Action<bool> onAttack = delegate { };
+    public event Action<bool> onAttackSpecial = delegate { };
     public event Action onDisolve = delegate { };
     public event Action onEndSpawn = delegate { };
 
@@ -212,13 +213,21 @@ public abstract class Enemy : MonoBehaviour
             transform.forward = dir;
             _navMeshAgent.speed = 0;
             onWalk(isAttacking);
-            onAttack(!isAttacking);
+            onAttackSpecial(!isAttacking);
             isAttacking = true; 
         }
         if(!_currentTrapObjective.GetComponent<BaseballLauncher>().active) //cambiar el baseballLauncher por clase padre de trampas.
         {
             foundTrapInPath = false;
         }
+    }
+
+    public void RevertSpecialAttackBool() //Esto se llama por la animación de ataque.
+    {
+        onAttackSpecial(!isAttacking);
+        _navMeshAgent.speed = 1;
+        onWalk(isAttacking);
+        isAttacking = false;
     }
 
     public void RevertAttackBool() //Esto se llama por la animación de ataque.

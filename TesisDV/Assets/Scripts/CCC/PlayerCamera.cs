@@ -106,7 +106,7 @@ public class PlayerCamera : MonoBehaviour
     public IEnumerator ShakeDamage(float duration, float magnitude)
     {
 
-        Vector3 originalPos = transform.localPosition;
+        Vector3 originalPos = Camera.transform.localPosition;
 
         float elapsed = 0.0f;
 
@@ -115,7 +115,7 @@ public class PlayerCamera : MonoBehaviour
             float x = Random.Range(-0.15f, 0.15f) * magnitude;
             float z = Random.Range(-0.15f, 0.15f) * magnitude;
 
-            transform.localPosition = new Vector3(originalPos.x + x, originalPos.y, originalPos.z + z);
+            Camera.transform.localPosition = new Vector3(originalPos.x + x, originalPos.y, originalPos.z + z);
 
             elapsed += Time.deltaTime;
 

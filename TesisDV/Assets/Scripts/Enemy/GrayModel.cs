@@ -14,6 +14,7 @@ public class GrayModel : Enemy
 
     private void Awake()
     {
+        attackTrapThreshold = 2.5f;
         _fsm = new StateMachine();
         _fsm.AddState(EnemyStatesEnum.CatState, new CatState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.ChaseState, new ChaseState(_fsm, this));

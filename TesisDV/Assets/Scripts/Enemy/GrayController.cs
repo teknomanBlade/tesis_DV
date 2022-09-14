@@ -15,6 +15,7 @@ public class GrayController : IController
         _m.onHit        +=  v.InnerEffectAnimation;
         _m.onDeath      +=  v.DeathAnimation;
         _m.onAttack     +=  v.AttackAnimation;
+        _m.onAttackSpecial  +=  v.EMPSkillAnimation;
         _m.onCatGrab    +=  v.CatGrabAnimation;
         _m.onDisolve    +=  v.DissolveAnimation;
         _m.onEndSpawn   +=  v.EndSpawnAnim;
