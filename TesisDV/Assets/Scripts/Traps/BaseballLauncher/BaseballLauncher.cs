@@ -111,13 +111,6 @@ public class BaseballLauncher : Item, IMovable
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            Debug.Log("hola");
-            Inactive();
-        }
-
-
         if (active)
         {
             Debug.Log("ENTRA EN ACTIVA?");

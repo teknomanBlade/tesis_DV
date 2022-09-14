@@ -7,6 +7,7 @@ public class SlowTrap : MonoBehaviour
     [SerializeField] private float _slowAmount;
     [SerializeField] private float _slowAmountPlayer;
     [SerializeField] private float _destroyTime;
+    [SerializeField] private bool _doesDamage;
     Animator _animator;
 
     void Start()
@@ -22,6 +23,21 @@ public class SlowTrap : MonoBehaviour
         {
             _animator.SetTrigger("IsDestroyed");
         }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            if (_doesDamage)
+            {
+                _doesDamage = false;
+            }
+            else
+            {
+                _doesDamage = true;
+            }
+
+        }
+
+        
     }
 
     public void DestroyTrap()

@@ -6,17 +6,17 @@ using UnityEngine.AI;
 
 public class Cat : MonoBehaviour
 {
+    [SerializeField] private float _runninngSpeed;
     private bool _isHeld;
     private bool _isWalking;
-    [SerializeField]
-    private Vector3 _startingPosition;
-    private GameObject _startingPositionGameObject;
+    private bool _isRepositioning;
+    [SerializeField] private Vector3 _startingPosition;
+    [SerializeField] private GameObject _startingPositionGameObject;
     private NavMeshAgent _navMeshAgent;
     private LevelManager _lm;
     private Vector3 _exitPos;
     private Animator _animator;
-    [SerializeField]
-    private List<Vector3> _myPos = new List<Vector3>();
+    [SerializeField] private List<Vector3> _myPos = new List<Vector3>();
     void Awake()
     {
         _startingPositionGameObject = GameObject.Find("StartingPosition");
@@ -31,7 +31,7 @@ public class Cat : MonoBehaviour
 
     void Start()
     {
-        SetPositionBetweenWaves();
+        SetStartingPosition();
     }
 
     void Update()
@@ -49,6 +49,7 @@ public class Cat : MonoBehaviour
             {
                 _animator.SetBool("IsIdle", true);
             }*/
+            _navMeshAgent.speed = _runninngSpeed;
             _navMeshAgent.destination = dest;
             //transform.rotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
         }
@@ -61,6 +62,7 @@ public class Cat : MonoBehaviour
     public void CatIsBeingTaken()
     {
         _isHeld = true;
+        _isRepositioning = false;
         _animator.SetBool("IsMad", true);
         _navMeshAgent.enabled = false;
     }
@@ -68,7 +70,10 @@ public class Cat : MonoBehaviour
     public void CatHasBeenReleased()
     {
         _isHeld = false;
-        
+        _isRepositioning = true;
+
+        RepositionBetweenWaves();
+
         _animator.SetBool("IsIdle", false);
         _animator.SetBool("IsMad", false);
         _animator.SetBool("IsWalking", true);
@@ -76,11 +81,26 @@ public class Cat : MonoBehaviour
         _navMeshAgent.enabled = true;
     }
 
-    public void SetPositionBetweenWaves()
+    public void RepositionBetweenWaves()
+    {
+        Vector3 newPos = _myPos[Random.Range(0, 3)];
+
+        if (newPos != _startingPosition)
+        {
+            _startingPosition = newPos;
+        }
+        else
+        {
+            _startingPosition = _myPos[Random.Range(0, 3)];
+        }
+
+    }
+
+    public void SetStartingPosition()
     {
         if(!_isHeld)
         {
-            transform.position = _myPos[Random.Range(0, 2)];
+            transform.position = _myPos[Random.Range(0, 3)];
             //transform.position = _myPos[1];
             _startingPositionGameObject.transform.position = transform.position;
             _startingPosition = _startingPositionGameObject.transform.position;
