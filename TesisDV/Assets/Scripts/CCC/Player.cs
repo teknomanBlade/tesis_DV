@@ -45,7 +45,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     #endregion
 
     #region Movement
-    private float speed = 5f;
+    [SerializeField] private float speed = 5f;
     private float crouchSpeed = 2.5f;
     private float walkSpeed = 5f;
     private float sprintSpeed = 10f;
@@ -495,6 +495,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
         _rb.AddForce(0f, jumpForce, 0f, ForceMode.VelocityChange);
     }
+
+    public void SlowDown(float slowAmount)
+    {
+        speed -= slowAmount;
+    } 
 
     IEnumerator PreventCheck()
     {
