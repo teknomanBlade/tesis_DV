@@ -284,6 +284,14 @@ public abstract class Enemy : MonoBehaviour
         //_fsm.ChangeState(EnemyStatesEnum.EscapeState); 
     }
 
+    public Vector3 GetPlayerPos()
+    {
+        Vector3 aux = _player.transform.position;
+        Vector3 objective = new Vector3(aux.x, 0f, aux.z);
+
+        return objective;
+    }
+
     public void GoBackToShip()
     {
         _lm.RemoveGray(this);

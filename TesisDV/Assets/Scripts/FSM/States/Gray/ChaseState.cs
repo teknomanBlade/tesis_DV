@@ -18,12 +18,15 @@ public class ChaseState : IState
         Debug.Log("Entre a Chase");
         //_enemy.SetObjective(_enemy._player.gameObject);
         //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
-        _enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+
+        //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position); Ahora usamos el GetPlayerPos para que los aliens no se queden duros cuando subis a algun lugar
+        _enemy.ResetPathAndSetObjective(_enemy.GetPlayerPos());
     }
 
     public void OnUpdate()
     {
-        _enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+        //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position); Ahora usamos el GetPlayerPos para que los aliens no se queden duros cuando subis a algun lugar
+        _enemy.ResetPathAndSetObjective(_enemy.GetPlayerPos());
         _enemy.Move();
         _enemy.DetectTraps();
 
