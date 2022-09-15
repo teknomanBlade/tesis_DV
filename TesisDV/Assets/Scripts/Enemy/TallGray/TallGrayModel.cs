@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public class TallGrayModel : Enemy
 {
-    public StateMachine _fsm;
+    
     IController _myController;
 
     MiniMap miniMap;
@@ -65,20 +65,6 @@ public class TallGrayModel : Enemy
     public void GetDoor(Door door)
     {
         OpenDoor(door);
-    }
-
-    //Le pide el UFO mas cerca al LevelManager y luego cambia el valor de _exitPos.
-    private void GetNearestUFO() //Hasta solucionarlo no se usa. Probar corrutina.
-    {
-        float currentDistance = 99999;
-
-        foreach (UFO ufo in _lm.AllUFOs)
-        {
-            if(Vector3.Distance(transform.position, ufo.transform.position) < currentDistance)
-            {
-                currentDistance = Vector3.Distance(transform.position, ufo.transform.position);
-            } 
-        }
     }
 
     private void OpenDoor(Door door)

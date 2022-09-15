@@ -32,7 +32,7 @@ public class CatState : IState
             _enemy.GrabCat();
             GameVars.Values.ShowNotification("The cat has been captured! You must prevent the grays getting to the ship!");
 
-            _fsm.ChangeState(EnemyStatesEnum.EscapeState);
+            _fsm.ChangeState(EnemyStatesEnum.EscapeState); 
         }
         else if (_enemy._lm.enemyHasObjective)
         {

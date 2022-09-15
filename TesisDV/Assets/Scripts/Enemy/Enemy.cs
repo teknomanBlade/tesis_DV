@@ -55,6 +55,7 @@ public abstract class Enemy : MonoBehaviour
     private float _currentTrapObjectiveDistance = 1000f;
     public const float MAX_CURRENT_OBJECTIVE_DISTANCE = 1000;
 
+    public StateMachine _fsm;
     public LevelManager _lm;
     [SerializeField] protected LineRenderer lineRenderer;
 
@@ -241,11 +242,14 @@ public abstract class Enemy : MonoBehaviour
     public void GrabCat()
     {
         //GetNearestUFO(); Cuesta conseguir el Exit pos y despues escapar, despues lo arreglo.
-        //_anim.SetBool("IsGrab", true); Ahora se usa el evento de abajo.
+
         onCatGrab(true);
-        GameVars.Values.TakeCat(_exitPos);
+        GameVars.Values.TakeCat(_exitPos); //Todo esto se hace en una corrutina para darle tiempo al Gray a encontrar la nave mas cercana.
         hasObjective = true;
         _lm.CheckForObjective();
+
+        GetNearestUFO();
+        //StartCoroutine("GrabCatCoroutine");
     }
 
     public void EscapeWithCat()
@@ -258,6 +262,26 @@ public abstract class Enemy : MonoBehaviour
         hasObjective = false;
         GameVars.Values.SetCatFree();
         _lm.CheckForObjective();
+    }
+
+    private void GetNearestUFO() //Hasta solucionarlo no se usa. Probar corrutina.
+    {
+        float currentDistance = 99999;
+        Vector3 currentExitPos = _exitPos;
+
+        foreach (UFO ufo in _lm.AllUFOs)
+        {
+            if(Vector3.Distance(transform.position, ufo.transform.position) < currentDistance)
+            {
+                currentDistance = Vector3.Distance(transform.position, ufo.transform.position);
+                currentExitPos = ufo.transform.position;
+            } 
+            
+        }
+        
+        Vector3 aux = currentExitPos;
+        _exitPos = new Vector3(aux.x, 0f, aux.z);
+        //_fsm.ChangeState(EnemyStatesEnum.EscapeState); 
     }
 
     public void GoBackToShip()

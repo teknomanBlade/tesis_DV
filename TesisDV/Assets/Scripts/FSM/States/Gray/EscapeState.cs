@@ -19,7 +19,8 @@ public class EscapeState : IState
         
         //_enemy.SetObjective(_enemy.currentExitUFO);
         //_enemy.ResetPathAndSetObjective(_enemy._exitPos);
-
+        var dir = _enemy._exitPos - _enemy.transform.position;
+        _enemy.transform.forward = dir;
         _enemy.ResetPathAndSetObjective(_enemy._exitPos);
     }
     public void OnUpdate()

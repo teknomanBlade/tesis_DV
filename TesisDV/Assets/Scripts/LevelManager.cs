@@ -286,13 +286,21 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
             canSpawn = !enemyHasObjective;
             return;
         }
+
         foreach (Enemy gray in enemiesInScene)
         {
-            enemyHasObjective = gray.hasObjective;
-            
-            if (enemyHasObjective == true) 
-            canSpawn = !enemyHasObjective;
-            return;
+            if (gray.hasObjective) 
+            {
+                enemyHasObjective = gray.hasObjective; //true
+                canSpawn = !enemyHasObjective;
+                return;
+            }
+            else
+            {
+                enemyHasObjective = false;
+                canSpawn = !enemyHasObjective;
+                //return;
+            }
         }
     }
 
