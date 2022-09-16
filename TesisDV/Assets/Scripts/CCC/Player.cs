@@ -684,6 +684,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(40f);
             return;
         }
+        if (lookingAt.gameObject.TryGetComponent<NailFiringMachine>(out NailFiringMachine nailFiringMachine))
+        {
+            crosshair.sprite = GameVars.Values.crosshairActivation;
+            ChangeCrosshairSize(40f);
+            return;
+        }
         crosshair.sprite = GameVars.Values.crosshair;
         ChangeCrosshairSize(20f);
     }
@@ -727,6 +733,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 auxBL.OnReload += OnBaseballMachineReload;
             }
         }
+        /*if (lookingAt.gameObject.TryGetComponent<NailFiringMachine>(out NailFiringMachine NFM))
+        {
+            if (auxBL.IsEmpty)
+            {
+                GameVars.Values.ShowNotification("You need a Tennis Ball Box to reload!");
+                auxBL.OnReload += OnBaseballMachineReload;
+            }
+        }*/
 
         if (lookingAt.TryGetComponent<Door>(out Door door))
         {

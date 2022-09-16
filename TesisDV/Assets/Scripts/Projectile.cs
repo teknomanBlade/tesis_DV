@@ -10,7 +10,7 @@ public abstract class Projectile : MonoBehaviour
     protected bool effectUp = true;
     protected bool dieOnImpact = true;
     [SerializeField] protected float lifeTime = 3f;
-    [SerializeField] protected int _damageAmount = 1;
+    [SerializeField] protected int _damageAmount;
 
     protected virtual void Start()
     {
