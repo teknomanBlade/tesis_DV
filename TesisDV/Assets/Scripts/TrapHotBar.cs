@@ -74,5 +74,31 @@ public class TrapHotBar : MonoBehaviour
         {
             trapSlots[2].DeactivateImage();
         }
+
+        if (GameVars.Values.SlowTrap.HasNailFiringMachineItems(inventory))
+        {
+            if(isFaded)
+            {
+                Fade();
+            }
+            trapSlots[3].ActivateImage();
+        }
+        else
+        {
+            trapSlots[3].DeactivateImage();
+        }
+
+        if (GameVars.Values.SlowTrap.HasElectricTrapItems(inventory))
+        {
+            if(isFaded)
+            {
+                Fade();
+            }
+            trapSlots[4].ActivateImage();
+        }
+        else
+        {
+            trapSlots[4].DeactivateImage();
+        }
     }
 }

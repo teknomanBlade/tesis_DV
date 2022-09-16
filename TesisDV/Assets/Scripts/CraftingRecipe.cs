@@ -38,6 +38,16 @@ using UnityEngine;
             return inventory.ContainsID(4);
         }
 
+        public bool HasNailFiringMachineItems(Inventory inventory)
+        {
+            return inventory.ContainsID(2) && inventory.ContainsID(7);
+        }
+
+        public bool HasElectricTrapItems(Inventory inventory)
+        {
+            return inventory.ContainsID(2) && inventory.ContainsID(5);
+        }
+
         public bool CanCraft(Inventory inventory)
         {
             _inventory = inventory;

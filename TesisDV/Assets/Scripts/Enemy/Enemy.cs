@@ -10,6 +10,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private int _hp;
     [SerializeField] private float _movingSpeed;
     [SerializeField] private Transform _catGrabPos;
+    public Collider[] allTargets;
 
     protected bool isAwake = false;
     public bool isDead = false;
@@ -79,7 +80,7 @@ public abstract class Enemy : MonoBehaviour
         
         if(_hp > 0)
         {
-            onHit();
+            //onHit();
         }
         else
         {
@@ -158,7 +159,7 @@ public abstract class Enemy : MonoBehaviour
     public void DetectTraps()
     {
        
-        Collider[] allTargets = Physics.OverlapSphere(transform.position, _trapViewRadius, _trapMask);
+        allTargets = Physics.OverlapSphere(transform.position, _trapViewRadius, _trapMask);
 
         if (allTargets.Length == 0 || _currentTrapObjective == null)
         {
@@ -166,26 +167,27 @@ public abstract class Enemy : MonoBehaviour
             _currentTrapObjectiveDistance = MAX_CURRENT_OBJECTIVE_DISTANCE;
         }
 
-        if (_currentTrapObjective == null || !_currentTrapObjective.GetComponent<BaseballLauncher>().active || _currentTrapObjectiveDistance > _trapViewRadius) //cambiar el baseballLauncher por clase padre de trampas.
+        if (_currentTrapObjective == null || !_currentTrapObjective.GetComponent<BaseballLauncher>().active || !_currentTrapObjective.GetComponent<NailFiringMachine>().active || _currentTrapObjectiveDistance > _trapViewRadius) //cambiar el baseballLauncher por clase padre de trampas.
         {
             
             foreach (var item in allTargets)
             {
                 
-                if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance && item.GetComponent<BaseballLauncher>())
+                if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance && item.GetComponent<BaseballLauncher>() || Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance && item.GetComponent<NailFiringMachine>() )
                 {
-                    if (item.GetComponent<BaseballLauncher>().active) //cambiar el baseballLauncher por clase padre de trampas.
+                    var bTrap = item.GetComponent<BaseballLauncher>(); //Después cambiar cuando haya un script Trap.
+                    var nfm = item.GetComponent<NailFiringMachine>(); //Después cambiar cuando haya un script Trap.
+                    if (bTrap && item.GetComponent<BaseballLauncher>().active || nfm && item.GetComponent<NailFiringMachine>().active) //cambiar el baseballLauncher por clase padre de trampas.
                     {
                         _currentTrapObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
                         _currentTrapObjective = item;
-                        
                     }
                 }
             }
             
         }
 
-        if (_currentTrapObjectiveDistance < _trapViewRadius && _currentTrapObjective != null)
+        if (_currentTrapObjectiveDistance < _trapViewRadius && _currentTrapObjective != null && _currentTrapObjective.GetComponent<BaseballLauncher>().active)
         {
             foundTrapInPath = true;
         }
@@ -214,10 +216,12 @@ public abstract class Enemy : MonoBehaviour
             transform.forward = dir;
             _navMeshAgent.speed = 0;
             onWalk(isAttacking);
-            onAttackSpecial(!isAttacking);
+            //onAttackSpecial(!isAttacking);
+            onAttack(!isAttacking);
             isAttacking = true; 
+            //_currentTrapObjective.GetComponent<BaseballLauncher>().Inactive();
         }
-        if(!_currentTrapObjective.GetComponent<BaseballLauncher>().active) //cambiar el baseballLauncher por clase padre de trampas.
+        if(_currentTrapObjective.GetComponent<BaseballLauncher>().active == false) //cambiar el baseballLauncher por clase padre de trampas.
         {
             foundTrapInPath = false;
         }
@@ -225,10 +229,13 @@ public abstract class Enemy : MonoBehaviour
 
     public void RevertSpecialAttackBool() //Esto se llama por la animación de ataque.
     {
-        onAttackSpecial(!isAttacking);
+        //onAttackSpecial(!isAttacking);
         _navMeshAgent.speed = 1;
         onWalk(isAttacking);
         isAttacking = false;
+
+        foundTrapInPath = false;    
+        _fsm.ChangeState(EnemyStatesEnum.CatState);
     }
 
     public void RevertAttackBool() //Esto se llama por la animación de ataque.

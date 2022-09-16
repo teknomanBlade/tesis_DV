@@ -226,13 +226,21 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             GameVars.Values.TVTrap.Craft(_inventory);
-            //GameVars.Values.TVTrapAgain.Craft(_inventory);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             GameVars.Values.SlowTrap.Craft(_inventory);
-            //GameVars.Values.TVTrapAgain.Craft(_inventory);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            GameVars.Values.NailFiringMachine.Craft(_inventory);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            GameVars.Values.ElectricTrap.Craft(_inventory);
         }
 
         if(Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))

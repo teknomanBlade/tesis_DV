@@ -75,6 +75,8 @@ public class GameVars : MonoBehaviour
     public CraftingRecipe BaseballLauncher;
     public CraftingRecipe TVTrap;
     public CraftingRecipe SlowTrap;
+    public CraftingRecipe NailFiringMachine;
+    public CraftingRecipe ElectricTrap;
     public TVCraftingRecipe TVTrapAgain;
 
     [Header("Game")]
@@ -82,7 +84,8 @@ public class GameVars : MonoBehaviour
     private bool _isFaded;
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
-    public int currentShotsTrap1;
+    public int currentShotsTrap1; //BaseballLauncher
+    public int currentShotsTrap2; //NailFiringMachine
     public List<List<Node>> levelRoutes;
 
     private void Awake()

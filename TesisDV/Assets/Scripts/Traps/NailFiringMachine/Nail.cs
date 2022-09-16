@@ -5,6 +5,7 @@ using UnityEngine;
 public class Nail : Projectile
 {
     private Rigidbody _rb;
+    [SerializeField] private float _forceAmount;
     private NailFiringMachine _nfm;
     // Start is called before the first frame update
     protected override void Start()
@@ -18,7 +19,7 @@ public class Nail : Projectile
     // Update is called once per frame
     void Update()
     {
-        _rb.AddForce(35f * _nfm.spawnPoint.transform.up, ForceMode.Force); //era 20f
+        _rb.AddForce(_forceAmount * _nfm.spawnPoint.transform.forward, ForceMode.Force);
     }
     public Nail SetOwner(NailFiringMachine nfm)
     {

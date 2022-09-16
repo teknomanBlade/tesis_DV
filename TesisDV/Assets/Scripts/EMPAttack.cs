@@ -13,6 +13,7 @@ public class EMPAttack : MonoBehaviour
     {
         var player = other.GetComponent<Player>();
         var bTrap = other.GetComponent<BaseballLauncher>(); //Después cambiar cuando haya un script Trap.
+        var nfm = other.GetComponent<NailFiringMachine>(); //Después cambiar cuando haya un script Trap.
 
         if (player)
         {
@@ -21,6 +22,10 @@ public class EMPAttack : MonoBehaviour
             
         }
         else if (bTrap && other.GetComponent<BaseballLauncher>())
+        {
+            other.GetComponent<BaseballLauncher>().Inactive();
+        }
+        else if (nfm && other.GetComponent<NailFiringMachine>())
         {
             other.GetComponent<BaseballLauncher>().Inactive();
         }

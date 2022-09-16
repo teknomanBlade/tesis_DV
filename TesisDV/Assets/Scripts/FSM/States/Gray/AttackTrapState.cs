@@ -19,16 +19,7 @@ public class AttackTrapState : IState
     }
     public void OnUpdate()
     {
-        if (Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.attackTrapThreshold)
-        {
-            _enemy.AttackTrap();
-        }
-        else
-        {
-            _enemy.RevertSpecialAttackBool();
-            _fsm.ChangeState(EnemyStatesEnum.ChaseState);
-        }
-       
+        _enemy.AttackTrap();  
         
         if(!_enemy.foundTrapInPath)
         {

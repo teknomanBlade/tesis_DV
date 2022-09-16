@@ -113,15 +113,15 @@ public class BaseballLauncher : Item, IMovable
     {
         if (active)
         {
-            Debug.Log("ENTRA EN ACTIVA?");
+            //Debug.Log("ENTRA EN ACTIVA?");
             FieldOfView();
         }
         
-
-        if (shotsLeft == 0)
+/* 
+        if (shotsLeft == 0) Se chequea al instanciar una pelota.
         {
             Inactive();
-        }
+        } */
     }
     public void Reload()
     {
@@ -163,6 +163,11 @@ public class BaseballLauncher : Item, IMovable
         GameObject aux = Instantiate(projectilePrefab, exitPoint.transform.position, Quaternion.identity);
         aux.GetComponent<Rigidbody>().AddForce(35f * exitPoint.transform.forward, ForceMode.Impulse); //era 20f
         GameVars.Values.soundManager.PlaySoundAtPoint("BallLaunched", transform.position, 0.7f);
+
+        if (shotsLeft == 0)
+        {
+            Inactive();
+        }
     }
 
     public void ActiveBallsState1()
@@ -296,8 +301,9 @@ public class BaseballLauncher : Item, IMovable
         _animator.SetBool("HasNoBalls", true);
         _animator.SetBool("IsDetectingTarget", false);
         laser.gameObject.SetActive(false);
-
+        active = false;
     }
+
     IEnumerator PlayShutdownSound()
     {
         _isDisabledSFX = false;

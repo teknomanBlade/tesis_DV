@@ -51,6 +51,7 @@ public class GrayView : MonoBehaviour
     public void EMPSkillAnimation(bool value)
     {
         _myAnimator.SetBool("IsEMP", value);
+        //_myAnimator.Play("EMPSkill");
     }
 
     public void DeathAnimation()
