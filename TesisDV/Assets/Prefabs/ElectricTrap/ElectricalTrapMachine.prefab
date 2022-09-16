@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 2632709413722482004}
   - component: {fileID: 8622832083812791110}
   - component: {fileID: 5184652544793431943}
-  - component: {fileID: 4203522982965707662}
+  - component: {fileID: 4811209757660947990}
+  - component: {fileID: 7563792352725659563}
   m_Layer: 10
   m_Name: ElectricalTrapMachine
   m_TagString: Untagged
@@ -185,7 +186,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4203522982965707662
+--- !u!135 &4811209757660947990
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 923361385767164133}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 4
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7563792352725659563
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -194,32 +208,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 923361385767164133}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f6b4eca38e48524a87d074e2095f4a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 84907c1ebae92ae4f80705254d551f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemName: ElectricalTrap
-  _itemImage: {fileID: 21300000, guid: a921ff0e6ad0d244b846691c104b371e, type: 3}
-  itemType: 2
-  _currentLife: 0
-  blueprintPrefab: {fileID: 0}
-  _myItems: []
-  interval: 0
-  spawnPoint: {fileID: 0}
-  shots: 30
-  shotsLeft: 0
   active: 0
-  viewRadius: 0
-  viewAngle: 0
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 0
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _currentObjectiveDistance: 1000
-  _currentObjective: {fileID: 0}
-  collidersObjectives: []
-  collidersObjectivesDisabled: []
+  _damagePerSecond: 0.04
+  _trapDuration: 10
 --- !u!1 &3135196139978435934
 GameObject:
   m_ObjectHideFlags: 0

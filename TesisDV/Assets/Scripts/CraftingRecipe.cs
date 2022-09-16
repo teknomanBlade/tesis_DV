@@ -45,7 +45,7 @@ using UnityEngine;
 
         public bool HasElectricTrapItems(Inventory inventory)
         {
-            return inventory.ContainsID(2) && inventory.ContainsID(5);
+            return inventory.ContainsID(2) && inventory.ContainsID(2);
         }
 
         public bool CanCraft(Inventory inventory)

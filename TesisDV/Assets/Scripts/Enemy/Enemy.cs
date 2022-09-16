@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public abstract class Enemy : MonoBehaviour
 {
-    [SerializeField] private int _hp;
+    [SerializeField] private float _hp;
     [SerializeField] private float _movingSpeed;
     [SerializeField] private Transform _catGrabPos;
     public Collider[] allTargets; //Borrar esto y probar.
@@ -74,7 +74,7 @@ public abstract class Enemy : MonoBehaviour
 
     #endregion Events
 
-    public void TakeDamage(int DamageAmount)
+    public void TakeDamage(float DamageAmount)
     {
         _hp -= DamageAmount;
         GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
