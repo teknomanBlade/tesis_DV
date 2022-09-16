@@ -9,7 +9,7 @@ public class TallGrayModel : Enemy
 {
     
     IController _myController;
-
+    
     MiniMap miniMap;
 
     private void Awake()
@@ -21,13 +21,12 @@ public class TallGrayModel : Enemy
         _fsm.AddState(EnemyStatesEnum.ChaseTrapState, new ChaseTrapState(_fsm ,this));
         _fsm.AddState(EnemyStatesEnum.AttackTrapState, new AttackTrapState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.EscapeState, new EscapeState(_fsm, this));
-        //_fsm.ChangeState(EnemyStatesEnum.CatState);
     }
 
     private void Start()
     {
         _myController = new TallGrayController(this, GetComponent<TallGrayView>());
-
+        _capsuleCollider = GetComponent<CapsuleCollider>();
         _as = GetComponent<AudioSource>();
 
         _player = GameVars.Values.Player;

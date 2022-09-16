@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 
 
-public class NailFiringMachine : Item, IMovable
+public class NailFiringMachine : Trap, IMovable, IInteractable
 {
     [SerializeField] private float _currentLife;
     [SerializeField] private GameObject blueprintPrefab;
@@ -18,7 +18,6 @@ public class NailFiringMachine : Item, IMovable
     public GameObject spawnPoint;
     public int shots = 30;
     public int shotsLeft;
-    public bool active = false;
     private Coroutine ShootCoroutine; 
     Transform myCannon;
 
@@ -38,6 +37,7 @@ public class NailFiringMachine : Item, IMovable
     // Start is called before the first frame update
     void Awake()
     {
+        active = false;
         shotsLeft = shots;
         InitialStock = 30;
         Nail = Resources.Load<Nail>("Nail");
@@ -53,7 +53,7 @@ public class NailFiringMachine : Item, IMovable
         }
     }
 
-    public override void Interact()
+    public void Interact()
     {
         if (!active)
         {
@@ -185,7 +185,7 @@ public class NailFiringMachine : Item, IMovable
         Destroy(gameObject);
     }
 
-    public void Inactive()
+    public override void Inactive()
     {
         active = false;
     }

@@ -87,7 +87,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     #region Interactions
 
     [SerializeField]
-    public Item lookingAt;
+    public IInteractable lookingAt;
     public IMovable lookingIMovable;
     public InventoryItem lookingFor;
     public Vector3 lookingPlacement;
@@ -638,7 +638,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     return;
             }
 
-            lookingAt = hit.collider.gameObject.GetComponent<Item>();
+            if(hit.collider.gameObject.GetComponent<IInteractable>() != null)
+            {
+                lookingAt = hit.collider.gameObject.GetComponent<IInteractable>();//.gameObject.GetComponent<Item>(); LookingAt ahora es un collider para incluir Item y Traps
+            }
+            
             SetOnItem(lookingAt);
             ChangeCrosshair();
         }
@@ -750,7 +754,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             }
         }*/
 
-        if (lookingAt.TryGetComponent<Door>(out Door door))
+        if (lookingAt.gameObject.TryGetComponent<Door>(out Door door))
         {
             _lm.ChangeDoorsStatus();
         }
@@ -853,7 +857,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         Gizmos.DrawLine(start + new Vector3(-gizmoScaleSin, 0f, -gizmoScaleSin), start + new Vector3(-gizmoScaleSin, 0f, -gizmoScaleSin) + down);
     }
 
-    private void SetOnItem(Item item)
+    private void SetOnItem(IInteractable item)
     {
         if (item == null)
             return;
@@ -865,7 +869,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         outLine.OutlineWidth = 6f;
     }
 
-    private void SetOffItem(Item item)
+    private void SetOffItem(IInteractable item)
     {
         if (item == null)
             return;

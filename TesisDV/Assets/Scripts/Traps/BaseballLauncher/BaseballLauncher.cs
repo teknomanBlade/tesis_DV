@@ -5,7 +5,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class BaseballLauncher : Item, IMovable
+public class BaseballLauncher : Trap, IMovable, IInteractable
 {
     private float _maxLife = 100f;
     [SerializeField]
@@ -39,7 +39,6 @@ public class BaseballLauncher : Item, IMovable
     public float interval;
     public LayerMask targetMask;
     public LayerMask obstacleMask;
-    public bool active = false;
     Vector3 auxVector;
     Transform myCannon;
     Transform myCannonSupport;
@@ -65,6 +64,7 @@ public class BaseballLauncher : Item, IMovable
 
     public void Awake()
     {
+        active = false;
         _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
         _animator.SetBool("HasNoBalls", true);
@@ -79,7 +79,7 @@ public class BaseballLauncher : Item, IMovable
         ActiveBallsState1();
     }
 
-    public override void Interact()
+    public void Interact()
     {
         if (HasPlayerTennisBallBox && IsEmpty)
         {
@@ -294,7 +294,7 @@ public class BaseballLauncher : Item, IMovable
         yield return new WaitForSeconds(0.2f);
         GameVars.Values.soundManager.StopSound();
     }*/
-    public void Inactive()
+    public override void Inactive()
     {
         if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
         _animator.enabled = true;

@@ -8,7 +8,6 @@ using UnityEngine.AI;
 public class GrayModel : Enemy
 {
     IController _myController;
-
     MiniMap miniMap;
 
     private void Awake()
@@ -27,7 +26,7 @@ public class GrayModel : Enemy
     private void Start()
     {
         _myController = new GrayController(this, GetComponent<GrayView>());
-
+        _capsuleCollider = GetComponent<CapsuleCollider>();
         _as = GetComponent<AudioSource>();
 
         _player = GameVars.Values.Player;

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum ItemType { Crafting, Heal, Weapon }
-public abstract class Item : MonoBehaviour
+public abstract class Item : MonoBehaviour, IInteractable
 {
     [SerializeField]
     protected string _itemName;

@@ -12,8 +12,7 @@ public class EMPAttack : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         var player = other.GetComponent<Player>();
-        var bTrap = other.GetComponent<BaseballLauncher>(); //Después cambiar cuando haya un script Trap.
-        var nfm = other.GetComponent<NailFiringMachine>(); //Después cambiar cuando haya un script Trap.
+        var trap = other.GetComponent<Trap>();
 
         if (player)
         {
@@ -21,13 +20,9 @@ public class EMPAttack : MonoBehaviour
             other.GetComponent<Player>().Damage(_damageAmount);
             
         }
-        else if (bTrap && other.GetComponent<BaseballLauncher>())
+        else if (trap && other.GetComponent<BaseballLauncher>())
         {
-            other.GetComponent<BaseballLauncher>().Inactive();
-        }
-        else if (nfm && other.GetComponent<NailFiringMachine>())
-        {
-            other.GetComponent<BaseballLauncher>().Inactive();
+            other.GetComponent<Trap>().Inactive();
         }
     }
 }

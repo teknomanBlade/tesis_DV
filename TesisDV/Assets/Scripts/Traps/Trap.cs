@@ -4,13 +4,10 @@ using UnityEngine;
 
 public abstract class Trap : MonoBehaviour
 {
-    public Switch trapSwitch;
-    public bool active = false;
+    public bool active;
 
-    public void Start()
+    public virtual void Inactive()
     {
-        trapSwitch.trap = this;
-    }
 
-    public virtual void Activate() { }
+    }
 }
