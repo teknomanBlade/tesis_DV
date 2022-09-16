@@ -29,9 +29,10 @@ public class ChaseTrapState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.CatState);
         }
-        if(_enemy._currentTrapObjective.GetComponent<BaseballLauncher>().active == false)
+        if(_enemy._currentTrapObjective.GetComponent<Trap>().active == false)
         {
             _fsm.ChangeState(EnemyStatesEnum.CatState);
+            _enemy.foundTrapInPath = false;
         }
         if(Vector3.Distance(_enemy._currentTrapObjective.transform.position, _enemy.transform.position) < _enemy.attackThreshold)
         {
