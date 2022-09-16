@@ -7,7 +7,7 @@ public class Baseball : Projectile
     protected override void Start()
     {
         base.Start();
-        //_damageAmount = 1;
+        _damageAmount = 1;
     }
 
     private void OnTriggerEnter(Collider other) 
