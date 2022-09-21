@@ -426,7 +426,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _audioSource.enabled = false;
         _rb.isKinematic = true;
         canMoveCamera = false;
-        Invoke("Dead", 3f);
+        Invoke("Dead", 0.5f); //Esperabamos tres segundos antes.
+        
     }
 
     public void SwitchIsCrafting()
