@@ -1,15 +1,11 @@
-using System.Runtime.Versioning;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-using System.Linq;
 
 public class BaseballLauncher : Trap, IMovable, IInteractable
 {
     private float _maxLife = 100f;
-    [SerializeField]
-    private float _currentLife;
+    [SerializeField] private float _currentLife;
     private float _valueToChange;
     private bool _isDestroyed;
     private bool _isDisabledSFX;
@@ -22,8 +18,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
     public GameObject ballsState1, ballsState2, ballsState3;
-    [SerializeField]
-    private GameObject trapDestroyPrefab;
+    [SerializeField] private GameObject trapDestroyPrefab;
     public int shots = 15;
     public int shotsLeft;
     public bool IsEmpty
@@ -48,6 +43,10 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public Laser laser;
     private Coroutine searchingForTargetCoroutine;
 
+    public PoolObject<Baseball> BaseballPool { get; set; }
+    public Baseball Baseball { get; private set; }
+    public int InitialStock { get; private set; }
+
     public void Awake()
     {
         active = false;
@@ -62,6 +61,9 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         //Debug.Log(transform.GetChild(2));
         shotsLeft = shots;
         laser.gameObject.SetActive(false);
+        Baseball = Resources.Load<Baseball>("tennisBallaux");
+        InitialStock = 20;
+        BaseballPool = new PoolObject<Baseball>(BaseballFactory, ActivateBaseball, DeactivateBaseball, InitialStock, true);
         ActiveBallsState1();
     }
 
@@ -138,22 +140,23 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     public void InstantiateBall()
     {
-        if (shotsLeft == 0 || _canShoot == false || _currentObjective.GetComponent<GrayModel>().isDead)
+        if  (_canShoot == false || _currentObjective.GetComponent<Enemy>().isDead)
             return;
         
+        if (shotsLeft == 0)
+        {
+            Inactive();
+        }
+
         laser.gameObject.SetActive(true);
         ShootEffect.Play();
         shotsLeft--;
         shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
         ChangeBallsState(shotsLeft);
-        GameObject aux = Instantiate(projectilePrefab, exitPoint.transform.position, Quaternion.identity);
-        aux.GetComponent<Rigidbody>().AddForce(35f * exitPoint.transform.forward, ForceMode.Impulse); //era 20f
+        FireBaseball();
+        //GameObject aux = Instantiate(projectilePrefab, exitPoint.transform.position, Quaternion.identity);
+        //aux.GetComponent<Rigidbody>().AddForce(35f * exitPoint.transform.forward, ForceMode.Impulse);     Usamos Pool :D
         GameVars.Values.soundManager.PlaySoundAtPoint("BallLaunched", transform.position, 0.7f);
-
-        if (shotsLeft == 0)
-        {
-            Inactive();
-        }
     }
 
     public void ActiveBallsState1()
@@ -277,6 +280,31 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             }
         }
         Destroy(this.gameObject);
+    }
+
+    private Baseball BaseballFactory()
+    {
+        return Instantiate(Baseball);
+    }
+
+    private void DeactivateBaseball(Baseball o)
+    {
+        o.gameObject.SetActive(false);
+        o.transform.localPosition = new Vector3(0f, 0f, 0f);
+    }
+
+    private void ActivateBaseball(Baseball o)
+    {
+        o.gameObject.SetActive(true);
+    }
+
+    private void FireBaseball()
+    {
+        if(_canShoot)
+        {
+            BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwner(this);
+        }
+        
     }
 
     void OnDrawGizmos()

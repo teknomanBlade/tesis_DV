@@ -9,13 +9,13 @@ public abstract class Projectile : MonoBehaviour
     //private List<IHittableObserver> _myHittableObservers = new List<IHittableObserver>();
     protected bool effectUp = true;
     protected bool dieOnImpact = true;
-    [SerializeField] protected float lifeTime = 3f;
+    //[SerializeField] protected float lifeTime = 3f;
     [SerializeField] protected int _damageAmount;
 
     protected virtual void Start()
     {
-        lifeTime = GameVars.Values.projectileLifeTime;
-        Destroy(gameObject, lifeTime);
+        //lifeTime = GameVars.Values.projectileLifeTime;
+        //Destroy(gameObject, lifeTime);
     }
 
     protected virtual void OnContactEffect(Collider other)

@@ -75,9 +75,7 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
             //Hacer animacion de destrucción, instanciar sus objetos de construcción y destruirse.
             DestroyThisTrap();
         }
-    }
-
-    
+    }    
 
     private void FireNail()
     {

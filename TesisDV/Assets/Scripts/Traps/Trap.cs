@@ -24,7 +24,7 @@ public abstract class Trap : MonoBehaviour
 
     protected float _currentObjectiveDistance = 1000;
     protected Collider _currentObjective = null;
-    protected Collider[] collidersObjectives;
+    public Collider[] collidersObjectives;
     protected Collider[] collidersObjectivesDisabled;
     protected const float MAX_CURRENT_OBJETIVE_DISTANCE = 1000;
 

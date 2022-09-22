@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 5298513893471635396}
   - component: {fileID: 6794119782065756995}
   - component: {fileID: 2679019402174758399}
-  - component: {fileID: 6794119782065756994}
   - component: {fileID: 7672155381100128060}
   - component: {fileID: 3923324235713322783}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: tennisBallaux
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,24 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeTime: 3
   _damageAmount: 1
---- !u!114 &6794119782065756994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5947256333315532305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1f3e8ca3b011ec4ab82a267f583b2b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _itemName: Tennis Ball
-  _itemImage: {fileID: 21300000, guid: 7f228ebb1835f10488bd7d9087480e2c, type: 3}
-  itemType: 0
-  myCraftingID: 0
-  myPrefab: {fileID: 5947256333315532305}
-  timeLimit: 3
+  _forceAmount: 35
 --- !u!54 &7672155381100128060
 Rigidbody:
   m_ObjectHideFlags: 0

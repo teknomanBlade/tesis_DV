@@ -210,7 +210,6 @@ GameObject:
   - component: {fileID: 1701700851319522168}
   - component: {fileID: 5139753722626236109}
   - component: {fileID: 405796880077784126}
-  - component: {fileID: 2955292876341209344}
   m_Layer: 0
   m_Name: Loader
   m_TagString: Untagged
@@ -281,19 +280,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2955292876341209344
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4972524731447536809}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1.0000001}
-  m_Center: {x: 0.0000019073486, y: -0.0000000037252903, z: -0.0000019073486}
 --- !u!1 &5457197421207323729
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,7 +321,6 @@ GameObject:
   - component: {fileID: 1276516317442080118}
   - component: {fileID: 2945144004587946612}
   - component: {fileID: 2114386733056734843}
-  - component: {fileID: 2807848939663215582}
   m_Layer: 0
   m_Name: NailShooter
   m_TagString: Untagged
@@ -406,20 +391,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &2807848939663215582
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7229059318552723122}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000002
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.0000019669533, y: -0.0000000037252903, z: -0.0000019967556}
 --- !u!1 &8472629527410450786
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,7 +402,6 @@ GameObject:
   - component: {fileID: 7198353828875472209}
   - component: {fileID: 7183728850761553692}
   - component: {fileID: 8010110770957427218}
-  - component: {fileID: 7903527117809956666}
   m_Layer: 0
   m_Name: NailThrower
   m_TagString: Untagged
@@ -505,16 +475,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7903527117809956666
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8472629527410450786}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1.0000001}
-  m_Center: {x: 0.0000019073486, y: -0.0000000037252903, z: -0.0000019073486}
