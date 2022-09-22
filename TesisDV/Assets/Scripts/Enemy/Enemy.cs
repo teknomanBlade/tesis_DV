@@ -327,6 +327,20 @@ public abstract class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void GetDoor(Door door)
+    {
+        OpenDoor(door);
+    }
+
+    private void OpenDoor(Door door)
+    {
+        door.Interact();
+        //Refeencia a View donde hace un play de la animacion de abrir la puerta.
+
+        //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
+        //TriggerDoorGrayInteract("GrayDoorInteract");
+    }
+
     public void Dissolve()
     {
         onDisolve();

@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 8527683028964595945}
   - component: {fileID: 8527683028964595944}
   - component: {fileID: 8527683028964595947}
+  - component: {fileID: 2838646456577768843}
   - component: {fileID: 8527683028964595946}
   - component: {fileID: 5466480737862603747}
   m_Layer: 10
@@ -404,6 +405,25 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!95 &2838646456577768843
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8527683028964595949}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!65 &8527683028964595946
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -429,9 +449,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1390aafcbefe1dd429873b11399db4b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemName: 
-  _itemImage: {fileID: 0}
-  itemType: 2
+  active: 0
+  viewRadius: 10
+  viewAngle: 90
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 65536
+  myCannon: {fileID: 3706665785273453831}
+  myCannonSupport: {fileID: 8527683030187067574}
   _currentLife: 5
   blueprintPrefab: {fileID: 2795999551099263163, guid: a3224cb9723c29c40bce68320565ad13, type: 3}
   _myItems:
@@ -441,20 +469,6 @@ MonoBehaviour:
   spawnPoint: {fileID: 1958736446158144519}
   shots: 15
   shotsLeft: 0
-  active: 0
-  viewRadius: 10
-  viewAngle: 90
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 4096
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 8
-  HitTurret: {fileID: 0}
-  _currentObjectiveDistance: 1000
-  _currentObjective: {fileID: 0}
-  collidersObjectives: []
-  collidersObjectivesDisabled: []
 --- !u!1 &8527683030187067561
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class ObstacleDetector : MonoBehaviour
 {
-    [SerializeField]
-    private GrayModel _myOwner;
+    [SerializeField] private Enemy _myOwner;
     void Start()
     {
         //_myOwner = transform.transform.GetComponent<Gray>();

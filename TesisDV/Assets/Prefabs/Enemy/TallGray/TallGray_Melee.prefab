@@ -1736,6 +1736,64 @@ Transform:
   m_Father: {fileID: 5831493287735679573}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -0.5906315, y: -5.1381993, z: -47.514076}
+--- !u!1 &6457808327524838261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1872309364917871253}
+  - component: {fileID: 2400498059217762776}
+  - component: {fileID: 8086186791867443474}
+  m_Layer: 18
+  m_Name: ObstacleDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1872309364917871253
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6457808327524838261}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.352, z: 0.029}
+  m_LocalScale: {x: 0.375, y: 0.375, z: 0.375}
+  m_Children: []
+  m_Father: {fileID: 9171576087201974361}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2400498059217762776
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6457808327524838261}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.49698514, y: 0.25072628, z: 1.0354351}
+  m_Center: {x: -0.016837439, y: -0.05427318, z: 0.6256096}
+--- !u!114 &8086186791867443474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6457808327524838261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520b804d0cc98e44aa89095ab49fe4c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myOwner: {fileID: -3214199489047620312}
 --- !u!1 &6504553805418249568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2316,7 +2374,7 @@ GameObject:
   - component: {fileID: 8704686938908094391}
   - component: {fileID: -3214199489047620312}
   - component: {fileID: 5700644261775503027}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: TallGray_Melee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2339,6 +2397,7 @@ Transform:
   - {fileID: 5105381875823897915}
   - {fileID: 453900518992729467}
   - {fileID: 2443855166772008150}
+  - {fileID: 1872309364917871253}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2524,6 +2583,7 @@ MonoBehaviour:
   _hp: 10
   _movingSpeed: 2
   _catGrabPos: {fileID: 453900518992729467}
+  allTargets: []
   isDead: 0
   pursueThreshold: 10
   disengageThreshold: 15

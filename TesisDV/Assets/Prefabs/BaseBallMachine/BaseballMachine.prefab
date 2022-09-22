@@ -55,9 +55,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4283510081ca7d4caaf45782179d1b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemName: Baseball Launcher
-  _itemImage: {fileID: 21300000, guid: 9485f5ca79c73ac4b8210461edb09ff9, type: 3}
-  itemType: 2
+  active: 0
+  viewRadius: 10
+  viewAngle: 90
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 65536
+  myCannon: {fileID: 2018341531716792587}
+  myCannonSupport: {fileID: 8190567066106638660}
   _currentLife: 3
   HitTurret: {fileID: 4808819858614014439}
   ShootEffect: {fileID: 1563815400455616865}
@@ -69,25 +77,12 @@ MonoBehaviour:
   ballsState3: {fileID: 2378795130276980881}
   trapDestroyPrefab: {fileID: 4781164415668618757, guid: 5ca33918d921f8746a458bb0b041a4b8, type: 3}
   shots: 15
-  viewRadius: 10
-  viewAngle: 90
   shotsLeft: 0
   interval: 0.5
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 4096
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 8
-  active: 0
-  _currentObjective: {fileID: 0}
-  _currentObjectiveDistance: 1000
   _myItems:
   - {fileID: 3347486647281790323, guid: f34fc2fba773253438b72b7339ead9bc, type: 3}
   - {fileID: 4600965342611424314, guid: a36cf15f5d57e674889c8b7138c2a37d, type: 3}
   - {fileID: 3877556373250478930, guid: 84d87ae8aae7f434a949463f34c1b1e6, type: 3}
-  collidersObjectives: []
-  collidersObjectivesDisabled: []
   laser: {fileID: 8572901668696723674}
 --- !u!65 &3861253924358264624
 BoxCollider:
