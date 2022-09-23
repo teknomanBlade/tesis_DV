@@ -5,22 +5,20 @@ using UnityEngine;
 
 public class RacketManager : MonoBehaviour
 {
-    public Racket racket;
-    // Start is called before the first frame update
+    [SerializeField] private Racket racket;
+
     void Awake()
     {
-        racket.OnRacketDestroyed += RacketDestroyed;
+        //racket.OnRacketDestroyed += RacketDestroyed;
+    }
+
+    public void ActivateRacket()
+    {
+        racket.gameObject.SetActive(true);
     }
 
     private void RacketDestroyed(bool destroyed)
     {
         this.gameObject.SetActive(!destroyed);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-   
 }

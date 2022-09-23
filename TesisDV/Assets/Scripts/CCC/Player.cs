@@ -30,17 +30,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public FadeInOutScenesPPSSettings postProcessFadeInOutScenes;
     private Coroutine FadeOutSceneCoroutine;
     private Coroutine FadeInSceneCoroutine;
-    [SerializeField]
-    private Inventory _inventory;
-    public GameObject _weaponGO;
-    [SerializeField]
-    private Melee _weapon;
+    [SerializeField] private Inventory _inventory;
+    public RacketManager _weaponGO;
+    [SerializeField] private Melee _weapon;
     public string typeFloor { get; private set; }
     
     private AudioSource _audioSource;
     private GameObject _craftingScreen;
-    [SerializeField]
-    private GameObject _miniMapDisplay;
+    [SerializeField] private GameObject _miniMapDisplay;
     private LevelManager _lm;
     #endregion
 
@@ -889,10 +886,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             if (_inventory.ContainsID(3))
             {
-                _weaponGO.SetActive(true);
-                _weaponGO.transform.GetComponentInChildren<Racket>().gameObject.layer = 0;
-                OnNewRacketGrabbed += _weaponGO.transform.GetComponentInChildren<Racket>().OnNewRacketGrabbed;
-                OnNewRacketGrabbed?.Invoke();
+                _weaponGO.gameObject.SetActive(true);
+                _weaponGO.ActivateRacket();
+                //_weaponGO.transform.GetComponentInChildren<Racket>().gameObject.layer = 0;
+                //OnNewRacketGrabbed += _weaponGO.transform.GetComponentInChildren<Racket>().OnNewRacketGrabbed;
+                //OnNewRacketGrabbed?.Invoke();
             }
         }
     }

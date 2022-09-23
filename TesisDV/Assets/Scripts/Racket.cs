@@ -15,32 +15,33 @@ public class Racket : Melee
     private bool _isDestroyed;
     [SerializeField]
     private int _damageAmount = 1;
-    public delegate void OnRacketDestroyedDelegate(bool destroyed);
-    public event OnRacketDestroyedDelegate OnRacketDestroyed;
+    private Quaternion _startingRotation;
+    //public delegate void OnRacketDestroyedDelegate(bool destroyed); Ahora la misma raqueta maneja su GameObject. 
+    //public event OnRacketDestroyedDelegate OnRacketDestroyed;
     [SerializeField] private Mesh _damagedRacketMesh;
+    private Mesh _newRacketMesh;
+    private Texture _startingTexture;
     public Texture textureState1;
     public Texture textureState2;
     public Texture textureState3;
-    // Start is called before the first frame update
+
     void Awake()
     {
+        _startingRotation = transform.localRotation;
         hitsRemaining = 7;
         SetStateRacketDamaged(hitsRemaining);
         _renderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
+        _newRacketMesh = _meshFilter.mesh;
+        _startingTexture = _renderer.material.mainTexture;
     }
 
     public void OnNewRacketGrabbed()
     {
-        _isDestroyed = false;
-        hitsRemaining = 7;
-        OnRacketDestroyed?.Invoke(_isDestroyed);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        this.gameObject.SetActive(true);
+        //_isDestroyed = false;
+        //hitsRemaining = 7;
+        //OnRacketDestroyed?.Invoke(_isDestroyed);
     }
 
     public override void MeleeAttack()
@@ -48,6 +49,7 @@ public class Racket : Melee
         if(!IsAttacking)
             StartCoroutine(Attack("IsAttacking","RacketSwing"));
     }
+    
     IEnumerator Attack(string param, string name)
     {
         IsAttacking = true;
@@ -85,7 +87,8 @@ public class Racket : Melee
                     _isDestroyed = true;
                     GameVars.Values.soundManager.PlaySoundAtPoint("RacketBroken", transform.position, 0.09f);
                     GameVars.Values.ShowNotification("Oh no! The racket has broken!");
-                    OnRacketDestroyed?.Invoke(_isDestroyed);
+                    //OnRacketDestroyed?.Invoke(_isDestroyed);
+                    DestroyAndRestoreValues();
                     _player.RacketInventoryRemoved();
                 }
                 other.GetComponent<Enemy>().TakeDamage(_damageAmount);
@@ -123,6 +126,16 @@ public class Racket : Melee
         _meshFilter.mesh = _damagedRacketMesh;
         //transform.position -= 0.07f;
         transform.localRotation = Quaternion.Euler(2.658f,42.094f,73.143f);
+    }
+
+    public void DestroyAndRestoreValues()
+    {
+        this.gameObject.SetActive(false);
+        hitsRemaining = 7; //Hacer un void ResetHits() despues.
+        transform.localRotation = _startingRotation;
+        _meshFilter.mesh = _newRacketMesh;
+        _renderer.material.SetTexture("_MainTexture", _startingTexture);
+        SetStateRacketDamaged(hitsRemaining);
     }
     
 }
