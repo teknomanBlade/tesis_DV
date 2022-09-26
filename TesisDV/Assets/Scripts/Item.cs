@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum ItemType { Crafting, Heal, Weapon }
+public enum ItemType { Crafting, Heal, Weapon, Interactable }
 public abstract class Item : MonoBehaviour, IInteractable
 {
     [SerializeField]

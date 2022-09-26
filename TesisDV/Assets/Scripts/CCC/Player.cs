@@ -673,6 +673,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(40f);
             return;
         }
+        if (lookingAt.gameObject.TryGetComponent<PantryDoor>(out PantryDoor pantryDoor))
+        {
+            crosshair.sprite = GameVars.Values.crosshairDoor;
+            ChangeCrosshairSize(40f);
+            return;
+        }
         if (lookingAt.gameObject.TryGetComponent<Drawer>(out Drawer drawer))
         {
             crosshair.sprite = GameVars.Values.crosshairHandHold;

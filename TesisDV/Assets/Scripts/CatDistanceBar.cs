@@ -20,8 +20,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     public Animator RestWaveTimeAnim { get; private set; }
     public Animator RoundTextAnim { get; private set; }
     public float _valueToChange { get; private set; }
-    
-
+    public GameObject catCaptured;
     void Start()
     {
         _mySlider = GetComponent<Slider>();
@@ -104,6 +103,11 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
 
     void Update()
     {
+        if (GameVars.Values.IsCatCaptured)
+        {
+            catCaptured.GetComponent<Animator>().SetBool("IsCaptured", GameVars.Values.IsCatCaptured);
+            
+        }
         _mySlider.value = GameVars.Values.GetCatDistance();
         if (_mySlider.value < _dangerThreshold)
         {
