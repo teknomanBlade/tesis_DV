@@ -86,8 +86,13 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         if (!_inRound)
         {
             TimeWaves -= Time.deltaTime;
-            if (TimeWaves <= 0)
+            if (TimeWaves <= 0) //Aca deberia chequear si ganaste.
             {
+                if (_currentRound >= _totalRounds)
+                {
+                    GameVars.Values.LevelManager.WinGame(); 
+                    return;
+                }
                 DespawnUFOIndicators();
                 SpawnWave();
                 GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
@@ -123,10 +128,10 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetTotalGrays(_totalGraysUFO1);//.SetRotation(new Vector3(-90f, 0f, 0f));
             Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetTotalGrays(_totalGraysUFO2);//.SetRotation(new Vector3(-90f, 0f, 0f));
         }
-        else
+        /* else
         {
-            GameVars.Values.LevelManager.WinGame();
-        }
+            GameVars.Values.LevelManager.WinGame(); Chequear si ganaste aca hace que tengas que esperar todo el tiempo InBetweenRounds.
+        } */
     }
 
     //Hacer por evento en lugar de void publico.
