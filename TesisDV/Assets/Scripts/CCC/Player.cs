@@ -100,7 +100,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public float gizmoScale = 1f;
     public LayerMask itemMask;
     private float _valueToChange;
-
+    private bool _canStartNextWave;
+    
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();

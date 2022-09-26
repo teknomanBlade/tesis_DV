@@ -86,13 +86,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         if (!_inRound)
         {
             TimeWaves -= Time.deltaTime;
-            if (TimeWaves <= 0) //Aca deberia chequear si ganaste.
+            if (TimeWaves <= 0)
             {
-                if (_currentRound >= _totalRounds)
-                {
-                    GameVars.Values.LevelManager.WinGame(); 
-                    return;
-                }
                 DespawnUFOIndicators();
                 SpawnWave();
                 GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
@@ -137,6 +132,11 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     //Hacer por evento en lugar de void publico.
     public void SendNextRound()
     {
+        if (_currentRound >= _totalRounds)
+        {
+            Invoke("SendWinGame", 1f);
+            return;
+        }
         _inRound = false;
         OnRoundStartEnd?.Invoke(_inRound);
         //if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
@@ -149,11 +149,17 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         Destroy(UFOIndicator2);
     }
 
+    private void SendWinGame()
+    {
+        GameVars.Values.LevelManager.WinGame(); 
+    }
+
     private void InstantiateUFOIndicators()
     {
         Vector3 auxVector = new Vector3(_finalPos1.x, 0f, _finalPos1.z);
         UFOIndicator = Instantiate(UFOIndicatorPrefab);
         UFOIndicator.transform.position = auxVector;
+
         Vector3 auxVector2 = new Vector3(_finalPos2.x, 0.05f, _finalPos2.z);
         UFOIndicator2 = Instantiate(UFOIndicatorPrefab);
         UFOIndicator2.transform.position = auxVector2;
