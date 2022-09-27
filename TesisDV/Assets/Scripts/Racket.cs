@@ -87,8 +87,9 @@ public class Racket : Melee
                     _isDestroyed = true;
                     GameVars.Values.soundManager.PlaySoundAtPoint("RacketBroken", transform.position, 0.09f);
                     GameVars.Values.ShowNotification("Oh no! The racket has broken!");
-                    //OnRacketDestroyed?.Invoke(_isDestroyed);
-                    DestroyAndRestoreValues();
+                    SetDamagedRacket();
+                    anim.SetBool("IsDestroyed", true);
+                    //DestroyAndRestoreValues();
                     _player.RacketInventoryRemoved();
                 }
                 other.GetComponent<Enemy>().TakeDamage(_damageAmount);
@@ -117,7 +118,7 @@ public class Racket : Melee
         {
             Debug.Log("HITS 1");
             _renderer.material.SetTexture("_MainTexture", textureState3);
-            SetDamagedRacket();
+           
         }
     }
 
@@ -133,6 +134,7 @@ public class Racket : Melee
         this.gameObject.SetActive(false);
         hitsRemaining = 7; //Hacer un void ResetHits() despues.
         transform.localRotation = _startingRotation;
+        anim.SetBool("IsDestroyed", false);
         _meshFilter.mesh = _newRacketMesh;
         _renderer.material.SetTexture("_MainTexture", _startingTexture);
         SetStateRacketDamaged(hitsRemaining);

@@ -12,6 +12,11 @@ public class RacketManager : MonoBehaviour
         //racket.OnRacketDestroyed += RacketDestroyed;
     }
 
+    public void ResetValuesOnDestroyed()
+    {
+        racket.DestroyAndRestoreValues();
+    }
+
     public void ActivateRacket()
     {
         racket.gameObject.SetActive(true);
