@@ -49,11 +49,11 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     public void Awake()
     {
-        active = false;
+        //active = false; Ahora las trampas empiezan encendidas.
         _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
-        _animator.SetBool("HasNoBalls", true);
-        GameVars.Values.ShowNotification("The Turret is inactive. Get near until you see the Active Button Icon.");
+        //_animator.SetBool("HasNoBalls", true); Ahora las trampas empiezan encendidas.
+        //GameVars.Values.ShowNotification("The Turret is inactive. Get near until you see the Active Button Icon."); Ahora las trampas empiezan encendidas.
         isFirstTime = true;
         myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
@@ -65,6 +65,15 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         InitialStock = 20;
         BaseballPool = new PoolObject<Baseball>(BaseballFactory, ActivateBaseball, DeactivateBaseball, InitialStock, true);
         ActiveBallsState1();
+        StartTrap();
+    }
+
+    private void StartTrap()
+    {
+        active = true;
+        _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
+        if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
+        ShootCoroutine = StartCoroutine("ActiveCoroutine");
     }
 
     public void Interact()

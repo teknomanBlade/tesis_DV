@@ -7,6 +7,11 @@ public class ElectricTrap : Trap, IInteractable
     [SerializeField] private float _damagePerSecond;
     [SerializeField] private float _trapDuration;
 
+    private void Start()
+    {
+        active = true; // Ahora las trampas empiezan encendidas.        
+    }
+
     private void Update()
     {
         _trapDuration -= Time.deltaTime;

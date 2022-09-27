@@ -20,13 +20,14 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     private Coroutine ShootCoroutine; 
     void Awake()
     {
-        active = false;
+        active = true; // Ahora las trampas empiezan encendidas.
         _animator = GetComponent<Animator>();
         shotsLeft = shots;
         InitialStock = 30;
         Nail = Resources.Load<Nail>("Nail");
         NailsPool = new PoolObject<Nail>(NailFactory, ActivateNail, DeactivateNail, InitialStock, true);
         myCannon = transform.GetChild(1);
+        StartTrap();
     }
 
     void Update()
@@ -35,6 +36,14 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
         {
             FieldOfView();
         }
+    }
+
+    private void StartTrap()
+    {
+        active = true;
+        _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
+        if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
+        ShootCoroutine = StartCoroutine("ActiveCoroutine");
     }
 
     public void Interact()
