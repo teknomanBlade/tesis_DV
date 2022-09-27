@@ -46,6 +46,7 @@ public class GameVars : MonoBehaviour
     public KeyCode primaryFire;
     public KeyCode secondaryFire;
     public KeyCode useKey;
+    public KeyCode hideShowMiniMapKey;
     public KeyCode dropKey;
     public KeyCode inventoryKey;
     public KeyCode inventoryItem1Key;

@@ -156,9 +156,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 Interact();
             }
         }
+        if (Input.GetKeyDown(GameVars.Values.hideShowMiniMapKey))
+        {
+            _miniMapDisplay.SetActive(!_miniMapDisplay.activeSelf);
+        }
 
-        //Cambiar la deteccion para no fijarte cada frame. Ver una mejor forma de detectar cuando tenemos un arma para no tener problema al agregar mas. Hacerlo cada vez que agarramos un item.
-        
+         //Cambiar la deteccion para no fijarte cada frame. Ver una mejor forma de detectar cuando tenemos un arma para no tener problema al agregar mas. Hacerlo cada vez que agarramos un item.
+
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire))
         {
