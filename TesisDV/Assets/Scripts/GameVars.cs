@@ -77,7 +77,6 @@ public class GameVars : MonoBehaviour
     public CraftingRecipe SlowTrap;
     public CraftingRecipe NailFiringMachine;
     public CraftingRecipe ElectricTrap;
-    public TVCraftingRecipe TVTrapAgain;
 
     [Header("Game")]
     private float _fadeDelay = 1.1f;

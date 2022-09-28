@@ -85,7 +85,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         //craftingRecipe.RestoreBuildAmount();
 
         GameVars.Values.BaseballLauncher.RestoreBuildAmount();
-        GameVars.Values.TVTrapAgain.RestoreBuildAmount();
+        
         GameVars.Values.soundManager.PlaySound("MusicPreWave",0.14f,true);
         
         //Invoke("EndRound",8f);
