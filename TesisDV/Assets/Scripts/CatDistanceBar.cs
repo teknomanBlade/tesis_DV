@@ -14,6 +14,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     private Image _fillImage;
     public GameObject Fill;
     public Text GraysAmountPerWaveText;
+    public Text WittsAmountText;
     public Animator GraysAmountPerWaveTextAnim { get; private set; }
     public Text RoundText;
     public Text RestWaveTimeText;
@@ -21,6 +22,12 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     public Animator RoundTextAnim { get; private set; }
     public float _valueToChange { get; private set; }
     public GameObject catCaptured;
+
+    void Awake()
+    {
+        
+    }
+
     void Start()
     {
         _mySlider = GetComponent<Slider>();
@@ -37,6 +44,8 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         GameVars.Values.WaveManager.OnTimeWaveChange += TimeWaveChanged;
         GameVars.Values.WaveManager.OnRoundStartEnd += RoundStartEnd;
         GameVars.Values.LevelManager.OnGrayAmountChange += GrayAmountChanged;
+
+        GameVars.Values.Inventory.OnWittsAmountChanged += WittsAmountChanged;
         
         _fillImage = Fill.GetComponent<Image>();
         _maxDistance = GameVars.Values.GetCatDistance();
@@ -63,6 +72,12 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     private void TimeWaveChanged(float newVal)
     {
         RestWaveTimeText.text = "Rest wave time: " + newVal.ToString("F0");
+    }
+
+    private void WittsAmountChanged(int newVal)
+    {
+        WittsAmountText.text = "X " + newVal;
+        //Aplicar animación.
     }
 
     private void GrayAmountChanged(int newVal)

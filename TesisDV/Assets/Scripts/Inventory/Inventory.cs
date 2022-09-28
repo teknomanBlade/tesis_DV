@@ -13,6 +13,10 @@ public class Inventory : MonoBehaviour
     [SerializeField] private int _wittsAmount;    
     private float fadeDelay = 1.1f;
     private bool isFaded;
+
+    public delegate void OnWittsAmountChangedDelegate(int witts);
+    public event OnWittsAmountChangedDelegate OnWittsAmountChanged;
+
     private void Awake()
     {
         _myCanvasGroup = GetComponent<CanvasGroup>();
@@ -20,9 +24,15 @@ public class Inventory : MonoBehaviour
         _trapHotBar = GameObject.Find("InventoryBar").GetComponent<TrapHotBar>(); 
     }
 
+    void Start()
+    {
+        //OnWittsAmountChanged(_wittsAmount);
+    }
+
     public void ReceiveWitts(int wittsAmount)
     {
         _wittsAmount += wittsAmount;
+        OnWittsAmountChanged(_wittsAmount);
     }
 
     public void AddTrapItem(int slotIndex)
@@ -127,6 +137,7 @@ public class Inventory : MonoBehaviour
     public void RemoveWitts(int wittsNeeded)
     {
         _wittsAmount -= wittsNeeded;
+        OnWittsAmountChanged(_wittsAmount);
     }
 
     public bool IsFull()
