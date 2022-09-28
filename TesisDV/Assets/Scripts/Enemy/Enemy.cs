@@ -8,6 +8,7 @@ using UnityEngine.AI;
 public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] private float _hp;
+    [SerializeField] private int _myWittsValue;
     [SerializeField] private float _movingSpeed;
     [SerializeField] private Transform _catGrabPos;
     public Collider[] allTargets; //Borrar esto y probar.

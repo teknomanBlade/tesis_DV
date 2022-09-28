@@ -31,11 +31,13 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         GraysAmountPerWaveTextAnim = GraysAmountPerWaveText.GetComponentInChildren<Image>().gameObject.GetComponent<Animator>();
         RestWaveTimeText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRestWaveTime")).FirstOrDefault();
         RestWaveTimeAnim = RestWaveTimeText.gameObject.GetComponent<Animator>();
+
         GameVars.Values.WaveManager.AddObserver(this);
         GameVars.Values.WaveManager.OnRoundChanged += RoundChanged;
         GameVars.Values.WaveManager.OnTimeWaveChange += TimeWaveChanged;
         GameVars.Values.WaveManager.OnRoundStartEnd += RoundStartEnd;
         GameVars.Values.LevelManager.OnGrayAmountChange += GrayAmountChanged;
+        
         _fillImage = Fill.GetComponent<Image>();
         _maxDistance = GameVars.Values.GetCatDistance();
         _dangerThreshold = _maxDistance * 0.20f;

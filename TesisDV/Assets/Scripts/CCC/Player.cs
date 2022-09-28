@@ -108,6 +108,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         Cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
         volume = _cam.Camera.GetComponent<PostProcessVolume>();
 
+        GameVars.Values.WaveManager.OnRoundEnd += CanStartNextWave;
+
         _craftingScreen = GameObject.Find("CraftingContainer");
         _miniMapDisplay = GameObject.Find("MiniMapDisplay");
         //_inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
@@ -120,8 +122,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
         hp = maxHp;
         GameVars.Values.ShowLivesRemaining(hp, maxHp);
-        ActiveFadeInEffect(1f);
-        
+        ActiveFadeInEffect(1f);    
     }
 
     private void Start()
@@ -181,6 +182,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 MoveTrap();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Return) && _canStartNextWave)
+        {
+            _canStartNextWave = false;
+            GameVars.Values.WaveManager.StartRound();
+        }
+
 
         //if (Input.GetKeyDown(GameVars.Values.inventoryKey))  Dejo el c�digo del screenmanager para usarlo en las pantallas de win y loose, donde si queremos que el PJ no se pueda seguir controlando.
         //{
@@ -443,6 +451,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             IsCrafting = true;
         }
 
+    }
+
+    public void CanStartNextWave()
+    {
+        _canStartNextWave = true;
     }
 
     public void Dead()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,14 +25,12 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             OnRoundChanged?.Invoke(_currentRound);
         }
     }
-    [SerializeField]
-    private float _firstWaveDelay;
-    [SerializeField]
-    private float _timeBetweenWaves;
+    /* [SerializeField]
+    private float _firstWaveDelay; */
+    [SerializeField] private float _timeBetweenWaves;
 
     private bool _inRound;
-    [SerializeField]
-    private float _timeWaves = 0;
+    [SerializeField] private float _timeWaves = 0;
     public float TimeWaves
     {
         get { return _timeWaves; }
@@ -42,24 +41,19 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             OnTimeWaveChange?.Invoke(_timeWaves);
         }
     }
-    [SerializeField]
-    private int _totalRounds;
+    [SerializeField] private int _totalRounds;
 
-    [SerializeField]
-    private Vector3 _startingPos;
+    [SerializeField] private Vector3 _startingPos;
 
     [Header("UFO 1 Details")]
-    [SerializeField]
-    private Vector3 _finalPos1;
+    [SerializeField] private Vector3 _finalPos1;
     [SerializeField] private int _totalGraysUFO1;
 
     [Header("UFO 2 Details")]
 
-    [SerializeField]
-    private Vector3 _finalPos2;
+    [SerializeField] private Vector3 _finalPos2;
 
-    [SerializeField]
-    private int _totalGraysUFO2;
+    [SerializeField] private int _totalGraysUFO2;
 
     [SerializeField] private GameObject UFOIndicatorPrefab;
     private GameObject UFOIndicator;
@@ -70,6 +64,9 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public event OnTimeWaveChangeDelegate OnTimeWaveChange;
     public delegate void OnRoundStartEndDelegate(bool roundStart);
     public event OnRoundStartEndDelegate OnRoundStartEnd;
+    public delegate void OnRoundEndDelegate();
+    public event OnRoundEndDelegate OnRoundEnd;
+
     void Awake()
     {
         TimeWaves = _timeBetweenWaves;
@@ -79,38 +76,58 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     void Start()
     {
         parent = GameObject.Find("MainGame");
+        //OnRoundStartEnd(_inRound);
+        //Debug.Log(_inRound);
+        OnRoundEnd();
     }
 
     void Update()
     {
-        if (!_inRound)
+        if (_inRound)
         {
             TimeWaves -= Time.deltaTime;
-            if (TimeWaves <= 0)
+
+            if(TimeWaves <= 0)
             {
-                DespawnUFOIndicators();
-                SpawnWave();
-                GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
-                _inRound = true;
-                OnRoundStartEnd?.Invoke(_inRound);
-                TimeWaves = _timeBetweenWaves;
+                SendUFOS();
             }
-        }
+        }  
     }
 
-    IEnumerator WaitFirstDelay()
+   /*  IEnumerator WaitFirstDelay()
     {
         DespawnUFOIndicators();
         yield return new WaitForSeconds(_firstWaveDelay);
         SpawnWave();
         
-    }
+    } */
 
     IEnumerator WaitBetweenWaves()
     {
         DespawnUFOIndicators();
         yield return new WaitForSeconds(_timeBetweenWaves);
         SpawnWave();
+    }
+
+    public void StartRound()
+    {
+        TimeWaves = _timeBetweenWaves;
+        _inRound = true;
+        OnRoundStartEnd(_inRound);
+        //SendUFOS();
+    }
+
+    private void SendUFOS()
+    {
+        _inRound = false;
+        OnRoundStartEnd(_inRound);
+
+        DespawnUFOIndicators();
+        SpawnWave();
+        GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
+        //_inRound = true;
+        //OnRoundStartEnd?.Invoke(_inRound);
+        TimeWaves = _timeBetweenWaves;
     }
 
     private void SpawnWave()
@@ -139,6 +156,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         }
         _inRound = false;
         OnRoundStartEnd?.Invoke(_inRound);
+        OnRoundEnd();
         //if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
         //_currentCoroutine = StartCoroutine("WaitBetweenWaves");
     }
