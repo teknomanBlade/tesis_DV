@@ -14,32 +14,31 @@ public class GameVars : MonoBehaviour
     public LevelManager LevelManager { get; set; }
     public WaveManager WaveManager { get; set; }
     
-    [SerializeField]
-    private Player player;
+    [SerializeField] private Player player;
     public Player Player
     {
         get { return player; }
     }
 
-    [SerializeField]
-    private Cat cat;
+    [SerializeField] private Cat cat;
     public Cat Cat
     {
         get { return cat; }
     }
 
-    [SerializeField]
-    private bool _isCatCaptured;
+    [SerializeField] private Inventory inventory;
+    public Inventory Inventory
+    {
+        get { return inventory; }
+    }
+
+    [SerializeField] private bool _isCatCaptured;
     public bool IsCatCaptured { get { return _isCatCaptured; } }
 
-    [SerializeField]
-    private string objectLayerName;
-    [SerializeField]
-    private string floorLayerName;
-    [SerializeField]
-    private string enemyLayerName;
-    [SerializeField]
-    private string wallLayerName;
+    [SerializeField] private string objectLayerName;
+    [SerializeField] private string floorLayerName;
+    [SerializeField] private string enemyLayerName;
+    [SerializeField] private string wallLayerName;
 
     [Header("KeyBinds")]
     public KeyCode jumpKey;

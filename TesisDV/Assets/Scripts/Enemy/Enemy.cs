@@ -92,6 +92,7 @@ public abstract class Enemy : MonoBehaviour
         {
             isAwake= false;
             isDead = true;
+            SendWitts();
             _capsuleCollider.enabled = false;
             GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
@@ -340,6 +341,11 @@ public abstract class Enemy : MonoBehaviour
 
         //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
         //TriggerDoorGrayInteract("GrayDoorInteract");
+    }
+
+    public void SendWitts()
+    {
+        GameVars.Values.Inventory.ReceiveWitts(_myWittsValue);
     }
 
     public void Dissolve()

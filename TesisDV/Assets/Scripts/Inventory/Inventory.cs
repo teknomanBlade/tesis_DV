@@ -20,6 +20,11 @@ public class Inventory : MonoBehaviour
         _trapHotBar = GameObject.Find("InventoryBar").GetComponent<TrapHotBar>(); 
     }
 
+    public void ReceiveWitts(int wittsAmount)
+    {
+        _wittsAmount += wittsAmount;
+    }
+
     public void AddTrapItem(int slotIndex)
     {
         itemSlots[slotIndex].ActivateTrapKey();
