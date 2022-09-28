@@ -11,6 +11,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private int _myWittsValue;
     [SerializeField] private float _movingSpeed;
     [SerializeField] private Transform _catGrabPos;
+    public ParticleSystem witGainEffect;
     public Collider[] allTargets; //Borrar esto y probar.
     protected CapsuleCollider _capsuleCollider;
     protected bool isAwake = false;
@@ -345,7 +346,13 @@ public abstract class Enemy : MonoBehaviour
 
     public void SendWitts()
     {
+        ActivateWitGainEffect();
         GameVars.Values.Inventory.ReceiveWitts(_myWittsValue);
+    }
+
+    public void ActivateWitGainEffect()
+    {
+        witGainEffect.Play();
     }
 
     public void Dissolve()
