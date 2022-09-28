@@ -119,7 +119,7 @@ public class Blueprint : MonoBehaviour
         yield return new WaitForSeconds(2f);
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, parent.transform);
         //Destroy(aux.GetComponent<InventoryItem>());
-        craftingRecipe.RemoveItems();
+        craftingRecipe.RemoveItemsAndWitts();
         craftingRecipe.RestoreBuildAmount();
         Destroy(particlesInstantiated);
         Destroy(gameObject);

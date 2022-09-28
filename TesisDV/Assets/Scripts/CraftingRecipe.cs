@@ -20,6 +20,7 @@ using UnityEngine;
             //public InventoryItem item;
             public int craftingID;
             public int amount;
+            public int wittValue;
             public Sprite itemImage;
             public GameObject trapPrefab;
         }
@@ -53,8 +54,7 @@ using UnityEngine;
             _inventory = inventory;
             foreach (ItemAmount itemAmount in materials)
             {
-                
-                if(!inventory.ContainsID(itemAmount.craftingID, itemAmount.amount))
+                if(!inventory.ContainsID(itemAmount.craftingID, itemAmount.amount) || !inventory.HasEnoughWitts(itemAmount.wittValue))
                 {
                     return false;
                 }
@@ -86,15 +86,19 @@ using UnityEngine;
             }
         }
 
-        public void RemoveItems()
+        public void RemoveItemsAndWitts()
         {
             foreach(ItemAmount itemAmount in materials)
+            {
+                for(int i = 0; i < itemAmount.amount; i++)
                 {
-                    for(int i = 0; i < itemAmount.amount; i++)
-                    {
-                        _inventory.RemoveItemID(itemAmount.craftingID, itemAmount.amount);
-                    }
+                    _inventory.RemoveItemID(itemAmount.craftingID, itemAmount.amount);
                 }
+            }
+            foreach(ItemAmount itemAmount in results)
+            {
+                _inventory.RemoveWitts(itemAmount.wittValue);
+            }
         }
 
         public void RestoreBuildAmount()

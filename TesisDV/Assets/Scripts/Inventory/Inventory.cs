@@ -10,7 +10,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] List<InventoryItem> items;
     [SerializeField] Slot[] itemSlots;
     [SerializeField] private CanvasGroup _myCanvasGroup;   
-    private int _wittAmount;    
+    [SerializeField] private int _wittsAmount;    
     private float fadeDelay = 1.1f;
     private bool isFaded;
     private void Awake()
@@ -119,6 +119,11 @@ public class Inventory : MonoBehaviour
         }  
     }
 
+    public void RemoveWitts(int wittsNeeded)
+    {
+        _wittsAmount -= wittsNeeded;
+    }
+
     public bool IsFull()
     {
         for (int i = 0; i < itemSlots.Length; i++)
@@ -161,6 +166,18 @@ public class Inventory : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool HasEnoughWitts (int wittsNeeded)
+    {
+        if (_wittsAmount >= wittsNeeded)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public int ItemCount(InventoryItem item)
