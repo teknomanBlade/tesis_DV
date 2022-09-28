@@ -4820,7 +4820,6 @@ GameObject:
   - component: {fileID: 4045332455025785545}
   - component: {fileID: 1460707569630886863}
   - component: {fileID: 3869437340328525739}
-  - component: {fileID: 7781972381165934021}
   m_Layer: 10
   m_Name: Racket
   m_TagString: Untagged
@@ -4840,6 +4839,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8335414700092917432}
+  - {fileID: 7059659233518293416}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
@@ -4944,6 +4944,8 @@ MonoBehaviour:
   hitsRemaining: 0
   _trail: {fileID: 6299067606991385543}
   _isDestroyed: 0
+  _damageAmount: 1
+  _damagedRacketMesh: {fileID: 0}
   textureState1: {fileID: 2800000, guid: d5222ae4e49a8344bba999115fe06f0f, type: 3}
   textureState2: {fileID: 2800000, guid: 1b5e516bb7a7d9e4194a49b6ff0a6d91, type: 3}
   textureState3: {fileID: 2800000, guid: 5020bd5bf82094f42a70e2cedc8709d7, type: 3}
@@ -4963,17 +4965,65 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 3
---- !u!136 &7781972381165934021
-CapsuleCollider:
+--- !u!1001 &7382046122507204163
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7341024955952405277}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.54475987
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.4388393
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.007479012
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6933534
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.72059774
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -92.208
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+      propertyPath: m_Name
+      value: racked_new
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+--- !u!4 &7059659233518293416 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fe57df94e8dfbdc48aab422588b989ec, type: 3}
+  m_PrefabInstance: {fileID: 7382046122507204163}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7988853864577627180}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.3237517
-  m_Height: 0.9873081
-  m_Direction: 1
-  m_Center: {x: 0.22602612, y: -0.08073475, z: -0.16353723}
