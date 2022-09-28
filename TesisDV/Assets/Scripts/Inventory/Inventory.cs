@@ -9,7 +9,8 @@ public class Inventory : MonoBehaviour
     private TrapHotBar _trapHotBar;
     [SerializeField] List<InventoryItem> items;
     [SerializeField] Slot[] itemSlots;
-    [SerializeField] private CanvasGroup _myCanvasGroup;       
+    [SerializeField] private CanvasGroup _myCanvasGroup;   
+    private int _wittAmount;    
     private float fadeDelay = 1.1f;
     private bool isFaded;
     private void Awake()
@@ -98,16 +99,22 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void RemoveItemID(int itemID)
+    public void RemoveItemID(int itemID, int amount)
     {
+        int itemAmount = 0;
+
         for (int i = 0; i < itemSlots.Length; i++)
         {
             if(itemSlots[i].HasItemID(itemID))
             {
                 //itemSlots[i].Item = null;
                 itemSlots[i].RemoveItem();
-                _trapHotBar.CheckRecipeRequirements(this);
-                break;
+                itemAmount++;
+                if(itemAmount >= amount)
+                {
+                    _trapHotBar.CheckRecipeRequirements(this);
+                    break;
+                }
             }
         }  
     }
@@ -130,7 +137,6 @@ public class Inventory : MonoBehaviour
         {
             if(itemSlots[i].HasItem(item))
             {
-
                 return true;
             }
         }
@@ -138,15 +144,19 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    public bool ContainsID(int itemID)
+    public bool ContainsID(int itemID, int amount)
     {
+        int itemAmount = 0;
 
         for (int i = 0; i < itemSlots.Length; i++)
         {
-
             if(itemSlots[i].HasItemID(itemID))
             {
-                return true;
+                itemAmount ++;
+                if(itemAmount >= amount)
+                {
+                    return true;
+                }
             }
         }
 

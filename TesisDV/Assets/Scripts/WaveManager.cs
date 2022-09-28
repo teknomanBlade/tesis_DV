@@ -64,7 +64,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public event OnTimeWaveChangeDelegate OnTimeWaveChange;
     public delegate void OnRoundStartEndDelegate(bool roundStart);
     public event OnRoundStartEndDelegate OnRoundStartEnd;
-    public delegate void OnRoundEndDelegate();
+    public delegate void OnRoundEndDelegate(int round);
     public event OnRoundEndDelegate OnRoundEnd;
 
     void Awake()
@@ -78,7 +78,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         parent = GameObject.Find("MainGame");
         //OnRoundStartEnd(_inRound);
         //Debug.Log(_inRound);
-        OnRoundEnd();
+        OnRoundEnd(_totalRounds);
     }
 
     void Update()
@@ -156,7 +156,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         }
         _inRound = false;
         OnRoundStartEnd?.Invoke(_inRound);
-        OnRoundEnd();
+        OnRoundEnd(_totalRounds);
         //if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
         //_currentCoroutine = StartCoroutine("WaitBetweenWaves");
     }

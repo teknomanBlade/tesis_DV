@@ -30,8 +30,8 @@ using UnityEngine;
             foreach (ItemAmount itemAmount in materials)
             {
                 
-                if(!inventory.ContainsID(itemAmount.craftingID))
-                {
+                if(!inventory.ContainsID(itemAmount.craftingID, itemAmount.amount))
+                 {
                     return false;
                 }
             }
@@ -68,7 +68,7 @@ using UnityEngine;
                 {
                     for(int i = 0; i < itemAmount.amount; i++)
                     {
-                        _inventory.RemoveItemID(itemAmount.craftingID);
+                        _inventory.RemoveItemID(itemAmount.craftingID, itemAmount.amount);
                     }
                 }
         }

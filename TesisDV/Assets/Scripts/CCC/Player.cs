@@ -167,7 +167,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire))
         {
-            if (_inventory.ContainsID(3) && !IsCrafting) 
+            if (_inventory.ContainsID(3, 1) && !IsCrafting) 
             {
                 _weapon.SetOwner(this);
                 _weapon.MeleeAttack();
@@ -453,7 +453,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     }
 
-    public void CanStartNextWave()
+    public void CanStartNextWave(int round)
     {
         _canStartNextWave = true;
     }
@@ -705,7 +705,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
         if (lookingAt.gameObject.TryGetComponent<BaseballLauncher>(out BaseballLauncher baseballLauncher))
         {
-            baseballLauncher.HasPlayerTennisBallBox = _inventory.ContainsID(8);
+            baseballLauncher.HasPlayerTennisBallBox = _inventory.ContainsID(8, 1);
             if (baseballLauncher.IsEmpty)
             {
                 crosshair.sprite = GameVars.Values.crosshairReloadTrap1;
@@ -784,7 +784,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void OnBaseballMachineReload()
     {
-        if (_inventory.ContainsID(8))
+        if (_inventory.ContainsID(8, 1))
             _inventory.RemoveItemByID(8);
     }
 
@@ -908,7 +908,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         if (message.Equals("ItemGrabbed"))
         {
-            if (_inventory.ContainsID(3))
+            if (_inventory.ContainsID(3, 1))
             {
                 _weaponGO.gameObject.SetActive(true);
                 _weaponGO.ActivateRacket();

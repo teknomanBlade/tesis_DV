@@ -26,26 +26,26 @@ using UnityEngine;
         
         public bool HasBaseballTrapItems(Inventory inventory)
         {
-            return inventory.ContainsID(5) && inventory.ContainsID(2) && inventory.ContainsID(8);
+            return inventory.ContainsID(5, 1) && inventory.ContainsID(2, 1) && inventory.ContainsID(8, 1);
         }
         public bool HasTVTrapItems(Inventory inventory)
         {
-            return inventory.ContainsID(2) && inventory.ContainsID(6);
+            return inventory.ContainsID(2, 1) && inventory.ContainsID(6, 1);
         }
 
         public bool HasSlowTrapItems(Inventory inventory)
         {
-            return inventory.ContainsID(4);
+            return inventory.ContainsID(4, 1);
         }
 
         public bool HasNailFiringMachineItems(Inventory inventory)
         {
-            return inventory.ContainsID(2) && inventory.ContainsID(7);
+            return inventory.ContainsID(2, 1) && inventory.ContainsID(7, 1);
         }
 
         public bool HasElectricTrapItems(Inventory inventory)
         {
-            return inventory.ContainsID(2) && inventory.ContainsID(2);
+            return inventory.ContainsID(2, 2);
         }
 
         public bool CanCraft(Inventory inventory)
@@ -54,7 +54,7 @@ using UnityEngine;
             foreach (ItemAmount itemAmount in materials)
             {
                 
-                if(!inventory.ContainsID(itemAmount.craftingID))
+                if(!inventory.ContainsID(itemAmount.craftingID, itemAmount.amount))
                 {
                     return false;
                 }
@@ -92,7 +92,7 @@ using UnityEngine;
                 {
                     for(int i = 0; i < itemAmount.amount; i++)
                     {
-                        _inventory.RemoveItemID(itemAmount.craftingID);
+                        _inventory.RemoveItemID(itemAmount.craftingID, itemAmount.amount);
                     }
                 }
         }
