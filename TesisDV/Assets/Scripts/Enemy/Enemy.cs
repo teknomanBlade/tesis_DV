@@ -27,6 +27,8 @@ public abstract class Enemy : MonoBehaviour
     public float attackThreshold;
     //Distancia a la que deja de atacar al Player pero lo sigue persiguiendo
     public float attackDisengageThreshold;
+    //Distancia a la que empieza a ir hacia la trampa.
+    [SerializeField] private float _trapViewRadius;
     //Distancia a la que empieza a atacar a la trampa
     public float attackTrapThreshold;
 
@@ -50,14 +52,12 @@ public abstract class Enemy : MonoBehaviour
     public Vector3[] _waypoints;
     private int _currentWaypoint = 0;
     private int _currentCorner = 0;
-
     public bool foundTrapInPath = false;
-    [SerializeField] private float _trapViewRadius;
+
     [SerializeField] private LayerMask _trapMask;
     public Collider _currentTrapObjective { get; private set; }
     private float _currentTrapObjectiveDistance = 1000f;
     public const float MAX_CURRENT_OBJECTIVE_DISTANCE = 1000;
-
     public StateMachine _fsm;
     public LevelManager _lm;
     private bool canBeHit = true;

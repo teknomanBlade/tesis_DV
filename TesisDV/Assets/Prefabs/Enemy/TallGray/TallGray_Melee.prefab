@@ -7420,11 +7420,12 @@ MonoBehaviour:
   witGainEffect: {fileID: 4580537072530106202}
   allTargets: []
   isDead: 0
-  pursueThreshold: 10
-  disengageThreshold: 15
-  attackThreshold: 3
-  attackDisengageThreshold: 4
-  attackTrapThreshold: 2
+  pursueThreshold: 4
+  disengageThreshold: 4.5
+  attackThreshold: 2
+  attackDisengageThreshold: 3
+  _trapViewRadius: 5
+  attackTrapThreshold: 2.3
   _player: {fileID: 0}
   _cat: {fileID: 0}
   hasObjective: 0
@@ -7433,7 +7434,6 @@ MonoBehaviour:
   trapPos: {x: 0, y: 0, z: 0}
   _waypoints: []
   foundTrapInPath: 0
-  _trapViewRadius: 0
   _trapMask:
     serializedVersion: 2
     m_Bits: 0
