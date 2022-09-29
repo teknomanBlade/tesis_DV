@@ -47,13 +47,12 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     [Header("UFO 1 Details")]
     [SerializeField] private Vector3 _finalPos1;
-    [SerializeField] private int _totalGraysUFO1;
+    [SerializeField] private List<Enemy> _graysUFO1;
 
     [Header("UFO 2 Details")]
 
     [SerializeField] private Vector3 _finalPos2;
-
-    [SerializeField] private int _totalGraysUFO2;
+    [SerializeField] private List<Enemy> _graysUFO2;
 
     [SerializeField] private GameObject UFOIndicatorPrefab;
     private GameObject UFOIndicator;
@@ -137,8 +136,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         {
             CurrentRound++;
             //TriggerRoundChange("RoundChanged");
-            Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetTotalGrays(_totalGraysUFO1);//.SetRotation(new Vector3(-90f, 0f, 0f));
-            Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetTotalGrays(_totalGraysUFO2);//.SetRotation(new Vector3(-90f, 0f, 0f));
+            Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetGraysToSpawn(_graysUFO1);//.SetRotation(new Vector3(-90f, 0f, 0f));
+            Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetGraysToSpawn(_graysUFO2);//.SetRotation(new Vector3(-90f, 0f, 0f));
         }
         /* else
         {

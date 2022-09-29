@@ -24,26 +24,22 @@ public class UFO : MonoBehaviour, IInRoundObserver
     public Vector3 checkCubePos = new Vector3(0f, 4f, 0f);
     public Vector3 checkCubeExt = new Vector3(4f, 4f, 4f);
     public Vector3 startPos;
-    public Vector3 startPosTall;
     private Vector3 _spawnPos;
     private Vector3 _finalPos;
     public Vector3 endPos;
     [Range(0,1)]
     public float sliderSoundVolume;
     private float _spawnTimer;
-    [SerializeField] private GameObject _grayPrefab;
-    [SerializeField] private GameObject _tallGrayPrefab;
     [SerializeField] private GameObject UFOIndicatorPrefab;
     private GameObject UFOIndicator;
     public Enemy currentGray;
+    [SerializeField] private List<Enemy> EnemiesToSpawn = new List<Enemy>();
     public float timeLimit;
     public float timer;
     public bool spawning = false;
     private float _UFOSpeed = 50f;
-    [SerializeField]
-    private int _totalGrays;
-    [SerializeField]
-    private bool _inPosition;
+    [SerializeField] private int _graysSpawned;
+    [SerializeField] private bool _inPosition;
     private bool _canLeavePlanet;
     private GameObject parent;
 
@@ -166,26 +162,18 @@ public class UFO : MonoBehaviour, IInRoundObserver
     IEnumerator SpawnGrey()
     {
         yield return new WaitForSeconds(_spawnTimer);
-        if(_totalGrays > 0)
+        if(_graysSpawned <   EnemiesToSpawn.Count())
         {
             if (!Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
             {
                 //CAMBIO PARA MVC
                 //La referencia cambia a GrayModel
-
-                if(_totalGrays == 1) //Por ahora hasta hacer el Pool.
-                {
-                    currentGray = Instantiate(_tallGrayPrefab, transform.position - startPosTall, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
-                }
-                else
-                {
-                    currentGray = Instantiate(_grayPrefab, transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
-                }
+                currentGray = Instantiate(EnemiesToSpawn[_graysSpawned], transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
                 
                 //_lm.EnemySpawned();
                 //SpawnGreyLerp();
                 spawning = false;
-                _totalGrays--;
+                _graysSpawned++;
             }
             else StartCoroutine("SpawnGrey");
         }
@@ -257,11 +245,6 @@ public class UFO : MonoBehaviour, IInRoundObserver
         Gizmos.DrawWireCube(transform.position - endPos, new Vector3(0.5f, 0.5f, 0.5f));
     }
 
-    public void NextGrayToSpawn(int totalGrays)
-    {
-        //if(totalGrays)
-    }
-
     public UFO SetSpawnPos(Vector3 newPos)
     {
         transform.position = newPos;
@@ -275,9 +258,9 @@ public class UFO : MonoBehaviour, IInRoundObserver
         return this;
     }
 
-    public UFO SetTotalGrays(int totalGrays)
+    public UFO SetGraysToSpawn(List<Enemy> enemies)
     {
-        _totalGrays = totalGrays;
+        EnemiesToSpawn = enemies;
         return this;
     }
 
