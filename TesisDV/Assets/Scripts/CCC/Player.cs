@@ -238,31 +238,31 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             GameVars.Values.BaseballLauncher.Craft(_inventory);
-            DoubleTapKey1(() => Debug.Log("DOUBLE TAP KEY 1??"));    
+            DoubleTapKey1(() => GameVars.Values.ShowNotificationDefinedTime("Baseball Tower. Offensive Weapon. It shoots baseballs to the enemy. Useful against Lesser Grays. Not effective against Tall Grays.", 6f));    
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             GameVars.Values.TVTrap.Craft(_inventory);
-            DoubleTapKey2(() => Debug.Log("DOUBLE TAP KEY 2??"));
+            DoubleTapKey2(() => GameVars.Values.ShowNotificationDefinedTime("Microwave Pusher. Defensive Weapon. Useful to protect the objective against Enemy grabbing. Grays can disable it, Tall Grays can destroy them by multiple hits.", 6f));
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             GameVars.Values.SlowTrap.Craft(_inventory);
-            DoubleTapKey3(() => Debug.Log("DOUBLE TAP KEY 3??"));
+            DoubleTapKey3(() => GameVars.Values.ShowNotificationDefinedTime("Tar Slowing Trap. Defensive Weapon. Useful to slow down Enemies. Grays are slowed more than Tall Grays.", 6f));
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             GameVars.Values.NailFiringMachine.Craft(_inventory);
-            DoubleTapKey4(() => Debug.Log("DOUBLE TAP KEY 4??"));
+            DoubleTapKey4(() => GameVars.Values.ShowNotificationDefinedTime("Nail Firing Machine. Offensive Weapon. It shoots Nails that make gargantual damage. Grays can disable it if they reach it, Tall Grays can destroy them by multiple hits.", 6f));
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             GameVars.Values.ElectricTrap.Craft(_inventory);
-            DoubleTapKey5(() => Debug.Log("DOUBLE TAP KEY 5??"));
+            DoubleTapKey5(() => GameVars.Values.ShowNotificationDefinedTime("Electric Trap. Offensive Weapon. A platform connected to multiple batteries to make progressive electrical damage. Grays are inmune to it, Tall Grays take augmented damage.", 6f));
         }
 
         if(Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))

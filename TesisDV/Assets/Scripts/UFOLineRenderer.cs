@@ -15,7 +15,8 @@ public class UFOLineRenderer : MonoBehaviour
         transform.position = owner.transform.position;
         _cat = GameVars.Values.Cat;
 
-        CalculatePath(_cat.transform.position);
+        //GONZA: EN ESTA LINEA TIRA NULL AL ENCENDER EL JUEGO.
+        //CalculatePath(_cat.transform.position);
     }
 
     private void DrawLineRenderer(Vector3[] waypoints)  //Esto deberia ir en el view T.T Apenas este todo bien lindo lo cambio

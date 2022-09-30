@@ -262,6 +262,19 @@ public class GameVars : MonoBehaviour
         notifications.gameObject.GetComponent<Animator>().SetBool("ShowNotification", false);
     }
 
+    public void ShowNotificationDefinedTime(string text, float time)
+    {
+        notifications.text = text;
+        StartCoroutine(ShowNotificationDefinedTime(time));
+    }
+
+    public IEnumerator ShowNotificationDefinedTime(float time)
+    {
+        notifications.gameObject.GetComponent<Animator>().SetBool("ShowNotification", true);
+        yield return new WaitForSeconds(time);
+        notifications.gameObject.GetComponent<Animator>().SetBool("ShowNotification", false);
+    }
+
     #endregion
 
     #region Cat
