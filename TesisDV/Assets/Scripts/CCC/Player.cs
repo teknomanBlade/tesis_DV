@@ -110,6 +110,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public LayerMask itemMask;
     private float _valueToChange;
     private bool _canStartNextWave;
+    private bool _canMoveTraps;
     
     private void Awake()
     {
@@ -181,7 +182,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if (Input.GetKeyDown(GameVars.Values.secondaryFire))
         {
-            if (lookingAt != null)
+            if (lookingAt != null && _canMoveTraps)
             {
                 SwitchIsCrafting();
                 MoveTrap();
@@ -191,6 +192,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (Input.GetKeyDown(KeyCode.Return) && _canStartNextWave)
         {
             _canStartNextWave = false;
+            _canMoveTraps = false;
             GameVars.Values.WaveManager.StartRound();
         }
 
@@ -512,6 +514,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public void CanStartNextWave(int round)
     {
         _canStartNextWave = true;
+        _canMoveTraps = true;
     }
 
     public void Dead()

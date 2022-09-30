@@ -78,6 +78,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         //OnRoundStartEnd(_inRound);
         //Debug.Log(_inRound);
         OnRoundEnd(_currentRound);
+        InstantiateUFOIndicators();
     }
 
     void Update()
@@ -103,7 +104,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     IEnumerator WaitBetweenWaves()
     {
-        DespawnUFOIndicators();
+        //DespawnUFOIndicators();
         yield return new WaitForSeconds(_timeBetweenWaves);
         SpawnWave();
     }
@@ -121,7 +122,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         _inRound = false;
         OnRoundStartEnd(_inRound);
 
-        DespawnUFOIndicators();
+        DisableUFOLR(); 
         SpawnWave();
         GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
         //_inRound = true;
@@ -131,7 +132,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     private void SpawnWave()
     {
-        InstantiateUFOIndicators();
+        //InstantiateUFOIndicators(); Ahora los indicadores aparecen entre rondas.
         if (_currentRound < _totalRounds)
         {
             CurrentRound++;
@@ -156,15 +157,23 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         _inRound = false;
         OnRoundStartEnd?.Invoke(_inRound);
         OnRoundEnd(_currentRound);
+        RestartUFOIndicators();
         //if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
         //_currentCoroutine = StartCoroutine("WaitBetweenWaves");
     }
 
-    private void DespawnUFOIndicators()
+    private void RestartUFOIndicators()
     {
         Destroy(UFOIndicator);
         Destroy(UFOIndicator2);
+        InstantiateUFOIndicators();
     }
+
+    private void DisableUFOLR()
+    {
+        UFOIndicator.GetComponent<UFOLandingIndicator>().DisableLineRenderer();
+        UFOIndicator2.GetComponent<UFOLandingIndicator>().DisableLineRenderer();
+    }    
 
     private void SendWinGame()
     {
