@@ -15,11 +15,10 @@ public class UFOLineRenderer : MonoBehaviour
         transform.position = owner.transform.position;
         _cat = GameVars.Values.Cat;
 
-        //GONZA: EN ESTA LINEA TIRA NULL AL ENCENDER EL JUEGO.
-        //CalculatePath(_cat.transform.position);
+        CalculatePath(_cat.transform.position);
     }
 
-    private void DrawLineRenderer(Vector3[] waypoints)  //Esto deberia ir en el view T.T Apenas este todo bien lindo lo cambio
+    private void DrawLineRenderer(Vector3[] waypoints) 
     {
         lineRenderer.positionCount = waypoints.Length;
         lineRenderer.SetPosition(0, waypoints[0]);
@@ -37,7 +36,7 @@ public class UFOLineRenderer : MonoBehaviour
         NavMeshPath path = new NavMeshPath();
         if (NavMesh.CalculatePath(owner.transform.position, targetPosition, NavMesh.AllAreas, path))
         {
-            _navMeshAgent.SetPath(path);
+            //_navMeshAgent.SetPath(path); Esta linea tiraba null pero no es necesaria para mostrar el LineRenderer.
 
             DrawLineRenderer(path.corners);  
         }
