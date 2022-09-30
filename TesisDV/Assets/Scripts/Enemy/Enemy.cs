@@ -318,7 +318,7 @@ public abstract class Enemy : MonoBehaviour
     public void GoBackToShip()
     {
         _lm.RemoveGray(this);
-
+        SendWitts();
         if (hasObjective)
         {
             _lm.LoseGame();
