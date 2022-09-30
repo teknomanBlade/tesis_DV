@@ -26,7 +26,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     }
     public PostProcessVolume volume;
     public Vignette postProcessDamage;
-    public AttentionPlayerPPSSettings postProcessAttention;
     public FadeInOutScenesPPSSettings postProcessFadeInOutScenes;
     private Coroutine FadeOutSceneCoroutine;
     private Coroutine FadeInSceneCoroutine;
@@ -39,6 +38,16 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private GameObject _craftingScreen;
     [SerializeField] private GameObject _miniMapDisplay;
     private LevelManager _lm;
+    private float _doubleTapTime1;
+    private bool _doubleTap1 = false;
+    private float _doubleTapTime2;
+    private bool _doubleTap2 = false;
+    private float _doubleTapTime3;
+    private bool _doubleTap3 = false;
+    private float _doubleTapTime4;
+    private bool _doubleTap4 = false;
+    private float _doubleTapTime5;
+    private bool _doubleTap5 = false;
     #endregion
 
     #region Movement
@@ -135,10 +144,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         
         LookingAt();
         CheckGround();
-        if (GameVars.Values.IsCatCaptured)
-        {
-            ActiveAttentionEffect();
-        }
 
         if (!GameVars.Values.crouchToggle)
         {
@@ -231,26 +236,31 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             GameVars.Values.BaseballLauncher.Craft(_inventory);
+            DoubleTapKey1(() => Debug.Log("DOUBLE TAP KEY 1??"));    
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             GameVars.Values.TVTrap.Craft(_inventory);
+            DoubleTapKey2(() => Debug.Log("DOUBLE TAP KEY 2??"));
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             GameVars.Values.SlowTrap.Craft(_inventory);
+            DoubleTapKey3(() => Debug.Log("DOUBLE TAP KEY 3??"));
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             GameVars.Values.NailFiringMachine.Craft(_inventory);
+            DoubleTapKey4(() => Debug.Log("DOUBLE TAP KEY 4??"));
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             GameVars.Values.ElectricTrap.Craft(_inventory);
+            DoubleTapKey5(() => Debug.Log("DOUBLE TAP KEY 5??"));
         }
 
         if(Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
@@ -285,6 +295,77 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         Walk(); 
     }
 
+    public void DoubleTapKey1(Action action)
+    {
+        if (Time.time < _doubleTapTime1 + .7f)
+        {
+            _doubleTap1 = true;
+        }
+        _doubleTapTime1 = Time.time;
+
+        if (_doubleTap1)
+        {
+            action();
+            
+            _doubleTap1 = false;
+        }
+    }
+    public void DoubleTapKey2(Action action)
+    {
+        if (Time.time < _doubleTapTime2 + .7f)
+        {
+            _doubleTap2 = true;
+        }
+        _doubleTapTime2 = Time.time;
+
+        if (_doubleTap2)
+        {
+            action();
+            _doubleTap2 = false;
+        }
+    }
+    public void DoubleTapKey3(Action action)
+    {
+        if (Time.time < _doubleTapTime3 + .7f)
+        {
+            _doubleTap3 = true;
+        }
+        _doubleTapTime3 = Time.time;
+
+        if (_doubleTap3)
+        {
+            action();
+            _doubleTap3 = false;
+        }
+    }
+    public void DoubleTapKey4(Action action)
+    {
+        if (Time.time < _doubleTapTime4 + .7f)
+        {
+            _doubleTap4 = true;
+        }
+        _doubleTapTime4 = Time.time;
+
+        if (_doubleTap4)
+        {
+            action();
+            _doubleTap4 = false;
+        }
+    }
+    public void DoubleTapKey5(Action action)
+    {
+        if (Time.time < _doubleTapTime5 + .7f)
+        {
+            _doubleTap5 = true;
+        }
+        _doubleTapTime5 = Time.time;
+
+        if (_doubleTap5)
+        {
+            action();
+            _doubleTap5 = false;
+        }
+    }
     public void ActiveDamageEffect()
     {
         if (volume.profile.TryGetSettings(out postProcessDamage))
@@ -323,31 +404,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         StartCoroutine(LerpDamageEffect(0f,1f));
     }
 
-    public void ActiveAttentionEffect()
-    {
-        if (volume.profile.TryGetSettings(out postProcessAttention))
-        {
-            StartCoroutine(LerpAttentionEffect(0.75f, 1f));
-        }
-    }
-
-    IEnumerator LerpAttentionEffect(float endValue, float duration)
-    {
-        float time = 0;
-        float startValue = _valueToChange;
-
-        while (time < duration)
-        {
-            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
-            time += Time.deltaTime;
-
-            postProcessAttention._Interpolator.value = _valueToChange;
-            yield return null;
-        }
-
-        _valueToChange = endValue;
-        StartCoroutine(LerpAttentionEffect(0f, 1f));
-    }
     public void ActiveFadeInEffect(float duration)
     {
         if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
@@ -935,7 +991,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (message.Equals("GrayDoorInteract"))
         {
             GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "AlertNotificationDoorAccess", 0.18f, true);
-            ActiveAttentionEffect();
         }
     }
 
