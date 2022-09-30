@@ -14561,7 +14561,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4675978260217064613}
-  m_Mesh: {fileID: 7227987690937372125, guid: 228ac861675906941ba65da24513ab11, type: 3}
+  m_Mesh: {fileID: 7227987690937372125, guid: 67b4f38467691164b96b9b2ca82534c9, type: 3}
 --- !u!23 &1349481614412306753
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14581,7 +14581,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6ce9c75d7db8cbc4581b742329f49c04, type: 2}
+  - {fileID: 2100000, guid: faddf0afe6176ae4daa52a4457177d59, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -30374,6 +30374,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: e097588435a8a15409235805a85441f3, type: 2}
+    - target: {fileID: 1863501304978204234, guid: 604c9edac12bd314fac8ea00d7ff68c6, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -3526627643538031157, guid: ccd832eb585ec1243968de29f4b898f1, type: 3}
     - target: {fileID: 1875694467339486276, guid: 604c9edac12bd314fac8ea00d7ff68c6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.51
@@ -30918,6 +30922,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
+    - target: {fileID: 4483487195916866176, guid: 604c9edac12bd314fac8ea00d7ff68c6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4598e549f3fdeb94da40732831202d9d, type: 2}
     - target: {fileID: 4565024864235254297, guid: 604c9edac12bd314fac8ea00d7ff68c6, type: 3}
       propertyPath: m_Layer
       value: 16
@@ -31694,7 +31702,9 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3093648643009510721, guid: 604c9edac12bd314fac8ea00d7ff68c6, type: 3}
+    - {fileID: 6258236594355552061, guid: 604c9edac12bd314fac8ea00d7ff68c6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 604c9edac12bd314fac8ea00d7ff68c6, type: 3}
 --- !u!4 &420439381177393902 stripped
 Transform:
