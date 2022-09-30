@@ -122,9 +122,11 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     }
     public void Reload()
     {
+        shotsLeft = shots;
+        active = true;
+        StartCoroutine("ActiveCoroutine");
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
         _isDisabledSFX = false;
-        shotsLeft = shots;
         _animator.enabled = true;
         _animator.SetBool("HasNoBalls", false);
         ActiveDeactivateBallStates(true, false, false);
@@ -133,7 +135,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     }
     IEnumerator ActiveCoroutine()
     {
-        if (active)
+        if (active && shotsLeft > 0)
         {
             InstantiateBall();
             yield return new WaitForSeconds(interval);
@@ -194,7 +196,6 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             ActiveDeactivateBallStates(false, false, false);
             return;
         }
-
 
         if (shotsLeft == 15)
         {

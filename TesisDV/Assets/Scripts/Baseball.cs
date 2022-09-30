@@ -6,6 +6,7 @@ public class Baseball : Projectile
 {
     private Rigidbody _rb;
     [SerializeField] private float _forceAmount; //Estamos en 35f.
+    private Vector3 shootDirection;
     private BaseballLauncher _bl;
 
     protected override void Start()
@@ -25,6 +26,11 @@ public class Baseball : Projectile
     public Baseball SetOwner(BaseballLauncher bl)
     {
         _bl = bl;
+        return this;
+    }
+    public Baseball SetOwnerForward(Vector3 forward)
+    {
+        shootDirection = forward;
         return this;
     }
     public Baseball SetInitialPos(Vector3 pos)
