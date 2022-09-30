@@ -312,7 +312,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         if(_canShoot)
         {
-            BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwner(this);
+            BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetOwner(this);
         }
         
     }

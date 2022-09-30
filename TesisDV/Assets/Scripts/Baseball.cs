@@ -15,7 +15,7 @@ public class Baseball : Projectile
         _damageAmount = 1;
         Invoke("ReturnToPool",5f);
         _rb = GetComponent<Rigidbody>();
-        _rb.AddForce(_forceAmount * _bl.exitPoint.transform.forward, ForceMode.Impulse);
+        _rb.AddForce(_forceAmount * shootDirection, ForceMode.Impulse);
     }
 
     public void ReturnToPool() 
