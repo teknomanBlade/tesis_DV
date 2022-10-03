@@ -124,7 +124,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _miniMapDisplay = GameObject.Find("MiniMapDisplay");
         //_inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
         _inventory = _craftingScreen.gameObject.GetComponentInChildren<Inventory>();
-        _weapon = _weaponGO.transform.GetChild(0).GetComponent<Racket>();
+        _weapon = _weaponGO.transform.GetChild(1).GetComponent<Racket>(); //Cambia el GetChild a la raqueta nueva.
         _audioSource = GetComponent<AudioSource>();
         _originalScale = transform.localScale;
         _originalCamPos = _cam.transform.localPosition;

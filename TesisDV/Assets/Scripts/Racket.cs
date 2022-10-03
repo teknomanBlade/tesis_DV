@@ -19,8 +19,8 @@ public class Racket : Melee
     //public delegate void OnRacketDestroyedDelegate(bool destroyed); Ahora la misma raqueta maneja su GameObject. 
     //public event OnRacketDestroyedDelegate OnRacketDestroyed;
     [SerializeField] private Mesh _damagedRacketMesh;
-    private Mesh _newRacketMesh;
-    private Texture _startingTexture;
+    [SerializeField] private Mesh _newRacketMesh;
+    [SerializeField] private Texture _startingTexture;
     public Texture textureState1;
     public Texture textureState2;
     public Texture textureState3;
@@ -30,10 +30,10 @@ public class Racket : Melee
         _startingRotation = transform.localRotation;
         hitsRemaining = 7;
         SetStateRacketDamaged(hitsRemaining);
-        _renderer = GetComponent<MeshRenderer>();
-        _meshFilter = GetComponent<MeshFilter>();
-        _newRacketMesh = _meshFilter.mesh;
-        _startingTexture = _renderer.material.mainTexture;
+        _renderer = transform.GetChild(1).GetComponent<MeshRenderer>();
+        _meshFilter = transform.GetChild(1).GetComponent<MeshFilter>();
+        //_newRacketMesh = _meshFilter.mesh;
+        //_startingTexture = _renderer.material.mainTexture;
     }
 
     public void OnNewRacketGrabbed()
