@@ -162,6 +162,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
     IEnumerator SpawnGrey()
     {
         yield return new WaitForSeconds(_spawnTimer);
+        yield return new WaitUntil(() => this.enabled);
         if(_graysSpawned <   EnemiesToSpawn.Count())
         {
             if (!Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
