@@ -9418,7 +9418,7 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 0
     light: {fileID: 0}
     randomDistribution: 1
@@ -15852,6 +15852,7 @@ MonoBehaviour:
   disengageThreshold: 4.5
   attackThreshold: 2
   attackDisengageThreshold: 3
+  _trapViewRadius: 5
   attackTrapThreshold: 2.3
   _player: {fileID: 0}
   _cat: {fileID: 0}
@@ -15861,7 +15862,6 @@ MonoBehaviour:
   trapPos: {x: 0, y: 0, z: 0}
   _waypoints: []
   foundTrapInPath: 0
-  _trapViewRadius: 5
   _trapMask:
     serializedVersion: 2
     m_Bits: 1024

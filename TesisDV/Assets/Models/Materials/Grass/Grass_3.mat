@@ -40,6 +40,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 2800000, guid: f9bd85ea2601b824c87556c13e852933, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexture:
         m_Texture: {fileID: 2800000, guid: 02efa2c86bd7a99418a4148f7183bca9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -60,15 +64,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureGrass3_Albedo_AO:
-        m_Texture: {fileID: 2800000, guid: 3bb91f11717a9ca47a21789f9bd306a5, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureGrass3_Albedo_NORM:
-        m_Texture: {fileID: 2800000, guid: a38300f72d336b94a8d525758e442653, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureGrass3_Albedo_SPEC:
-        m_Texture: {fileID: 2800000, guid: 07bece4689e33a044910183fe28ac1b9, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -84,10 +88,13 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _Intensity: 1.27
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _Rim: 0.742
+    - _RimAmount: 0.436
     - _SaturateValue: 0.32
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -96,6 +103,10 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
+    - _AmbientColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainColor: {r: 0.2392157, g: 0.2392157, b: 0.2392157, a: 1}
+    - _RimColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecularColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 0}
   m_BuildTextureStacks: []
