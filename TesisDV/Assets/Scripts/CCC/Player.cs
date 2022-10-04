@@ -699,6 +699,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void LookingAt()
     {
+        
         RaycastHit hit;
         //RaycastHit wallHit; No se usaba.
         RaycastHit hitResult;
@@ -710,7 +711,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             if (Physics.Linecast(_cam.transform.position, hit.collider.gameObject.transform.position, out hitResult))
             {
                 if (hit.collider.name != hitResult.collider.name)
-                    return;
+                   SetOffItem(lookingAt); 
+                   //return;
             }
 
             if(hit.collider.gameObject.GetComponent<IInteractable>() != null)
@@ -727,6 +729,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             lookingAt = null;
             ChangeCrosshair();
         }
+
+        Debug.Log(lookingAt);
         //}
     }
 
