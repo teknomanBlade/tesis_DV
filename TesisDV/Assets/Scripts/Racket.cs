@@ -88,7 +88,6 @@ public class Racket : Melee
                     GameVars.Values.soundManager.PlaySoundAtPoint("RacketBroken", transform.position, 0.09f);
                     GameVars.Values.ShowNotification("Oh no! The racket has broken!");
                     SetDamagedRacket();
-                    anim.SetBool("IsDestroyed", true);
                     //DestroyAndRestoreValues();
                     _player.RacketInventoryRemoved();
                 }
@@ -100,6 +99,13 @@ public class Racket : Melee
                 //TriggerHit("RacketHit");
             }
         }
+    }
+
+    public void RemoveFromParent()
+    {
+        var lastWorldPos = transform.parent.parent.position;
+        transform.parent.parent = null;
+        transform.position = lastWorldPos;
     }
 
     public void SetStateRacketDamaged(int hitsRemaining)
@@ -125,7 +131,7 @@ public class Racket : Melee
     public void SetDamagedRacket()
     {
         _meshFilter.mesh = _damagedRacketMesh;
-        //transform.position -= 0.07f;
+        anim.SetBool("IsDestroyed", true);
         transform.localRotation = Quaternion.Euler(2.658f,42.094f,73.143f);
     }
 
@@ -134,6 +140,7 @@ public class Racket : Melee
         this.gameObject.SetActive(false);
         hitsRemaining = 7; //Hacer un void ResetHits() despues.
         transform.localRotation = _startingRotation;
+        transform.parent = _player.Cam.transform;
         anim.SetBool("IsDestroyed", false);
         _meshFilter.mesh = _newRacketMesh;
         _renderer.material.SetTexture("_MainTexture", _startingTexture);

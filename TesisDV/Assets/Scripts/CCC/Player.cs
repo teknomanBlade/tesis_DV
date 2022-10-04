@@ -30,7 +30,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private Coroutine FadeOutSceneCoroutine;
     private Coroutine FadeInSceneCoroutine;
     [SerializeField] private Inventory _inventory;
-    public RacketManager _weaponGO;
+    public GameObject _weaponGO;
     [SerializeField] private Melee _weapon;
     public string typeFloor { get; private set; }
     
@@ -124,7 +124,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _miniMapDisplay = GameObject.Find("MiniMapDisplay");
         //_inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
         _inventory = _craftingScreen.gameObject.GetComponentInChildren<Inventory>();
-        _weapon = _weaponGO.transform.GetChild(1).GetComponent<Racket>(); //Cambia el GetChild a la raqueta nueva.
+        _weapon = _weaponGO.GetComponent<Racket>(); //Cambia el GetChild a la raqueta nueva.
         _audioSource = GetComponent<AudioSource>();
         _originalScale = transform.localScale;
         _originalCamPos = _cam.transform.localPosition;
@@ -238,31 +238,26 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             GameVars.Values.BaseballLauncher.Craft(_inventory);
-            DoubleTapKey1(() => GameVars.Values.ShowNotificationDefinedTime("Baseball Tower. Offensive Weapon. It shoots baseballs to the enemy. Useful against Lesser Grays. Not effective against Tall Grays.", 6f));    
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             GameVars.Values.TVTrap.Craft(_inventory);
-            DoubleTapKey2(() => GameVars.Values.ShowNotificationDefinedTime("Microwave Pusher. Defensive Weapon. Useful to protect the objective against Enemy grabbing. Grays can disable it, Tall Grays can destroy them by multiple hits.", 6f));
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             GameVars.Values.SlowTrap.Craft(_inventory);
-            DoubleTapKey3(() => GameVars.Values.ShowNotificationDefinedTime("Tar Slowing Trap. Defensive Weapon. Useful to slow down Enemies. Grays are slowed more than Tall Grays.", 6f));
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             GameVars.Values.NailFiringMachine.Craft(_inventory);
-            DoubleTapKey4(() => GameVars.Values.ShowNotificationDefinedTime("Nail Firing Machine. Offensive Weapon. It shoots Nails that make gargantual damage. Grays can disable it if they reach it, Tall Grays can destroy them by multiple hits.", 6f));
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             GameVars.Values.ElectricTrap.Craft(_inventory);
-            DoubleTapKey5(() => GameVars.Values.ShowNotificationDefinedTime("Electric Trap. Offensive Weapon. A platform connected to multiple batteries to make progressive electrical damage. Grays are inmune to it, Tall Grays take augmented damage.", 6f));
         }
 
         if(Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
@@ -296,78 +291,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         Walk(); 
     }
-
-    public void DoubleTapKey1(Action action)
-    {
-        if (Time.time < _doubleTapTime1 + .7f)
-        {
-            _doubleTap1 = true;
-        }
-        _doubleTapTime1 = Time.time;
-
-        if (_doubleTap1)
-        {
-            action();
-            
-            _doubleTap1 = false;
-        }
-    }
-    public void DoubleTapKey2(Action action)
-    {
-        if (Time.time < _doubleTapTime2 + .7f)
-        {
-            _doubleTap2 = true;
-        }
-        _doubleTapTime2 = Time.time;
-
-        if (_doubleTap2)
-        {
-            action();
-            _doubleTap2 = false;
-        }
-    }
-    public void DoubleTapKey3(Action action)
-    {
-        if (Time.time < _doubleTapTime3 + .7f)
-        {
-            _doubleTap3 = true;
-        }
-        _doubleTapTime3 = Time.time;
-
-        if (_doubleTap3)
-        {
-            action();
-            _doubleTap3 = false;
-        }
-    }
-    public void DoubleTapKey4(Action action)
-    {
-        if (Time.time < _doubleTapTime4 + .7f)
-        {
-            _doubleTap4 = true;
-        }
-        _doubleTapTime4 = Time.time;
-
-        if (_doubleTap4)
-        {
-            action();
-            _doubleTap4 = false;
-        }
-    }
-    public void DoubleTapKey5(Action action)
-    {
-        if (Time.time < _doubleTapTime5 + .7f)
-        {
-            _doubleTap5 = true;
-        }
-        _doubleTapTime5 = Time.time;
-
-        if (_doubleTap5)
-        {
-            action();
-            _doubleTap5 = false;
-        }
-    }
+    
     public void ActiveDamageEffect()
     {
         if (volume.profile.TryGetSettings(out postProcessDamage))
@@ -974,7 +898,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             if (_inventory.ContainsID(3, 1))
             {
                 _weaponGO.gameObject.SetActive(true);
-                _weaponGO.ActivateRacket();
+                //_weaponGO.ActivateRacket();
                 //_weaponGO.transform.GetComponentInChildren<Racket>().gameObject.layer = 0;
                 //OnNewRacketGrabbed += _weaponGO.transform.GetComponentInChildren<Racket>().OnNewRacketGrabbed;
                 //OnNewRacketGrabbed?.Invoke();

@@ -17,6 +17,11 @@ public class RacketManager : MonoBehaviour
         racket.DestroyAndRestoreValues();
     }
 
+    public void RemoveParent()
+    {
+        racket.RemoveFromParent();
+    }
+
     public void ActivateRacket()
     {
         racket.gameObject.SetActive(true);
