@@ -134,11 +134,11 @@ Shader "CatDistanceBarShader"
 }
 /*ASEBEGIN
 Version=17800
-267;472;1307;378;1942.988;1753.066;2.460586;True;False
+488;207;1307;550;1737.835;1741.305;2.088263;True;False
 Node;AmplifyShaderEditor.RangedFloatNode;18;-1011.79,-354.4936;Inherit;False;Property;_TimeFrq;TimeFrq;1;0;Create;True;0;0;False;0;4.17;4;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.PosVertexDataNode;13;-1042.142,-861.9379;Inherit;False;0;0;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;37;-950.9622,-1283.902;Inherit;False;Property;_Tiling;Tiling;3;0;Create;True;0;0;False;0;0;0.73;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;5;-1111.726,-642.6281;Inherit;False;Property;_Frq;Frq;2;0;Create;True;0;0;False;0;5.9;1;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;37;-950.9622,-1283.902;Inherit;False;Property;_Tiling;Tiling;3;0;Create;True;0;0;False;0;0;0.73;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleTimeNode;19;-713.0773,-496.3883;Inherit;False;1;0;FLOAT;1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;16;-772.2341,-754.4487;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.Vector2Node;51;-647.757,-1227.832;Inherit;False;Property;_Speed;Speed;4;0;Create;True;0;0;False;0;0.4,0;0.3,0;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
@@ -165,4 +165,4 @@ WireConnection;71;1;21;4
 WireConnection;71;2;14;0
 WireConnection;42;0;71;0
 ASEEND*/
-//CHKSM=9744F743AC1D66E90383677D338973085F3C7F0F
+//CHKSM=4B28405BFF1C8F421562AB0AC16B4C645DAC3EBC
