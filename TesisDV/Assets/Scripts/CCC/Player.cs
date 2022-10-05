@@ -625,27 +625,31 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         
         RaycastHit hit;
-        //RaycastHit wallHit; No se usaba.
         RaycastHit hitResult;
-
+        RaycastHit wallHit;
         //if(!Physics.Raycast(_cam.transform.position, _cam.GetForward(), out wallHit, 5f, GameVars.Values.GetWallLayerMask()))
         //{
+
         if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()))
         {
-            if (Physics.Linecast(_cam.transform.position, hit.collider.gameObject.transform.position, out hitResult))
+            Vector3 dir = hit.transform.position - _cam.transform.position;
+            if(!Physics.Raycast(_cam.transform.position, _cam.GetForward(), out wallHit, dir.magnitude, GameVars.Values.GetWallLayerMask()))
             {
-                if (hit.collider.name != hitResult.collider.name)
-                   SetOffItem(lookingAt); 
-                   //return;
-            }
+                if (Physics.Linecast(_cam.transform.position, hit.collider.gameObject.transform.position, out hitResult))
+                {
+                    if (hit.collider.name != hitResult.collider.name)
+                    SetOffItem(lookingAt); 
+                    //return;
+                }
 
-            if(hit.collider.gameObject.GetComponent<IInteractable>() != null)
-            {
-                lookingAt = hit.collider.gameObject.GetComponent<IInteractable>();//.gameObject.GetComponent<Item>(); LookingAt ahora es un collider para incluir Item y Traps
+                if(hit.collider.gameObject.GetComponent<IInteractable>() != null)
+                {
+                    lookingAt = hit.collider.gameObject.GetComponent<IInteractable>();//.gameObject.GetComponent<Item>(); LookingAt ahora es un collider para incluir Item y Traps
+                }
+                
+                SetOnItem(lookingAt);
+                ChangeCrosshair();
             }
-            
-            SetOnItem(lookingAt);
-            ChangeCrosshair();
         }
         else
         {
@@ -653,9 +657,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             lookingAt = null;
             ChangeCrosshair();
         }
+        
+        
 
-        Debug.Log(lookingAt);
-        //}
     }
 
     private void ChangeCrosshair()
