@@ -87,6 +87,11 @@ public class GameVars : MonoBehaviour
     public int currentShotsTrap2; //NailFiringMachine
     public List<List<Node>> levelRoutes;
 
+    #region Events
+    public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
+    public event OnCapturedCatChangeDelegate OnCapturedCatChange;
+    #endregion
+
     private void Awake()
     {
         if (_gameVars == null) _gameVars = this;
@@ -281,6 +286,7 @@ public class GameVars : MonoBehaviour
     public void SetCatFree()
     {
         _isCatCaptured = false;
+        OnCapturedCatChange(_isCatCaptured);
         cat.CatHasBeenReleased();
     }
 
@@ -292,6 +298,7 @@ public class GameVars : MonoBehaviour
     public void TakeCat(Vector3 exitPos)
     {
         _isCatCaptured = true;
+        OnCapturedCatChange(_isCatCaptured);
         cat.CatIsBeingTaken();
         cat.SetExitPos(exitPos);
     }

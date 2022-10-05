@@ -5,22 +5,43 @@ using UnityEngine.UI;
 
 public class CatCaptured : MonoBehaviour
 {
+    private Animator _animator;
+    public Sprite catReleasedSprite;
     public Sprite catCapturedSprite;
     public GameObject catImage;
-    // Start is called before the first frame update
+
     void Start()
     {
-        
+        GameVars.Values.OnCapturedCatChange += CatCaptureChanged;
+        _animator = GetComponent<Animator>();
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetAnimatorCaptureBool(bool isCaptured)
     {
-        
+        _animator.SetBool("IsCaptured", isCaptured);
     }
 
-    public void SetCapturedCatImage()
+    private void CatCaptureChanged(bool isCaptured)
+    {
+        if (isCaptured)
+        {
+            SetAnimatorCaptureBool(isCaptured);
+            SetCapturedCatImage();
+        }
+        else
+        {
+            SetAnimatorCaptureBool(isCaptured);
+            SetReleasedCatImage();
+        }
+    }
+
+    public void SetCapturedCatImage() //Esto se llama por la animacion.
     {
         catImage.GetComponent<Image>().sprite = catCapturedSprite;
+    }
+    public void SetReleasedCatImage() //Esto se llama por 
+    {
+        catImage.GetComponent<Image>().sprite = catReleasedSprite;
     }
 }
