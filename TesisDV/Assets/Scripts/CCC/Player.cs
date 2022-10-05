@@ -235,27 +235,27 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         //    }
         //}
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !IsCrafting)
         {
             GameVars.Values.BaseballLauncher.Craft(_inventory);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting)
         {
             GameVars.Values.TVTrap.Craft(_inventory);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting)
         {
             GameVars.Values.SlowTrap.Craft(_inventory);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting)
         {
             GameVars.Values.NailFiringMachine.Craft(_inventory);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha5))
+        if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting)
         {
             GameVars.Values.ElectricTrap.Craft(_inventory);
         }
