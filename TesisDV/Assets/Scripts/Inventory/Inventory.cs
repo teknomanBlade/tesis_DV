@@ -16,7 +16,6 @@ public class Inventory : MonoBehaviour
 
     public delegate void OnWittsAmountChangedDelegate(int witts);
     public event OnWittsAmountChangedDelegate OnWittsAmountChanged;
-
     private void Awake()
     {
         _myCanvasGroup = GetComponent<CanvasGroup>();
@@ -42,13 +41,25 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(InventoryItem item)
     {
+        Debug.Log(item.myCraftingID);
         //Fade();
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+           if(itemSlots[i].HasItemID(item.myCraftingID))
+           {
+               item.Interact();   
+               //itemSlots[i].Item = item;
+               itemSlots[i].SetItem(item);
+               //USAR EVENTO
+               _trapHotBar.CheckRecipeRequirements(this);
+                return;
+           }
+        }
         for (int i = 0; i < itemSlots.Length; i++)
         {
            if(itemSlots[i].IsFree())
            {
-               item.Interact();
-               
+               item.Interact();   
                //itemSlots[i].Item = item;
                itemSlots[i].SetItem(item);
                //USAR EVENTO

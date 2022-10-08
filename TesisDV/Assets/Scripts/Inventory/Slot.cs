@@ -10,6 +10,9 @@ public class Slot : MonoBehaviour
 {
     [SerializeField]
     private InventoryItem _item;
+    private int _itemAmount = 0;
+    private GameObject _itemAmountContainer;
+    private Text _itemAmountText;
     [SerializeField]
     private Image _image;
     [SerializeField]
@@ -27,6 +30,8 @@ public class Slot : MonoBehaviour
 
     void Awake()
     {
+        _itemAmountContainer = transform.GetChild(3).gameObject;
+        _itemAmountText = _itemAmountContainer.transform.GetChild(0).GetComponent<Text>();
         isFaded = true;
         _keyImage = transform.GetComponentsInChildren<Transform>()
             .Where(x => x.gameObject.name.Equals("KeyImage")).First().GetComponent<Image>();
@@ -50,7 +55,6 @@ public class Slot : MonoBehaviour
 
     public bool HasItem(InventoryItem item)
     {
-    
         if(_item == item)
         {
             return true;
@@ -63,7 +67,6 @@ public class Slot : MonoBehaviour
 
     public bool HasItemID(int itemID)
     {
-    
         if(_itemID == itemID)
         {
             return true;
@@ -81,19 +84,28 @@ public class Slot : MonoBehaviour
 
     public void SetItem(InventoryItem item)
     {
-        _item = item;
-        _image.enabled = true;
-        _image.color = new Color32(255,255,255,255);
-        _image.sprite = item.itemImage;
-        _itemID = item.myCraftingID;
-        _myPrefab = item.myPrefab;
-        //Fade();
+        if(IsFree())
+        {
+            _item = item;
+            _itemAmount++;
+            _image.enabled = true;
+            _image.color = new Color32(255,255,255,255);
+            _image.sprite = item.itemImage;
+            _itemID = item.myCraftingID;
+            _myPrefab = item.myPrefab;
+            //Fade();
+        }
+        else
+        {
+            _itemAmount++;
+            _itemAmountContainer.SetActive(true);
+            _itemAmountText.text = _itemAmount.ToString();
+        }
     }
 
     public void SetItemID(int itemID)
     {
         _itemID = itemID;
-        
     }
 
     public void DropItem()
@@ -114,13 +126,32 @@ public class Slot : MonoBehaviour
 
     public void RemoveItem()
     {
+        if(_itemAmount == 1)
+        {
+            ResetSlot();
+            //Fade(); 
+        }
+        else if(_itemAmount == 2)
+        {
+            _itemAmount--;
+            _itemAmountContainer.SetActive(false);
+        }
+        else
+        {
+            _itemAmount--;
+            _itemAmountText.text = _itemAmount.ToString();
+        }
+        
+    }
+
+    private void ResetSlot()
+    {
         _item = null;
+        _itemAmount = 0;
         _itemID = 0;
         _image.enabled = false;
         _image.color = new Color32(0,0,0,255);;
         _image.sprite = null;
-        //Fade();
-        
     }
 
     public void Fade(CanvasGroup canvasGroup)
@@ -128,6 +159,7 @@ public class Slot : MonoBehaviour
         StartCoroutine(DoFade(canvasGroup, canvasGroup.alpha, isFaded ? 1 : 0));
         isFaded = !isFaded;
     }
+
     public IEnumerator DoFade(CanvasGroup canvasGroup,float start, float end)
     {
         float counter = 0f;
