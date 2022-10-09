@@ -9,7 +9,6 @@ public class TrapHotBar : MonoBehaviour
     [SerializeField] private CanvasGroup _myCanvasGroup;
     private float fadeDelay = 1.1f;
     private bool isFaded;
-    private float _showingNotificationDelay = 2.0f;
 
     private void Awake()
     {
@@ -44,7 +43,6 @@ public class TrapHotBar : MonoBehaviour
                 Fade();
             }
             trapSlots[0].ActivateImage();
-            Invoke("ShowNotificationSlot1", _showingNotificationDelay);
         }
         else
         {
@@ -58,7 +56,6 @@ public class TrapHotBar : MonoBehaviour
                 Fade();
             }
             trapSlots[1].ActivateImage();
-            Invoke("ShowNotificationSlot2", _showingNotificationDelay);
         }
         else
         {
@@ -72,7 +69,6 @@ public class TrapHotBar : MonoBehaviour
                 Fade();
             }
             trapSlots[2].ActivateImage();
-            Invoke("ShowNotificationSlot3", _showingNotificationDelay);
         }
         else
         {
@@ -86,7 +82,6 @@ public class TrapHotBar : MonoBehaviour
                 Fade();
             }
             trapSlots[3].ActivateImage();
-            Invoke("ShowNotificationSlot4", _showingNotificationDelay);
         }
         else
         {
@@ -100,7 +95,6 @@ public class TrapHotBar : MonoBehaviour
                 Fade();
             }
             trapSlots[4].ActivateImage();
-            Invoke("ShowNotificationSlot5", _showingNotificationDelay);
         }
         else
         {
@@ -108,24 +102,5 @@ public class TrapHotBar : MonoBehaviour
         }
     }
 
-    public void ShowNotificationSlot1()
-    {
-        GameVars.Values.ShowNotification("Baseball Tower. Press 1 to create, Double Tap 1 to see description.");
-    }
-    public void ShowNotificationSlot2()
-    {
-        GameVars.Values.ShowNotification("Microwave Pusher. Press 2 to create, Double Tap 2 to see description.");
-    }
-    public void ShowNotificationSlot3()
-    {
-        GameVars.Values.ShowNotification("Tar Slowing Trap. Press 3 to create, Double Tap 3 to see description.");
-    }
-    public void ShowNotificationSlot4()
-    {
-        GameVars.Values.ShowNotification("Nail Firing Tower. Press 4 to create, Double Tap 4 to see description.");
-    }
-    public void ShowNotificationSlot5()
-    {
-        GameVars.Values.ShowNotification("Electric Tower. Press 5 to create, Double Tap 5 to see description.");
-    }
+    
 }
