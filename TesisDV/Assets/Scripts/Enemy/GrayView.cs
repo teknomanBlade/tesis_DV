@@ -35,7 +35,10 @@ public class GrayView : MonoBehaviour
         _myAnimator.SetBool("IsSpawning", false);
     }
 
-
+    public void StunAnimation(bool value)
+    {
+        _myAnimator.SetBool("IsStunned", value);
+    }
     public void WalkAnimation(bool value)
     {
         _myAnimator.SetBool("IsWalking", value);

@@ -12,10 +12,16 @@ public class TVTrap : Item, IMovable
     private LayerMask targetMask;
     void Start()
     {
+        
+    }
+    private void Awake()
+    {
         _canStun = true;
         _timePassed = _recoveryTime;
+        _itemName = "StationaryTVTrap";
+        itemType = ItemType.Weapon;
+        targetMask = LayerMask.GetMask("Enemy");
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -39,7 +45,7 @@ public class TVTrap : Item, IMovable
             if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 Debug.Log("3");
-                collision.gameObject.GetComponent<Gray>().SecondStun(3f);
+                collision.gameObject.GetComponent<GrayModel>().Stun(3f);
                 _canStun = false;
             }
         }
@@ -48,7 +54,7 @@ public class TVTrap : Item, IMovable
     public void BecomeMovable()
     {
         Debug.Log("2");
-        GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
-        Destroy(gameObject);
+        //GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
+        //Destroy(gameObject);
     }
 }

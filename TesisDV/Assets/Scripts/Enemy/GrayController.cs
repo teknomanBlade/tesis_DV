@@ -11,6 +11,7 @@ public class GrayController : IController
         _m = m;
 
         _m.onWalk       +=  v.WalkAnimation;
+        _m.onStun       +=  v.StunAnimation;
         _m.onHit        +=  v.HitAnimation;
         _m.onHit        +=  v.InnerEffectAnimation;
         _m.onDeath      +=  v.DeathAnimation;

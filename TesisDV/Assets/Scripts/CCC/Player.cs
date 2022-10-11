@@ -676,6 +676,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(40f);
             return;
         }
+        if (lookingAt.gameObject.TryGetComponent<StationaryItem>(out StationaryItem stationaryItem))
+        {
+            crosshair.sprite = GameVars.Values.crosshairAddOnBattery;
+            stationaryItem.ShowBlueprint();
+            ChangeCrosshairSize(40f);
+            return;
+        }
         if (lookingAt.gameObject.TryGetComponent<Door>(out Door aux1))
         {
             crosshair.sprite = GameVars.Values.crosshairDoor;

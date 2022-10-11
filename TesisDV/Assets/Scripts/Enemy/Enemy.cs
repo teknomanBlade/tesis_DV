@@ -41,6 +41,7 @@ public abstract class Enemy : MonoBehaviour
 
     public bool hasObjective;
     [SerializeField] private bool isAttacking = false;
+    [SerializeField] private bool isStunned = false;
 
     public Vector3 _exitPos;
     public Vector3 trapPos;
@@ -66,6 +67,7 @@ public abstract class Enemy : MonoBehaviour
     #region Events
 
     public event Action<bool> onWalk = delegate { };
+    public event Action<bool> onStun = delegate { };
     public event Action<bool> onCatGrab = delegate { };
     public event Action onDeath = delegate { };
     public event Action onHit = delegate { };
@@ -202,7 +204,18 @@ public abstract class Enemy : MonoBehaviour
         }
         
     }
-
+    public void Stun(float time)
+    {
+        Debug.Log("STUNEA AL GRIS");
+        if (!isStunned)
+        {
+            _navMeshAgent.speed = 0;
+            onStun(isStunned);
+            onWalk(!isStunned);
+            isStunned = true;
+        }
+        //Invoke("SecondUnStun", time);
+    }
     public void AttackPlayer() //Verifica que no estemos atacando para mirar hacia el jugador y envia nuevamente la animacion de ataque. El booleano se resetea con un AnimEvent.
     {
         if(!isAttacking)
