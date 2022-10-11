@@ -26,7 +26,10 @@ public class StationaryItem : Item
     public void ActiveBatteryComponent()
     {
         if (!_isAddOnPlaced)
+        {
             gameObject.AddComponent<TVTrap>();
+            Destroy(gameObject.GetComponent<StationaryItem>());
+        }
 
         batteryAddOn.SetActive(true);
         batteryBlueprint.SetActive(false);
