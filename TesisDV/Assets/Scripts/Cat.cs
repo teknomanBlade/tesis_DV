@@ -122,6 +122,16 @@ public class Cat : MonoBehaviour
         return _isHeld;
     }
 
+    public void GetDoor(Door door)
+    {
+        OpenDoor(door);
+    }
+
+    private void OpenDoor(Door door)
+    {
+        door.Interact();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Equals("StartingPosition"))
