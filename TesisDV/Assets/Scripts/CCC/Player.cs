@@ -173,7 +173,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire))
         {
-            if (_inventory.ContainsID(3, 1) && !IsCrafting) 
+            if (_inventory != null && _inventory.ContainsID(3, 1) && !IsCrafting) 
             {
                 _weapon.SetOwner(this);
                 _weapon.MeleeAttack();
