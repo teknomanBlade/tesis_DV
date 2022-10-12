@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StationaryItem : Item
@@ -21,13 +22,14 @@ public class StationaryItem : Item
 
     public override void Interact()
     {
-        ActiveBatteryComponent();
+        //ActiveBatteryComponent();
     }
     public void ActiveBatteryComponent()
     {
         if (!_isAddOnPlaced)
         {
             gameObject.AddComponent<TVTrap>();
+            gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = true;
             Destroy(gameObject.GetComponent<StationaryItem>());
         }
 

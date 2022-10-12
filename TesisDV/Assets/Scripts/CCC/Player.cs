@@ -765,14 +765,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 auxBL.OnReload += OnBaseballMachineReload;
             }
         }
-        /*if (lookingAt.gameObject.TryGetComponent<NailFiringMachine>(out NailFiringMachine NFM))
+        if (lookingAt.gameObject.TryGetComponent<StationaryItem>(out StationaryItem stationaryItem))
         {
-            if (auxBL.IsEmpty)
-            {
-                GameVars.Values.ShowNotification("You need a Tennis Ball Box to reload!");
-                auxBL.OnReload += OnBaseballMachineReload;
-            }
-        }*/
+            if (_inventory.ContainsID(2, 1))
+                stationaryItem.ActiveBatteryComponent();
+            else
+                GameVars.Values.ShowNotification("You need a Battery for this!");
+        }
 
         if (lookingAt.gameObject.TryGetComponent<Door>(out Door door))
         {
