@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: house_door_black
-  m_Shader: {fileID: 4800000, guid: 07f554fb3702a2c4d97bf5d7902ba843, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9a740eb707428ba4381a656c94014185, type: 3}
   m_ShaderKeywords: _NORMALMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -44,11 +44,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: c7882111acf7cd740af5593bba17abdd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture1:
-        m_Texture: {fileID: 2800000, guid: 40682c15a9f2ad94a8eff4ee560c86b1, type: 3}
+        m_Texture: {fileID: 2800000, guid: c7882111acf7cd740af5593bba17abdd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -97,6 +97,9 @@ Material:
     - _AmbientColor: {r: 0, g: 0, b: 0, a: 0}
     - _AmbientColor1: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Door_Base_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Door_Border_Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Door_Center_Color: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _RimColor: {r: 0, g: 0, b: 0, a: 0}
     - _RimColor1: {r: 1, g: 1, b: 1, a: 0}
