@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: house_door
+  m_Name: house_door_white
   m_Shader: {fileID: 4800000, guid: 9a740eb707428ba4381a656c94014185, type: 3}
   m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP
   m_LightmapFlags: 4
@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 829f76b18d987f34e8b931b23ecdb936, type: 3}
+        m_Texture: {fileID: 2800000, guid: c88a42494f6f6e349b0c78041f542118, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailMask:
-        m_Texture: {fileID: 2800000, guid: 44a5b790f2d22f2479b9cd8ae86a698d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 207f13630b3d3f849be0dbda29565bf2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailNormalMap:
@@ -40,15 +40,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: becd62731e8b440469d44d98e0cf1c8e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8c0e9785d3731b947a36596428946fa1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: c7882111acf7cd740af5593bba17abdd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture1:
-        m_Texture: {fileID: 2800000, guid: 40682c15a9f2ad94a8eff4ee560c86b1, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8c0e9785d3731b947a36596428946fa1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -60,7 +60,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: 015eba9599275c6438d65d8dba87b364, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9227c5b35c495844f9ab68288ea05203, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 89c5037151a0e9943aba3fbd974cffa4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -72,19 +76,18 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Float0: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
-    - _Glossiness1: 4
+    - _Glossiness: 4
+    - _Glossiness1: -7.51
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Rim: 0
-    - _Rim1: 0.328
-    - _RimAmount: 0
-    - _RimAmount1: 0.366
+    - _Rim: 0.568
+    - _Rim1: 0.701
+    - _RimAmount: 0.187
+    - _RimAmount1: 0.609
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -95,14 +98,16 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _AmbientColor: {r: 0, g: 0, b: 0, a: 0}
-    - _AmbientColor1: {r: 0.6320754, g: 0.6320754, b: 0.6320754, a: 0}
+    - _AmbientColor: {r: 1, g: 1, b: 1, a: 0}
+    - _AmbientColor1: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Door_Base_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Door_Border_Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Door_Center_Color: {r: 0.7924528, g: 0.743859, b: 0.743859, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 0, g: 0, b: 0, a: 0}
-    - _RimColor1: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 0}
-    - _SpecularColor: {r: 0, g: 0, b: 0, a: 0}
-    - _SpecularColor1: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 0}
-    - _TintColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 0}
-    - _TintColor1: {r: 0.23921569, g: 0.23921569, b: 0.23921569, a: 1}
+    - _RimColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 0}
+    - _RimColor1: {r: 0.7578583, g: 0.7578583, b: 0.7578583, a: 0}
+    - _SpecularColor: {r: 0.9460624, g: 0.9460624, b: 0.9460624, a: 0}
+    - _SpecularColor1: {r: 1, g: 1, b: 1, a: 0}
+    - _TintColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
   m_BuildTextureStacks: []
