@@ -211,11 +211,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if(Input.GetKeyDown(GameVars.Values.inventoryKey) && _craftingScreen.activeInHierarchy)
         {
+            Cursor.lockState = CursorLockMode.Locked;
             _craftingScreen.SetActive(false);
             _miniMapDisplay.SetActive(true);
         }
         else if(Input.GetKeyDown(GameVars.Values.inventoryKey) && !_craftingScreen.activeInHierarchy)
         {
+            Cursor.lockState = CursorLockMode.None;
             _craftingScreen.SetActive(true);
             _miniMapDisplay.SetActive(false);
         }
