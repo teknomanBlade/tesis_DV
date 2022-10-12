@@ -243,23 +243,25 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     public void CheckForObjective()
     {
-        if (enemiesInScene.Count <= 0)
+        /* if (enemiesInScene.Count <= 0)
         {
             enemyHasObjective = false;
             canSpawn = !enemyHasObjective;
             return;
-        }
+        } */
 
         foreach (Enemy gray in enemiesInScene)
         {
             if (gray.hasObjective) 
             {
+                Debug.Log("si");
                 enemyHasObjective = gray.hasObjective; //true
                 canSpawn = !enemyHasObjective;
                 return;
             }
             else
             {
+                Debug.Log("no");
                 enemyHasObjective = false;
                 canSpawn = !enemyHasObjective;
                 //return;

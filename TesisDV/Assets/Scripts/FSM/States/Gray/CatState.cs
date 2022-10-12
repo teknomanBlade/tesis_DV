@@ -36,7 +36,7 @@ public class CatState : IState
         }
         else if (_enemy._lm.enemyHasObjective)
         {
-            _fsm.ChangeState(EnemyStatesEnum.EscapeState);
+            _fsm.ChangeState(EnemyStatesEnum.ProtectState);
         }
         else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold) //Agregar Raycast para ver al player
         {

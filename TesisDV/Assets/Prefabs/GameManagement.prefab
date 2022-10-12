@@ -57,7 +57,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 730f5458244e36d4e84417f1a70e4129, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: []
+  InitialStockUFO: 0
+  YouWin: {fileID: 0}
+  YouLose: {fileID: 0}
+  NewHouse: {fileID: 0}
+  OldHouse: {fileID: 0}
+  AllUFOs: []
+  allDoors: []
+  objective: {fileID: 0}
+  allDoorsAreClosed: 0
+  playing: 1
+  _player: {fileID: 0}
+  canSpawn: 1
+  enemiesInScene: []
+  enemyHasObjective: 0
 --- !u!114 &2683927559517160038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,12 +83,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e29f0b829951f84dbc11b0d7a4844c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  cat: {fileID: 0}
+  inventory: {fileID: 0}
+  _isCatCaptured: 0
   objectLayerName: Object
   floorLayerName: Floor
+  enemyLayerName: 
+  wallLayerName: 
   jumpKey: 0
   primaryFire: 0
   secondaryFire: 0
   useKey: 0
+  hideShowMiniMapKey: 0
+  dropKey: 0
+  inventoryKey: 0
+  inventoryItem1Key: 0
   sprintKey: 0
   crouchKey: 0
   crouchToggle: 0
+  crosshair: {fileID: 0}
+  crosshairDoor: {fileID: 0}
+  crosshairActivation: {fileID: 0}
+  crosshairReloadTrap1: {fileID: 0}
+  crosshairHandGrab: {fileID: 0}
+  crosshairHandHold: {fileID: 0}
+  crosshairAddOnBattery: {fileID: 0}
+  imageBaseballTrap: {fileID: 0}
+  craftingScreen: {fileID: 0}
+  notifications: {fileID: 0}
+  playerLives: {fileID: 0}
+  audioClips: []
+  BaseballLauncher: {fileID: 0}
+  TVTrap: {fileID: 0}
+  SlowTrap: {fileID: 0}
+  NailFiringMachine: {fileID: 0}
+  ElectricTrap: {fileID: 0}
+  projectileLifeTime: 5
+  itemPickUpLerpSpeed: 0.2
+  currentShotsTrap1: 0
+  currentShotsTrap2: 0

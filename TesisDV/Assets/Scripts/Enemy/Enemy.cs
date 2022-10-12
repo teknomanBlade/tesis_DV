@@ -64,6 +64,11 @@ public abstract class Enemy : MonoBehaviour
     private bool canBeHit = true;
     [SerializeField] protected LineRenderer lineRenderer;
 
+    [Header("BattleCircle AI")]
+    public float protectDistance;
+    public GameObject _target;
+    public Vector3 _circlePos;
+
     #region Events
 
     public event Action<bool> onWalk = delegate { };
@@ -96,6 +101,7 @@ public abstract class Enemy : MonoBehaviour
             isAwake= false;
             isDead = true;
             SendWitts();
+            AIManager.Instance.RemoveEnemyFromList(this, hasObjective);
             _capsuleCollider.enabled = false;
             GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
@@ -204,6 +210,7 @@ public abstract class Enemy : MonoBehaviour
         }
         
     }
+
     public void Stun(float time)
     {
         Debug.Log("STUNEA AL GRIS");
@@ -216,6 +223,7 @@ public abstract class Enemy : MonoBehaviour
         }
         //Invoke("SecondUnStun", time);
     }
+
     public void AttackPlayer() //Verifica que no estemos atacando para mirar hacia el jugador y envia nuevamente la animacion de ataque. El booleano se resetea con un AnimEvent.
     {
         if(!isAttacking)
@@ -278,7 +286,8 @@ public abstract class Enemy : MonoBehaviour
     public void GrabCat()
     {
         //GetNearestUFO(); Cuesta conseguir el Exit pos y despues escapar, despues lo arreglo.
-
+        ReduceSpeed();
+        AIManager.Instance.SetNewTarget(this.gameObject);
         onCatGrab(true);
         GameVars.Values.TakeCat(_exitPos); //Todo esto se hace en una corrutina para darle tiempo al Gray a encontrar la nave mas cercana.
         hasObjective = true;
@@ -330,6 +339,7 @@ public abstract class Enemy : MonoBehaviour
 
     public void GoBackToShip()
     {
+        AIManager.Instance.RemoveEnemyFromList(this, hasObjective);
         _lm.RemoveGray(this);
         SendWitts();
         if (hasObjective)
@@ -418,9 +428,25 @@ public abstract class Enemy : MonoBehaviour
         return _navMeshAgent.velocity;
     }
 
+    public void ReduceSpeed()
+    {
+        _navMeshAgent.speed *= 0.4f;
+    }
+
+    public void GetProtectTarget()
+    {
+        _target = AIManager.Instance.currentTarget;
+    }
+
     public void ReferenceEvent(bool value)
     {
         onWalk(value);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, protectDistance);
     }
 
 }

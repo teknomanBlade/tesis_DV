@@ -19,6 +19,7 @@ public class GrayModel : Enemy
         _fsm.AddState(EnemyStatesEnum.ChaseTrapState, new ChaseTrapState(_fsm ,this));
         _fsm.AddState(EnemyStatesEnum.AttackTrapState, new AttackTrapState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.EscapeState, new EscapeState(_fsm, this));
+        _fsm.AddState(EnemyStatesEnum.ProtectState, new ProtectState(_fsm, this));
         //_fsm.ChangeState(EnemyStatesEnum.CatState);
     }
 
@@ -27,6 +28,8 @@ public class GrayModel : Enemy
         _myController = new GrayController(this, GetComponent<GrayView>());
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _as = GetComponent<AudioSource>();
+
+        AIManager.Instance.SubscribeEnemyForPosition(this);
 
         _player = GameVars.Values.Player;
         _cat = GameVars.Values.Cat;

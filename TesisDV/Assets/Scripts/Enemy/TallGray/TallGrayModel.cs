@@ -21,6 +21,7 @@ public class TallGrayModel : Enemy
         _fsm.AddState(EnemyStatesEnum.ChaseTrapState, new ChaseTrapState(_fsm ,this));
         _fsm.AddState(EnemyStatesEnum.AttackTrapState, new AttackTrapState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.EscapeState, new EscapeState(_fsm, this));
+        _fsm.AddState(EnemyStatesEnum.ProtectState, new ProtectState(_fsm, this));
     }
 
     private void Start()
@@ -28,6 +29,8 @@ public class TallGrayModel : Enemy
         _myController = new TallGrayController(this, GetComponent<TallGrayView>());
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _as = GetComponent<AudioSource>();
+
+        AIManager.Instance.SubscribeEnemyForPosition(this);
 
         _player = GameVars.Values.Player;
         _cat = GameVars.Values.Cat;

@@ -41,7 +41,6 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(InventoryItem item)
     {
-        Debug.Log(item.myCraftingID);
         //Fade();
         for (int i = 0; i < itemSlots.Length; i++)
         {

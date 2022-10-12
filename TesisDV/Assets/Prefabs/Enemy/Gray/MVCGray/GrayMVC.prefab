@@ -15858,6 +15858,7 @@ MonoBehaviour:
   _cat: {fileID: 0}
   hasObjective: 0
   isAttacking: 0
+  isStunned: 0
   _exitPos: {x: 0, y: 0, z: 0}
   trapPos: {x: 0, y: 0, z: 0}
   _waypoints: []
@@ -15867,6 +15868,9 @@ MonoBehaviour:
     m_Bits: 1024
   _lm: {fileID: 0}
   lineRenderer: {fileID: 2830093908131666664}
+  protectDistance: 1
+  _target: {fileID: 0}
+  _circlePos: {x: 0, y: 0, z: 0}
 --- !u!114 &8188055648448647315
 MonoBehaviour:
   m_ObjectHideFlags: 0

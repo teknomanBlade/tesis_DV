@@ -581,7 +581,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IDoorGrayInteractObservabl
         hasObjective = true;
         _anim.SetBool("IsGrab", true);
         GameVars.Values.TakeCat(_exitPos);
-        _lm.CheckForObjective();
+        //_lm.CheckForObjective();
     }
 
     public void MoveObjective()
@@ -596,7 +596,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IDoorGrayInteractObservabl
     {
         hasObjective = false;
         GameVars.Values.SetCatFree();
-        _lm.CheckForObjective();
+        //_lm.CheckForObjective();
     }
 
     public void GoBackToShip()
@@ -706,7 +706,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IDoorGrayInteractObservabl
         //Esta lista ahora referencia GrayModel, no Gray.
         //_lm.RemoveGray(this);
 
-        _lm.CheckForObjective();
+        //_lm.CheckForObjective();
     }
     public void Dissolve()
     {
