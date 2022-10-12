@@ -4,11 +4,11 @@ Shader "CatDistanceBarShader"
 {
 	Properties
 	{
-		_TextureSample0("Texture Sample 0", 2D) = "white" {}
+		_TextureArrows("TextureArrows", 2D) = "white" {}
 		_TimeFrq("TimeFrq", Float) = 4.17
 		_Frq("Frq", Range( 0 , 1)) = 5.9
-		_Tiling("Tiling", Float) = 0
 		_Speed("Speed", Vector) = (0.4,0,0,0)
+		_Tiling("Tiling", Vector) = (0,0,0,0)
 
 	}
 	
@@ -70,9 +70,9 @@ Shader "CatDistanceBarShader"
 				float4 ase_texcoord2 : TEXCOORD2;
 			};
 
-			uniform sampler2D _TextureSample0;
+			uniform sampler2D _TextureArrows;
 			uniform float2 _Speed;
-			uniform float _Tiling;
+			uniform float2 _Tiling;
 			uniform float _Frq;
 			uniform float _TimeFrq;
 
@@ -116,13 +116,12 @@ Shader "CatDistanceBarShader"
 				float3 WorldPosition = i.worldPos;
 #endif
 				float4 color45 = IsGammaSpace() ? float4(0,0.9529972,1,0) : float4(0,0.896389,1,0);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 uv035 = i.ase_texcoord1.xy * temp_cast_0 + float2( 0,1.16 );
-				float2 panner50 = ( 0.1 * _Time.y * _Speed + uv035);
+				float2 uv035 = i.ase_texcoord1.xy * _Tiling + float2( 0,1.16 );
+				float2 panner50 = ( 0.2 * _Time.y * _Speed + uv035);
 				float mulTime19 = _Time.y * _TimeFrq;
 				
 				
-				finalColor = ( color45 * tex2D( _TextureSample0, panner50 ).a * sin( ( ( i.ase_texcoord2.xyz.z * _Frq ) + mulTime19 ) ) );
+				finalColor = ( color45 * tex2D( _TextureArrows, panner50 ).a * sin( ( ( i.ase_texcoord2.xyz.z * _Frq ) + mulTime19 ) ) );
 				return finalColor;
 			}
 			ENDCG
@@ -134,26 +133,26 @@ Shader "CatDistanceBarShader"
 }
 /*ASEBEGIN
 Version=17800
-488;207;1307;550;1737.835;1741.305;2.088263;True;False
+275;538;1307;514;1725.029;1561.651;1.622357;True;False
 Node;AmplifyShaderEditor.RangedFloatNode;18;-1011.79,-354.4936;Inherit;False;Property;_TimeFrq;TimeFrq;1;0;Create;True;0;0;False;0;4.17;4;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.PosVertexDataNode;13;-1042.142,-861.9379;Inherit;False;0;0;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;5;-1111.726,-642.6281;Inherit;False;Property;_Frq;Frq;2;0;Create;True;0;0;False;0;5.9;1;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;37;-950.9622,-1283.902;Inherit;False;Property;_Tiling;Tiling;3;0;Create;True;0;0;False;0;0;0.73;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.Vector2Node;73;-913.149,-1337.315;Inherit;False;Property;_Tiling;Tiling;4;0;Create;True;0;0;False;0;0,0;5,0.72;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
 Node;AmplifyShaderEditor.SimpleTimeNode;19;-713.0773,-496.3883;Inherit;False;1;0;FLOAT;1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;16;-772.2341,-754.4487;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.Vector2Node;51;-647.757,-1227.832;Inherit;False;Property;_Speed;Speed;4;0;Create;True;0;0;False;0;0.4,0;0.3,0;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
 Node;AmplifyShaderEditor.TextureCoordinatesNode;35;-690.6868,-1420.179;Inherit;False;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,1.16;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.Vector2Node;51;-647.757,-1227.832;Inherit;False;Property;_Speed;Speed;3;0;Create;True;0;0;False;0;0.4,0;0.3,0;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
 Node;AmplifyShaderEditor.SimpleAddOpNode;17;-485.64,-780.6879;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.PannerNode;50;-423.8666,-1388.821;Inherit;False;3;0;FLOAT2;0,0;False;2;FLOAT2;0,0;False;1;FLOAT;0.1;False;1;FLOAT2;0
+Node;AmplifyShaderEditor.PannerNode;50;-423.8666,-1388.821;Inherit;False;3;0;FLOAT2;0,0;False;2;FLOAT2;0,0;False;1;FLOAT;0.2;False;1;FLOAT2;0
 Node;AmplifyShaderEditor.ColorNode;45;-184.5674,-1187.51;Inherit;False;Constant;_Color0;Color 0;5;0;Create;True;0;0;False;0;0,0.9529972,1,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SinOpNode;14;-187.877,-932.9937;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SamplerNode;21;-166.4911,-1458.355;Inherit;True;Property;_TextureSample0;Texture Sample 0;0;0;Create;True;0;0;False;0;-1;None;0cbf819071b7b2c4d9188d98802bebc4;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;21;-166.4911,-1459.977;Inherit;True;Property;_TextureArrows;TextureArrows;0;0;Create;True;0;0;False;0;-1;None;0cbf819071b7b2c4d9188d98802bebc4;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;71;261.2682,-1197.967;Inherit;True;3;3;0;COLOR;0,0,0,0;False;1;FLOAT;0;False;2;FLOAT;0;False;1;COLOR;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;42;732.6361,-1130.816;Float;False;True;-1;2;ASEMaterialInspector;100;1;CatDistanceBarShader;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;True;False;True;0;False;-1;True;True;True;True;True;0;False;-1;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;RenderType=Opaque=RenderType;True;2;0;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;;0
 WireConnection;19;0;18;0
 WireConnection;16;0;13;3
 WireConnection;16;1;5;0
-WireConnection;35;0;37;0
+WireConnection;35;0;73;0
 WireConnection;17;0;16;0
 WireConnection;17;1;19;0
 WireConnection;50;0;35;0
@@ -165,4 +164,4 @@ WireConnection;71;1;21;4
 WireConnection;71;2;14;0
 WireConnection;42;0;71;0
 ASEEND*/
-//CHKSM=4B28405BFF1C8F421562AB0AC16B4C645DAC3EBC
+//CHKSM=002CAEE0DB13786F96C6B480656BA428CB3852EA
