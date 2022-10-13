@@ -47,11 +47,25 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public Baseball Baseball { get; private set; }
     public int InitialStock { get; private set; }
 
+    #region Upgrades
+    [Header("Upgrades")]
+    [SerializeField] private GameObject _staticBallsBlueprint;
+    [SerializeField] private GameObject _staticBallsUpgrade;
+    [SerializeField] private GameObject _fireRateBlueprint;
+    [SerializeField] private GameObject _fireRateUpgrade;
+    public bool _canActivate1Upgrade {get; private set;}
+    public bool _canActivate2Upgrade {get; private set;}
+    private SkillTree _skillTree;
+
+    #endregion
     public void Awake()
     {
         //active = false; Ahora las trampas empiezan encendidas.
         _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
+        _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
+        _skillTree.OnUpgrade += CheckForUpgrades;
+        CheckForUpgrades();
         //_animator.SetBool("HasNoBalls", true); Ahora las trampas empiezan encendidas.
         //GameVars.Values.ShowNotification("The Turret is inactive. Get near until you see the Active Button Icon."); Ahora las trampas empiezan encendidas.
         isFirstTime = true;
@@ -316,6 +330,37 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         }
         
     }
+
+    #region Upgrade Voids
+    private void CheckForUpgrades()
+    {
+        if(_skillTree.isBL1Activated)
+        {
+            _staticBallsBlueprint.SetActive(true);
+            _canActivate1Upgrade = true;
+        }
+        else if (_skillTree.isBL2Activated)
+        {
+            _fireRateBlueprint.SetActive(true);
+            _canActivate2Upgrade = true;
+        }
+    }
+
+    public void ActivateFirstUpgrade()
+    {
+        _staticBallsBlueprint.SetActive(false);
+        _staticBallsUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+
+    public void ActivateSecondUpgrade()
+    {
+        _fireRateBlueprint.SetActive(false);
+        _fireRateUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+
+    #endregion
 
     void OnDrawGizmos()
     {

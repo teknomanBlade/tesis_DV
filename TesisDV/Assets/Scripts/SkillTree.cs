@@ -12,9 +12,17 @@ public class SkillTree : MonoBehaviour
     [Header("BaseballLauncher Upgrades")]
     [SerializeField] private int BL1WittCost;
     private bool _isBL1Activated;
+    public bool isBL1Activated
+    {
+        get { return _isBL1Activated; }
+    }
     [Header("Firerate Upgrade")]
     [SerializeField] private int BL2WittCost;
     private bool _isBL2Activated;
+    public bool isBL2Activated
+    {
+        get { return _isBL2Activated; }
+    }
 
     #endregion
 
@@ -24,9 +32,17 @@ public class SkillTree : MonoBehaviour
     [Header("NailFiringMachine Upgrades")]
     [SerializeField] private int NFM1WittCost;
     private bool _isNFM1Activated;
+    public bool isNFM1Activated
+    {
+        get { return _isNFM1Activated; }
+    }
     [Header("Toxic Damage")]
     [SerializeField] private int NFM2WittCost;
     private bool _isNFM2Activated;
+    public bool isNFM2Activated
+    {
+        get { return _isNFM2Activated; }
+    }
 
     #endregion
 
@@ -36,10 +52,17 @@ public class SkillTree : MonoBehaviour
     [Header("ElectricTrap Upgrades")]
     [SerializeField] private int ET1WittCost;
     private bool _isET1Activated;
+    public bool isET1Activated
+    {
+        get { return _isET1Activated; }
+    }
     [Header("Area Upgrade")]
     [SerializeField] private int ET2WittCost;
     private bool _isET2Activated;
-    
+    public bool isET2Activated
+    {
+        get { return _isET2Activated; }
+    }
 
     #endregion
 
@@ -49,9 +72,17 @@ public class SkillTree : MonoBehaviour
     [Header("SlowTrap Upgrades")]
     [SerializeField] private int ST1WittCost;
     private bool _isST1Activated;
+    public bool isST1Activated
+    {
+        get { return _isST1Activated; }
+    }
     [Header("Toxic Damage")]
     [SerializeField] private int ST2WittCost;
     private bool _isST2Activated;
+    public bool isST2Activated
+    {
+        get { return _isST2Activated; }
+    }
 
     #endregion
 
@@ -61,12 +92,24 @@ public class SkillTree : MonoBehaviour
     [Header("MicrowaveTrap Upgrades")]
     [SerializeField] private int MT1WittCost;
     private bool _isMT1Activated;
+    public bool isMT1Activated
+    {
+        get { return _isMT1Activated; }
+    }
     [Header("Return Damage")]
     [SerializeField] private int MT2WittCost;
     private bool _isMT2Activated;
+    public bool isMT2Activated
+    {
+        get { return _isMT2Activated; }
+    }
     [Header("Explode On Death")]
     [SerializeField] private int MT3WittCost;
     private bool _isMT3Activated;
+    public bool isMT3Activated
+    {
+        get { return _isMT3Activated; }
+    }
 
     #endregion
     
@@ -75,7 +118,7 @@ public class SkillTree : MonoBehaviour
 
     void Start()
     {
-        //Conseguir el inventario
+        _inventory = GetComponentInChildren<Inventory>();
     }
 
     #region ButtonVoids

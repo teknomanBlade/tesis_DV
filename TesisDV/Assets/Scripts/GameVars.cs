@@ -11,6 +11,7 @@ public class GameVars : MonoBehaviour
     public static GameVars Values { get { return _gameVars; } }
 
     public SoundManager soundManager { get; private set; }
+    public CraftingScreen craftingContainer { get; private set; }
     public LevelManager LevelManager { get; set; }
     public WaveManager WaveManager { get; set; }
     
@@ -63,6 +64,7 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairAddOnBattery;
     public Sprite imageBaseballTrap;
     public CraftingScreen craftingScreen;
+
     public Text notifications;
     public Text playerLives;
 
@@ -151,6 +153,7 @@ public class GameVars : MonoBehaviour
         playerLivesAnim = playerLives.gameObject.GetComponent<Animator>();
         playerLivesAnim.SetBool("IsDamaged", false);
         soundManager = FindObjectOfType<SoundManager>();
+        craftingContainer = FindObjectOfType<CraftingScreen>();
         soundManager.SetAudioClips(audioClips);
         LevelManager = GetComponent<LevelManager>();
         WaveManager = GetComponent<WaveManager>();
