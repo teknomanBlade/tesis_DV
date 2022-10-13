@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: house_door_black
-  m_Shader: {fileID: 4800000, guid: 9a740eb707428ba4381a656c94014185, type: 3}
-  m_ShaderKeywords: _NORMALMAP
+  m_Name: Random_book
+  m_Shader: {fileID: 4800000, guid: 6be1bd562b939d84e90b1e92c0db434a, type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -19,8 +19,12 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: b68f0326f75f8414db3874328a4145b6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 6dd62bfb27e8f5d4caebe80c29617ed3, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -28,7 +32,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailMask:
-        m_Texture: {fileID: 2800000, guid: 390a753f304dab14fb7a2c44d790b9d8, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailNormalMap:
@@ -40,15 +44,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 9744657a462c5d74d99aeda378240509, type: 3}
+        m_Texture: {fileID: 2800000, guid: b68f0326f75f8414db3874328a4145b6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: c7882111acf7cd740af5593bba17abdd, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8abc7d31b91727c4c9c0a7b379f620f5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture1:
-        m_Texture: {fileID: 2800000, guid: c7882111acf7cd740af5593bba17abdd, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8abc7d31b91727c4c9c0a7b379f620f5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -56,10 +60,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: 34cd2634b7cfc684591e7f42f343a741, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SSSMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -71,40 +79,44 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _Distortion: 0.5
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
-    - _Glossiness1: 5
     - _GlossyReflections: 1
+    - _InternalColourPower: 4
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _PointLightPunchthrough: 1
     - _Rim: 0
-    - _Rim1: 0.567
     - _RimAmount: 0
-    - _RimAmount1: 0.277
+    - _SSSMultiplier: 1
+    - _SSSPower: 1
+    - _SSSScale: 1
+    - _ShadowStrength: 0.1
+    - _ShadowStrength1: 1
+    - _Shininess: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TeleportDeathVal: 0
-    - _TeleportValue: 0
-    - _Transparency: 0
+    - _SubsurfaceDistortion: 0.044
     - _UVSec: 0
+    - _Width: 0.001
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _AmbientColor: {r: 1, g: 1, b: 1, a: 0}
-    - _AmbientColor1: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 0}
+    - _AmbientColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Door_Base_Color: {r: 1, g: 1, b: 1, a: 0}
-    - _Door_Border_Color: {r: 0, g: 0, b: 0, a: 0}
-    - _Door_Center_Color: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 0}
+    - _Color0: {r: 1, g: 1, b: 1, a: 0}
+    - _Color_Base: {r: 1, g: 0, b: 0, a: 0}
+    - _Color_Title: {r: 1, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 0, g: 0, b: 0, a: 0}
-    - _RimColor1: {r: 1, g: 1, b: 1, a: 0}
-    - _SpecularColor: {r: 0, g: 0, b: 0, a: 0}
-    - _SpecularColor1: {r: 0.764151, g: 0.764151, b: 0.764151, a: 0}
-    - _TintColor: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 0}
-    - _TintColor1: {r: 0.41960785, g: 0.41960785, b: 0.41960785, a: 0}
+    - _InternalColour: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
+    - _MainColor: {r: 0.3921569, g: 0.3921569, b: 0.3921569, a: 1}
+    - _OutLineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 0}
+    - _SpecularColor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
+    - _TintColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
