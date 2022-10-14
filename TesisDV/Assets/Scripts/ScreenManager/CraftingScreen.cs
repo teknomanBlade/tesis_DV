@@ -13,6 +13,7 @@ public class CraftingScreen : MonoBehaviour, IScreen
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Confined;
         if (InventoryAndTrapDescriptions.activeSelf)
         {
             BTNPage1.interactable = false;
@@ -34,10 +35,14 @@ public class CraftingScreen : MonoBehaviour, IScreen
 
     void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Keypad1))
         {
-            BTN_Back();
-        } */   
+            BTN_PageOne();
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            BTN_PageTwo();
+        }
     }
     public void BTN_Back()
     {
@@ -46,6 +51,7 @@ public class CraftingScreen : MonoBehaviour, IScreen
 
     public void BTN_PageOne()
     {
+        Cursor.lockState = CursorLockMode.Confined;
         TrapProgressionSystem.SetActive(false);
         InventoryAndTrapDescriptions.SetActive(true);
         BTNPage1.interactable = false;
@@ -54,6 +60,7 @@ public class CraftingScreen : MonoBehaviour, IScreen
 
     public void BTN_PageTwo()
     {
+        Cursor.lockState = CursorLockMode.Confined;
         TrapProgressionSystem.SetActive(true);
         InventoryAndTrapDescriptions.SetActive(false);
         BTNPage1.interactable = true;
