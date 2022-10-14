@@ -10,7 +10,7 @@ Material:
   m_Name: TallGray_Melee
   m_Shader: {fileID: 4800000, guid: 7ef6373f8c492764b97c41e07c35512a, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -43,6 +43,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainTexture:
+        m_Texture: {fileID: 2800000, guid: e33be6dc7500e1d49a28c13edcb4a882, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTexture1:
         m_Texture: {fileID: 2800000, guid: e33be6dc7500e1d49a28c13edcb4a882, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -65,30 +69,46 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
-    - _Cutoff: 0.5
+    - _Cutoff: 0.75
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _EdgeThickness: 0.3
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 3.16
     - _Glossiness1: 3.16
     - _GlossyReflections: 1
+    - _LowerLimit: 2
     - _Metallic: 0
     - _Mode: 0
+    - _NoiseScrollspeed: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Rim: 0.139
     - _Rim1: 0.139
+    - _RimAmount: 0.671
     - _RimAmount1: 0.671
+    - _ScaleDissolveGray: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
+    - _UpperLimit: -2
+    - _VertexPosition: 1
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
+    - _AmbientColor: {r: 1, g: 1, b: 1, a: 0}
     - _AmbientColor1: {r: 1, g: 1, b: 1, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DissolveDirection: {r: 0, g: 0, b: 1, a: 0}
+    - _EdgeColor: {r: 0, g: 0.7125139, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _NoiseDirection: {r: 0, g: 0, b: 1, a: 0}
+    - _NoiseScale: {r: 5, g: 5, b: 0, a: 0}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 0}
     - _RimColor1: {r: 1, g: 1, b: 1, a: 0}
+    - _SpecularColor: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 0}
     - _SpecularColor1: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 0}
+    - _TintColor: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
     - _TintColor1: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
   m_BuildTextureStacks: []

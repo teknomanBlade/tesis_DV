@@ -774,7 +774,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (lookingAt.gameObject.TryGetComponent<StationaryItem>(out StationaryItem stationaryItem))
         {
             if (_inventory.ContainsID(2, 1))
+            {
+                _inventory.RemoveItemByID(2);
                 stationaryItem.ActiveBatteryComponent();
+            }
             else
                 GameVars.Values.ShowNotification("You need a Battery for this!");
         }

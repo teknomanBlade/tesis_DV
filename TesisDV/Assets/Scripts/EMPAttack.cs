@@ -7,20 +7,21 @@ public class EMPAttack : MonoBehaviour
 {
     [SerializeField]
     private GrayModel _myOwner;
-    [SerializeField] private int _damageAmount;
+    //[SerializeField] private int _damageAmount;
 
     void OnTriggerEnter(Collider other)
     {
-        var player = other.GetComponent<Player>();
+        //var player = other.GetComponent<Player>();
         var trap = other.GetComponent<Trap>();
 
-        if (player)
+        /*if (player)
         {
             //_myOwner.GetDoor(other.GetComponent<Door>());
             other.GetComponent<Player>().Damage(_damageAmount);
             
         }
-        else if (trap && other.GetComponent<BaseballLauncher>())
+        else*/
+        if (trap && other.GetComponent<BaseballLauncher>())
         {
             other.GetComponent<Trap>().Inactive();
         }
