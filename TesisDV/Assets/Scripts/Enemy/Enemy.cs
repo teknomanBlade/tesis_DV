@@ -40,6 +40,7 @@ public abstract class Enemy : MonoBehaviour
     public Cat _cat;
 
     public bool hasObjective;
+    [SerializeField] private bool isSpecialAttacking = false;
     [SerializeField] private bool isAttacking = false;
     [SerializeField] private bool isStunned = false;
 
@@ -240,16 +241,16 @@ public abstract class Enemy : MonoBehaviour
 
     public void AttackTrap()
     {
-        if(!isAttacking)
+        if(!isSpecialAttacking)
         {
             canBeHit = false;
             var dir = _currentTrapObjective.transform.position - transform.position;
             transform.forward = dir;
             _navMeshAgent.speed = 0;
-            onWalk(isAttacking);
-            //onAttackSpecial(!isAttacking);
-            onAttack(!isAttacking);
-            isAttacking = true; 
+            onWalk(isSpecialAttacking);
+            onAttackSpecial(!isSpecialAttacking);
+            //onAttack(!isAttacking);
+            isSpecialAttacking = true; 
             //_currentTrapObjective.GetComponent<BaseballLauncher>().Inactive();
         }
         if(_currentTrapObjective.GetComponent<Trap>() && _currentTrapObjective.GetComponent<Trap>().active == false) //cambiar el baseballLauncher por clase padre de trampas.
@@ -266,10 +267,10 @@ public abstract class Enemy : MonoBehaviour
 
     public void RevertSpecialAttackBool() //Esto se llama por la animación de ataque.
     {
-        //onAttackSpecial(!isAttacking);
+        onAttackSpecial(!isSpecialAttacking);
         _navMeshAgent.speed = 1;
-        onWalk(isAttacking);
-        isAttacking = false;
+        onWalk(isSpecialAttacking);
+        isSpecialAttacking = false;
 
         foundTrapInPath = false;    
         _fsm.ChangeState(EnemyStatesEnum.CatState);

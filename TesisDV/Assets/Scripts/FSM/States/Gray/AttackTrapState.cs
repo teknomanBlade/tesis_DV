@@ -19,11 +19,14 @@ public class AttackTrapState : IState
     }
     public void OnUpdate()
     {
-        _enemy.AttackTrap();  
-        
-        if(!_enemy.foundTrapInPath)
+        if (!_enemy.foundTrapInPath)
         {
+            _enemy.RevertSpecialAttackBool();
             _fsm.ChangeState(EnemyStatesEnum.CatState);
+        }
+        else
+        {
+            _enemy.AttackTrap();
         }
     }
     public void OnExit()

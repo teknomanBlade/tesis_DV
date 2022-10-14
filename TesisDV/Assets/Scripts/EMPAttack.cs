@@ -21,6 +21,11 @@ public class EMPAttack : MonoBehaviour
             
         }
         else*/
+        if (trap && other.GetComponent<ElectricTrap>())
+        {
+            other.GetComponent<Trap>().Inactive();
+        }
+
         if (trap && other.GetComponent<BaseballLauncher>())
         {
             other.GetComponent<Trap>().Inactive();
