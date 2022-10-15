@@ -129,7 +129,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(BL1WittCost);
             _isBL1Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
         
     }
@@ -140,7 +143,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(BL2WittCost);
             _isBL2Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
     }
 
@@ -150,7 +156,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(NFM1WittCost);
             _isNFM1Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
     }
 
@@ -160,7 +169,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(NFM2WittCost);
             _isNFM2Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
     }
 
@@ -170,7 +182,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(ET1WittCost);
             _isET1Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
     }
 
@@ -180,7 +195,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(ET2WittCost);
             _isET2Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
     }
 
@@ -190,7 +208,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(ST1WittCost);
             _isST1Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
     }
 
@@ -200,7 +221,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(ST2WittCost);
             _isST2Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
     }
 
@@ -210,7 +234,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(MT1WittCost);
             _isMT1Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
     }
 
@@ -220,7 +247,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(MT2WittCost);
             _isMT2Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
     }
 
@@ -230,7 +260,10 @@ public class SkillTree : MonoBehaviour
         {
             _inventory.RemoveWitts(MT3WittCost);
             _isMT3Activated = true;
-            OnUpgrade();
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
         }
     }
 

@@ -20,7 +20,7 @@ using UnityEngine;
             //public InventoryItem item;
             public int craftingID;
             public int amount;
-            public int wittValue;
+            //public int wittValue; No se usan Witts para construir trampas.
             public Sprite itemImage;
             public GameObject trapPrefab;
         }
@@ -54,7 +54,7 @@ using UnityEngine;
             _inventory = inventory;
             foreach (ItemAmount itemAmount in materials)
             {
-                if(!inventory.ContainsID(itemAmount.craftingID, itemAmount.amount) || !inventory.HasEnoughWitts(itemAmount.wittValue))
+                if(!inventory.ContainsID(itemAmount.craftingID, itemAmount.amount)) //|| !inventory.HasEnoughWitts(itemAmount.wittValue)) No se usan Witts para construir trampas.
                 {
                     return false;
                 }
@@ -95,10 +95,10 @@ using UnityEngine;
                     _inventory.RemoveItemID(itemAmount.craftingID, itemAmount.amount);
                 }
             }
-            foreach(ItemAmount itemAmount in results)
+            /* foreach(ItemAmount itemAmount in results)
             {
-                _inventory.RemoveWitts(itemAmount.wittValue);
-            }
+                _inventory.RemoveWitts(itemAmount.wittValue); No se usan Witts para construir trampas.
+            } */
         }
 
         public void RestoreBuildAmount()

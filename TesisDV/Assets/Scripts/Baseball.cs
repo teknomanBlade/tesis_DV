@@ -12,7 +12,7 @@ public class Baseball : Projectile
     protected override void Start()
     {
         base.Start();
-        _damageAmount = 1;
+        //_damageAmount = 1;
         Invoke("ReturnToPool",5f);
         _rb = GetComponent<Rigidbody>();
         _rb.AddForce(_forceAmount * shootDirection, ForceMode.Impulse);
@@ -36,6 +36,12 @@ public class Baseball : Projectile
     public Baseball SetInitialPos(Vector3 pos)
     {
         transform.position = pos;
+        return this;
+    }
+
+    public Baseball SetAdditionalDamage(int addDamage)
+    {
+        _damageAmount += addDamage;
         return this;
     }
 
