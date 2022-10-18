@@ -38,16 +38,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private GameObject _craftingScreen;
     [SerializeField] private GameObject _miniMapDisplay;
     private LevelManager _lm;
-    private float _doubleTapTime1;
-    private bool _doubleTap1 = false;
-    private float _doubleTapTime2;
-    private bool _doubleTap2 = false;
-    private float _doubleTapTime3;
-    private bool _doubleTap3 = false;
-    private float _doubleTapTime4;
-    private bool _doubleTap4 = false;
-    private float _doubleTapTime5;
-    private bool _doubleTap5 = false;
     #endregion
 
     #region Movement
@@ -863,7 +853,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void InteractWithInventoryItem()
     {
-        _inventory.AddItem(lookingAt as InventoryItem);
+            _inventory.AddItem(lookingAt as InventoryItem);
     }
 
     private void OnDrawGizmos()

@@ -24,11 +24,21 @@ public class StationaryItem : Item
     {
         //ActiveBatteryComponent();
     }
+    public StationaryItem SetAddOnGameObject(GameObject batteryAddOn)
+    {
+        this.batteryAddOn = batteryAddOn;
+        return this;
+    }
+    public StationaryItem SetBlueprint(GameObject batteryBlueprint)
+    {
+        this.batteryBlueprint = batteryBlueprint;
+        return this;
+    }
     public void ActiveBatteryComponent()
     {
         if (!_isAddOnPlaced)
         {
-            gameObject.AddComponent<TVTrap>();
+            gameObject.AddComponent<TVTrap>().SetAddOnGameObject(batteryAddOn).SetBlueprint(batteryBlueprint);
             gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = true;
             Destroy(gameObject.GetComponent<StationaryItem>());
         }
@@ -36,6 +46,7 @@ public class StationaryItem : Item
         batteryAddOn.SetActive(true);
         batteryBlueprint.SetActive(false);
         _isAddOnPlaced = true;
+        
     }
     public void ShowBlueprint()
     {
@@ -44,6 +55,7 @@ public class StationaryItem : Item
 
         Invoke("HideBlueprint", 2f);
     }
+    
     public void HideBlueprint()
     {
         batteryBlueprint.SetActive(false);

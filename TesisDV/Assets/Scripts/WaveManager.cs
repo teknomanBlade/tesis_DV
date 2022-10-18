@@ -30,6 +30,11 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     [SerializeField] private float _timeBetweenWaves;
 
     private bool _inRound;
+    public bool InRound
+    {
+        get { return _inRound;  }
+        set { _inRound = value; }
+    }
     [SerializeField] private float _timeWaves = 0;
     public float TimeWaves
     {
