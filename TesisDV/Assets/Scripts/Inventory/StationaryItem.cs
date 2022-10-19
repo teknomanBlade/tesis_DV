@@ -12,6 +12,7 @@ public class StationaryItem : Item
     void Start()
     {
         _isAddOnPlaced = false;
+        
     }
 
     // Update is called once per frame
@@ -36,6 +37,7 @@ public class StationaryItem : Item
     }
     public void ActiveBatteryComponent()
     {
+       
         if (!_isAddOnPlaced)
         {
             gameObject.AddComponent<TVTrap>().SetAddOnGameObject(batteryAddOn).SetBlueprint(batteryBlueprint);

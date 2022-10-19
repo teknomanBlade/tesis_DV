@@ -9,11 +9,14 @@ public class ElectricTrap : Trap, IInteractable
     [SerializeField] private float _currentLife;
     public GameObject ParticleLightning;
     public GameObject ElectricRadius;
+    public GameObject ElectricRadiusInternal;
     private bool _isDisabledSFX;
     private AudioSource _as;
     private void Start()
     {
-        active = true; // Ahora las trampas empiezan encendidas.        
+        active = true; // Ahora las trampas empiezan encendidas.   
+        _as = GetComponent<AudioSource>();
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "ElectricTrapSFX", 0.25f, true);
     }
 
     private void Update()
@@ -33,8 +36,10 @@ public class ElectricTrap : Trap, IInteractable
         if (!active)
         {
             active = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "ElectricTrapSFX", 0.25f, true);
             ParticleLightning.SetActive(true);
             ElectricRadius.SetActive(true);
+            ElectricRadiusInternal.SetActive(true);
         }
         if(_trapDuration <= 0)
         {
@@ -56,6 +61,7 @@ public class ElectricTrap : Trap, IInteractable
         if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
         ParticleLightning.SetActive(false);
         ElectricRadius.SetActive(false);
+        ElectricRadiusInternal.SetActive(false);
         active = false;
     }
 

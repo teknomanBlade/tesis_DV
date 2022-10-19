@@ -14,20 +14,23 @@ public class TVTrap : Item, IMovable
     public GameObject blueprintPrefab;
     [SerializeField]
     private LayerMask targetMask;
-    
+    private AudioSource _as;
+
     void Start()
     {
         
     }
     private void Awake()
     {
+        _as = GetComponent<AudioSource>();
         _canStun = true;
         _activeOncePerRound = false;
         _timePassed = _recoveryTime;
         _itemName = "StationaryTVTrap";
         itemType = ItemType.Weapon;
         targetMask = LayerMask.GetMask("Enemy");
-        
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "TvStaticSFX", 0.08f, true);
+
     }
     // Update is called once per frame
     void Update()
@@ -72,6 +75,7 @@ public class TVTrap : Item, IMovable
             Destroy(gameObject.GetComponent<TVTrap>());
         }
         _activeOncePerRound = true;
+        GameVars.Values.soundManager.StopSound();
     }
     void OnTriggerEnter(Collider collision)
     {

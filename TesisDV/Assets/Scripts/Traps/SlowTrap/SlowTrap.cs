@@ -9,10 +9,13 @@ public class SlowTrap : MonoBehaviour
     [SerializeField] private float _destroyTime;
     [SerializeField] private bool _doesDamage;
     Animator _animator;
+    private AudioSource _as;
 
     void Start()
     {
         _animator = GetComponent<Animator>();
+        _as = GetComponent<AudioSource>();
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "TarLiquidSFX", 0.15f, true);
     }
 
     void Update()
@@ -22,6 +25,7 @@ public class SlowTrap : MonoBehaviour
         if (_destroyTime <=0)
         {
             _animator.SetTrigger("IsDestroyed");
+            GameVars.Values.soundManager.StopSound();
         }
 
         if (Input.GetKeyDown(KeyCode.G))
