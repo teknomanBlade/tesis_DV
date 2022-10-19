@@ -24,6 +24,7 @@ public class Racket : Melee
     public Texture textureState1;
     public Texture textureState2;
     public Texture textureState3;
+    public GameObject racketSpawner;
 
     void Awake()
     {
@@ -103,9 +104,9 @@ public class Racket : Melee
 
     public void RemoveFromParent()
     {
-        var lastWorldPos = transform.parent.parent.position;
+        //var lastWorldPos = transform.parent.parent.position;
         transform.parent.parent = null;
-        transform.position = lastWorldPos;
+        //transform.position = lastWorldPos;
     }
 
     public void SetStateRacketDamaged(int hitsRemaining)
@@ -138,9 +139,12 @@ public class Racket : Melee
     public void DestroyAndRestoreValues()
     {
         this.gameObject.SetActive(false);
+        
         hitsRemaining = 7; //Hacer un void ResetHits() despues.
         transform.localRotation = _startingRotation;
-        transform.parent = _player.Cam.transform;
+        transform.parent.parent = _player.Cam.transform;
+        transform.parent.localPosition = Vector3.zero;
+        transform.parent.localRotation = Quaternion.Euler(0f,0f,0f);
         anim.SetBool("IsDestroyed", false);
         _meshFilter.mesh = _newRacketMesh;
         _renderer.material.SetTexture("_MainTexture", _startingTexture);

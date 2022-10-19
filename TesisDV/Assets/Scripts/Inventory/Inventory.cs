@@ -221,6 +221,19 @@ public class Inventory : MonoBehaviour
         }
         return number;
     }
+    public int ItemCountByID(int itemID)
+    {
+        int number = 0;
+
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if (itemSlots[i].HasItemID(itemID))
+            {
+                number++;
+            }
+        }
+        return number;
+    }
     public void Fade()
     {
         StartCoroutine(DoFade(_myCanvasGroup.alpha, 1));

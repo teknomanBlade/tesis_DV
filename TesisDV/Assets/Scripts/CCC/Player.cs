@@ -745,7 +745,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (lookingAt.gameObject.TryGetComponent<InventoryItem>(out InventoryItem aux))
         {
             aux.AddObserver(this);
-            InteractWithInventoryItem();
+            InteractWithInventoryItem(aux);
             return;
         }
         lookingAt.Interact();
@@ -851,9 +851,19 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         GameVars.Values.soundManager.PlaySoundAtPoint("GrabSound", transform.position, 0.18f);
     }
 
-    public void InteractWithInventoryItem()
+    public void InteractWithInventoryItem(InventoryItem inventoryItem)
     {
-            _inventory.AddItem(lookingAt as InventoryItem);
+        if ((inventoryItem.myCraftingID == 3 || inventoryItem.myCraftingID == 11))
+        {
+            if (_inventory.ItemCountByID(inventoryItem.myCraftingID) < 1)
+            {
+                _inventory.AddItem(inventoryItem);
+            }
+        }
+        else
+        {
+            _inventory.AddItem(inventoryItem);
+        }
     }
 
     private void OnDrawGizmos()
