@@ -9,7 +9,8 @@ public class MainScreen : MonoBehaviour
     public GameObject controls;
     public GameObject credits;
     public GameObject houseStructure;
-
+    public GameObject loadingSprite;
+    
     public GameObject Cam { get; private set; }
 
     public PostProcessVolume volume;
@@ -17,6 +18,7 @@ public class MainScreen : MonoBehaviour
     private Coroutine FadeOutSceneCoroutine;
     private Coroutine FadeInSceneCoroutine;
     private AudioSource _as;
+    private int _timesActiveScreen;
     // Start is called before the first frame update
     void Awake()
     {
@@ -26,6 +28,8 @@ public class MainScreen : MonoBehaviour
         volume = Cam.GetComponent<PostProcessVolume>();
         _as = GetComponent<AudioSource>();
         ActiveFadeInEffect(1f);
+        _timesActiveScreen++;
+        Debug.Log("TIMES ACTIVE MAIN SCREEN:" + _timesActiveScreen);
     }
 
     // Update is called once per frame
@@ -61,6 +65,8 @@ public class MainScreen : MonoBehaviour
             postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
             yield return null;
         }
+        if(loadingSprite != null)
+            loadingSprite.SetActive(!loadingSprite.activeSelf);
     }
     IEnumerator LerpFadeOutEffect(float duration)
     {
@@ -76,6 +82,7 @@ public class MainScreen : MonoBehaviour
 
         if (time < 0f)
         {
+            
             Debug.Log("LLEGO AL FINAL??");
             SceneManager.LoadScene(1);
         }
