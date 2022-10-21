@@ -21,7 +21,7 @@ public class AttackTrapState : IState
     {
         if (!_enemy.foundTrapInPath)
         {
-            _enemy.RevertSpecialAttackBool();
+            //_enemy.RevertSpecialAttackBool();
             _fsm.ChangeState(EnemyStatesEnum.CatState);
         }
         else

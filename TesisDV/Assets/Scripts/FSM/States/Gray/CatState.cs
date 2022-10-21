@@ -53,6 +53,7 @@ public class CatState : IState
 
         RaycastHit hit;
         Vector3 catDir = _enemy._cat.transform.position - _enemy.transform.position;
+        Vector3 moveDir;
         if(myPath != null && Physics.Raycast(_enemy.transform.position, catDir, out hit, catDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
         {
             if(myPath.Count >= 1)
@@ -74,6 +75,8 @@ public class CatState : IState
         }
         else
         {
+            Vector3 aux = catDir;
+            catDir = new Vector3(aux.x, 0f, aux.z);
             _enemy.transform.forward = catDir;
             _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
         }

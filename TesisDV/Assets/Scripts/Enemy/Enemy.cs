@@ -238,6 +238,8 @@ public abstract class Enemy : MonoBehaviour
         if(!isAttacking)
         {
             var dir = _player.transform.position - transform.position;
+            Vector3 aux = dir;
+            dir = new Vector3(aux.x, 0f, aux.z);
             transform.forward = dir;
             //_navMeshAgent.speed = 0; //Se va el navmesh
             onWalk(isAttacking);
@@ -275,21 +277,23 @@ public abstract class Enemy : MonoBehaviour
 
     public void RevertSpecialAttackBool() //Esto se llama por la animación de ataque.
     {
-        onAttackSpecial(!isSpecialAttacking);
-        //_navMeshAgent.speed = 1; //Se va el navmesh
-        onWalk(isSpecialAttacking);
         isSpecialAttacking = false;
+        foundTrapInPath = false;
+        onAttackSpecial(isSpecialAttacking);
+        //_navMeshAgent.speed = 1; //Se va el navmesh
+        onWalk(!isSpecialAttacking);
+        
 
-        foundTrapInPath = false;    
+            
         _fsm.ChangeState(EnemyStatesEnum.CatState);
     }
 
     public void RevertAttackBool() //Esto se llama por la animación de ataque.
     {
-        onAttack(!isAttacking);
+        isAttacking = false;
+        onAttack(isAttacking);
         //_navMeshAgent.speed = 1; //Se va el navmesh
-        onWalk(isAttacking);
-        isAttacking = false;   
+        onWalk(!isAttacking);
     }
 
     public void GrabCat()
