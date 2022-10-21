@@ -30,12 +30,21 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     public void DetectObjectiveToProtect()
     {
         Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
-        cat = allTargets.Where(x => x.GetComponent<Cat>()).FirstOrDefault().gameObject;
-        var forceField = cat.GetComponent<Cat>().ForceField;
-        forceField.SetActive(true);
-        var dir = cat.transform.position - particleRipples.transform.position;
-        transform.forward = dir;
-        particleRipples.transform.forward = dir;
+        if (allTargets.Length > 0)
+        {
+            cat = allTargets.Where(x => x.GetComponent<Cat>()).FirstOrDefault().gameObject;
+            var forceField = cat.GetComponent<Cat>().ForceField;
+            forceField.SetActive(true);
+            var dir = cat.transform.position - particleRipples.transform.position;
+            transform.forward = dir;
+            particleRipples.transform.forward = dir;
+        }
+        else
+        {
+            particleRipples.SetActive(false);
+            GameVars.Values.soundManager.StopSound();
+        }
+        
         return;
     }
 
