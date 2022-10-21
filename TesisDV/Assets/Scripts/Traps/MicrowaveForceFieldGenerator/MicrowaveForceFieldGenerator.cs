@@ -31,6 +31,8 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     {
         Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
         cat = allTargets.Where(x => x.GetComponent<Cat>()).FirstOrDefault().gameObject;
+        var forceField = cat.GetComponent<Cat>().ForceField;
+        forceField.SetActive(true);
         var dir = cat.transform.position - particleRipples.transform.position;
         transform.forward = dir;
         particleRipples.transform.forward = dir;
