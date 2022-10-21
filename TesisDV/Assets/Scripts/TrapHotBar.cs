@@ -49,7 +49,7 @@ public class TrapHotBar : MonoBehaviour
             trapSlots[0].DeactivateImage();
         }
 
-        if (GameVars.Values.BaseballLauncher.HasTVTrapItems(inventory))
+        if (GameVars.Values.MicrowaveForceFieldGenerator.HasMicrowaveForceFieldGeneratorItems(inventory))
         {
             if (isFaded)
             {

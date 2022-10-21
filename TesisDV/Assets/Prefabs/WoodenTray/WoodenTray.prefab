@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6293252231726472403
+--- !u!1 &7024693579044355870
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4376046376277156014}
-  - component: {fileID: 1580590926157409912}
-  - component: {fileID: 6500475171524456322}
-  - component: {fileID: 6048102156181322358}
-  - component: {fileID: -6035242109831678112}
+  - component: {fileID: 7653701797627274660}
+  - component: {fileID: 6744336905172199937}
+  - component: {fileID: 8826006229458902731}
+  - component: {fileID: 3331397460302970118}
+  - component: {fileID: 5810917514793976719}
+  - component: {fileID: 4805073508498607803}
   m_Layer: 10
-  m_Name: SlowTrapBlueprint
+  m_Name: WoodenTray
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4376046376277156014
+--- !u!4 &7653701797627274660
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6293252231726472403}
+  m_GameObject: {fileID: 7024693579044355870}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.8, y: 5.4517555, z: 42.689907}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: 28.091698, y: 0.0017244816, z: 12.263678}
+  m_LocalScale: {x: 0.306377, y: 0.306377, z: 0.3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1580590926157409912
+--- !u!33 &6744336905172199937
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6293252231726472403}
+  m_GameObject: {fileID: 7024693579044355870}
   m_Mesh: {fileID: 4300000, guid: ec69ea08e9ce0734eab1fece7c12f832, type: 2}
---- !u!23 &6500475171524456322
+--- !u!23 &8826006229458902731
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6293252231726472403}
+  m_GameObject: {fileID: 7024693579044355870}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -61,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0be4739deea2b8c4e9e5b8026f6cec91, type: 2}
+  - {fileID: 2100000, guid: 17e6396687688974a98db730b5bef57b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,36 +84,52 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &6048102156181322358
-SphereCollider:
+--- !u!65 &3331397460302970118
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6293252231726472403}
+  m_GameObject: {fileID: 7024693579044355870}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-6035242109831678112
+  m_Size: {x: 6.838613, y: 0.3916224, z: 7.0529847}
+  m_Center: {x: -0.06857033, y: 0.15598398, z: 0.006746848}
+--- !u!114 &5810917514793976719
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6293252231726472403}
+  m_GameObject: {fileID: 7024693579044355870}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 576e82fd62f0ac145b1bd2bb11239ce3, type: 3}
+  m_Script: {fileID: 11500000, guid: f1f3e8ca3b011ec4ab82a267f583b2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  craftingRecipe: {fileID: 11400000, guid: 5ae805cdd8ad4b94fbcc2a7a5a965a1e, type: 2}
-  trapAnimPrefab: {fileID: 2450129766235944469, guid: 5039675052a89a04284b7a781169b51b, type: 3}
-  particles: {fileID: 3984549846058083597, guid: 88689427b9f8a1c4ca13887e9bb12cd2, type: 3}
-  customPivot: {fileID: 0}
-  newMaterial: {fileID: 2100000, guid: 04d9b8823b798c944ac1ae3fed55dc18, type: 2}
-  LayerMaskWall:
-    serializedVersion: 2
-    m_Bits: 65536
+  _itemName: WoodenTray
+  _itemImage: {fileID: 21300000, guid: 31aa9327243267440b07059b4ebc04b6, type: 3}
+  itemType: 0
+  myCraftingID: 13
+  myPrefab: {fileID: 7024693579044355870}
+  timeLimit: 3
+--- !u!114 &4805073508498607803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7024693579044355870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.087417364, g: 1, b: 0, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

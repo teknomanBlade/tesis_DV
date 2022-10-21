@@ -29,14 +29,14 @@ using UnityEngine;
         {
             return inventory.ContainsID(5, 1) && inventory.ContainsID(2, 1) && inventory.ContainsID(8, 1);
         }
-        public bool HasTVTrapItems(Inventory inventory)
+        public bool HasMicrowaveForceFieldGeneratorItems(Inventory inventory)
         {
-            return inventory.ContainsID(2, 1) && inventory.ContainsID(6, 1);
+            return inventory.ContainsID(2, 1) && inventory.ContainsID(12, 1);
         }
 
         public bool HasSlowTrapItems(Inventory inventory)
         {
-            return inventory.ContainsID(4, 1);
+        return inventory.ContainsID(4, 1) && inventory.ContainsID(13,1);
         }
 
         public bool HasNailFiringMachineItems(Inventory inventory)

@@ -234,7 +234,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting)
         {
-            GameVars.Values.TVTrap.Craft(_inventory);
+            GameVars.Values.MicrowaveForceFieldGenerator.Craft(_inventory);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting)

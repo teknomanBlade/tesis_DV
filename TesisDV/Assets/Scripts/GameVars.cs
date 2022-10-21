@@ -76,7 +76,7 @@ public class GameVars : MonoBehaviour
 
     [Header("Crafting Recipes")]
     public CraftingRecipe BaseballLauncher;
-    public CraftingRecipe TVTrap;
+    public CraftingRecipe MicrowaveForceFieldGenerator;
     public CraftingRecipe SlowTrap;
     public CraftingRecipe NailFiringMachine;
     public CraftingRecipe ElectricTrap;
