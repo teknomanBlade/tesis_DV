@@ -5,12 +5,14 @@ using UnityEngine;
 public class ProtectState : IState
 {
     private StateMachine _fsm;
+    private Pathfinding _pf;
     private Enemy _enemy;
 
-    public ProtectState(StateMachine fsm, Enemy p)
+    public ProtectState(StateMachine fsm, Enemy p, Pathfinding pf)
     {
         _fsm = fsm;
         _enemy = p;
+        _pf = pf;
     }
 
     public void OnStart()
@@ -35,7 +37,7 @@ public class ProtectState : IState
 
         if(Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.1f)
         {
-            _enemy.ResetPathAndSetObjective(_enemy._circlePos);
+            //_enemy.ResetPathAndSetObjective(_enemy._circlePos); //Se va el navmesh
         }
 
         //if (distanceToTarget > _enemy.protectDistance)

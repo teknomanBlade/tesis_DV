@@ -9,7 +9,7 @@ public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] private float _hp;
     [SerializeField] private int _myWittsValue;
-    [SerializeField] private float _movingSpeed;
+    public float _movingSpeed;
     [SerializeField] private Transform _catGrabPos;
     public ParticleSystem witGainEffect;
     public Collider[] allTargets; //Borrar esto y probar.
@@ -47,15 +47,14 @@ public abstract class Enemy : MonoBehaviour
     public Vector3 _exitPos;
     public Vector3 trapPos;
 
-    protected NavMeshAgent _navMeshAgent;
-    private NavMeshPath _navMeshPath;
-    private bool pathIsCreated;
-    private bool canCreatePath;
+    //protected NavMeshAgent _navMeshAgent; //Se va el navmesh
+    //private NavMeshPath _navMeshPath;
+    //private bool pathIsCreated;
+    //private bool canCreatePath;
     public Vector3[] _waypoints;
     private int _currentWaypoint = 0;
     private int _currentCorner = 0;
     public bool foundTrapInPath = false;
-
     [SerializeField] private LayerMask _trapMask;
     public Collider _currentTrapObjective { get; private set; }
     private float _currentTrapObjectiveDistance = 1000f;
@@ -64,6 +63,14 @@ public abstract class Enemy : MonoBehaviour
     public LevelManager _lm;
     private bool canBeHit = true;
     [SerializeField] protected LineRenderer lineRenderer;
+
+    #region Pathfinding
+    
+    public Pathfinding _pf;
+    public PathfindingManager _pfManager;
+    public List<Node> Path = new List<Node>(); 
+
+    #endregion 
 
     [Header("BattleCircle AI")]
     public float protectDistance;
@@ -111,12 +118,13 @@ public abstract class Enemy : MonoBehaviour
             {
                 DropCat();
             }
-            _navMeshAgent.speed = 0;
+            //_navMeshAgent.speed = 0; //Se va el navmesh
+
             //Desabilitar colliders y lo que haga falta.
         }
     }
 
-    private void CalculatePath(Vector3 targetPosition)
+    /* private void CalculatePath(Vector3 targetPosition)
     {
         _navMeshAgent.ResetPath();
         NavMeshPath path = new NavMeshPath();
@@ -131,18 +139,18 @@ public abstract class Enemy : MonoBehaviour
             pathIsCreated = true;
             DrawLineRenderer(path.corners);  
         }
-    }
+    } */
 
-    public void ResetPathAndSetObjective(Vector3 targetPosition)
+    /* public void ResetPathAndSetObjective(Vector3 targetPosition)
     {
         _navMeshAgent.ResetPath();
         CalculatePath(targetPosition);  
         //CalculatePath(currentObjective.transform.position);
         _currentWaypoint = 0;
         pathIsCreated = false;
-    }
+    } */
 
-    public void Move()
+    /* public void Move() No creo que sea necesario el move, el movimiento se ve dentro de los estados.
     {
         if (pathIsCreated) //Probar sin bool. No funciona, entra a Move cuando el waypoint todavia no tiene valor asignado.
         {
@@ -172,7 +180,7 @@ public abstract class Enemy : MonoBehaviour
             }
             
         }
-    }
+    } */
 
     public void DetectTraps()
     {
@@ -217,7 +225,7 @@ public abstract class Enemy : MonoBehaviour
         Debug.Log("STUNEA AL GRIS");
         if (!isStunned)
         {
-            _navMeshAgent.speed = 0;
+            //_navMeshAgent.speed = 0; //Se va el navmesh
             onStun(isStunned);
             onWalk(!isStunned);
             isStunned = true;
@@ -231,7 +239,7 @@ public abstract class Enemy : MonoBehaviour
         {
             var dir = _player.transform.position - transform.position;
             transform.forward = dir;
-            _navMeshAgent.speed = 0;
+            //_navMeshAgent.speed = 0; //Se va el navmesh
             onWalk(isAttacking);
             onAttack(!isAttacking);
             isAttacking = true; 
@@ -246,7 +254,7 @@ public abstract class Enemy : MonoBehaviour
             canBeHit = false;
             var dir = _currentTrapObjective.transform.position - transform.position;
             transform.forward = dir;
-            _navMeshAgent.speed = 0;
+            //_navMeshAgent.speed = 0; //Se va el navmesh
             onWalk(isSpecialAttacking);
             onAttackSpecial(!isSpecialAttacking);
             //onAttack(!isAttacking);
@@ -268,7 +276,7 @@ public abstract class Enemy : MonoBehaviour
     public void RevertSpecialAttackBool() //Esto se llama por la animación de ataque.
     {
         onAttackSpecial(!isSpecialAttacking);
-        _navMeshAgent.speed = 1;
+        //_navMeshAgent.speed = 1; //Se va el navmesh
         onWalk(isSpecialAttacking);
         isSpecialAttacking = false;
 
@@ -279,7 +287,7 @@ public abstract class Enemy : MonoBehaviour
     public void RevertAttackBool() //Esto se llama por la animación de ataque.
     {
         onAttack(!isAttacking);
-        _navMeshAgent.speed = 1;
+        //_navMeshAgent.speed = 1; //Se va el navmesh
         onWalk(isAttacking);
         isAttacking = false;   
     }
@@ -401,7 +409,7 @@ public abstract class Enemy : MonoBehaviour
 
     public void SlowDown(float slowAmount)
     {
-        _navMeshAgent.speed -= slowAmount;
+        //_navMeshAgent.speed -= slowAmount; //Se va el navmesh
     }   
 
     private void DrawLineRenderer(Vector3[] waypoints)  //Esto deberia ir en el view T.T Apenas este todo bien lindo lo cambio
@@ -424,14 +432,16 @@ public abstract class Enemy : MonoBehaviour
         return this;
     }
 
-    public Vector3 GetVelocity()
+    public float GetVelocity()
     {
-        return _navMeshAgent.velocity;
+        //return _navMeshAgent.velocity; //Se va el navmesh
+        return _movingSpeed;
     }
 
     public void ReduceSpeed()
     {
-        _navMeshAgent.speed *= 0.4f;
+        //_navMeshAgent.speed *= 0.4f; //Se va el navmesh
+        _movingSpeed *= 0.4f;
     }
 
     public void GetProtectTarget()
@@ -442,6 +452,16 @@ public abstract class Enemy : MonoBehaviour
     public void ReferenceEvent(bool value)
     {
         onWalk(value);
+    }
+
+    public void SetPath(List<Node> nodos) //esto no hace falta, es para testear.
+    {
+        Path = nodos;
+    }
+
+    public int GetCurrentWaypoint()
+    {
+        return _currentWaypoint;
     }
 
     private void OnDrawGizmos()

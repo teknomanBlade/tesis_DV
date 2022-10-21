@@ -4,10 +4,42 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    public List<Node> neighbours = new List<Node>();
+    [SerializeField] private PathfindingManager _pfManager; //Para testear uso el Serialize, despues que tome referencias.
+    [SerializeField] private List<Node> _neighbours;
+    private Vector2 closeNodes;
+    private Node closestNode;
+    public LayerMask obstacleMask;
+    private bool first = true;
+    public bool blocked;
+    public int cost;
 
-    public void OnDrawGizmos()
+    private void Start()
     {
-        //Gizmos.DrawWireSphere(transform.position, 0.25f);
+        _pfManager.AddNodes(this);
+    }
+
+    public List<Node> GetNeighbours(Node cn)
+    {
+        RaycastHit hit;
+        List<Node> _neighbors = new List<Node>();
+
+        foreach(Node node in _pfManager.nodes)
+        {
+            Vector3 dir = node.transform.position - cn.transform.position;
+           
+            //RaycastHit2D hit = Physics2D.Raycast(cn.transform.position, dir, dir.magnitude, obstacleMask);
+            //if(hit == true)
+            if (Physics.Raycast(cn.transform.position, dir, out hit, dir.magnitude, GameVars.Values.GetWallLayerMask()))
+            {
+                
+            } 
+            else
+            {
+                _neighbors.Add(node);
+                Debug.Log("soy " + this.gameObject +" este es mi vecino + " + node);
+            }
+        }
+        return _neighbors; 
+        //return _neighbours;
     }
 }

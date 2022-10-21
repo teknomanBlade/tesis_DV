@@ -10,7 +10,8 @@ public enum EnemyStatesEnum
     ChaseTrapState,
     AttackTrapState,
     EscapeState,
-    ProtectState
+    ProtectState,
+    PathfindingState
 }
 
 public class StateMachine

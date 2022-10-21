@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//No se si borrarlo o no, por las dudas lo dejo.
+
+/* using System.Collections; 
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -92,3 +94,4 @@ public class ThetaStar<T>
         return smoothPath;
     }
 }
+ */

@@ -63,9 +63,12 @@ public abstract class Trap : MonoBehaviour
 
         if (_currentObjectiveDistance < viewRadius && _currentObjective != null)
         {
-            Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<Enemy>().GetVelocity() * _futureTime * Time.deltaTime);
+            //Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<Enemy>().GetVelocity() * _futureTime * Time.deltaTime);
+            //Claro, se fue el Navmesh y ahora tengo que ver como arreglar lo del velocity para poder dar la referencia.
+            //Cuando esté todo hecho lo del navmesh se verá.
 
-            Vector3 dir = futurePos - transform.position;
+            //Vector3 dir = futurePos - transform.position; Esto hasta arreglar el velocity
+            Vector3 dir = _currentObjective.transform.position - transform.position;
             _currentObjectiveDistance = Vector3.Distance(transform.position, _currentObjective.transform.position);
             if (Physics.Raycast(transform.position, dir, out RaycastHit hit, dir.magnitude, obstacleMask) == false)
             {

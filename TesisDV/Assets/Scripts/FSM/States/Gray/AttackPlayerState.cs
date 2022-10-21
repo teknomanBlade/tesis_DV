@@ -17,14 +17,14 @@ public class AttackPlayerState : IState
     {
         Debug.Log("Entre a AttackPlayer");
         //_enemy.SetObjective(_enemy._player.gameObject);
-        _enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+        //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position); //Se va el navmesh
         //_enemy.ResetPathAndSetObjective();
         //_enemy.AttackPlayer();
     }
 
     public void OnUpdate() //Chequear que la animacion de ataque no se solape.
     {
-        _enemy.ResetPathAndSetObjective(_enemy._player.transform.position);
+        //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position); //Se va el navmesh
 
         if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.attackThreshold)
         {

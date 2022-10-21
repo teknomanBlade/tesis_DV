@@ -12,15 +12,18 @@ public class GrayModel : Enemy
 
     private void Awake()
     {
+        _pfManager = GameObject.Find("PathfindingManager").GetComponent<PathfindingManager>();
         _fsm = new StateMachine();
-        _fsm.AddState(EnemyStatesEnum.CatState, new CatState(_fsm, this));
+        _pf = new Pathfinding();    
+       
+        _fsm.AddState(EnemyStatesEnum.CatState, new CatState(_fsm, this, _pf));
         _fsm.AddState(EnemyStatesEnum.ChaseState, new ChaseState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.AttackPlayerState, new AttackPlayerState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.ChaseTrapState, new ChaseTrapState(_fsm ,this));
         _fsm.AddState(EnemyStatesEnum.AttackTrapState, new AttackTrapState(_fsm, this));
-        _fsm.AddState(EnemyStatesEnum.EscapeState, new EscapeState(_fsm, this));
-        _fsm.AddState(EnemyStatesEnum.ProtectState, new ProtectState(_fsm, this));
-        //_fsm.ChangeState(EnemyStatesEnum.CatState);
+        _fsm.AddState(EnemyStatesEnum.EscapeState, new EscapeState(_fsm, this, _pf));
+        _fsm.AddState(EnemyStatesEnum.ProtectState, new ProtectState(_fsm, this, _pf));
+        _fsm.AddState(EnemyStatesEnum.PathfindingState, new PathfindingState(_fsm, this, _pf));
     }
 
     private void Start()
@@ -34,7 +37,7 @@ public class GrayModel : Enemy
         _player = GameVars.Values.Player;
         _cat = GameVars.Values.Cat;
 
-        _navMeshAgent = GetComponent<NavMeshAgent>();
+        //_navMeshAgent = GetComponent<NavMeshAgent>(); //Se va el navmesh
 
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _lm.AddGray(this);  //Cambiar a GrayModel
