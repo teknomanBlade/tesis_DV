@@ -30,6 +30,10 @@ public class ChaseState : IState
         //_enemy.Move(); 
         _enemy.DetectTraps();
 
+        Vector3 dir = _enemy._player.transform.position - _enemy.transform.position;
+        _enemy.transform.forward = dir;
+        _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
+
         if (Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) > _enemy.disengageThreshold && _enemy._lm.enemyHasObjective)
         {
             _fsm.ChangeState(EnemyStatesEnum.ProtectState);

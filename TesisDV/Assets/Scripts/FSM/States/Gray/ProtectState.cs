@@ -8,6 +8,11 @@ public class ProtectState : IState
     private Pathfinding _pf;
     private Enemy _enemy;
 
+    public List<Node> myPath;
+    private int _currentWaypoint;
+    private int _currentPathWaypoint = 0;
+    private Node startingPoint;
+    private Node endingPoint;
     public ProtectState(StateMachine fsm, Enemy p, Pathfinding pf)
     {
         _fsm = fsm;
@@ -17,13 +22,14 @@ public class ProtectState : IState
 
     public void OnStart()
     {
-        Debug.Log("Entre a Protect");
+        
         _enemy.GetProtectTarget();
 
         //var dir = _enemy._target.transform.position - _enemy.transform.position;  Probar estos dos despues
         //_enemy.transform.forward = dir;                                           Probar estos dos despues
 
-
+        GetThetaStar();
+        Debug.Log("Entre a Protect");
         //_enemy.ResetPathAndSetObjective(_enemy._target.transform.position);
     }
     public void OnUpdate()
@@ -34,10 +40,43 @@ public class ProtectState : IState
         //_enemy.Move();
 
         _enemy._circlePos = AIManager.Instance.RequestPosition(_enemy);
-
-        if(Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.1f)
+        RaycastHit hit;
+        Vector3 protectDir = _enemy._circlePos - _enemy.transform.position;
+        /* if(Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.1f && Physics.Raycast(_enemy.transform.position, dir, out hit, dir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
         {
             //_enemy.ResetPathAndSetObjective(_enemy._circlePos); //Se va el navmesh
+            
+            _enemy.transform.forward = dir;
+            _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
+        }
+        else 
+        {
+            
+        } */
+
+        if(myPath != null && Physics.Raycast(_enemy.transform.position, protectDir, out hit, protectDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
+        {
+            if(myPath.Count >= 1)
+            {
+                Vector3 dir = myPath[_currentPathWaypoint].transform.position - _enemy.transform.position;
+
+                _enemy.transform.forward = dir;
+                _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
+
+                if (dir.magnitude < 0.1f)
+                {
+                    _currentPathWaypoint++;
+                    if (_currentPathWaypoint > myPath.Count - 1)
+                    {
+                        Debug.Log("Nunca deberiamos llegar aca. Si estas viendo esto algo salio mal.");
+                    }
+                }
+            }
+        }
+        else if((Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.1f))
+        {
+            _enemy.transform.forward = protectDir;
+            _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
         }
 
         //if (distanceToTarget > _enemy.protectDistance)
@@ -58,5 +97,27 @@ public class ProtectState : IState
     public void OnExit()
     {
         Debug.Log("Sali de Protect");
+    }
+
+    public void GetThetaStar()
+    {
+        myPath = new List<Node>();
+
+        //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
+        startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
+        Debug.Log("Start at " + startingPoint);
+
+        _currentWaypoint = _enemy.GetCurrentWaypoint();
+        
+        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._player.transform);
+        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._cat.transform.position);
+        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._circlePos);
+        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
+        Debug.Log("End at " + endingPoint);
+        //}
+
+        //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
+        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
+        _enemy.SetPath(myPath); //esto no hace falta, es para testear.
     }
 }

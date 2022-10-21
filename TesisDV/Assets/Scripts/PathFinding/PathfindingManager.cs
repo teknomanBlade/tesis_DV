@@ -10,7 +10,7 @@ public class PathfindingManager : MonoBehaviour
     private float debugTime = 1;
     private Vector2 closeNodes;
     private Node closestNode;
-    private bool first = true;
+    //private bool first = true;
     public LayerMask obstacleMask;
     public List<Node> nodes = new List<Node>();
 
@@ -33,7 +33,7 @@ public class PathfindingManager : MonoBehaviour
             Vector3 dir = node.transform.position - position.transform.position;
             
             //RaycastHit2D hit = Physics2D.Raycast(position.transform.position, dir, dir.magnitude, obstacleMask);
-
+            bool first = true;
             if(first)
             {
                 //if(hit == true)
@@ -63,7 +63,7 @@ public class PathfindingManager : MonoBehaviour
             }
         }
 
-        first = true;
+        //first = true;
         return closestNode; 
 
         //Version vieja en 2D
@@ -105,13 +105,13 @@ public class PathfindingManager : MonoBehaviour
         return closestNode;  */
     }
 
-    public Node GetEndNode(Transform position) 
+    public Node GetEndNode(Vector3 position) 
     {
         foreach(Node node in nodes)
         {           
-            Vector3 dir = node.transform.position - position.transform.position;
+            Vector3 dir = node.transform.position - position;
 
-
+            bool first = true;
             if(first)
             {
                 closeNodes = dir;
@@ -125,10 +125,30 @@ public class PathfindingManager : MonoBehaviour
             }
         }
 
-        first = true;
+        //first = true;
         return closestNode; 
     }
+
+    public Node GetClosestNode(Vector3 origin)
+    {
+        float distance = Vector3.Distance(nodes[0].transform.position, origin);//.position);
+        int index = 0;
+
+        for (int i = 1; i < nodes.Count; i++)
+        {
+            float aux = Vector3.Distance(nodes[i].transform.position, origin);//.position);
+            if (aux < distance)
+            {
+                distance = aux;
+                index = i;
+            }
+        }
+
+        return nodes[index];
+    }
 }
+
+    
 
 //No se si borrarlo o no, por las dudas lo dejo.
 

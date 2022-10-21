@@ -51,7 +51,9 @@ public class CatState : IState
         //_enemy.Move(); Probemos sin move a ver que onda.
         _enemy.DetectTraps();
 
-        if(myPath != null)
+        RaycastHit hit;
+        Vector3 catDir = _enemy._cat.transform.position - _enemy.transform.position;
+        if(myPath != null && Physics.Raycast(_enemy.transform.position, catDir, out hit, catDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
         {
             if(myPath.Count >= 1)
             {
@@ -69,6 +71,11 @@ public class CatState : IState
                     }
                 }
             }
+        }
+        else
+        {
+            _enemy.transform.forward = catDir;
+            _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
         }
 
         if(Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 1f) 
@@ -100,20 +107,22 @@ public class CatState : IState
     {
         myPath = new List<Node>();
 
-        startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
+        //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
+        startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
         Debug.Log("Start at " + startingPoint);
 
         _currentWaypoint = _enemy.GetCurrentWaypoint();
         
-        endingPoint = _enemy._pfManager.GetEndNode(_enemy._player.transform);
-        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._cat.transform); //el nodo final es personalizado de cada estado.
+        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._player.transform);
+        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._cat.transform.position);
+        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._cat.transform.position);
+        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
         Debug.Log("End at " + endingPoint);
         //}
 
-        myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
-        //myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
+        //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
+        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
         _enemy.SetPath(myPath); //esto no hace falta, es para testear.
-        Debug.Log(myPath);
     }
 }
 

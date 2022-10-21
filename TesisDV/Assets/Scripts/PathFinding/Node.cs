@@ -36,7 +36,7 @@ public class Node : MonoBehaviour
             else
             {
                 _neighbors.Add(node);
-                Debug.Log("soy " + this.gameObject +" este es mi vecino + " + node);
+                //Debug.Log("soy " + this.gameObject +" este es mi vecino + " + node);
             }
         }
         return _neighbors; 

@@ -39,7 +39,9 @@ public class EscapeState : IState
 
         if (_enemy.hasObjective) _enemy.EscapeWithCat(); //En teoría que esto sea un if ahora no tiene sentido porque siempre va a ser true, despues lo saco y pruebo.
 
-        if(myPath != null)
+        RaycastHit hit;
+        Vector3 escapeDir = _enemy._exitPos - _enemy.transform.position;
+        if(myPath != null  && Physics.Raycast(_enemy.transform.position, escapeDir, out hit, escapeDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
         {
             if(myPath.Count >= 1)
             {
@@ -57,6 +59,11 @@ public class EscapeState : IState
                     }
                 }
             }
+        }
+        else
+        {
+            _enemy.transform.forward = escapeDir;
+            _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
         }
 
         if (Vector3.Distance(_enemy.transform.position, _enemy._exitPos) < 1.5f)
@@ -77,15 +84,19 @@ public class EscapeState : IState
     {
         myPath = new List<Node>();
 
-        startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
+        //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
+        startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
         Debug.Log("Start at " + startingPoint);
 
         _currentWaypoint = _enemy.GetCurrentWaypoint();
         
-        endingPoint = _enemy._pfManager.GetEndNode(_enemy._cat.transform); //el nodo final es personalizado de cada estado.
+        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
+        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._exitPos);
         Debug.Log("End at " + endingPoint);
         //}
 
-        myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
+        //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
+        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
+        _enemy.SetPath(myPath);
     }
 }

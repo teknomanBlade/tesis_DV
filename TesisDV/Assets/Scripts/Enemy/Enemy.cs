@@ -456,6 +456,7 @@ public abstract class Enemy : MonoBehaviour
 
     public void SetPath(List<Node> nodos) //esto no hace falta, es para testear.
     {
+        Path = null;
         Path = nodos;
     }
 

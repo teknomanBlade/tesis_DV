@@ -25,6 +25,10 @@ public class ChaseTrapState : IState
         //_enemy.ResetPathAndSetObjective(_enemy._currentTrapObjective.transform.position); //Se va el navmesh
         //_enemy.Move();
         
+        Vector3 dir = _enemy._currentTrapObjective.transform.position - _enemy.transform.position;
+        _enemy.transform.forward = dir;
+        _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
+
         if(!_enemy.foundTrapInPath)
         {
             _fsm.ChangeState(EnemyStatesEnum.CatState);
