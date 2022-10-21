@@ -17,6 +17,7 @@ public class Cat : MonoBehaviour
     private Vector3 _exitPos;
     private Animator _animator;
     [SerializeField] private List<Vector3> _myPos = new List<Vector3>();
+    public GameObject ForceField;
     void Awake()
     {
         _startingPositionGameObject = GameObject.Find("StartingPosition");
