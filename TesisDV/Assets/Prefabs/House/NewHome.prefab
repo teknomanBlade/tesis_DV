@@ -1186,7 +1186,7 @@ Light:
   m_Color: {r: 0.9569671, g: 1, b: 0, a: 1}
   m_Intensity: 0.13
   m_Range: 2.99
-  m_SpotAngle: 95.63
+  m_SpotAngle: 62.377563
   m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:
@@ -2013,7 +2013,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 0.23
-  m_Range: 2.61
+  m_Range: 1.357621
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -2051,10 +2051,10 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_AreaSize: {x: 1.4649775, y: 1}
+  m_BounceIntensity: 0.06
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -2913,7 +2913,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 0.23
-  m_Range: 1.21
+  m_Range: 1.3576212
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -2951,7 +2951,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -24727,6 +24727,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5061796029983458468}
     m_Modifications:
+    - target: {fileID: 37385938801682631, guid: bef3b6c14f8734741ab2602cbe8573e2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e097588435a8a15409235805a85441f3, type: 2}
     - target: {fileID: 784056325178689166, guid: bef3b6c14f8734741ab2602cbe8573e2, type: 3}
       propertyPath: m_Size.y
       value: 0.9001188

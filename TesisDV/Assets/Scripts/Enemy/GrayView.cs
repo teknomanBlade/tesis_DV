@@ -67,6 +67,11 @@ public class GrayView : MonoBehaviour
         _myAnimator.Play("Hit");
     }
 
+    public void IdleAnimation()
+    {
+        _myAnimator.SetBool("IsIdle", true);
+    }
+
     public void CatGrabAnimation(bool value)
     {
         _myAnimator.SetBool("IsGrab", value);
