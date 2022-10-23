@@ -5,6 +5,7 @@ Shader "RingWave_SDR"
 	Properties
 	{
 		_RingTexture("RingTexture", 2D) = "white" {}
+		_OpacityLevel("OpacityLevel", Float) = 0
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 		[HideInInspector] __dirty( "", Int ) = 1
 	}
@@ -24,6 +25,7 @@ Shader "RingWave_SDR"
 
 		uniform sampler2D _RingTexture;
 		uniform float4 _RingTexture_ST;
+		uniform float _OpacityLevel;
 
 		void surf( Input i , inout SurfaceOutputStandard o )
 		{
@@ -31,7 +33,7 @@ Shader "RingWave_SDR"
 			float2 uv_RingTexture = i.uv_texcoord * _RingTexture_ST.xy + _RingTexture_ST.zw;
 			float4 tex2DNode1 = tex2D( _RingTexture, uv_RingTexture );
 			o.Emission = ( color2 * tex2DNode1 ).rgb;
-			o.Alpha = tex2DNode1.a;
+			o.Alpha = ( tex2DNode1.a * _OpacityLevel );
 		}
 
 		ENDCG
@@ -113,14 +115,18 @@ Shader "RingWave_SDR"
 }
 /*ASEBEGIN
 Version=17800
-171;306;1137;572;1365.455;887.2964;1.686064;True;False
+647;450;1137;548;1124.301;578.427;1.386064;True;False
 Node;AmplifyShaderEditor.ColorNode;2;-641.0763,-568.3913;Inherit;False;Constant;_Color0;Color 0;1;0;Create;True;0;0;False;0;0,0.9779239,1,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SamplerNode;1;-735.7083,-368.049;Inherit;True;Property;_RingTexture;RingTexture;0;0;Create;True;0;0;False;0;-1;f24f3de37ffd16b408fa050bf5383d1b;235332da0af0fca4ead41cf076ddaa1f;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;9;-501.9585,-14.29895;Inherit;False;Property;_OpacityLevel;OpacityLevel;1;0;Create;True;0;0;False;0;0;0.15;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;7;-317.1081,-541.9124;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;136.4758,-347.2867;Float;False;True;-1;2;ASEMaterialInspector;0;0;Standard;RingWave_SDR;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;False;False;False;False;False;False;Off;0;False;-1;0;False;-1;False;0;False;-1;0;False;-1;False;0;Transparent;0.5;True;True;0;False;Transparent;;Transparent;All;14;all;True;True;True;True;0;False;-1;False;0;False;-1;255;False;-1;255;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;2;15;10;25;False;0.5;True;2;5;False;-1;10;False;-1;0;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;;-1;-1;-1;-1;0;False;0;0;False;-1;-1;0;False;-1;0;0;0;False;0.1;False;-1;0;False;-1;16;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;11;-278.802,-168.152;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;137.8619,-375.008;Float;False;True;-1;2;ASEMaterialInspector;0;0;Standard;RingWave_SDR;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;False;False;False;False;False;False;Off;0;False;-1;0;False;-1;False;0;False;-1;0;False;-1;False;0;Transparent;0.5;True;True;0;False;Transparent;;Transparent;All;14;all;True;True;True;True;0;False;-1;False;0;False;-1;255;False;-1;255;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;2;15;10;25;False;0.5;True;2;5;False;-1;10;False;-1;0;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;;0;-1;-1;-1;0;False;0;0;False;-1;-1;0;False;-1;0;0;0;False;0.1;False;-1;0;False;-1;16;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
 WireConnection;7;0;2;0
 WireConnection;7;1;1;0
+WireConnection;11;0;1;4
+WireConnection;11;1;9;0
 WireConnection;0;2;7;0
-WireConnection;0;9;1;4
+WireConnection;0;9;11;0
 ASEEND*/
-//CHKSM=0466F71136727C0CB9943FE5C21E0F445E195838
+//CHKSM=266709959EE8CC4A6DF830F52E55A148DD2B9E71

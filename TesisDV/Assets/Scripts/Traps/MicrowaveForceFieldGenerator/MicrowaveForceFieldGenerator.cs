@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
 {
-    public GameObject cat;
     public GameObject blueprintPrefab;
     public GameObject particleRipples;
     private AudioSource _as;
@@ -21,31 +20,7 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     // Update is called once per frame
     void Update()
     {
-        if (active)
-        {
-            DetectObjectiveToProtect();
-        }
-    }
 
-    public void DetectObjectiveToProtect()
-    {
-        Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
-        if (allTargets.Length > 0)
-        {
-            cat = allTargets.Where(x => x.GetComponent<Cat>()).FirstOrDefault().gameObject;
-            var forceField = cat.GetComponent<Cat>().ForceField;
-            forceField.SetActive(true);
-            var dir = cat.transform.position - particleRipples.transform.position;
-            transform.forward = dir;
-            particleRipples.transform.forward = dir;
-        }
-        else
-        {
-            particleRipples.SetActive(false);
-            GameVars.Values.soundManager.StopSound();
-        }
-        
-        return;
     }
 
     public void BecomeMovable()
