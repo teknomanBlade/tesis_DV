@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3716462223633225115}
   - component: {fileID: 3211310955613690440}
   - component: {fileID: 4124008952501090105}
+  - component: {fileID: 8215871942749675031}
   m_Layer: 0
   m_Name: BaseballBat
   m_TagString: Untagged
@@ -153,3 +154,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8215871942749675031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184483644812247978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07ab6609825e0344eb6d4f259abc2449, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 4124008952501090105}
+  hitsRemaining: 2
+  _damagedBaseballBatMesh: {fileID: 599364451460763881, guid: 4b89c0113cd24b244b328ecb3d56d7f5, type: 3}
+  _newBaseballBatMesh: {fileID: -1239263250430464157, guid: 8ed28da8a0fcb6e4bb4d792447144057, type: 3}
+  _isDestroyed: 0
+  _damageAmount: 3

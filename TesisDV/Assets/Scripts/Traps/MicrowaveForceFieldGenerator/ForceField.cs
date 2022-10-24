@@ -23,6 +23,7 @@ public class ForceField : MonoBehaviour
         if (gray != null)
         {
             gray._movingSpeed = 0f;
+            gray.ForceFieldRejection();
         }
         var grayMelee = other.gameObject.GetComponent<TallGrayModel>();
         if (grayMelee != null)

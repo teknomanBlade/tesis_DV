@@ -43,6 +43,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private bool isSpecialAttacking = false;
     [SerializeField] private bool isAttacking = false;
     [SerializeField] private bool isStunned = false;
+    [SerializeField] private bool isForceFieldRejected = false;
 
     public Vector3 _exitPos;
     public Vector3 trapPos;
@@ -80,6 +81,7 @@ public abstract class Enemy : MonoBehaviour
     #region Events
 
     public event Action<bool> onWalk = delegate { };
+    public event Action onForceFieldRejection = delegate { };
     public event Action<bool> onStun = delegate { };
     public event Action<bool> onCatGrab = delegate { };
     public event Action onDeath = delegate { };
@@ -218,6 +220,17 @@ public abstract class Enemy : MonoBehaviour
             foundTrapInPath = true;
         }
         
+    }
+    public void ForceFieldRejection()
+    {
+        Debug.Log("LLEGA A FORCEFIELD REJECTION");
+        if (!isForceFieldRejected)
+        {
+            Debug.Log("LLEGA A FORCEFIELD REJECTION IF "+ isForceFieldRejected);
+            onForceFieldRejection();
+            onWalk(!isForceFieldRejected);
+            isForceFieldRejected = true;
+        }
     }
 
     public void Stun(float time)

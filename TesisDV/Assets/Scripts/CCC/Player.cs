@@ -30,7 +30,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private Coroutine FadeOutSceneCoroutine;
     private Coroutine FadeInSceneCoroutine;
     [SerializeField] private Inventory _inventory;
-    public GameObject _weaponGO;
+    public GameObject _weaponGORacket;
+    public GameObject _weaponGOBaseballBat;
     [SerializeField] private Melee _weapon;
     public string typeFloor { get; private set; }
     
@@ -114,7 +115,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _miniMapDisplay = GameObject.Find("MiniMapDisplay");
         //_inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
         _inventory = _craftingScreen.gameObject.GetComponentInChildren<Inventory>();
-        _weapon = _weaponGO.GetComponent<Racket>(); //Cambia el GetChild a la raqueta nueva.
+        //Cambia el GetChild a la raqueta nueva.
         _audioSource = GetComponent<AudioSource>();
         _originalScale = transform.localScale;
         _originalCamPos = _cam.transform.localPosition;
@@ -163,7 +164,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire))
         {
-            if (_inventory != null && _inventory.ContainsID(3, 1) && !IsCrafting) 
+            if (_inventory != null && (_inventory.ContainsID(3, 1) || _inventory.ContainsID(11, 1)) && !IsCrafting) 
             {
                 _weapon.SetOwner(this);
                 _weapon.MeleeAttack();
@@ -492,7 +493,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         isGrounded = false;
         _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
-        _rb.AddForce(0f, jumpForce, 0f, ForceMode.VelocityChange);
+        _rb.AddForce(0f, jumpForce, 0f, ForceMode.Impulse);
     }
 
     public void SlowDown(float slowAmount)
@@ -916,11 +917,17 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             if (_inventory.ContainsID(3, 1))
             {
-                _weaponGO.gameObject.SetActive(true);
+                _weaponGORacket.SetActive(true);
+                _weapon = _weaponGORacket.GetComponent<Racket>();
                 //_weaponGO.ActivateRacket();
                 //_weaponGO.transform.GetComponentInChildren<Racket>().gameObject.layer = 0;
                 //OnNewRacketGrabbed += _weaponGO.transform.GetComponentInChildren<Racket>().OnNewRacketGrabbed;
                 //OnNewRacketGrabbed?.Invoke();
+            }
+            else if (_inventory.ContainsID(11, 1))
+            {
+                _weaponGOBaseballBat.SetActive(true);
+                _weapon = _weaponGOBaseballBat.GetComponent<BaseballBat>();
             }
         }
     }
@@ -947,6 +954,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public void RacketInventoryRemoved()
     {
         _inventory.RemoveItemByID(3);
+    }
+
+    public void BaseballBatInventoryRemoved()
+    {
+        _inventory.RemoveItemByID(11);
     }
 
 }
