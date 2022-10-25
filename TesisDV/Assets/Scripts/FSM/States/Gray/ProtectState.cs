@@ -8,6 +8,7 @@ public class ProtectState : IState
     private Pathfinding _pf;
     private Enemy _enemy;
 
+    private bool canPathfind;
     public List<Node> myPath;
     private int _currentWaypoint;
     private int _currentPathWaypoint = 0;
@@ -42,6 +43,7 @@ public class ProtectState : IState
         _enemy._circlePos = AIManager.Instance.RequestPosition(_enemy);
         RaycastHit hit;
         Vector3 protectDir = _enemy._circlePos - _enemy.transform.position;
+        Vector3 targetDir = _enemy._target.transform.position - _enemy.transform.position;
         /* if(Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.1f && Physics.Raycast(_enemy.transform.position, dir, out hit, dir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
         {
             //_enemy.ResetPathAndSetObjective(_enemy._circlePos); //Se va el navmesh
@@ -54,7 +56,7 @@ public class ProtectState : IState
             
         } */
 
-        if(myPath != null && Physics.Raycast(_enemy.transform.position, protectDir, out hit, protectDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
+        if(myPath != null && Physics.Raycast(_enemy.transform.position, targetDir, out hit, targetDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
         {
             if(myPath.Count >= 1)
             {
@@ -69,12 +71,15 @@ public class ProtectState : IState
                     if (_currentPathWaypoint > myPath.Count - 1)
                     {
                         Debug.Log("Nunca deberiamos llegar aca. Si estas viendo esto algo salio mal.");
+                        GetThetaStar();
                     }
                 }
             }
         }
-        else if((Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.1f))
+        else if((Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.2f))
         {
+            Vector3 aux = protectDir;
+            protectDir = new Vector3(aux.x, 0f, aux.z);
             _enemy.transform.forward = protectDir;
             _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
         }
@@ -111,7 +116,7 @@ public class ProtectState : IState
         
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._player.transform);
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._cat.transform.position);
-        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._circlePos);
+        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._target.transform.position);
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
         Debug.Log("End at " + endingPoint);
         //}

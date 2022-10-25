@@ -134,7 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5105381875823897915}
   - component: {fileID: 354202072164548035}
-  - component: {fileID: 8815496374445641748}
+  - component: {fileID: 2746915761368093836}
   m_Layer: 0
   m_Name: AttackArea
   m_TagString: Untagged
@@ -169,7 +169,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.49353218, y: 0.26621008, z: 0.36543065}
   m_Center: {x: -0.033689022, y: 0.36689496, z: 0.3378125}
---- !u!114 &8815496374445641748
+--- !u!114 &2746915761368093836
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -178,11 +178,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 579260700780049535}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c2266b44384473448e9b9196a290be2, type: 3}
+  m_Script: {fileID: 11500000, guid: a300785d5532b3c44babc4f1297219d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _myOwner: {fileID: 0}
-  _damageAmount: 1
+  _damageAmount: 2
 --- !u!1 &582609958653938691
 GameObject:
   m_ObjectHideFlags: 0
@@ -7429,7 +7429,10 @@ MonoBehaviour:
   _player: {fileID: 0}
   _cat: {fileID: 0}
   hasObjective: 0
+  isSpecialAttacking: 0
   isAttacking: 0
+  isStunned: 0
+  isForceFieldRejected: 0
   _exitPos: {x: 0, y: 0, z: 0}
   trapPos: {x: 0, y: 0, z: 0}
   _waypoints: []
@@ -7439,6 +7442,11 @@ MonoBehaviour:
     m_Bits: 0
   _lm: {fileID: 0}
   lineRenderer: {fileID: 1063702095537008266}
+  _pfManager: {fileID: 0}
+  Path: []
+  protectDistance: 3
+  _target: {fileID: 0}
+  _circlePos: {x: 0, y: 0, z: 0}
 --- !u!114 &5700644261775503027
 MonoBehaviour:
   m_ObjectHideFlags: 0

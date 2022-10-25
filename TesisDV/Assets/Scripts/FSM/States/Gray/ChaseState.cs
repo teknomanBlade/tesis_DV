@@ -42,7 +42,7 @@ public class ChaseState : IState
         }
         else if (Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) > _enemy.disengageThreshold)
         {
-            _fsm.ChangeState(EnemyStatesEnum.ProtectState);
+            _fsm.ChangeState(EnemyStatesEnum.CatState);
         }
         else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.attackThreshold)
         {

@@ -14,8 +14,10 @@ public class TallGrayModel : Enemy
 
     private void Awake()
     {
+        _pfManager = GameObject.Find("PathfindingManager").GetComponent<PathfindingManager>();
         _fsm = new StateMachine();
         _pf = new Pathfinding();
+        
         _fsm.AddState(EnemyStatesEnum.CatState, new CatState(_fsm, this, _pf));
         _fsm.AddState(EnemyStatesEnum.ChaseState, new ChaseState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.AttackPlayerState, new AttackPlayerState(_fsm, this));
