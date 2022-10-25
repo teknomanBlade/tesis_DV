@@ -13,11 +13,10 @@ public class BaseballBat : Melee
     private bool hitStateActive;
     [SerializeField]
     private bool _isDestroyed;
-    [SerializeField]
-    private int _damageAmount = 3;
     // Start is called before the first frame update
     void Awake()
     {
+        damageAmount = 3;
         _startingRotation = transform.localRotation;
         _renderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
@@ -41,12 +40,16 @@ public class BaseballBat : Melee
         _player.Cam.ShakeRacketSwing();
         anim.SetBool(param, true);
         GameVars.Values.soundManager.PlaySoundAtPoint("RacketSwing", transform.position, 0.09f);
-
+        var playerCollider = _player.GetComponent<BoxCollider>();
         var clips = anim.runtimeAnimatorController.animationClips;
         float time = clips.First(x => x.name == name).length;
+        if (time / 2 < 0.2f)
+        {
+            playerCollider.enabled = true;
+        }
         yield return new WaitForSeconds(time);
         anim.SetBool(param, false);
-
+        playerCollider.enabled = false;
         IsAttacking = false;
         hitStateActive = false;
     }
@@ -60,7 +63,7 @@ public class BaseballBat : Melee
         anim.SetBool("IsDestroyed", true);
         //transform.localRotation = Quaternion.Euler(2.658f, 42.094f, 73.143f);
     }
-    protected override void OnContactEffect(Collider other)
+    /*protected override void OnContactEffect(Collider other)
     {
         if (IsAttacking)
         {
@@ -77,12 +80,28 @@ public class BaseballBat : Melee
                     GameVars.Values.ShowNotification("Oh no! The Baseball Bat has broken!");
                     _player.BaseballBatInventoryRemoved();
                 }
-                other.GetComponent<Enemy>().TakeDamage(_damageAmount);
+                other.GetComponent<Enemy>().TakeDamage(damageAmount);
                 IsAttacking = false; //Lo dejo en falso para que no repita el daño, veremos.
             }
         }
+    }*/
+    public override void OnHitEffect()
+    {
+        if (IsAttacking)
+        {
+            Debug.Log("Hit WITH BASEBALL BAT TO GRAY?");
+            hitsRemaining--;
+            if (hitsRemaining <= 0)
+            {
+                _isDestroyed = true;
+                SetDamagedBaseballBat();
+                GameVars.Values.soundManager.PlaySoundAtPoint("RacketBroken", transform.position, 0.09f);
+                GameVars.Values.ShowNotification("Oh no! The Baseball Bat has broken!");
+                _player.BaseballBatInventoryRemoved();
+            }
+            IsAttacking = false; //Lo dejo en falso para que no repita el daño, veremos.
+        }
     }
-
     public void DestroyAndRestoreValues()
     {
         this.gameObject.SetActive(false);

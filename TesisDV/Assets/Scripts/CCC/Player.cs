@@ -961,4 +961,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _inventory.RemoveItemByID(11);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        var enemy = other.gameObject.GetComponent<Enemy>();
+        if (enemy != null && _weapon != null)
+        {
+            enemy.TakeDamage(_weapon.damageAmount);
+            _weapon.OnHitEffect();
+        }
+    }
 }

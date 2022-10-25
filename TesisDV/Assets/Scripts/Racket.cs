@@ -6,15 +6,12 @@ using UnityEngine;
 
 public class Racket : Melee
 {
-    [SerializeField]
-    private ParticleSystem _trail;
     private MeshRenderer _renderer;
     private MeshFilter _meshFilter;
     private bool hitStateActive;
     [SerializeField]
     private bool _isDestroyed;
-    [SerializeField]
-    private int _damageAmount = 1;
+    
     private Quaternion _startingRotation;
     //public delegate void OnRacketDestroyedDelegate(bool destroyed); Ahora la misma raqueta maneja su GameObject. 
     //public event OnRacketDestroyedDelegate OnRacketDestroyed;
@@ -30,6 +27,7 @@ public class Racket : Melee
     {
         _startingRotation = transform.localRotation;
         hitsRemaining = 7;
+        damageAmount = 1;
         SetStateRacketDamaged(hitsRemaining);
         _renderer = transform.GetChild(1).GetComponent<MeshRenderer>();
         _meshFilter = transform.GetChild(1).GetComponent<MeshFilter>();
@@ -55,23 +53,23 @@ public class Racket : Melee
     {
         IsAttacking = true;
         _player.Cam.ShakeRacketSwing();
-        _trail.gameObject.SetActive(IsAttacking);
-        _trail.Play();
         anim.SetBool(param, true);
         GameVars.Values.soundManager.PlaySoundAtPoint("RacketSwing", transform.position, 0.09f);
-
+        var playerCollider = _player.GetComponent<BoxCollider>();
         var clips = anim.runtimeAnimatorController.animationClips;
         float time = clips.First(x => x.name == name).length;
+        if (time / 2 < 0.2f)
+        {
+            playerCollider.enabled = true;
+        }
         yield return new WaitForSeconds(time);
         anim.SetBool(param, false);
-        _trail.Stop();
-
+        playerCollider.enabled = false;
         IsAttacking = false;
         hitStateActive = false;
-        _trail.gameObject.SetActive(IsAttacking);
     }
 
-    protected override void OnContactEffect(Collider other)
+    /*protected override void OnContactEffect(Collider other)
     {
         if (IsAttacking)
         {
@@ -92,7 +90,7 @@ public class Racket : Melee
                     //DestroyAndRestoreValues();
                     _player.RacketInventoryRemoved();
                 }
-                other.GetComponent<Enemy>().TakeDamage(_damageAmount);
+                other.GetComponent<Enemy>().TakeDamage(damageAmount);
                 IsAttacking = false; //Lo dejo en falso para que no repita el daño, veremos.
 
                 //No usamos observer para hacer daño.
@@ -100,8 +98,26 @@ public class Racket : Melee
                 //TriggerHit("RacketHit");
             }
         }
+    }*/
+    public override void OnHitEffect()
+    {
+        if (IsAttacking)
+        {
+            Debug.Log("Hit WITH RACKET TO GRAY?");
+            hitsRemaining--;
+            SetStateRacketDamaged(hitsRemaining);
+            if (hitsRemaining <= 0)
+            {
+                _isDestroyed = true;
+                GameVars.Values.soundManager.PlaySoundAtPoint("RacketBroken", transform.position, 0.09f);
+                GameVars.Values.ShowNotification("Oh no! The racket has broken!");
+                SetDamagedRacket();
+                //DestroyAndRestoreValues();
+                _player.RacketInventoryRemoved();
+            }
+            IsAttacking = false; //Lo dejo en falso para que no repita el daño, veremos.
+        }
     }
-
     public void RemoveFromParent()
     {
         //var lastWorldPos = transform.parent.parent.position;

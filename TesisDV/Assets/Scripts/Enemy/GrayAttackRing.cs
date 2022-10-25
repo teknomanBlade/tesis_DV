@@ -18,7 +18,7 @@ public class GrayAttackRing : MonoBehaviour
 
         if (player)
         {
-            Debug.Log("ENTRA EN TRIGGER DAMAGE?");
+            //Debug.Log("ENTRA EN TRIGGER DAMAGE?");
             other.GetComponent<Player>().Damage(_damageAmount);
 
         }

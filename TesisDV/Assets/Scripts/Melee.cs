@@ -10,6 +10,8 @@ public abstract class Melee : MonoBehaviour
     protected Player _player;
     protected bool IsAttacking = false;
     [SerializeField]
+    public int damageAmount;
+    [SerializeField]
     protected int hitsRemaining;
     protected virtual void OnContactEffect(Collider other)
     {
@@ -31,6 +33,10 @@ public abstract class Melee : MonoBehaviour
         OnContactEffect(other);
     }
 
+    public virtual void OnHitEffect()
+    {
+
+    }
 
     // Start is called before the first frame update
     void Start()
