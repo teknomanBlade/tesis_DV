@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -272,16 +273,17 @@ public class GameVars : MonoBehaviour
         notifications.gameObject.GetComponent<Animator>().SetBool("ShowNotification", false);
     }
 
-    public void ShowNotificationDefinedTime(string text, float time)
+    public void ShowNotificationDefinedTime(string text, float time, Action action)
     {
         notifications.text = text;
-        StartCoroutine(ShowNotificationDefinedTime(time));
+        StartCoroutine(ShowNotificationDefinedTime(time, action));
     }
 
-    public IEnumerator ShowNotificationDefinedTime(float time)
+    public IEnumerator ShowNotificationDefinedTime(float time, Action action)
     {
         notifications.gameObject.GetComponent<Animator>().SetBool("ShowNotification", true);
         yield return new WaitForSeconds(time);
+        action.Invoke();
         notifications.gameObject.GetComponent<Animator>().SetBool("ShowNotification", false);
     }
 

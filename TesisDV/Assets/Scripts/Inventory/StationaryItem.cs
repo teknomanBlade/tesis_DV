@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class StationaryItem : Item
 {
+
     public GameObject batteryBlueprint;
     public GameObject batteryAddOn;
     private bool _isAddOnPlaced;
@@ -55,7 +56,7 @@ public class StationaryItem : Item
         if(!_isAddOnPlaced)
             batteryBlueprint.SetActive(true);
 
-        Invoke("HideBlueprint", 2f);
+        //Invoke("HideBlueprint", 2f);
     }
     
     public void HideBlueprint()

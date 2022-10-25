@@ -676,6 +676,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(40f);
             return;
         }
+        
         if (lookingAt.gameObject.TryGetComponent<Door>(out Door aux1))
         {
             crosshair.sprite = GameVars.Values.crosshairDoor;
@@ -715,6 +716,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(40f);
             return;
         }
+
         crosshair.sprite = GameVars.Values.crosshair;
         ChangeCrosshairSize(20f);
     }
@@ -770,7 +772,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 stationaryItem.ActiveBatteryComponent();
             }
             else
-                GameVars.Values.ShowNotification("You need a Battery for this!");
+            {
+                GameVars.Values.ShowNotificationDefinedTime("You need a Battery for this!", 2f, 
+                    () => stationaryItem.HideBlueprint());
+            }
         }
 
         if (lookingAt.gameObject.TryGetComponent<Door>(out Door door))
