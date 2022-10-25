@@ -17,6 +17,15 @@ public class ForceField : MonoBehaviour
         
     }
 
+    public void TakeDamage(float damageAmount)
+    {
+        Health -= damageAmount;
+        if (Health <= 0f)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         var gray = other.gameObject.GetComponent<GrayModel>();

@@ -21,5 +21,12 @@ public class EnemyAttackArea : MonoBehaviour
         {
             other.GetComponent<Player>().Damage(_damageAmount);   
         }
+
+        var forceField = other.GetComponent<ForceField>();
+
+        if (forceField)
+        {
+            other.GetComponent<ForceField>().TakeDamage(_damageAmount);
+        }
     }
 }
