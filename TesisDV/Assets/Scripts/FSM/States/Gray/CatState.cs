@@ -23,6 +23,7 @@ public class CatState : IState
 
     public void OnStart()
     {
+        _currentPathWaypoint = 0;
         //Estos if en el start deberían hacer que no carguemos un Path sin necesidad.
 
         if (_enemy._lm.enemyHasObjective)
@@ -47,39 +48,7 @@ public class CatState : IState
     }
     public void OnUpdate()
     {
-        //_enemy.ResetPathAndSetObjective(_enemy._cat.transform.position);
-        //_enemy.Move(); Probemos sin move a ver que onda.
         _enemy.DetectTraps();
-
-        RaycastHit hit;
-        Vector3 catDir = _enemy._cat.transform.position - _enemy.transform.position;
-        Vector3 moveDir;
-        if(myPath != null && Physics.Raycast(_enemy.transform.position, catDir, out hit, catDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
-        {
-            if(myPath.Count >= 1)
-            {
-                Vector3 dir = myPath[_currentPathWaypoint].transform.position - _enemy.transform.position;
-
-                _enemy.transform.forward = dir;
-                _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
-
-                if (dir.magnitude < 0.1f)
-                {
-                    _currentPathWaypoint++;
-                    if (_currentPathWaypoint > myPath.Count - 1)
-                    {
-                        Debug.Log("Nunca deberiamos llegar aca. Si estas viendo esto algo salio mal.");
-                    }
-                }
-            }
-        }
-        else
-        {
-            Vector3 aux = catDir;
-            catDir = new Vector3(aux.x, 0f, aux.z);
-            _enemy.transform.forward = catDir;
-            _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
-        }
 
         if(Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 1f) 
         {
@@ -100,6 +69,43 @@ public class CatState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.ChaseTrapState);
         }
+        //_enemy.ResetPathAndSetObjective(_enemy._cat.transform.position);
+        //_enemy.Move(); Probemos sin move a ver que onda.
+        
+
+        RaycastHit hit;
+        Vector3 catDir = _enemy._cat.transform.position - _enemy.transform.position;
+        Vector3 moveDir;
+        if(myPath != null && Physics.Raycast(_enemy.transform.position, catDir, out hit, catDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
+        {
+            if(myPath.Count >= 1)
+            {
+                Vector3 dir = myPath[_currentPathWaypoint].transform.position - _enemy.transform.position;
+
+                _enemy.transform.forward = dir;
+                _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
+
+                if (dir.magnitude < 0.1f)
+                {
+                    _currentPathWaypoint++;
+                    if (_currentPathWaypoint > myPath.Count - 1)
+                    {
+                        Debug.Log("Nunca deberiamos llegar aca. Si estas viendo esto algo salio mal.");
+                        _currentPathWaypoint = 0;
+                        GetThetaStar();
+                    }
+                }
+            }
+        }
+        else
+        {
+            Vector3 aux = catDir;
+            catDir = new Vector3(aux.x, 0f, aux.z);
+            _enemy.transform.forward = catDir;
+            _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
+        }
+
+
     }
     public void OnExit()
     {

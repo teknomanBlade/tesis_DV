@@ -23,6 +23,8 @@ public class EscapeState : IState
 
     public void OnStart()
     {
+        _currentPathWaypoint = 0;
+        
         GetThetaStar();
         Debug.Log("Entre a Escape");
         

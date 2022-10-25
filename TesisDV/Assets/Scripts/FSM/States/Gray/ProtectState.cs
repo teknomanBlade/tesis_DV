@@ -23,6 +23,7 @@ public class ProtectState : IState
 
     public void OnStart()
     {
+        _currentPathWaypoint = 0;
         
         _enemy.GetProtectTarget();
 
@@ -35,6 +36,15 @@ public class ProtectState : IState
     }
     public void OnUpdate()
     {
+        if (!_enemy._lm.enemyHasObjective)
+        {
+            _fsm.ChangeState(EnemyStatesEnum.CatState);
+        }
+        if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold) //Agregar Raycast para ver al player
+        {
+            _fsm.ChangeState(EnemyStatesEnum.ChaseState);
+        }
+
         //float distanceToTarget = Vector3.Distance(_enemy.transform.position, _enemy._target.transform.position);
         //Les cuesta tomar el target de nuevo cuando su primer target desaparece. Por ahora funciona pero despues se podria usar el target para
         //que se muevan hacia el cuando el NavmeshPath no sea valido. Para que no se queden duros en el lugar.
@@ -71,6 +81,7 @@ public class ProtectState : IState
                     if (_currentPathWaypoint > myPath.Count - 1)
                     {
                         Debug.Log("Nunca deberiamos llegar aca. Si estas viendo esto algo salio mal.");
+                        _currentPathWaypoint = 0;
                         GetThetaStar();
                     }
                 }
@@ -89,14 +100,7 @@ public class ProtectState : IState
             //_enemy.ResetPathAndSetObjective(_enemy._target.transform.position);
         //} 
 
-        if (!_enemy._lm.enemyHasObjective)
-        {
-            _fsm.ChangeState(EnemyStatesEnum.CatState);
-        }
-        if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold) //Agregar Raycast para ver al player
-        {
-            _fsm.ChangeState(EnemyStatesEnum.ChaseState);
-        }
+        
         
     }
     public void OnExit()
@@ -110,7 +114,7 @@ public class ProtectState : IState
 
         //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
         startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
-        Debug.Log("Start at " + startingPoint);
+        //Debug.Log("Start at " + startingPoint);
 
         _currentWaypoint = _enemy.GetCurrentWaypoint();
         
@@ -118,7 +122,7 @@ public class ProtectState : IState
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._cat.transform.position);
         endingPoint = _enemy._pfManager.GetClosestNode(_enemy._target.transform.position);
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
-        Debug.Log("End at " + endingPoint);
+        //Debug.Log("End at " + endingPoint);
         //}
 
         //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);

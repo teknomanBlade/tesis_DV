@@ -108,10 +108,10 @@ public abstract class Enemy : MonoBehaviour
         }
         else
         {
+            AIManager.Instance.RemoveEnemyFromList(this, hasObjective);
             isAwake= false;
             isDead = true;
             SendWitts();
-            AIManager.Instance.RemoveEnemyFromList(this, hasObjective);
             _capsuleCollider.enabled = false;
             GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
