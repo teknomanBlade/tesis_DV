@@ -8,6 +8,7 @@ public class StaticBlueprint : MonoBehaviour
     RaycastHit hit;
     Vector3 movePoint;
     private bool canBuild;
+    private bool _spendMaterials;
     Vector3 auxVector;
     Vector3 secondAuxVector;
     public CraftingRecipe craftingRecipe;
@@ -22,7 +23,7 @@ public class StaticBlueprint : MonoBehaviour
     private Quaternion finalRotation;
     private Renderer[] _myChildrenRenderers;
     public LayerMask LayerMaskWall;
-    public LayerMask XDMaskWall;
+    public LayerMask TrapBaseMaskWall;
     int layerMask;
     private GameObject parent;  
 
@@ -76,7 +77,7 @@ public class StaticBlueprint : MonoBehaviour
             transform.Rotate(Vector3.up * 15f, Space.Self);
         }
 
-        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, XDMaskWall))
+        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, TrapBaseMaskWall))
         {
             canBuild = true;
             transform.position = hit.transform.position;
@@ -155,5 +156,11 @@ public class StaticBlueprint : MonoBehaviour
     {
         canBuild = true;
         SetOriginalMaterial();
+    }
+
+    public StaticBlueprint SpendMaterials(bool spendMaterials)
+    {
+
+        return this;
     }
 }
