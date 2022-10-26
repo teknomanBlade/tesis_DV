@@ -5,14 +5,21 @@ using UnityEngine;
 public class AIManager : MonoBehaviour
 {
     public List<Enemy> enemyList = new List<Enemy>();
+    public List<GameObject> markers = new List<GameObject>();
     public GameObject currentTarget;
     private Dictionary<Enemy, GameObject> _enemiesPosition = new Dictionary<Enemy, GameObject>();
     [SerializeField] private bool _isTargetSet;
+    private GameObject parent;
     public static AIManager Instance;
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
+        parent = GameObject.Find("MainGame");
     }
 
     private void Update()
@@ -69,6 +76,11 @@ public class AIManager : MonoBehaviour
         {
             _isTargetSet = false;
             currentTarget = null;
+
+            foreach(GameObject marker in markers)
+            {
+                marker.transform.SetParent(parent.transform);
+            } 
         }
     }
 
@@ -81,8 +93,14 @@ public class AIManager : MonoBehaviour
     public void SubscribeEnemyForPosition(Enemy enemy)
     {
         if (!enemyList.Contains(enemy))
+        {
             enemyList.Add(enemy);
+        }
         if (!_enemiesPosition.ContainsKey(enemy))
-            _enemiesPosition.Add(enemy, new GameObject("marker"));
+        {
+            GameObject aux = new GameObject("marker");
+            _enemiesPosition.Add(enemy, aux);
+            markers.Add(aux);
+        }
     }
 }
