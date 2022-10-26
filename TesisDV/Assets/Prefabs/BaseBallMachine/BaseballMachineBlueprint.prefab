@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2153742604224758928}
   - component: {fileID: 5044811853719674249}
-  - component: {fileID: 7067672642098637791}
+  - component: {fileID: 6371727449299742987}
   m_Layer: 10
   m_Name: BaseballMachineBlueprint
   m_TagString: Untagged
@@ -79,7 +79,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.6, z: 0}
---- !u!114 &7067672642098637791
+--- !u!114 &6371727449299742987
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,7 +88,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9171396001614254684}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 576e82fd62f0ac145b1bd2bb11239ce3, type: 3}
+  m_Script: {fileID: 11500000, guid: d9cd1cee673ed5a47bb35d4679184ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   craftingRecipe: {fileID: 11400000, guid: c86347ee0d52dcf4192280c1415acd7b, type: 2}
@@ -98,7 +98,10 @@ MonoBehaviour:
   newMaterial: {fileID: 2100000, guid: 04d9b8823b798c944ac1ae3fed55dc18, type: 2}
   LayerMaskWall:
     serializedVersion: 2
-    m_Bits: 65536
+    m_Bits: 67584
+  XDMaskWall:
+    serializedVersion: 2
+    m_Bits: 2097152
 --- !u!1001 &411846815397239830
 PrefabInstance:
   m_ObjectHideFlags: 0

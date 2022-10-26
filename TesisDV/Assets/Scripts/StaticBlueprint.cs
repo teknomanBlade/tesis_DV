@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Blueprint : MonoBehaviour
+public class StaticBlueprint : MonoBehaviour
 {
     private Player _player;
     RaycastHit hit;
@@ -22,6 +22,7 @@ public class Blueprint : MonoBehaviour
     private Quaternion finalRotation;
     private Renderer[] _myChildrenRenderers;
     public LayerMask LayerMaskWall;
+    public LayerMask XDMaskWall;
     int layerMask;
     private GameObject parent;  
 
@@ -41,34 +42,6 @@ public class Blueprint : MonoBehaviour
 
     void Update()
     {
-        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, LayerMaskWall))
-        {
-            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            //Debug.Log("Blue print Hit " + hit.collider.gameObject.layer + " " + hit.collider.gameObject.name);
-            canBuild = false;
-            transform.position = hit.point;
-            ChangeMaterial();
-            return;
-        }
-        else
-        {
-            canBuild = true;
-            SetOriginalMaterial();
-        }
-
-
-        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, GameVars.Values.GetFloorLayerMask()) && canBuild)
-        {
-            //auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
-            //transform.position = auxVector;
-            //Debug.Log("Blue print Hit " + hit.collider.gameObject.tag);
-
-
-            transform.position = hit.point;
-        }
-
         if (Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
             _player.SwitchIsCrafting();
@@ -101,6 +74,32 @@ public class Blueprint : MonoBehaviour
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
             transform.Rotate(Vector3.up * 15f, Space.Self);
+        }
+
+        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, XDMaskWall))
+        {
+            canBuild = true;
+            transform.position = hit.transform.position;
+            SetOriginalMaterial();
+            return;
+        }
+        else
+        {
+            canBuild = false;
+            ChangeMaterial();
+        }
+
+        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, LayerMaskWall) )
+        {
+            //auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
+            //transform.position = auxVector;
+            //Debug.Log("Blue print Hit " + hit.collider.gameObject.tag);
+
+
+            
+            canBuild = false;
+            transform.position = hit.point;
+            ChangeMaterial();
         }
     }
 

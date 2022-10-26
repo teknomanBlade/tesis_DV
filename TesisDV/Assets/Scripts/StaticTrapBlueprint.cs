@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Blueprint : MonoBehaviour
+public class StaticTrapBlueprint : MonoBehaviour
 {
     private Player _player;
     RaycastHit hit;
+    RaycastHit wallHit;
     Vector3 movePoint;
     private bool canBuild;
     Vector3 auxVector;
@@ -22,6 +23,7 @@ public class Blueprint : MonoBehaviour
     private Quaternion finalRotation;
     private Renderer[] _myChildrenRenderers;
     public LayerMask LayerMaskWall;
+    public LayerMask LayerMaskTrapBase;
     int layerMask;
     private GameObject parent;  
 
@@ -41,34 +43,7 @@ public class Blueprint : MonoBehaviour
 
     void Update()
     {
-        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, LayerMaskWall))
-        {
-            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            //Debug.Log("Blue print Hit " + hit.collider.gameObject.layer + " " + hit.collider.gameObject.name);
-            canBuild = false;
-            transform.position = hit.point;
-            ChangeMaterial();
-            return;
-        }
-        else
-        {
-            canBuild = true;
-            SetOriginalMaterial();
-        }
-
-
-        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, GameVars.Values.GetFloorLayerMask()) && canBuild)
-        {
-            //auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
-            //transform.position = auxVector;
-            //Debug.Log("Blue print Hit " + hit.collider.gameObject.tag);
-
-
-            transform.position = hit.point;
-        }
-
+        transform.position = hit.point;
         if (Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
             _player.SwitchIsCrafting();
@@ -102,6 +77,56 @@ public class Blueprint : MonoBehaviour
         {
             transform.Rotate(Vector3.up * 15f, Space.Self);
         }
+
+        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, LayerMaskTrapBase))
+        {
+            //auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
+            //transform.position = auxVector;
+            //Debug.Log("Blue print Hit " + hit.collider.gameObject.tag);
+
+
+            transform.position = hit.transform.position;
+            canBuild = true;
+        }
+
+        if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, LayerMaskWall))
+        {
+            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            //Debug.Log("Blue print Hit " + hit.collider.gameObject.layer + " " + hit.collider.gameObject.name);
+            canBuild = false;
+            transform.position = hit.point;
+            ChangeMaterial();
+        }
+        else
+        {
+            canBuild = true;
+            SetOriginalMaterial();
+        }
+
+        
+        /* if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, LayerMaskTrapBase))
+        {
+            Vector3 dir = hit.transform.position - GameVars.Values.GetPlayerCameraPosition();
+            if(!Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out wallHit, dir.magnitude, LayerMaskWall))
+            {
+                canBuild = true;
+                SetOriginalMaterial();
+                transform.position = hit.transform.position;
+            }
+            else
+            {
+                canBuild = false;
+                transform.position = hit.point;
+                ChangeMaterial();
+            }
+        }
+        else
+        {
+            Debug.Log("horla");
+            canBuild = false;
+            transform.position = hit.point;
+            ChangeMaterial();
+        } */
     }
 
     private IEnumerator BuildTrap()
@@ -119,9 +144,7 @@ public class Blueprint : MonoBehaviour
         yield return new WaitForSeconds(2f);
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, parent.transform);
         //Destroy(aux.GetComponent<InventoryItem>());
-
-        craftingRecipe.RemoveItemsAndWitts(); //Cambiar esto, basarlo en un booleano que se setea en el builder.
-        
+        craftingRecipe.RemoveItemsAndWitts();
         craftingRecipe.RestoreBuildAmount();
         //Destroy(particlesInstantiated);
         Destroy(gameObject);
