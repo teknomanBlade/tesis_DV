@@ -6,6 +6,7 @@ public class StaticBlueprint : MonoBehaviour
 {
     private Player _player;
     RaycastHit hit;
+    private TrapBase _trapBase;
     Vector3 movePoint;
     private bool canBuild;
     private bool _spendMaterials;
@@ -33,7 +34,7 @@ public class StaticBlueprint : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>();
         int layerMask = GameVars.Values.GetWallLayer();
         layerMask = ~layerMask;
-        canBuild = true;
+        canBuild = false;
         //originalMaterial = GetComponent<Renderer>().material; //Probar despues de arreglar posicionamiento. 
         originalMaterial = GetComponentInChildren<Renderer>().material;
         //myRenderer = GetComponent<Renderer>(); //Probar despues de arreglar posicionamiento.
@@ -50,6 +51,7 @@ public class StaticBlueprint : MonoBehaviour
             //finalPosition = secondAuxVector;
             finalPosition = transform.position;
             finalRotation = transform.rotation;
+            _trapBase.BuildOnBase();
             StartCoroutine(BuildTrap());
 
             /* Instantiate(particles, transform.position, transform.rotation);
@@ -79,10 +81,15 @@ public class StaticBlueprint : MonoBehaviour
 
         if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, TrapBaseMaskWall))
         {
-            canBuild = true;
-            transform.position = hit.transform.position;
-            SetOriginalMaterial();
-            return;
+            _trapBase = hit.transform.GetComponent<TrapBase>();
+            if(_trapBase._isAvailable)
+            {
+                
+                canBuild = true;
+                transform.position = hit.transform.position;
+                SetOriginalMaterial();
+                return;
+            }
         }
         else
         {
@@ -96,8 +103,6 @@ public class StaticBlueprint : MonoBehaviour
             //transform.position = auxVector;
             //Debug.Log("Blue print Hit " + hit.collider.gameObject.tag);
 
-
-            
             canBuild = false;
             transform.position = hit.point;
             ChangeMaterial();
