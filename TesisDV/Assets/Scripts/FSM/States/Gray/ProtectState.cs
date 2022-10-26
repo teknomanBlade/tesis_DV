@@ -7,7 +7,8 @@ public class ProtectState : IState
     private StateMachine _fsm;
     private Pathfinding _pf;
     private Enemy _enemy;
-
+    
+    private bool foundCircle = false;
     private bool canPathfind;
     public List<Node> myPath;
     private int _currentWaypoint;
@@ -24,7 +25,7 @@ public class ProtectState : IState
     public void OnStart()
     {
         _currentPathWaypoint = 0;
-        
+
         _enemy.GetProtectTarget();
 
         //var dir = _enemy._target.transform.position - _enemy.transform.position;  Probar estos dos despues
@@ -49,8 +50,12 @@ public class ProtectState : IState
         //Les cuesta tomar el target de nuevo cuando su primer target desaparece. Por ahora funciona pero despues se podria usar el target para
         //que se muevan hacia el cuando el NavmeshPath no sea valido. Para que no se queden duros en el lugar.
         //_enemy.Move();
+        if(!_enemy.isDead)
+        {
+            _enemy._circlePos = AIManager.Instance.RequestPosition(_enemy);
+        }
+        
 
-        _enemy._circlePos = AIManager.Instance.RequestPosition(_enemy);
         RaycastHit hit;
         Vector3 protectDir = _enemy._circlePos - _enemy.transform.position;
         Vector3 targetDir = _enemy._target.transform.position - _enemy.transform.position;
@@ -66,7 +71,7 @@ public class ProtectState : IState
             
         } */
 
-        if(myPath != null && Physics.Raycast(_enemy.transform.position, targetDir, out hit, targetDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
+        if(myPath != null && Physics.Raycast(_enemy.transform.position, targetDir, out hit, targetDir.magnitude, GameVars.Values.GetWallLayerMask()))
         {
             if(myPath.Count >= 1)
             {
@@ -80,7 +85,7 @@ public class ProtectState : IState
                     _currentPathWaypoint++;
                     if (_currentPathWaypoint > myPath.Count - 1)
                     {
-                        Debug.Log("Nunca deberiamos llegar aca. Si estas viendo esto algo salio mal.");
+                        Debug.Log("No encontré mi objetivo, recalculando.");
                         _currentPathWaypoint = 0;
                         GetThetaStar();
                     }
@@ -89,6 +94,7 @@ public class ProtectState : IState
         }
         else if((Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.2f))
         {
+
             Vector3 aux = protectDir;
             protectDir = new Vector3(aux.x, 0f, aux.z);
             _enemy.transform.forward = protectDir;

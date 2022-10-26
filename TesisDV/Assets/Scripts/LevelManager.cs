@@ -254,14 +254,12 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         {
             if (gray.hasObjective) 
             {
-                Debug.Log("si");
                 enemyHasObjective = gray.hasObjective; //true
                 canSpawn = !enemyHasObjective;
                 return;
             }
             else
             {
-                Debug.Log("no");
                 enemyHasObjective = false;
                 canSpawn = !enemyHasObjective;
                 //return;

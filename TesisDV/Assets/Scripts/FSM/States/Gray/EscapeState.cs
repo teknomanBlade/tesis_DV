@@ -57,7 +57,9 @@ public class EscapeState : IState
                     _currentPathWaypoint++;
                     if (_currentPathWaypoint > myPath.Count - 1)
                     {
-                        Debug.Log("Nunca deberiamos llegar aca. Si estas viendo esto algo salio mal.");
+                        Debug.Log("No encontré mi objetivo, recalculando.");
+                        _currentPathWaypoint = 0;
+                        GetThetaStar();
                     }
                 }
             }
@@ -88,13 +90,13 @@ public class EscapeState : IState
 
         //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
         startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
-        Debug.Log("Start at " + startingPoint);
+        //Debug.Log("Start at " + startingPoint);
 
         _currentWaypoint = _enemy.GetCurrentWaypoint();
         
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
         endingPoint = _enemy._pfManager.GetClosestNode(_enemy._exitPos);
-        Debug.Log("End at " + endingPoint);
+        //Debug.Log("End at " + endingPoint);
         //}
 
         //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);

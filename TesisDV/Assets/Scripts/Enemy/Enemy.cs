@@ -108,18 +108,20 @@ public abstract class Enemy : MonoBehaviour
         }
         else
         {
-            AIManager.Instance.RemoveEnemyFromList(this, hasObjective);
             isAwake= false;
+            AIManager.Instance.RemoveEnemyFromList(this, hasObjective);
+            if(hasObjective)
+            {
+                DropCat();
+            }
+            
             isDead = true;
             SendWitts();
             _capsuleCollider.enabled = false;
             GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
             _lm.RemoveGray(this);
-            if(hasObjective)
-            {
-                DropCat();
-            }
+            
             //_navMeshAgent.speed = 0; //Se va el navmesh
 
             //Desabilitar colliders y lo que haga falta.
