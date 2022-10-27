@@ -56,11 +56,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureArrows:
-        m_Texture: {fileID: 2800000, guid: 1510e9b5391b8fa42a0153dfbba3369a, type: 3}
+        m_Texture: {fileID: 2800000, guid: b037511df8ebb9d4c8674870da7bb0c3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureSample0:
-        m_Texture: {fileID: 2800000, guid: 0cbf819071b7b2c4d9188d98802bebc4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3c59bd6c3762484489689482eae5483d, type: 3}
         m_Scale: {x: 2, y: 2}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -68,10 +68,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _Adding: 1
     - _BumpScale: 1
+    - _Columns: 17
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _Divisor: 1.5
     - _DstBlend: 0
+    - _Float0: 0.18
+    - _Float1: 0.43
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -84,12 +89,17 @@ Material:
     - _LerpingVal1: 6.94
     - _Max: 0.01
     - _Max1: 0.43
+    - _MaxX: 0.01
+    - _MaxY: 0.36
     - _Metallic: 0
-    - _Min: 0.2
-    - _Min1: 0.48
+    - _Min: 0.48
+    - _Min1: -0.88
+    - _MinX: 0.05
+    - _MinY: 0.18
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Rows: 4.51
     - _ScaleX: 6.4
     - _ScaleX1: 6.96
     - _ScaleY: -1.09
@@ -97,9 +107,11 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _SubtractValue: 0.5
     - _Tiling: 0.64
     - _Tiling1: 1.89
     - _UVSec: 0
+    - _Value: 1
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
@@ -109,6 +121,8 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Speed: {r: -2, g: 0, b: 0, a: 0}
     - _Speed1: {r: 0.3, g: 0, b: 0, a: 0}
-    - _Tiling: {r: 18.86, g: 6.78, b: 0, a: 0}
-    - _Vector0: {r: 5, g: 0.65, b: 0, a: 0}
+    - _Tiling: {r: 19.32, g: 7.81, b: 0, a: 0}
+    - _TilingTex1: {r: 100, g: 8, b: 0, a: 0}
+    - _TilingTex2: {r: 100, g: 8, b: 0, a: 0}
+    - _Vector0: {r: 19.32, g: 7.81, b: 0, a: 0}
   m_BuildTextureStacks: []
