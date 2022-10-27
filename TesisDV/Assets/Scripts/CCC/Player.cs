@@ -33,6 +33,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public GameObject _weaponGORacket;
     public GameObject _weaponGOBaseballBat;
     [SerializeField] private Melee _weapon;
+    private GameObject _currentWeaponManager;
+    private bool _weaponIsActive = false;
     public string typeFloor { get; private set; }
     
     private AudioSource _audioSource;
@@ -259,6 +261,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ScreenManager.Instance.Push(screenPause);
             _rb.velocity = Vector3.zero;
             _rb.isKinematic = true;
+        }
+
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            SwitchWeapon();
         }
 
         //if (Input.GetKeyDown(GameVars.Values.dropKey))
@@ -784,6 +791,27 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
     }
 
+    private void SwitchWeapon()
+    {
+        if(_inventory.IsThereAnotherWeapon())
+        {
+            if(_currentWeaponManager == _weaponGORacket)
+            {
+                _currentWeaponManager = _weaponGOBaseballBat;
+                _weaponGORacket.SetActive(false);
+                _weapon = _weaponGOBaseballBat.GetComponent<BaseballBat>();
+                _weaponGOBaseballBat.SetActive(true);
+            }
+            else if(_currentWeaponManager == _weaponGOBaseballBat)
+            {
+                _currentWeaponManager = _weaponGORacket;
+                _weaponGOBaseballBat.SetActive(false);
+                _weapon = _weaponGORacket.GetComponent<Racket>();
+                _weaponGORacket.SetActive(true);
+            }
+        }
+    }
+
     private void OnBaseballMachineReload()
     {
         if (_inventory.ContainsID(8, 1))
@@ -920,17 +948,22 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         if (message.Equals("ItemGrabbed"))
         {
-            if (_inventory.ContainsID(3, 1))
+            if (_inventory.ContainsID(3, 1) && !_weaponIsActive)
             {
+                _weaponIsActive = true;
+                _currentWeaponManager = _weaponGORacket;
                 _weaponGORacket.SetActive(true);
                 _weapon = _weaponGORacket.GetComponent<Racket>();
+
                 //_weaponGO.ActivateRacket();
                 //_weaponGO.transform.GetComponentInChildren<Racket>().gameObject.layer = 0;
                 //OnNewRacketGrabbed += _weaponGO.transform.GetComponentInChildren<Racket>().OnNewRacketGrabbed;
                 //OnNewRacketGrabbed?.Invoke();
             }
-            else if (_inventory.ContainsID(11, 1))
+            else if (_inventory.ContainsID(11, 1) && !_weaponIsActive)
             {
+                _weaponIsActive = true;
+                _currentWeaponManager = _weaponGOBaseballBat;
                 _weaponGOBaseballBat.SetActive(true);
                 _weapon = _weaponGOBaseballBat.GetComponent<BaseballBat>();
             }
@@ -958,12 +991,30 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void RacketInventoryRemoved()
     {
+        _weaponIsActive = false;
         _inventory.RemoveItemByID(3);
+        if(_inventory.ContainsID(11,1))
+        {
+            _weaponIsActive = true;
+            _currentWeaponManager = _weaponGOBaseballBat;
+            _weaponGORacket.SetActive(false);
+            _weapon = _weaponGOBaseballBat.GetComponent<BaseballBat>();
+            _weaponGOBaseballBat.SetActive(true);
+        }
     }
 
     public void BaseballBatInventoryRemoved()
     {
+        _weaponIsActive = false;
         _inventory.RemoveItemByID(11);
+        if(_inventory.ContainsID(3,1))
+        {
+            _weaponIsActive = true;
+            _currentWeaponManager = _weaponGORacket;
+            _weaponGOBaseballBat.SetActive(false);
+            _weapon = _weaponGORacket.GetComponent<Racket>();
+            _weaponGORacket.SetActive(true);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

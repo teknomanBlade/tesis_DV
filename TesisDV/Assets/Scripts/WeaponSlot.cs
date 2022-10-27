@@ -6,14 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-public class Slot : MonoBehaviour
+public class WeaponSlot : MonoBehaviour
 {
     [SerializeField] private InventoryItem _item;
-    private int _itemAmount = 0;
-    private GameObject _itemAmountContainer;
-    private Text _itemAmountText;
     [SerializeField] private Image _image;
-    [SerializeField] private Image _keyImage;
     [SerializeField] private GameObject _myPrefab;
     [SerializeField] private int _itemID;
     [SerializeField] private CanvasGroup _slotCanvasGroup;
@@ -24,12 +20,10 @@ public class Slot : MonoBehaviour
 
     void Awake()
     {
-        _itemAmountContainer = transform.GetChild(3).gameObject;
-        _itemAmountText = _itemAmountContainer.transform.GetChild(0).GetComponent<Text>();
         isFaded = true;
-        _keyImage = transform.GetComponentsInChildren<Transform>()
-            .Where(x => x.gameObject.name.Equals("KeyImage")).First().GetComponent<Image>();
-        _keyCanvasGroup = _keyImage.GetComponent<CanvasGroup>();
+        //_keyImage = transform.GetComponentsInChildren<Transform>()
+            //.Where(x => x.gameObject.name.Equals("KeyImage")).First().GetComponent<Image>();
+        //_keyCanvasGroup = _keyImage.GetComponent<CanvasGroup>();
         _image = transform.GetComponentsInChildren<Transform>()
             .Where(x => x.gameObject.name.Equals("ItemImage")).First().GetComponent<Image>();
         _slotCanvasGroup = GetComponent<CanvasGroup>();
@@ -78,23 +72,13 @@ public class Slot : MonoBehaviour
 
     public void SetItem(InventoryItem item)
     {
-        if(IsFree())
-        {
-            _item = item;
-            _itemAmount++;
-            _image.enabled = true;
-            _image.color = new Color32(255,255,255,255);
-            _image.sprite = item.itemImage;
-            _itemID = item.myCraftingID;
-            _myPrefab = item.myPrefab;
-            //Fade();
-        }
-        else
-        {
-            _itemAmount++;
-            _itemAmountContainer.SetActive(true);
-            _itemAmountText.text = _itemAmount.ToString();
-        }
+        _item = item;
+        _image.enabled = true;
+        _image.color = new Color32(255,255,255,255);
+        _image.sprite = item.itemImage;
+        _itemID = item.myCraftingID;
+        _myPrefab = item.myPrefab;
+        //Fade(); 
     }
 
     public void SetItemID(int itemID)
@@ -120,28 +104,13 @@ public class Slot : MonoBehaviour
 
     public void RemoveItem()
     {
-        if(_itemAmount == 1)
-        {
-            ResetSlot();
-            //Fade(); 
-        }
-        else if(_itemAmount == 2)
-        {
-            _itemAmount--;
-            _itemAmountContainer.SetActive(false);
-        }
-        else
-        {
-            _itemAmount--;
-            _itemAmountText.text = _itemAmount.ToString();
-        }
-        
+        ResetSlot();
+        //Fade();   
     }
 
     private void ResetSlot()
     {
         _item = null;
-        _itemAmount = 0;
         _itemID = 0;
         _image.enabled = false;
         _image.color = new Color32(0,0,0,255);;

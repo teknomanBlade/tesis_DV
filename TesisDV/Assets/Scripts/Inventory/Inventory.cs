@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour
     private TrapHotBar _trapHotBar;
     [SerializeField] List<InventoryItem> items;
     [SerializeField] Slot[] itemSlots;
+    [SerializeField] WeaponSlot[] weaponSlots;
     [SerializeField] private CanvasGroup _myCanvasGroup;   
     [SerializeField] private int _wittsAmount;    
     private float fadeDelay = 1.1f;
@@ -41,31 +42,51 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(InventoryItem item)
     {
-        //Fade();
-        for (int i = 0; i < itemSlots.Length; i++)
+        //Si es tipo Weapon lo agregamos a un WeaponSlot.
+        if (item.itemType == ItemType.Weapon)
         {
-           if(itemSlots[i].HasItemID(item.myCraftingID))
-           {
-               item.Interact();   
-               //itemSlots[i].Item = item;
-               itemSlots[i].SetItem(item);
-               //USAR EVENTO
-               _trapHotBar.CheckRecipeRequirements(this);
-                return;
-           }
+            for (int i = 0; i < weaponSlots.Length; i++)
+            {
+                if(weaponSlots[i].IsFree())
+                {
+                    item.Interact();   
+
+                    weaponSlots[i].SetItem(item);
+
+                    _trapHotBar.CheckRecipeRequirements(this);
+                    return;
+                }
+            }
         }
-        for (int i = 0; i < itemSlots.Length; i++)
+        else
         {
-           if(itemSlots[i].IsFree())
-           {
-               item.Interact();   
-               //itemSlots[i].Item = item;
-               itemSlots[i].SetItem(item);
-               //USAR EVENTO
-               _trapHotBar.CheckRecipeRequirements(this);
-                return;
-           }
+            //Si no, lo agregamos a un ItemSlot.
+            for (int i = 0; i < itemSlots.Length; i++)
+            {
+                if(itemSlots[i].HasItemID(item.myCraftingID))
+                {
+                    item.Interact();   
+                    //itemSlots[i].Item = item;
+                    itemSlots[i].SetItem(item);
+                    //USAR EVENTO
+                    _trapHotBar.CheckRecipeRequirements(this);
+                    return;
+                }
+            }
+            for (int i = 0; i < itemSlots.Length; i++)
+            {
+                if(itemSlots[i].IsFree())
+                {
+                    item.Interact();   
+                    //itemSlots[i].Item = item;
+                    itemSlots[i].SetItem(item);
+                    //USAR EVENTO
+                    _trapHotBar.CheckRecipeRequirements(this);
+                    return;
+                }
+            }
         }
+        
     } 
 
     public void AddItemID(InventoryItem item, int itemID)
@@ -122,6 +143,14 @@ public class Inventory : MonoBehaviour
                 break;
             }
         }
+        for (int i = 0; i < weaponSlots.Length; i++)
+        {
+            if (weaponSlots[i].HasItemID(itemID))
+            {
+                weaponSlots[i].RemoveItem();
+                break;
+            }
+        }
     }
 
     public void RemoveItemID(int itemID, int amount)
@@ -175,13 +204,24 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    public bool ContainsID(int itemID, int amount)
+    public bool ContainsID(int itemID, int amount) //Considerar separar conteo de armas e items.
     {
         int itemAmount = 0;
 
         for (int i = 0; i < itemSlots.Length; i++)
         {
             if(itemSlots[i].HasItemID(itemID))
+            {
+                itemAmount ++;
+                if(itemAmount >= amount)
+                {
+                    return true;
+                }
+            }
+        }
+        for (int i = 0; i < weaponSlots.Length; i++)
+        {
+            if(weaponSlots[i].HasItemID(itemID))
             {
                 itemAmount ++;
                 if(itemAmount >= amount)
@@ -221,7 +261,7 @@ public class Inventory : MonoBehaviour
         }
         return number;
     }
-    public int ItemCountByID(int itemID)
+    public int ItemCountByID(int itemID)    //Considerar separar conteo de armas e items.
     {
         int number = 0;
 
@@ -232,8 +272,38 @@ public class Inventory : MonoBehaviour
                 number++;
             }
         }
+        for (int i = 0; i < weaponSlots.Length; i++)
+        {
+            if (weaponSlots[i].HasItemID(itemID))
+            {
+                number++;
+            }
+        }
         return number;
     }
+
+    public bool IsThereAnotherWeapon()
+    {
+        int number = 0;
+
+        for(int i = 0; i < weaponSlots.Length; i++)
+        {
+            if(!weaponSlots[i].IsFree())
+            {
+                number++;
+            }
+        }
+
+        if(number >= 2)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        } 
+    }
+
     public void Fade()
     {
         StartCoroutine(DoFade(_myCanvasGroup.alpha, 1));
