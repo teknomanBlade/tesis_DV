@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+//using UnityEngine.Rendering.PostProcessing;
 
 public class MainScreen : MonoBehaviour
 {
@@ -13,7 +13,7 @@ public class MainScreen : MonoBehaviour
     
     public GameObject Cam { get; private set; }
 
-    public PostProcessVolume volume;
+    //public PostProcessVolume volume;
     public FadeInOutScenesPPSSettings postProcessFadeInOutScenes;
     private Coroutine FadeOutSceneCoroutine;
     private Coroutine FadeInSceneCoroutine;
@@ -25,7 +25,7 @@ public class MainScreen : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         Cam = GameObject.Find("Main Camera");
-        volume = Cam.GetComponent<PostProcessVolume>();
+        //volume = Cam.GetComponent<PostProcessVolume>();
         _as = GetComponent<AudioSource>();
         ActiveFadeInEffect(1f);
         _timesActiveScreen++;
@@ -40,19 +40,19 @@ public class MainScreen : MonoBehaviour
 
     public void ActiveFadeInEffect(float duration)
     {
-        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
-        {
-            if (FadeInSceneCoroutine != null) StopCoroutine(FadeInSceneCoroutine);
-            FadeInSceneCoroutine = StartCoroutine(LerpFadeInEffect(duration));
-        }
+        //if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        //{
+        //    if (FadeInSceneCoroutine != null) StopCoroutine(FadeInSceneCoroutine);
+        //    FadeInSceneCoroutine = StartCoroutine(LerpFadeInEffect(duration));
+        //}
     }
     public void ActiveFadeOutEffect(float duration)
     {
-        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
-        {
-            if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
-            FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(duration));
-        }
+        //if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        //{
+        //    if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
+        //    FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(duration));
+        //}
     }
     IEnumerator LerpFadeInEffect(float duration)
     {
@@ -62,7 +62,7 @@ public class MainScreen : MonoBehaviour
         {
             time += Time.deltaTime;
 
-            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            //postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
             yield return null;
         }
         if(loadingSprite != null)
@@ -76,7 +76,7 @@ public class MainScreen : MonoBehaviour
         {
             time -= Time.deltaTime;
 
-            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            //postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
             yield return null;
         }
 

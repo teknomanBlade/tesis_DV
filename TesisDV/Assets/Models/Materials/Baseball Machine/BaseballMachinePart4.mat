@@ -10,7 +10,7 @@ Material:
   m_Name: BaseballMachinePart4
   m_Shader: {fileID: 4800000, guid: ecddff0271446b543be512750134e598, type: 3}
   m_ShaderKeywords: _NORMALMAP
-  m_LightmapFlags: 0
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -68,6 +68,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _AlphaCutoff: 0.5
     - _BumpScale: 1
     - _ColorInterpolator1: 0
     - _ColorInterpolatorBallShooter: 0

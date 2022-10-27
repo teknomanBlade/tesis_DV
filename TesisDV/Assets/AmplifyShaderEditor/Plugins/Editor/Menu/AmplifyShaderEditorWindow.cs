@@ -28,6 +28,9 @@ namespace AmplifyShaderEditor
 		public const string ObjectSelectorClosed = "ObjectSelectorClosed";
 		public const string LiveShaderError = "Live Shader only works with an assigned Master Node on the graph";
 
+		public const string AsyncMessage = "Detected Asynchronous Shader Compilation. This can cause slowdowns when saving not only ASE shaders but other shaders as well.\n" +
+											"Please consider turning it off ( Project Settings > Editor > Asynchronous Shader Compilation ) if detecting big slowdowns on shader save.\n" +
+											"This message can be turned off via Preferences > Amplify Shader Editor > Show Async Message.";
 		//public Texture2D MasterNodeOnTexture = null;
 		//public Texture2D MasterNodeOffTexture = null;
 
@@ -538,6 +541,24 @@ namespace AmplifyShaderEditor
 			}
 		}
 
+		public static void LoadAndSaveList( string[] assetList )
+		{
+			EditorPrefs.SetString( "ASEfileList", string.Join( ",", assetList ) );
+			if( assetList[ 0 ].EndsWith( ".asset" ) )
+			{
+				var obj = AssetDatabase.LoadAssetAtPath<AmplifyShaderFunction>( assetList[ 0 ] );
+				AmplifyShaderEditorWindow.LoadShaderFunctionToASE( obj, false );
+			}
+			else
+			{
+				var obj = AssetDatabase.LoadAssetAtPath<Shader>( assetList[ 0 ] );
+				AmplifyShaderEditorWindow.ConvertShaderToASE( obj );
+			}
+
+			UIUtils.CurrentWindow.State = AmplifyShaderEditorWindow.OpenSaveState.OPEN;
+			UIUtils.CurrentWindow.Repaint();
+		}
+
 		public static AmplifyShaderEditorWindow OpenWindow( string title = null, Texture icon = null )
 		{
 			AmplifyShaderEditorWindow currentWindow = (AmplifyShaderEditorWindow)AmplifyShaderEditorWindow.GetWindow( typeof( AmplifyShaderEditorWindow ), false );
@@ -569,7 +590,7 @@ namespace AmplifyShaderEditor
 			{
 				case EventType.MouseDown:
 				case EventType.MouseUp:
-				case EventType.MouseMove:
+				//case EventType.MouseMove:
 				case EventType.MouseDrag:
 				case EventType.KeyDown:
 				case EventType.KeyUp:
@@ -592,6 +613,8 @@ namespace AmplifyShaderEditor
 		public override void OnEnable()
 		{
 			base.OnEnable();
+
+			Preferences.LoadDefaults();
 
 #if UNITY_2018_3_OR_NEWER
 			ASEPackageManagerHelper.RequestInfo();
@@ -1043,6 +1066,7 @@ namespace AmplifyShaderEditor
 			{
 				return false;
 			}
+			Preferences.LoadDefaults();
 #if UNITY_2018_3_OR_NEWER
 			ASEPackageManagerHelper.RequestInfo();
 			ASEPackageManagerHelper.Update();
@@ -1412,8 +1436,10 @@ namespace AmplifyShaderEditor
 			//Need to force one graph draw because it wont call OnGui propertly since its focuses somewhere else
 			// Focus() doesn't fix this since it only changes keyboard focus
 			m_drawInfo.InvertedZoom = 1 / m_cameraZoom;
-			m_mainGraphInstance.Draw( m_drawInfo );
 
+			m_mainGraphInstance.IsLoading = true;
+			m_mainGraphInstance.Draw( m_drawInfo );
+			m_mainGraphInstance.IsLoading = false;
 			ShaderIsModified = false;
 			Focus();
 			Repaint();
@@ -1682,6 +1708,16 @@ namespace AmplifyShaderEditor
 				case ToolButtonType.Options: { } break;
 				case ToolButtonType.Update:
 				{
+					if( Preferences.GlobalClearLog )
+					{
+						m_consoleLogWindow.ClearMessages();
+					}
+#if UNITY_2019_4_OR_NEWER
+					if( EditorSettings.asyncShaderCompilation && Preferences.GlobalShowAsyncMsg )
+					{
+						ShowMessage( AsyncMessage );
+					}
+#endif
 					SaveToDisk( false );
 				}
 				break;
@@ -1692,9 +1728,10 @@ namespace AmplifyShaderEditor
 					// 0 off
 					// 1 on
 					// 2 pending
-					if( m_liveShaderEditing && m_mainGraphInstance.CurrentMasterNode.CurrentShader == null )
+					if( m_liveShaderEditing && m_mainGraphInstance.CurrentMasterNode != null && m_mainGraphInstance.CurrentMasterNode.CurrentShader == null )
 					{
 						m_liveShaderEditing = false;
+						m_innerEditorVariables.LiveMode = false;
 					}
 
 					UpdateLiveUI();
@@ -2051,6 +2088,14 @@ namespace AmplifyShaderEditor
 		void OnLeftMouseDown()
 		{
 			Focus();
+
+			if( m_lastKeyPressed == KeyCode.Q )
+			{
+				m_rmbStartPos = m_currentMousePos2D;
+				UseCurrentEvent();
+				return;
+			}
+
 			m_mouseDownOnValidArea = true;
 			m_lmbPressed = true;
 			if( m_currentEvent.alt )
@@ -2231,6 +2276,20 @@ namespace AmplifyShaderEditor
 			if( m_lostFocus )
 			{
 				m_lostFocus = false;
+				return;
+			}
+
+			if( m_lastKeyPressed == KeyCode.Q )
+			{
+				if( m_currentEvent.alt )
+				{
+					ModifyZoom( Constants.ALT_CAMERA_ZOOM_SPEED * ( m_currentEvent.delta.x + m_currentEvent.delta.y ), m_altKeyStartPos );
+				}
+				else
+				{
+					m_cameraOffset += m_cameraZoom * m_currentEvent.delta;
+				}
+				UseCurrentEvent();
 				return;
 			}
 
@@ -2451,20 +2510,23 @@ namespace AmplifyShaderEditor
 							originNode.RecordObject( Constants.UndoCreateConnectionId );
 							targetNode.RecordObject( Constants.UndoCreateConnectionId );
 
-							if( !inputPort.CheckValidType( outputPort.DataType ) )
+							if( inputPort.NotFreeForAllTypes && outputPort.NotFreeForAllTypes )
 							{
-								UIUtils.ShowIncompatiblePortMessage( true, originNode, inputPort, targetNode, outputPort );
-								m_wireReferenceUtils.InvalidateReferences();
-								UseCurrentEvent();
-								return;
-							}
+								if( !inputPort.CheckValidType( outputPort.DataType ) )
+								{
+									UIUtils.ShowIncompatiblePortMessage( true, originNode, inputPort, targetNode, outputPort );
+									m_wireReferenceUtils.InvalidateReferences();
+									UseCurrentEvent();
+									return;
+								}
 
-							if( !outputPort.CheckValidType( inputPort.DataType ) )
-							{
-								UIUtils.ShowIncompatiblePortMessage( false, targetNode, outputPort, originNode, inputPort );
-								m_wireReferenceUtils.InvalidateReferences();
-								UseCurrentEvent();
-								return;
+								if( !outputPort.CheckValidType( inputPort.DataType ) )
+								{
+									UIUtils.ShowIncompatiblePortMessage( false, targetNode, outputPort, originNode, inputPort );
+									m_wireReferenceUtils.InvalidateReferences();
+									UseCurrentEvent();
+									return;
+								}
 							}
 
 							inputPort.DummyAdd( outputPort.NodeId, outputPort.PortId );
@@ -2520,20 +2582,23 @@ namespace AmplifyShaderEditor
 							originNode.RecordObject( Constants.UndoCreateConnectionId );
 							targetNode.RecordObject( Constants.UndoCreateConnectionId );
 
-							if( !inputPort.CheckValidType( outputPort.DataType ) )
+							if( inputPort.NotFreeForAllTypes && outputPort.NotFreeForAllTypes )
 							{
-								UIUtils.ShowIncompatiblePortMessage( true, targetNode, inputPort, originNode, outputPort );
-								m_wireReferenceUtils.InvalidateReferences();
-								UseCurrentEvent();
-								return;
-							}
+								if( !inputPort.CheckValidType( outputPort.DataType ) )
+								{
+									UIUtils.ShowIncompatiblePortMessage( true, targetNode, inputPort, originNode, outputPort );
+									m_wireReferenceUtils.InvalidateReferences();
+									UseCurrentEvent();
+									return;
+								}
 
-							if( !outputPort.CheckValidType( inputPort.DataType ) )
-							{
-								UIUtils.ShowIncompatiblePortMessage( false, originNode, outputPort, targetNode, inputPort );
-								m_wireReferenceUtils.InvalidateReferences();
-								UseCurrentEvent();
-								return;
+								if( !outputPort.CheckValidType( inputPort.DataType ) )
+								{
+									UIUtils.ShowIncompatiblePortMessage( false, originNode, outputPort, targetNode, inputPort );
+									m_wireReferenceUtils.InvalidateReferences();
+									UseCurrentEvent();
+									return;
+								}
 							}
 
 							inputPort.DummyAdd( m_wireReferenceUtils.OutputPortReference.NodeId, m_wireReferenceUtils.OutputPortReference.PortId );
@@ -3423,7 +3488,9 @@ namespace AmplifyShaderEditor
 				}
 				else
 				{
-#if UNITY_2017_2_OR_NEWER
+#if UNITY_2020_1_OR_NEWER
+					if( www.result == UnityWebRequest.Result.ConnectionError )
+#elif UNITY_2017_1_OR_NEWER
 					if( www.isNetworkError )
 #else
 					if( www.isError )
@@ -3510,9 +3577,9 @@ namespace AmplifyShaderEditor
 		private void OnFocus()
 		{
 			EditorGUI.FocusTextInControl( null );
-#if UNITY_2019_1_OR_NEWER
-			m_fixOnFocus = true;
-#endif
+//#if UNITY_2019_1_OR_NEWER
+//			m_fixOnFocus = true;
+//#endif
 		}
 
 		void OnLostFocus()
@@ -3649,7 +3716,9 @@ namespace AmplifyShaderEditor
 				}
 				else
 				{
-#if UNITY_2017_2_OR_NEWER
+#if UNITY_2020_1_OR_NEWER
+					if( www.result == UnityWebRequest.Result.ConnectionError )
+#elif UNITY_2017_1_OR_NEWER
 					if( www.isNetworkError )
 #else
 					if( www.isError )
@@ -3920,8 +3989,25 @@ namespace AmplifyShaderEditor
 								case IOUtils.NodeParam:
 								{
 									string typeStr = parameters[ IOUtils.NodeTypeId ];
-									//System.Type type = System.Type.GetType( parameters[ IOUtils.NodeTypeId ] );
-									System.Type type = System.Type.GetType( IOUtils.NodeTypeReplacer.ContainsKey( typeStr ) ? IOUtils.NodeTypeReplacer[ typeStr ] : typeStr );
+									typeStr = IOUtils.NodeTypeReplacer.ContainsKey( typeStr ) ? IOUtils.NodeTypeReplacer[ typeStr ] : typeStr;
+									System.Type type = System.Type.GetType( typeStr );
+									if( type == null )
+									{
+#if UNITY_2017_3_OR_NEWER
+										try
+										{
+											var editorAssembly = System.Reflection.Assembly.Load( "Assembly-CSharp-Editor" );
+											if( editorAssembly != null )
+											{
+												type = editorAssembly.GetType( typeStr );
+											}
+										}
+										catch( Exception )
+										{
+
+										}
+#endif
+									}
 									if( type != null )
 									{
 										System.Type oldType = type;
@@ -3949,6 +4035,7 @@ namespace AmplifyShaderEditor
 												{
 													newNode.ParentReadFromString( ref parameters );
 													newNode.ReadFromDeprecated( ref parameters, oldType );
+													newNode.WasDeprecated = true;
 												}
 												else
 													newNode.ReadFromString( ref parameters );
@@ -4014,11 +4101,21 @@ namespace AmplifyShaderEditor
 											InPortId = inNode.VersionConvertInputPortId( InPortId );
 											OutPortId = outNode.VersionConvertOutputPortId( OutPortId );
 
+											if( inNode.WasDeprecated )
+												InPortId = inNode.InputIdFromDeprecated( InPortId );
+											if( outNode.WasDeprecated )
+												OutPortId = outNode.OutputIdFromDeprecated( OutPortId );
+
 											inputPort = inNode.GetInputPortByArrayId( InPortId );
 											outputPort = outNode.GetOutputPortByArrayId( OutPortId );
 										}
 										else
 										{
+											if( inNode.WasDeprecated )
+												InPortId = inNode.InputIdFromDeprecated( InPortId );
+											if( outNode.WasDeprecated )
+												OutPortId = outNode.OutputIdFromDeprecated( OutPortId );
+
 											inputPort = inNode.GetInputPortByUniqueId( InPortId );
 											outputPort = outNode.GetOutputPortByUniqueId( OutPortId );
 										}
@@ -4240,7 +4337,26 @@ namespace AmplifyShaderEditor
 								case IOUtils.NodeParam:
 								{
 									string typeStr = parameters[ IOUtils.NodeTypeId ];
-									System.Type type = System.Type.GetType( IOUtils.NodeTypeReplacer.ContainsKey( typeStr ) ? IOUtils.NodeTypeReplacer[ typeStr ] : typeStr );
+									typeStr = IOUtils.NodeTypeReplacer.ContainsKey( typeStr ) ? IOUtils.NodeTypeReplacer[ typeStr ] : typeStr;
+									System.Type type = System.Type.GetType( typeStr );
+									if( type == null )
+									{
+#if UNITY_2017_3_OR_NEWER
+										try
+										{
+											var editorAssembly = System.Reflection.Assembly.Load( "Assembly-CSharp-Editor" );
+											if( editorAssembly != null )
+											{
+												type = editorAssembly.GetType( typeStr );
+											}
+										}
+										catch( Exception )
+										{
+									
+										}
+#endif
+									}
+
 									if( type != null )
 									{
 										System.Type oldType = type;
@@ -4278,6 +4394,7 @@ namespace AmplifyShaderEditor
 												{
 													newNode.ParentReadFromString( ref parameters );
 													newNode.ReadFromDeprecated( ref parameters, oldType );
+													newNode.WasDeprecated = true;
 												}
 												else
 													newNode.ReadFromString( ref parameters );
@@ -4343,11 +4460,21 @@ namespace AmplifyShaderEditor
 											InPortId = inNode.VersionConvertInputPortId( InPortId );
 											OutPortId = outNode.VersionConvertOutputPortId( OutPortId );
 
+											if( inNode.WasDeprecated )
+												InPortId = inNode.InputIdFromDeprecated( InPortId );
+											if( outNode.WasDeprecated )
+												OutPortId = outNode.OutputIdFromDeprecated( OutPortId );
+
 											inputPort = inNode.GetInputPortByArrayId( InPortId );
 											outputPort = outNode.GetOutputPortByArrayId( OutPortId );
 										}
 										else
 										{
+											if( inNode.WasDeprecated )
+												InPortId = inNode.InputIdFromDeprecated( InPortId );
+											if( outNode.WasDeprecated )
+												OutPortId = outNode.OutputIdFromDeprecated( OutPortId );
+
 											inputPort = inNode.GetInputPortByUniqueId( InPortId );
 											outputPort = outNode.GetOutputPortByUniqueId( OutPortId );
 										}
@@ -4613,36 +4740,8 @@ namespace AmplifyShaderEditor
 
 		public bool MouseInteracted = false;
 
-#if UNITY_2019_1_OR_NEWER
-		private bool m_fixOnFocus = false;
-		private bool m_fixFocusRepaint = false;
-#endif
 		void OnGUI()
 		{
-#if UNITY_2019_1_OR_NEWER
-			// hack fix for mouse selecting text fields when window is opening or window not focused?
-			if( m_fixFocusRepaint && Event.current.type == EventType.Repaint )
-			{
-				// hack over hack: makes texture fields selectable again when window is not focused
-				if( ( EditorGUIUtility.editingTextField && EditorGUIUtility.hotControl != 0 ) ||
-					!( EditorGUIUtility.editingTextField && EditorGUIUtility.hotControl == EditorGUIUtility.keyboardControl && EditorGUIUtility.keyboardControl != 0 )
-					)
-				{
-					EditorGUI.FocusTextInControl( null );
-					GUIUtility.keyboardControl = 0;
-				}
-
-				m_fixOnFocus = false;
-				m_fixFocusRepaint = false;
-			}
-
-			if( m_fixOnFocus && ( Event.current.type == EventType.Used || Event.current.type == EventType.MouseDown ) )
-			{
-				m_fixFocusRepaint = true;
-			}
-#endif
-
-
 #if UNITY_2018_3_OR_NEWER
 			if( ASEPackageManagerHelper.CheckImporter )
 				return;
@@ -4958,6 +5057,8 @@ namespace AmplifyShaderEditor
 				}
 			}
 
+			m_consoleLogWindow.Draw( m_graphArea, m_currentMousePos2D, m_currentEvent.button, false, m_paletteWindow.IsMaximized ? m_paletteWindow.RealWidth : 0 );
+
 			if( m_contextPalette.IsActive )
 			{
 				m_contextPalette.Draw( m_cameraInfo, m_currentMousePos2D, m_currentEvent.button, m_contextPalette.IsActive );
@@ -4996,13 +5097,6 @@ namespace AmplifyShaderEditor
 					}
 				}
 			}
-
-			//if( m_consoleLogWindow.IsActive )
-			//{
-			//	m_consoleLogWindow.InitialX = m_nodeParametersWindow.IsMaximized ? m_nodeParametersWindow.RealWidth : 0;
-			//	m_consoleLogWindow.Width = m_cameraInfo.width - ( ( m_nodeParametersWindow.IsMaximized ? m_nodeParametersWindow.RealWidth : 0 ) + ( m_paletteWindow.IsMaximized ? m_paletteWindow.RealWidth : 0 ) );
-			m_consoleLogWindow.Draw( m_graphArea, m_currentMousePos2D, m_currentEvent.button, false, m_paletteWindow.IsMaximized ? m_paletteWindow.RealWidth : 0 );
-			//}
 
 			// Handle all events ( mouse interaction + others )
 			if( !MouseInteracted )
@@ -5075,7 +5169,7 @@ namespace AmplifyShaderEditor
 			{
 				if( m_saveIsDirty )
 				{
-					if( m_liveShaderEditing && focusedWindow && m_currentInactiveTime > InactivitySaveTime )
+					if( focusedWindow == this && m_currentInactiveTime > InactivitySaveTime && !(EditorGUIUtility.editingTextField && EditorGUIUtility.keyboardControl!=0) )
 					{
 						m_saveIsDirty = false;
 						if( m_mainGraphInstance.CurrentMasterNodeId != Constants.INVALID_NODE_ID )
@@ -5159,10 +5253,83 @@ namespace AmplifyShaderEditor
 			if( m_takeScreenShot && Event.current.type == EventType.Repaint )
 				TakeScreenShot();
 #endif
+
+			if( Event.current.type == EventType.Layout )
+			{
+				switch( State )
+				{
+					default:
+					case OpenSaveState.NONE:
+					break;
+					case OpenSaveState.OPEN:
+					{
+						State = OpenSaveState.WAIT;
+						string list = EditorPrefs.GetString( "ASEfileList", "" );
+						m_assetPaths = new List<string>( list.Split( ',' ) );
+						Repaint();
+					}
+					break;
+					case OpenSaveState.WAIT:
+					{
+						// we wait one frame to give time for the editor to properly initialize everything
+						State = OpenSaveState.SAVE;
+						Repaint();
+					}
+					break;
+					case OpenSaveState.SAVE:
+					{
+						State = OpenSaveState.CLOSE;
+						try
+						{
+							SaveToDisk( false );
+						}
+						catch( Exception e )
+						{
+							State = OpenSaveState.NONE;
+							throw e;
+						}
+
+						Repaint();
+					}
+					break;
+					case OpenSaveState.CLOSE:
+					{
+						State = OpenSaveState.NONE;
+						m_assetPaths.RemoveAt( 0 );
+						if( m_assetPaths.Count > 0 )
+						{
+							AmplifyShaderEditorWindow.LoadAndSaveList( m_assetPaths.ToArray() );
+						}
+						else
+						{
+							EditorPrefs.DeleteKey( "ASEfileList" );
+						}
+#if UNITY_2018_3_OR_NEWER
+						this.Close();
+#else
+						m_markToClose = true;
+#endif
+					}
+					break;
+				}
+			}
+		}
+
+		bool m_markToClose = false;
+		private List<string> m_assetPaths = new List<string>();
+		public OpenSaveState State = OpenSaveState.NONE;
+		public enum OpenSaveState
+		{
+			NONE,
+			OPEN,
+			WAIT,
+			SAVE,
+			CLOSE
 		}
 
 		void OnInspectorUpdate()
 		{
+			Preferences.LoadDefaults();
 #if UNITY_2018_3_OR_NEWER
 			ASEPackageManagerHelper.Update();
 #endif
@@ -5173,7 +5340,7 @@ namespace AmplifyShaderEditor
 				//m_mainGraphInstance.ParentWindow = this;
 			}
 
-			if( IsShaderFunctionWindow && CurrentGraph.CurrentShaderFunction == null )
+			if( (IsShaderFunctionWindow && CurrentGraph.CurrentShaderFunction == null) || m_markToClose )
 			{
 				Close();
 			}
@@ -5240,13 +5407,15 @@ namespace AmplifyShaderEditor
 			Debug.Log( node );
 		}
 
+		private const string ShaderIsModifiedMessage = "Click to save changes.";
+		private const string ShaderIsNotModified = "No changes to save, up-to-date.";
 		void OnMaterialUpdated( MasterNode masterNode )
 		{
 			if( masterNode != null )
 			{
 				if( masterNode.CurrentMaterial )
 				{
-					m_toolsWindow.SetStateOnButton( ToolButtonType.Update, ShaderIsModified ? 0 : 2, ShaderIsModified ? "Click to update Shader preview." : "Preview up-to-date." );
+					m_toolsWindow.SetStateOnButton( ToolButtonType.Update, ShaderIsModified ? 0 : 2, ShaderIsModified ? ShaderIsModifiedMessage : ShaderIsNotModified);
 				}
 				else
 				{
@@ -5615,7 +5784,12 @@ namespace AmplifyShaderEditor
 			m_replaceMasterNodeDataFromCache = cacheMasterNodes;
 			if( cacheMasterNodes )
 			{
-				m_clipboard.AddMultiPassNodesToClipboard( m_mainGraphInstance.MultiPassMasterNodes.NodesList );
+				m_clipboard.AddMultiPassNodesToClipboard( m_mainGraphInstance.MultiPassMasterNodes.NodesList, true, -1 );
+				for( int i = 0; i < m_mainGraphInstance.LodMultiPassMasternodes.Count; i++ )
+				{
+					if( m_mainGraphInstance.LodMultiPassMasternodes[ i ].Count > 0 )
+						m_clipboard.AddMultiPassNodesToClipboard( m_mainGraphInstance.LodMultiPassMasternodes[ i ].NodesList, false, i );
+				}
 			}
 		}
 
@@ -5642,8 +5816,21 @@ namespace AmplifyShaderEditor
 						TemplateDataParent templateData = m_templatesManager.GetTemplate( m_replaceMasterNodeData );
 						if( m_replaceMasterNodeDataFromCache )
 						{
-							m_mainGraphInstance.CrossCheckTemplateNodes( templateData );
-							m_clipboard.GetMultiPassNodesFromClipboard( m_mainGraphInstance.MultiPassMasterNodes.NodesList );
+							m_mainGraphInstance.CrossCheckTemplateNodes( templateData, m_mainGraphInstance.MultiPassMasterNodes.NodesList , -1 );
+							for( int i = 0; i < m_mainGraphInstance.LodMultiPassMasternodes.Count; i++ )
+							{
+								if( m_mainGraphInstance.LodMultiPassMasternodes[ i ].Count > 0 )
+									m_mainGraphInstance.CrossCheckTemplateNodes( templateData, m_mainGraphInstance.LodMultiPassMasternodes[ i ].NodesList, i );
+							}
+
+							//Getting data from clipboard must be done after cross check all lists
+							m_clipboard.GetMultiPassNodesFromClipboard( m_mainGraphInstance.MultiPassMasterNodes.NodesList,-1 );
+							for( int i = 0; i < m_mainGraphInstance.LodMultiPassMasternodes.Count; i++ )
+							{
+								if( m_mainGraphInstance.LodMultiPassMasternodes[ i ].Count > 0 )
+									m_clipboard.GetMultiPassNodesFromClipboard( m_mainGraphInstance.LodMultiPassMasternodes[i].NodesList,  i );
+							}
+							m_clipboard.ResetMultipassNodesData();
 						}
 						else
 						{
@@ -5767,7 +5954,7 @@ namespace AmplifyShaderEditor
 					MasterNode masterNode = m_mainGraphInstance.CurrentMasterNode;
 					if( masterNode != null && masterNode.CurrentShader != null )
 					{
-						m_toolsWindow.SetStateOnButton( ToolButtonType.Update, m_shaderIsModified ? 0 : 2 );
+						m_toolsWindow.SetStateOnButton( ToolButtonType.Update, ShaderIsModified ? 0 : 2, ShaderIsModified ? ShaderIsModifiedMessage : ShaderIsNotModified );
 						UpdateTabTitle( masterNode.ShaderName, m_shaderIsModified );
 					}
 					else

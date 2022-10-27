@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+//using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -24,8 +24,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         get { return _cam; }
         set { _cam = value; }
     }
-    public PostProcessVolume volume;
-    public Vignette postProcessDamage;
+    //public PostProcessVolume volume;
+    //public Vignette postProcessDamage;
     public FadeInOutScenesPPSSettings postProcessFadeInOutScenes;
     private Coroutine FadeOutSceneCoroutine;
     private Coroutine FadeInSceneCoroutine;
@@ -107,7 +107,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         _rb = GetComponent<Rigidbody>();
         Cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
-        volume = _cam.Camera.GetComponent<PostProcessVolume>();
+        //volume = _cam.Camera.GetComponent<PostProcessVolume>();
 
         GameVars.Values.WaveManager.OnRoundEnd += CanStartNextWave;
 
@@ -287,10 +287,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     
     public void ActiveDamageEffect()
     {
-        if (volume.profile.TryGetSettings(out postProcessDamage))
-        {
-            StartCoroutine(LerpDamageEffect(0.6f,1f));
-        }
+        //if (volume.profile.TryGetSettings(out postProcessDamage))
+        //{
+        //    StartCoroutine(LerpDamageEffect(0.6f,1f));
+        //}
     }
 
     public void SwitchKinematics()
@@ -315,7 +315,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
             time += Time.deltaTime;
 
-            postProcessDamage.intensity.value = _valueToChange;
+            //postProcessDamage.intensity.value = _valueToChange;
             yield return null;
         }
 
@@ -325,27 +325,27 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void ActiveFadeInEffect(float duration)
     {
-        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
-        {
-            if (FadeInSceneCoroutine != null) StopCoroutine(FadeInSceneCoroutine);
-            FadeInSceneCoroutine = StartCoroutine(LerpFadeInEffect(duration));
-        }
+        //if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        //{
+        //    if (FadeInSceneCoroutine != null) StopCoroutine(FadeInSceneCoroutine);
+        //    FadeInSceneCoroutine = StartCoroutine(LerpFadeInEffect(duration));
+        //}
     }
     public void ActiveFadeOutEffect()
     {
-        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
-        {
-            if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
-            FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(1f));
-        }
+        //if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        //{
+        //    if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
+        //    FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(1f));
+        //}
     }
     public void ActiveFadeOutRestartEffect()
     {
-        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
-        {
-            if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
-            FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutRestartEffect(1f));
-        }
+        //if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        //{
+        //    if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
+        //    FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutRestartEffect(1f));
+        //}
     }
     IEnumerator LerpFadeInEffect(float duration)
     {
@@ -355,7 +355,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             time += Time.deltaTime;
 
-            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            //postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
             yield return null;
         }
     }
@@ -367,7 +367,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             time -= Time.deltaTime;
 
-            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            //postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
             yield return null;
         }
 
@@ -385,7 +385,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             time -= Time.deltaTime;
 
-            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            //postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
             yield return null;
         }
 
