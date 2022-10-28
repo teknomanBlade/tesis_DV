@@ -91,8 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3101667555364933235}
   - component: {fileID: 8136371677219297130}
-  - component: {fileID: 7059001338729915662}
-  - component: {fileID: 1063786001319818290}
+  - component: {fileID: 4529086981932979960}
   m_Layer: 10
   m_Name: ElectricalTrapMachineBlueprint
   m_TagString: Untagged
@@ -108,7 +107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5309655294764603583}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.032598, y: -0.049875475, z: 32.081642}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5782000039755752038}
@@ -132,23 +131,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.6, z: 0}
---- !u!54 &7059001338729915662
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5309655294764603583}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &1063786001319818290
+--- !u!114 &4529086981932979960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,7 +140,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5309655294764603583}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 576e82fd62f0ac145b1bd2bb11239ce3, type: 3}
+  m_Script: {fileID: 11500000, guid: d9cd1cee673ed5a47bb35d4679184ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   craftingRecipe: {fileID: 11400000, guid: da753bcb7dc572c49a1955651c1ddc03, type: 2}
@@ -167,7 +150,10 @@ MonoBehaviour:
   newMaterial: {fileID: 2100000, guid: 04d9b8823b798c944ac1ae3fed55dc18, type: 2}
   LayerMaskWall:
     serializedVersion: 2
-    m_Bits: 65536
+    m_Bits: 67584
+  TrapBaseMaskWall:
+    serializedVersion: 2
+    m_Bits: 2097152
 --- !u!1 &5801268668148865684
 GameObject:
   m_ObjectHideFlags: 0

@@ -159,7 +159,7 @@ public class SkillTree : MonoBehaviour
 
     public void UnlockMicrowaveTrap()
     {
-        if(!_isMicrowaveTrapUnlocked)
+        if(!_isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MicrowaveTrapWittCost))
         {
             _inventory.RemoveWitts(MicrowaveTrapWittCost);
             _isMicrowaveTrapUnlocked = true;
@@ -171,7 +171,7 @@ public class SkillTree : MonoBehaviour
     }
     public void UnlockSlowTrap()
     {
-        if(!_isSlowTrapUnlocked)
+        if(!_isSlowTrapUnlocked && _inventory.HasEnoughWitts(SlowTrapWittCost))
         {
             _inventory.RemoveWitts(SlowTrapWittCost);
             _isSlowTrapUnlocked = true;
@@ -183,7 +183,7 @@ public class SkillTree : MonoBehaviour
     }
     public void UnlockElectricTrap()
     {
-        if(!_isElectricTrapUnlocked)
+        if(!_isElectricTrapUnlocked && _inventory.HasEnoughWitts(ElectricTrapWittCost))
         {
             _inventory.RemoveWitts(ElectricTrapWittCost);
             _isElectricTrapUnlocked = true;
@@ -195,7 +195,7 @@ public class SkillTree : MonoBehaviour
     }
     public void UnlockDartsTrap()
     {
-        if(!_isDartsTrapUnlocked)
+        if(!_isDartsTrapUnlocked && _inventory.HasEnoughWitts(DartsTrapWittCost))
         {
             _inventory.RemoveWitts(DartsTrapWittCost);
             _isDartsTrapUnlocked = true;
@@ -209,7 +209,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeBaseballLauncher1()
     {
-        if(!_isBL1Activated)
+        if(!_isBL1Activated && _inventory.HasEnoughWitts(BL1WittCost))
         {
             _inventory.RemoveWitts(BL1WittCost);
             _isBL1Activated = true;
@@ -223,7 +223,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeBaseballLauncher2()
     {
-        if(!_isBL2Activated)
+        if(!_isBL2Activated && _inventory.HasEnoughWitts(BL2WittCost))
         {
             _inventory.RemoveWitts(BL2WittCost);
             _isBL2Activated = true;
@@ -236,7 +236,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeNailFiringMachine1()
     {
-        if(!_isNFM1Activated && _isDartsTrapUnlocked)
+        if(!_isNFM1Activated && _isDartsTrapUnlocked && _inventory.HasEnoughWitts(NFM1WittCost))
         {
             _inventory.RemoveWitts(NFM1WittCost);
             _isNFM1Activated = true;
@@ -249,7 +249,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeNailFiringMachine2()
     {
-        if(!_isNFM2Activated && _isDartsTrapUnlocked)
+        if(!_isNFM2Activated && _isDartsTrapUnlocked && _inventory.HasEnoughWitts(NFM2WittCost))
         {
             _inventory.RemoveWitts(NFM2WittCost);
             _isNFM2Activated = true;
@@ -262,7 +262,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeElectricTrap1()
     {
-        if(!_isET1Activated && _isElectricTrapUnlocked)
+        if(!_isET1Activated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET1WittCost))
         {
             _inventory.RemoveWitts(ET1WittCost);
             _isET1Activated = true;
@@ -275,7 +275,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeElectricTrap2()
     {
-        if(!_isET2Activated && _isElectricTrapUnlocked)
+        if(!_isET2Activated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET2WittCost))
         {
             _inventory.RemoveWitts(ET2WittCost);
             _isET2Activated = true;
@@ -288,7 +288,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeSlowTrap1()
     {
-        if(!_isST1Activated && _isSlowTrapUnlocked)
+        if(!_isST1Activated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST1WittCost))
         {
             _inventory.RemoveWitts(ST1WittCost);
             _isST1Activated = true;
@@ -301,7 +301,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeSlowTrap2()
     {
-        if(!_isST2Activated && _isSlowTrapUnlocked)
+        if(!_isST2Activated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST2WittCost))
         {
             _inventory.RemoveWitts(ST2WittCost);
             _isST2Activated = true;
@@ -314,7 +314,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeMicrowaveTrap1()
     {
-        if(!_isMT1Activated && _isMicrowaveTrapUnlocked)
+        if(!_isMT1Activated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT1WittCost))
         {
             _inventory.RemoveWitts(MT1WittCost);
             _isMT1Activated = true;
@@ -327,7 +327,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeMicrowaveTrap2()
     {
-        if(!_isMT2Activated && _isMicrowaveTrapUnlocked)
+        if(!_isMT2Activated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT2WittCost))
         {
             _inventory.RemoveWitts(MT2WittCost);
             _isMT2Activated = true;
@@ -340,7 +340,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeMicrowaveTrap3()
     {
-        if(!_isMT3Activated && _isMicrowaveTrapUnlocked)
+        if(!_isMT3Activated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT3WittCost))
         {
             _inventory.RemoveWitts(MT3WittCost);
             _isMT3Activated = true;
