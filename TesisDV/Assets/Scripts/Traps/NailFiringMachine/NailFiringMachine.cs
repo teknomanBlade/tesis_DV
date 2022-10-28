@@ -15,7 +15,7 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     public int InitialStock { get; private set; }
     public float interval;
     public GameObject spawnPoint;
-    public int shots = 30;
+    public int shots;
     public int shotsLeft;
     private Coroutine ShootCoroutine; 
     void Awake()

@@ -19,7 +19,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public GameObject exitPoint;
     public GameObject ballsState1, ballsState2, ballsState3;
     [SerializeField] private GameObject trapDestroyPrefab;
-    public int shots = 15;
+    public int shots;
     public int shotsLeft;
     public bool IsEmpty
     {
