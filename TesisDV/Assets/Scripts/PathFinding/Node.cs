@@ -29,7 +29,7 @@ public class Node : MonoBehaviour
            
             //RaycastHit2D hit = Physics2D.Raycast(cn.transform.position, dir, dir.magnitude, obstacleMask);
             //if(hit == true)
-            if (Physics.Raycast(cn.transform.position, dir, out hit, dir.magnitude, GameVars.Values.GetWallLayerMask()))
+            if (Physics.Raycast(cn.transform.position, dir, out hit, dir.magnitude, obstacleMask))//GameVars.Values.GetWallLayerMask()))
             {
                 
             } 
@@ -39,7 +39,7 @@ public class Node : MonoBehaviour
                 //Debug.Log("soy " + this.gameObject +" este es mi vecino + " + node);
             }
         }
-        return _neighbors;
-        //return _neighbours;
+        //return _neighbors;
+        return _neighbours;
     }
 }
