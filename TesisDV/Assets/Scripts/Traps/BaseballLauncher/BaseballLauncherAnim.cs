@@ -10,7 +10,8 @@ public class BaseballLauncherAnim : MonoBehaviour
     void Start()
     {
         myAnimator = GetComponent<Animator>();
-        parent = GameObject.Find("MainGame");
+        //parent = GameObject.Find("MainGame");
+        parent = transform.parent.gameObject;
     }
 
     public void FinishAnim()

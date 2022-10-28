@@ -62,6 +62,9 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public void Awake()
     {
         //active = false; Ahora las trampas empiezan encendidas.
+        _myTrapBase = transform.parent.GetComponent<TrapBase>();
+        _myTrapBase.SetTrap(this.gameObject);
+
         _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
@@ -281,6 +284,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         GameVars.Values.currentShotsTrap1 = shotsLeft;
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
+        _myTrapBase.ResetBase();
         Destroy(gameObject);
     }
 

@@ -8,7 +8,7 @@ public class StaticBlueprint : MonoBehaviour
     RaycastHit hit;
     private TrapBase _trapBase;
     Vector3 movePoint;
-    private bool canBuild;
+    [SerializeField] private bool canBuild;
     private bool _spendMaterials;
     Vector3 auxVector;
     Vector3 secondAuxVector;
@@ -26,11 +26,11 @@ public class StaticBlueprint : MonoBehaviour
     public LayerMask LayerMaskWall;
     public LayerMask TrapBaseMaskWall;
     int layerMask;
-    private GameObject parent;  
+    private GameObject _parent;  
 
     void Start()
     {
-        parent = GameObject.Find("MainGame");
+        //_parent = GameObject.Find("MainGame");
         _player = GameObject.Find("Player").GetComponent<Player>();
         int layerMask = GameVars.Values.GetWallLayer();
         layerMask = ~layerMask;
@@ -52,6 +52,7 @@ public class StaticBlueprint : MonoBehaviour
             finalPosition = transform.position;
             finalRotation = transform.rotation;
             _trapBase.BuildOnBase();
+            _parent = _trapBase.transform.gameObject;
             StartCoroutine(BuildTrap());
 
             /* Instantiate(particles, transform.position, transform.rotation);
@@ -82,14 +83,13 @@ public class StaticBlueprint : MonoBehaviour
         if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, TrapBaseMaskWall))
         {
             _trapBase = hit.transform.GetComponent<TrapBase>();
-            if(_trapBase._isAvailable)
-            {
-                
+            //if(_trapBase._isAvailable)
+            //{
                 canBuild = true;
                 transform.position = hit.transform.position;
                 SetOriginalMaterial();
                 return;
-            }
+            //}
         }
         else
         {
@@ -122,7 +122,7 @@ public class StaticBlueprint : MonoBehaviour
         canBuild = false;
         GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
         yield return new WaitForSeconds(2f);
-        GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, parent.transform);
+        GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, _parent.transform);
         //Destroy(aux.GetComponent<InventoryItem>());
 
         craftingRecipe.RemoveItemsAndWitts(); //Cambiar esto, basarlo en un booleano que se setea en el builder.

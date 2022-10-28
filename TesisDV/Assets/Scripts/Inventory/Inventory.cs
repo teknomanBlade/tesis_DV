@@ -13,6 +13,9 @@ public class Inventory : MonoBehaviour
     [SerializeField] private CanvasGroup _myCanvasGroup;   
     [SerializeField] private int _wittsAmount;    
     private float fadeDelay = 1.1f;
+
+    public bool canCarryMultipleItems; //testing
+
     private bool isFaded;
 
     public delegate void OnWittsAmountChangedDelegate(int witts);
@@ -61,18 +64,22 @@ public class Inventory : MonoBehaviour
         else
         {
             //Si no, lo agregamos a un ItemSlot.
-            for (int i = 0; i < itemSlots.Length; i++)
+            if(canCarryMultipleItems)
             {
-                if(itemSlots[i].HasItemID(item.myCraftingID))
+                for (int i = 0; i < itemSlots.Length; i++)
                 {
-                    item.Interact();   
-                    //itemSlots[i].Item = item;
-                    itemSlots[i].SetItem(item);
-                    //USAR EVENTO
-                    _trapHotBar.CheckRecipeRequirements(this);
-                    return;
+                    if(itemSlots[i].HasItemID(item.myCraftingID))
+                    {
+                        item.Interact();   
+                        //itemSlots[i].Item = item;
+                        itemSlots[i].SetItem(item);
+                        //USAR EVENTO
+                        _trapHotBar.CheckRecipeRequirements(this);
+                        return;
+                    }
                 }
             }
+            
             for (int i = 0; i < itemSlots.Length; i++)
             {
                 if(itemSlots[i].IsFree())

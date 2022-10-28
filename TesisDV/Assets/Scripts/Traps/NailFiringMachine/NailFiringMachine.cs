@@ -20,6 +20,8 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     private Coroutine ShootCoroutine; 
     void Awake()
     {
+        _myTrapBase = transform.parent.GetComponent<TrapBase>();
+        _myTrapBase.SetTrap(this.gameObject);
         active = true; // Ahora las trampas empiezan encendidas.
         _animator = GetComponent<Animator>();
         shotsLeft = shots;
@@ -115,6 +117,7 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     {
         GameVars.Values.currentShotsTrap2 = shotsLeft;
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
+        _myTrapBase.ResetBase();
         Destroy(gameObject);
     }
 
