@@ -21,14 +21,14 @@ public class ElectricTrap : Trap, IInteractable
 
     private void Update()
     {
-        _trapDuration -= Time.deltaTime;
+        /* _trapDuration -= Time.deltaTime; La trampa ya no se apaga sola
 
         if (_trapDuration <=0)
         {
             active = false;
             ParticleLightning.SetActive(false);
             ElectricRadius.SetActive(false);
-        }
+        } */
     }
 
     public void Interact()
@@ -41,10 +41,10 @@ public class ElectricTrap : Trap, IInteractable
             ElectricRadius.SetActive(true);
             ElectricRadiusInternal.SetActive(true);
         }
-        if(_trapDuration <= 0)
+        /* if(_trapDuration <= 0) La trampa ya no se apaga sola
         {
             _trapDuration =10f;
-        }
+        } */
     }
 
     private void OnTriggerStay(Collider other)

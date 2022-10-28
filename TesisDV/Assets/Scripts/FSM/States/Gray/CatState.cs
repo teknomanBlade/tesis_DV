@@ -85,7 +85,7 @@ public class CatState : IState
                 _enemy.transform.forward = dir;
                 _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
 
-                if (dir.magnitude < 0.1f)
+                if (dir.magnitude < 0.4f)
                 {
                     _currentPathWaypoint++;
                     if (_currentPathWaypoint > myPath.Count - 1)
