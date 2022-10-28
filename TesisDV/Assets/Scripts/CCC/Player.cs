@@ -104,6 +104,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private float _valueToChange;
     private bool _canStartNextWave;
     private bool _canMoveTraps;
+    //SkillTree, deberia ver de mover esto a craftingrecipee, pero para llegar a este viernes sirve.
+    private SkillTree _skillTree;
+    private bool _canBuildMicrowaveTrap = false;
+    private bool _canBuildSlowTrap = false;
+    private bool _canBuildElectricTrap = false;
+    private bool _canBuildDartsTrap = false;
     
     private void Awake()
     {
@@ -112,6 +118,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         volume = _cam.Camera.GetComponent<PostProcessVolume>();
 
         GameVars.Values.WaveManager.OnRoundEnd += CanStartNextWave;
+
+        _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
+        _skillTree.OnUpgrade += CheckForUnlocks;
 
         _craftingScreen = GameObject.Find("CraftingContainer");
         _miniMapDisplay = GameObject.Find("MiniMapDisplay");
@@ -235,22 +244,22 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             GameVars.Values.BaseballLauncher.Craft(_inventory);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting)
+        if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting && _canBuildMicrowaveTrap)
         {
             GameVars.Values.MicrowaveForceFieldGenerator.Craft(_inventory);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting)
+        if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting && _canBuildSlowTrap)
         {
             GameVars.Values.SlowTrap.Craft(_inventory);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting)
+        if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting && _canBuildDartsTrap)
         {
             GameVars.Values.NailFiringMachine.Craft(_inventory);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting)
+        if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting && _canBuildElectricTrap)
         {
             GameVars.Values.ElectricTrap.Craft(_inventory);
         }
@@ -433,6 +442,26 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             IsCrafting = true;
         }
 
+    }
+
+    public void CheckForUnlocks()
+    {
+        if(_skillTree.isMicrowaveTrapUnlocked)
+        {
+            _canBuildMicrowaveTrap = true;
+        }
+        else if(_skillTree.isSlowTrapUnlocked)
+        {
+            _canBuildSlowTrap = true;
+        }
+        else if(_skillTree.isElectricTrapUnlocked)
+        {
+            _canBuildElectricTrap = true;
+        }
+        else if(_skillTree.isDartsTrapUnlocked)
+        {
+            _canBuildDartsTrap = true;
+        }
     }
 
     public void CanStartNextWave(int round)
