@@ -35,11 +35,11 @@ public class CraftingScreen : MonoBehaviour, IScreen
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             BTN_PageOne();
         }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             BTN_PageTwo();
         }
