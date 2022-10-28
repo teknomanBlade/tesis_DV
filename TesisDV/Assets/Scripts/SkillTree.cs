@@ -6,6 +6,40 @@ public class SkillTree : MonoBehaviour
 {
     private Inventory _inventory;
 
+    #region Trap Unlocks
+
+    [Header("Microwave Trap")]
+    [Header("Trap Unlocks")]
+    [SerializeField] private int MicrowaveTrapWittCost;
+    private bool _isMicrowaveTrapUnlocked;
+    public bool isMicrowaveTrapUnlocked
+    {
+        get { return _isMicrowaveTrapUnlocked; }
+    }
+    [Header("Slow Trap")]
+    [SerializeField] private int SlowTrapWittCost;
+    private bool _isSlowTrapUnlocked;
+    public bool isSlowTrapUnlocked
+    {
+        get { return _isSlowTrapUnlocked; }
+    }
+    [Header("Electric Trap")]
+    [SerializeField] private int ElectricTrapWittCost;
+    private bool _isElectricTrapUnlocked;
+    public bool isElectricTrapUnlocked
+    {
+        get { return _isElectricTrapUnlocked; }
+    }
+    [Header("Darts Trap")]
+    [SerializeField] private int DartsTrapWittCost;
+    private bool _isDartsTrapUnlocked;
+    public bool isDartsTrapUnlocked
+    {
+        get { return _isDartsTrapUnlocked; }
+    }
+
+    #endregion
+
     #region BaseballLauncher Upgrades
 
     [Header("Static Balls")]
@@ -123,6 +157,56 @@ public class SkillTree : MonoBehaviour
 
     #region ButtonVoids
 
+    public void UnlockMicrowaveTrap()
+    {
+        if(!_isMicrowaveTrapUnlocked)
+        {
+            _inventory.RemoveWitts(MicrowaveTrapWittCost);
+            _isMicrowaveTrapUnlocked = true;
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
+        }
+    }
+    public void UnlockSlowTrap()
+    {
+        if(!_isSlowTrapUnlocked)
+        {
+            _inventory.RemoveWitts(SlowTrapWittCost);
+            _isSlowTrapUnlocked = true;
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
+        }
+    }
+    public void UnlockElectricTrap()
+    {
+        if(!_isElectricTrapUnlocked)
+        {
+            _inventory.RemoveWitts(ElectricTrapWittCost);
+            _isElectricTrapUnlocked = true;
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
+        } 
+    }
+    public void UnlockDartsTrap()
+    {
+        if(!_isDartsTrapUnlocked)
+        {
+            _inventory.RemoveWitts(DartsTrapWittCost);
+            _isDartsTrapUnlocked = true;
+            if(OnUpgrade != null)
+            {
+                OnUpgrade();
+            }
+        }
+        
+    }
+
     public void UpgradeBaseballLauncher1()
     {
         if(!_isBL1Activated)
@@ -152,7 +236,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeNailFiringMachine1()
     {
-        if(!_isNFM1Activated)
+        if(!_isNFM1Activated && _isDartsTrapUnlocked)
         {
             _inventory.RemoveWitts(NFM1WittCost);
             _isNFM1Activated = true;
@@ -165,7 +249,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeNailFiringMachine2()
     {
-        if(!_isNFM2Activated)
+        if(!_isNFM2Activated && _isDartsTrapUnlocked)
         {
             _inventory.RemoveWitts(NFM2WittCost);
             _isNFM2Activated = true;
@@ -178,7 +262,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeElectricTrap1()
     {
-        if(!_isET1Activated)
+        if(!_isET1Activated && _isElectricTrapUnlocked)
         {
             _inventory.RemoveWitts(ET1WittCost);
             _isET1Activated = true;
@@ -191,7 +275,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeElectricTrap2()
     {
-        if(!_isET2Activated)
+        if(!_isET2Activated && _isElectricTrapUnlocked)
         {
             _inventory.RemoveWitts(ET2WittCost);
             _isET2Activated = true;
@@ -204,7 +288,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeSlowTrap1()
     {
-        if(!_isST1Activated)
+        if(!_isST1Activated && _isSlowTrapUnlocked)
         {
             _inventory.RemoveWitts(ST1WittCost);
             _isST1Activated = true;
@@ -217,7 +301,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeSlowTrap2()
     {
-        if(!_isST2Activated)
+        if(!_isST2Activated && _isSlowTrapUnlocked)
         {
             _inventory.RemoveWitts(ST2WittCost);
             _isST2Activated = true;
@@ -230,7 +314,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeMicrowaveTrap1()
     {
-        if(!_isMT1Activated)
+        if(!_isMT1Activated && _isMicrowaveTrapUnlocked)
         {
             _inventory.RemoveWitts(MT1WittCost);
             _isMT1Activated = true;
@@ -243,7 +327,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeMicrowaveTrap2()
     {
-        if(!_isMT2Activated)
+        if(!_isMT2Activated && _isMicrowaveTrapUnlocked)
         {
             _inventory.RemoveWitts(MT2WittCost);
             _isMT2Activated = true;
@@ -256,7 +340,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeMicrowaveTrap3()
     {
-        if(!_isMT3Activated)
+        if(!_isMT3Activated && _isMicrowaveTrapUnlocked)
         {
             _inventory.RemoveWitts(MT3WittCost);
             _isMT3Activated = true;
