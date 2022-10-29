@@ -8,14 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BlueprintMaterial
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _EMISSION
-  m_LightmapFlags: 2
+  m_Shader: {fileID: 4800000, guid: 5500f9b625f4c764a804f2d67fdb27ee, type: 3}
+  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
-  stringTagMap:
-    RenderType: Transparent
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -67,13 +66,19 @@ Material:
     - _Metallic: 0
     - _Mode: 3
     - _OcclusionStrength: 1
+    - _Opacity: 0.3
+    - _Opacity1: 0.25
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 0
+    - __dirty: 0
     m_Colors:
     - _Color: {r: 0.12405309, g: 0.6320754, b: 0.008944447, a: 1}
+    - _Color0: {r: 1, g: 0.0982824, b: 0, a: 0}
     - _EmissionColor: {r: 0.022663964, g: 0.3679245, b: 0, a: 1}
+    - _Tint: {r: 0, g: 1, b: 0.055066347, a: 1}
+    - _TintBlueprintAvailable: {r: 0, g: 1, b: 0.07144809, a: 1}
   m_BuildTextureStacks: []
