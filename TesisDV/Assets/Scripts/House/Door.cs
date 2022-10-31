@@ -11,6 +11,7 @@ public class Door : Item
     private float _valueToChange;
     private NavMeshObstacle _navMeshObstacle;
     private bool IsOpened { get; set; }
+    public bool IsLocked;
     public bool IsFront = false;
     public DoorTrigger[] doorTriggers;
     // Start is called before the first frame update
@@ -18,6 +19,7 @@ public class Door : Item
     {
         _anim = GetComponent<Animator>();
         doorTriggers = GetComponentsInChildren<DoorTrigger>();
+        itemType = ItemType.Interactable;
         //_navMeshObstacle = GetComponent<NavMeshObstacle>();
     }
 
@@ -61,6 +63,14 @@ public class Door : Item
     {
         StopAllCoroutines();
         doorTriggers.Select(x => x).ToList().ForEach(x => x.gameObject.SetActive(false));
+        if (IsLocked)
+        {
+            _anim.SetBool("IsBlocked", true);
+            GameVars.Values.soundManager.PlaySoundAtPoint("LockedDoorTry_" + RandomSound(), transform.position, 0.4f);
+            Invoke("SetBlockedFalse", 0.5f);
+            return;
+        }
+
         if (!IsOpened)
         {
             IsOpened = true;
@@ -76,6 +86,16 @@ public class Door : Item
             StartCoroutine(LerpDoorAnim(0f, 2f));
         }
 
+    }
+
+    private void SetBlockedFalse()
+    {
+        _anim.SetBool("IsBlocked", false);
+    }
+
+    private string RandomSound()
+    {
+        return UnityEngine.Random.Range(1,3).ToString();
     }
 
     public bool GetDoorStatus()
