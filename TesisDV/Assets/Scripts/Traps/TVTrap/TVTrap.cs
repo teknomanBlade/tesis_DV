@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class TVTrap : Item, IMovable
 {
+    public Animator anim;
+    public bool IsTurnOn;
     private bool _canStun;
     private bool _activeOncePerRound;
     private float _timePassed;
@@ -23,14 +25,13 @@ public class TVTrap : Item, IMovable
     private void Awake()
     {
         _as = GetComponent<AudioSource>();
+        anim = GetComponent<Animator>();
         _canStun = true;
         _activeOncePerRound = false;
         _timePassed = _recoveryTime;
         _itemName = "StationaryTVTrap";
         itemType = ItemType.Weapon;
         targetMask = LayerMask.GetMask("Enemy");
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "TvStaticSFX", 0.08f, true);
-
     }
     // Update is called once per frame
     void Update()
@@ -58,6 +59,8 @@ public class TVTrap : Item, IMovable
     public TVTrap SetAddOnGameObject(GameObject batteryAddOn)
     {
         this.batteryAddOn = batteryAddOn;
+        //IsTurnOn = true;
+        //anim.SetBool("IsTurnedOn", true);
         return this;
     }
     public TVTrap SetBlueprint(GameObject batteryBlueprint)
@@ -69,14 +72,37 @@ public class TVTrap : Item, IMovable
     {
         if (!_activeOncePerRound)
         {
+            TurnOff();
             gameObject.AddComponent<StationaryItem>().SetAddOnGameObject(batteryAddOn).SetBlueprint(batteryBlueprint);
             gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = false;
             batteryAddOn.SetActive(false);
             Destroy(gameObject.GetComponent<TVTrap>());
         }
         _activeOncePerRound = true;
-        GameVars.Values.soundManager.StopSound();
+        GameVars.Values.soundManager.StopSound(_as);
     }
+
+    public void TurnOff()
+    {
+        GameVars.Values.soundManager.StopSound(_as);
+        IsTurnOn = false;
+        anim.SetBool("IsTurnedOn", false);
+        CancelInvoke();
+        gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = false;
+    }
+
+    public void TurnOn()
+    {
+        IsTurnOn = true;
+        anim.SetBool("IsTurnedOn", true);
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "TvStaticSFX", 0.08f, true);
+
+        if (GameVars.Values.WaveManager.InRound)
+            Invoke("HideBatteryAddOnForEnergyDepletion", 15f);
+
+        gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = true;
+    }
+
     void OnTriggerEnter(Collider collision)
     {
         Debug.Log("1");

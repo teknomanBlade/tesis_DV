@@ -32,7 +32,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     [SerializeField] private Inventory _inventory;
     public GameObject _weaponGORacket;
     public GameObject _weaponGOBaseballBat;
+    public GameObject _weaponGORemoteControl;
     [SerializeField] private Melee _weapon;
+    [SerializeField] private Remote _remoteControl;
     private GameObject _currentWeaponManager;
     private bool _weaponIsActive = false;
     public string typeFloor { get; private set; }
@@ -179,6 +181,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             {
                 _weapon.SetOwner(this);
                 _weapon.MeleeAttack();
+            }
+
+            if (_inventory != null && (_inventory.ContainsID(14, 1)))
+            {
+                _remoteControl.SetOwner(this);
+                _remoteControl.ActivatableAction();
             }
         }
 
@@ -995,6 +1003,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 _currentWeaponManager = _weaponGOBaseballBat;
                 _weaponGOBaseballBat.SetActive(true);
                 _weapon = _weaponGOBaseballBat.GetComponent<BaseballBat>();
+            }
+            else if (_inventory.ContainsID(14, 1) && !_weaponIsActive)
+            {
+                _weaponIsActive = true;
+                _currentWeaponManager = _weaponGORemoteControl;
+                _weaponGORemoteControl.SetActive(true);
+                _remoteControl = _weaponGORemoteControl.GetComponent<RemoteControl>();
             }
         }
     }
