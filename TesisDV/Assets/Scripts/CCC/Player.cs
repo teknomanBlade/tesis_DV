@@ -450,15 +450,15 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             _canBuildMicrowaveTrap = true;
         }
-        else if(_skillTree.isSlowTrapUnlocked)
+        if(_skillTree.isSlowTrapUnlocked)
         {
             _canBuildSlowTrap = true;
         }
-        else if(_skillTree.isElectricTrapUnlocked)
+        if(_skillTree.isElectricTrapUnlocked)
         {
             _canBuildElectricTrap = true;
         }
-        else if(_skillTree.isDartsTrapUnlocked)
+        if(_skillTree.isDartsTrapUnlocked)
         {
             _canBuildDartsTrap = true;
         }

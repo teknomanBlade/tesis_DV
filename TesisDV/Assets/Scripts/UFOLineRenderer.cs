@@ -15,7 +15,7 @@ public class UFOLineRenderer : MonoBehaviour
         transform.position = owner.transform.position;
         _cat = GameVars.Values.Cat;
 
-        CalculatePath(_cat.transform.position);
+        CalculatePath(_cat.GetStartingPosition());
     }
 
     private void DrawLineRenderer(Vector3[] waypoints) 

@@ -133,6 +133,11 @@ public class Cat : MonoBehaviour
         door.Interact();
     }
 
+    public Vector3 GetStartingPosition()
+    {
+        return _startingPosition;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Equals("StartingPosition"))
