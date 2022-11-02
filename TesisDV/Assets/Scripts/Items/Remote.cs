@@ -7,7 +7,7 @@ public abstract class Remote : MonoBehaviour
     public Animator anim;
     protected AudioSource _as;
     protected Player _player;
-    protected TVTrap _TVTrap;
+    
     protected bool IsAtRange = false;
     // Start is called before the first frame update
     void Start()

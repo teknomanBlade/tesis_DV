@@ -1,9 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RemoteControl : Remote
 {
+    private TVTrap _TVTrap;
+    public TVTrap TVTrap
+    {
+        get { return _TVTrap; }
+        set { _TVTrap = value; }
+    }
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -15,10 +23,18 @@ public class RemoteControl : Remote
     {
         
     }
-
+    IEnumerator TurnOnOff(string param, string name)
+    {
+        anim.SetBool(param, true);
+        var clips = anim.runtimeAnimatorController.animationClips;
+        float time = clips.First(x => x.name == name).length;
+        yield return new WaitForSeconds(time);
+        anim.SetBool(param, false);
+    }
     public override void ActivatableAction()
     {
-        anim.SetBool("IsTurnOnOff", true);
+        StartCoroutine(TurnOnOff("IsTurnOnOff","TurnOffOnTV"));
+        //anim.SetBool("IsTurnOnOff", true);
         if (IsAtRange)
         {
             Debug.Log("TURN ON TV: " + _TVTrap.IsTurnOn);
@@ -31,7 +47,7 @@ public class RemoteControl : Remote
                 _TVTrap?.TurnOn();
             }
         }
-
+        //Invoke("SetIdle", 0.5f);
     }
 
     public void ActiveSound()
@@ -43,8 +59,26 @@ public class RemoteControl : Remote
     {
         anim.SetBool("IsTurnOnOff", false);
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.GetComponent<TVTrap>() != null)
+        {
+            IsAtRange = true;
+            _TVTrap = other.gameObject.GetComponent<TVTrap>();
+            Debug.Log("AT RANGE ENTER: " + IsAtRange);
+        }
+    }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.GetComponent<TVTrap>() != null)
+        {
+            IsAtRange = false;
+            _TVTrap = null;
+            Debug.Log("AT RANGE EXIT: " + IsAtRange);
+        }
+    }
+    /*private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.GetComponent<TVTrap>() != null)
         {
@@ -59,6 +93,6 @@ public class RemoteControl : Remote
             Debug.Log("AT RANGE: " + IsAtRange);
         }
         
-    }
+    }*/
 
 }
