@@ -67,9 +67,9 @@ public class GrayView : MonoBehaviour
         _myAnimator.Play("Hit");
     }
 
-    public void ForceFieldRejectionAnimation()
+    public void ForceFieldRejectionAnimation(bool value)
     {
-        _myAnimator.SetBool("IsFFRejected", true);
+        _myAnimator.SetBool("IsFFRejected", value);
     }
 
     public void CatGrabAnimation(bool value)

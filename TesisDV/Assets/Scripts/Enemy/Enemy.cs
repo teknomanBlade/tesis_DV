@@ -81,7 +81,7 @@ public abstract class Enemy : MonoBehaviour
     #region Events
 
     public event Action<bool> onWalk = delegate { };
-    public event Action onForceFieldRejection = delegate { };
+    public event Action<bool> onForceFieldRejection = delegate { };
     public event Action<bool> onStun = delegate { };
     public event Action<bool> onCatGrab = delegate { };
     public event Action onDeath = delegate { };
@@ -188,7 +188,6 @@ public abstract class Enemy : MonoBehaviour
 
     public void DetectTraps()
     {
-       
         allTargets = Physics.OverlapSphere(transform.position, _trapViewRadius, _trapMask);
 
         if (allTargets.Length == 0 || _currentTrapObjective == null)
@@ -229,8 +228,8 @@ public abstract class Enemy : MonoBehaviour
         if (!isForceFieldRejected)
         {
             Debug.Log("LLEGA A FORCEFIELD REJECTION IF "+ isForceFieldRejected);
-            onForceFieldRejection();
-            onWalk(!isForceFieldRejected);
+            onForceFieldRejection(!isForceFieldRejected);
+            onWalk(isForceFieldRejected);
             isForceFieldRejected = true;
         }
     }
@@ -278,13 +277,12 @@ public abstract class Enemy : MonoBehaviour
             isSpecialAttacking = true; 
             //_currentTrapObjective.GetComponent<BaseballLauncher>().Inactive();
         }
-        if(_currentTrapObjective.GetComponent<Trap>() && _currentTrapObjective.GetComponent<Trap>().active == false) //cambiar el baseballLauncher por clase padre de trampas.
+        if(_currentTrapObjective.GetComponent<Trap>() && _currentTrapObjective.GetComponent<Trap>().active == false)
         {
             foundTrapInPath = false;
             canBeHit = true;
         }
-        /* if(_currentTrapObjective.GetComponent<NailFiringMachine>() && _currentTrapObjective.GetComponent<NailFiringMachine>().active == false) //cambiar el baseballLauncher por clase padre de trampas.
-        {
+        /* if(_currentTrapObjective.GetComponent<NailFiringMachine>() && _currentTrapObjective.GetComponent<NailFiringMachine>().active == false)
             foundTrapInPath = false;
             canBeHit = true;
         } */
@@ -297,8 +295,6 @@ public abstract class Enemy : MonoBehaviour
         onAttackSpecial(isSpecialAttacking);
         //_navMeshAgent.speed = 1; //Se va el navmesh
         onWalk(!isSpecialAttacking);
-        
-
             
         _fsm.ChangeState(EnemyStatesEnum.CatState);
     }
@@ -309,6 +305,14 @@ public abstract class Enemy : MonoBehaviour
         onAttack(isAttacking);
         //_navMeshAgent.speed = 1; //Se va el navmesh
         onWalk(!isAttacking);
+    }
+
+    public void RevertForceFieldRejectBool() //Esto se llama por la animación de ataque.
+    {
+        isForceFieldRejected = false;
+        onForceFieldRejection(isForceFieldRejected);
+        //_navMeshAgent.speed = 1; //Se va el navmesh
+        onWalk(!isForceFieldRejected);
     }
 
     public void GrabCat()

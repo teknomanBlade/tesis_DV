@@ -39,7 +39,7 @@ public class Node : MonoBehaviour
                 //Debug.Log("soy " + this.gameObject +" este es mi vecino + " + node);
             }
         }
-        //return _neighbors;
-        return _neighbours;
+        return _neighbors;
+        //return _neighbours;
     }
 }

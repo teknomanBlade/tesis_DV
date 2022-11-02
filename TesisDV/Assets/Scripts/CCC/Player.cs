@@ -177,7 +177,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire))
         {
-            if (_inventory != null && (_inventory.ContainsID(3, 1) || _inventory.ContainsID(11, 1)) && !IsCrafting) 
+            if (_inventory.ContainsID(3, 1) || _inventory.ContainsID(11, 1) && !IsCrafting) 
             {
                 _weapon.SetOwner(this);
                 _weapon.MeleeAttack();
@@ -192,7 +192,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if (Input.GetKeyDown(GameVars.Values.secondaryFire))
         {
-            if (lookingAt != null && _canMoveTraps)
+            if (lookingAt.gameObject.TryGetComponent<IMovable>(out IMovable aux) && _canMoveTraps)
             {
                 SwitchIsCrafting();
                 MoveTrap();
@@ -660,7 +660,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void LookingAt()
     {
-        
         RaycastHit hit;
         RaycastHit hitResult;
         RaycastHit wallHit;
@@ -694,9 +693,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             lookingAt = null;
             ChangeCrosshair();
         }
-        
-        
-
     }
 
     private void ChangeCrosshair()

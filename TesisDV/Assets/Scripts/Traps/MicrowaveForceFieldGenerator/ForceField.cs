@@ -2,16 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ForceField : MonoBehaviour
+public class ForceField : Trap
 {
     public float Health;
-    // Start is called before the first frame update
     void Awake()
     {
+        active = true;
         Health = 100f;
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -22,6 +21,7 @@ public class ForceField : MonoBehaviour
         Health -= damageAmount;
         if (Health <= 0f)
         {
+            active = false;
             gameObject.SetActive(false);
         }
     }
@@ -31,14 +31,14 @@ public class ForceField : MonoBehaviour
         var gray = other.gameObject.GetComponent<GrayModel>();
         if (gray != null)
         {
-            gray._movingSpeed = 0f;
-            gray.ForceFieldRejection();
+            /* gray._movingSpeed = 0f;
+            gray.ForceFieldRejection(); */
         }
         var grayMelee = other.gameObject.GetComponent<TallGrayModel>();
         if (grayMelee != null)
         {
-            grayMelee._movingSpeed = 0f;
-            grayMelee._fsm.ChangeState(EnemyStatesEnum.AttackTrapState);
+            /* grayMelee._movingSpeed = 0f;
+            grayMelee._fsm.ChangeState(EnemyStatesEnum.AttackTrapState); */
         }
     }
 }
