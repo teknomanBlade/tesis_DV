@@ -8,6 +8,7 @@ public class Blueprint : MonoBehaviour
     RaycastHit hit;
     Vector3 movePoint;
     private bool canBuild;
+    private bool _spendMaterials;
     Vector3 auxVector;
     Vector3 secondAuxVector;
     public CraftingRecipe craftingRecipe;
@@ -120,8 +121,11 @@ public class Blueprint : MonoBehaviour
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, parent.transform);
         //Destroy(aux.GetComponent<InventoryItem>());
 
-        craftingRecipe.RemoveItemsAndWitts(); //Cambiar esto, basarlo en un booleano que se setea en el builder.
-        
+        if(_spendMaterials)
+        {
+            craftingRecipe.RemoveItemsAndWitts(); 
+        }
+
         craftingRecipe.RestoreBuildAmount();
         //Destroy(particlesInstantiated);
         Destroy(gameObject);
@@ -156,5 +160,11 @@ public class Blueprint : MonoBehaviour
     {
         canBuild = true;
         SetOriginalMaterial();
+    }
+
+    public Blueprint SpendMaterials(bool value)
+    {
+        _spendMaterials = value;
+        return this;
     }
 }

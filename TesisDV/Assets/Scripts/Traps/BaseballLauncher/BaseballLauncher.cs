@@ -284,6 +284,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         GameVars.Values.currentShotsTrap1 = shotsLeft;
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
+        aux.GetComponent<StaticBlueprint>().SpendMaterials(false);
         _myTrapBase.ResetBase();
         Destroy(gameObject);
     }

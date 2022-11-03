@@ -117,6 +117,7 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     {
         GameVars.Values.currentShotsTrap2 = shotsLeft;
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
+        aux.GetComponent<StaticBlueprint>().SpendMaterials(false);
         _myTrapBase.ResetBase();
         Destroy(gameObject);
     }

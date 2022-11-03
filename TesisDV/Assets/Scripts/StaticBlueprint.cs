@@ -125,7 +125,10 @@ public class StaticBlueprint : MonoBehaviour
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, _parent.transform);
         //Destroy(aux.GetComponent<InventoryItem>());
 
-        craftingRecipe.RemoveItemsAndWitts(); //Cambiar esto, basarlo en un booleano que se setea en el builder.
+        if(_spendMaterials)
+        {
+            craftingRecipe.RemoveItemsAndWitts();
+        }
         
         craftingRecipe.RestoreBuildAmount();
         //Destroy(particlesInstantiated);
@@ -163,9 +166,9 @@ public class StaticBlueprint : MonoBehaviour
         SetOriginalMaterial();
     }
 
-    public StaticBlueprint SpendMaterials(bool spendMaterials)
+    public StaticBlueprint SpendMaterials(bool value)
     {
-
+        _spendMaterials = value;
         return this;
     }
 }
