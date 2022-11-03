@@ -433,6 +433,7 @@ public abstract class Enemy : MonoBehaviour
     public void SlowDown(float slowAmount)
     {
         //_navMeshAgent.speed -= slowAmount; //Se va el navmesh
+        _movingSpeed -= slowAmount;
     }   
 
     private void DrawLineRenderer(Vector3[] waypoints)  //Esto deberia ir en el view T.T Apenas este todo bien lindo lo cambio
