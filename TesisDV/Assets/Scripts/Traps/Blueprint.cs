@@ -8,6 +8,7 @@ public class Blueprint : MonoBehaviour
     RaycastHit hit;
     Vector3 movePoint;
     private bool canBuild;
+    private bool _canBeCancelled;
     private bool _spendMaterials;
     Vector3 auxVector;
     Vector3 secondAuxVector;
@@ -87,7 +88,7 @@ public class Blueprint : MonoBehaviour
             Destroy(gameObject); */
         }
 
-        if (Input.GetKeyDown(GameVars.Values.secondaryFire))
+        if (Input.GetKeyDown(GameVars.Values.secondaryFire) && _canBeCancelled)
         {
             _player.SwitchIsCrafting();
             Destroy(gameObject);
@@ -107,6 +108,7 @@ public class Blueprint : MonoBehaviour
 
     private IEnumerator BuildTrap()
     {
+        _canBeCancelled = false;
         var particlesInstantiated = Instantiate(particles, transform.position, transform.rotation);
         //myRenderer.enabled = false; //Probar despues de arreglar posicionamiento.
 
@@ -165,6 +167,12 @@ public class Blueprint : MonoBehaviour
     public Blueprint SpendMaterials(bool value)
     {
         _spendMaterials = value;
+        return this;
+    }
+
+    public Blueprint CanBeCancelled(bool value)
+    {
+        _canBeCancelled = value;
         return this;
     }
 }

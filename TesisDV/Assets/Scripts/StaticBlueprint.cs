@@ -9,6 +9,7 @@ public class StaticBlueprint : MonoBehaviour
     private TrapBase _trapBase;
     Vector3 movePoint;
     [SerializeField] private bool canBuild;
+    private bool _canBeCancelled;
     private bool _spendMaterials;
     Vector3 auxVector;
     Vector3 secondAuxVector;
@@ -63,7 +64,7 @@ public class StaticBlueprint : MonoBehaviour
             Destroy(gameObject); */
         }
 
-        if (Input.GetKeyDown(GameVars.Values.secondaryFire))
+        if (Input.GetKeyDown(GameVars.Values.secondaryFire) && _canBeCancelled)
         {
             _player.SwitchIsCrafting();
             Destroy(gameObject);
@@ -111,6 +112,7 @@ public class StaticBlueprint : MonoBehaviour
 
     private IEnumerator BuildTrap()
     {
+        _canBeCancelled = false;
         var particlesInstantiated = Instantiate(particles, transform.position, transform.rotation);
         //myRenderer.enabled = false; //Probar despues de arreglar posicionamiento.
 
@@ -121,7 +123,9 @@ public class StaticBlueprint : MonoBehaviour
         //Canbuild provisional.
         canBuild = false;
         GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
+
         yield return new WaitForSeconds(2f);
+
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, _parent.transform);
         //Destroy(aux.GetComponent<InventoryItem>());
 
@@ -169,6 +173,12 @@ public class StaticBlueprint : MonoBehaviour
     public StaticBlueprint SpendMaterials(bool value)
     {
         _spendMaterials = value;
+        return this;
+    }
+
+    public StaticBlueprint CanBeCancelled(bool value)
+    {
+        _canBeCancelled = value;
         return this;
     }
 }

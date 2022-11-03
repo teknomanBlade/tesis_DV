@@ -82,10 +82,12 @@ using UnityEngine;
                             if(aux.GetComponent<StaticBlueprint>())
                             {
                                 aux.GetComponent<StaticBlueprint>().SpendMaterials(true);
+                                aux.GetComponent<StaticBlueprint>().CanBeCancelled(true);
                             }
                             else
                             {
                                 aux.GetComponent<Blueprint>().SpendMaterials(true);
+                                aux.GetComponent<Blueprint>().CanBeCancelled(true);
                             }
                             
                             aux.transform.eulerAngles = new Vector3(aux.transform.eulerAngles.x, GameVars.Values.GetPlayerCameraRotation(), aux.transform.eulerAngles.z);

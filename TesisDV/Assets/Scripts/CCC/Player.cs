@@ -191,9 +191,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             }
         }
 
-        if (Input.GetKeyDown(GameVars.Values.secondaryFire))
+        if (Input.GetKeyDown(GameVars.Values.secondaryFire) && !IsCrafting)
         {
-            if (lookingAt.gameObject.TryGetComponent<IMovable>(out IMovable aux) && _canMoveTraps)
+            if (lookingAt != null && lookingAt.gameObject.TryGetComponent<IMovable>(out IMovable aux) && _canMoveTraps)
             {
                 SwitchIsCrafting();
                 MoveTrap();
