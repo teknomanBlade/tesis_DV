@@ -201,8 +201,9 @@ public abstract class Enemy : MonoBehaviour
             
             foreach (var item in allTargets)
             {
-                
-                if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance && item.GetComponent<Trap>())
+                RaycastHit hit;
+                Vector3 dir = item.transform.position - transform.position;
+                if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance && item.GetComponent<Trap>() && !Physics.Raycast(transform.position, dir, out hit, dir.magnitude, GameVars.Values.GetWallLayerMask()))
                 {
                     var trap = item.GetComponent<Trap>(); //Después cambiar cuando haya un script Trap.
                     
