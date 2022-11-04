@@ -82,6 +82,8 @@ public class CatState : IState
             {
                 Vector3 dir = myPath[_currentPathWaypoint].transform.position - _enemy.transform.position;
 
+                Vector3 aux = dir;
+                dir = new Vector3 (aux.x ,0f, aux.z);
                 _enemy.transform.forward = dir;
                 _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
 
