@@ -34,6 +34,8 @@ public class ItemSpawner : MonoBehaviour
             case 1:
                     //_firstRoundItems.SetActive(false);
                 _secondRoundItems.SetActive(true);
+                _levelDoors[2].IsLockedToGrays = false;
+                _levelDoors[5].IsLockedToGrays = false;
             break;
             case 2:
                     //_secondRoundItems.SetActive(false);
