@@ -34,12 +34,15 @@ public class ItemSpawner : MonoBehaviour
             case 1:
                     //_firstRoundItems.SetActive(false);
                 _secondRoundItems.SetActive(true);
-                _levelDoors[2].IsLockedToGrays = false;
-                _levelDoors[5].IsLockedToGrays = false;
+                _levelDoors[2].IsLockedToGrays = false; //Puerta de la cocina a atras de la casa.
+                _levelDoors[5].IsLockedToGrays = false; //Puerta de la cocina al living.
             break;
             case 2:
                     //_secondRoundItems.SetActive(false);
                 _thirdRoundItems.SetActive(true);
+                _levelDoors[1].IsLockedToGrays = false; //Puerta del baño al patio.
+                _levelDoors[7].IsLockedToGrays = false; //Puerta del baño al living.
+                _levelDoors[8].IsLockedToGrays = false; //Puerta entre el baño y el patio
             break;
             case 3:
                 _fourthRoundItems.SetActive(true);
