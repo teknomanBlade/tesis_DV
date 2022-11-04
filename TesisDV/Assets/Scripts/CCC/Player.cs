@@ -824,7 +824,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             if (_inventory.ContainsID(2, 1))
             {
-                _inventory.RemoveItemByID(2);
+                _inventory.RemoveItemID(2, 1);
                 stationaryItem.ActiveBatteryComponent();
             }
             else
@@ -888,7 +888,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private void OnBaseballMachineReload()
     {
         if (_inventory.ContainsID(8, 1))
-            _inventory.RemoveItemByID(8);
+            _inventory.RemoveItemID(8, 1);
     }
 
     public void MoveTrap()
