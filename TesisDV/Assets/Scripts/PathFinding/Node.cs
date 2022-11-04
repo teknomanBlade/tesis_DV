@@ -35,7 +35,7 @@ public class Node : MonoBehaviour
             {
                 
             } 
-            else if (Physics.Raycast(cn.transform.position, dir, out itemHit, dir.magnitude, GameVars.Values.GetItemLayerMask()))
+            else if (Physics.Raycast(raycastAux, dir, out itemHit, dir.magnitude, GameVars.Values.GetItemLayerMask()))
             {
                 if(itemHit.collider.GetComponent<Door>())
                 {
