@@ -12,6 +12,7 @@ public class Door : Item
     private NavMeshObstacle _navMeshObstacle;
     private bool IsOpened { get; set; }
     public bool IsLocked;
+    public bool IsLockedToGrays;
     public bool IsFront = false;
     public DoorTrigger[] doorTriggers;
     // Start is called before the first frame update

@@ -84,16 +84,16 @@ public class Cat : MonoBehaviour
 
     public void RepositionBetweenWaves()
     {
-        Vector3 newPos = _myPos[Random.Range(0, 3)];
-        //Vector3 newPos = _myPos[0];
+        //Vector3 newPos = _myPos[Random.Range(0, 3)];
+        Vector3 newPos = _myPos[2];
         if (newPos != _startingPosition)
         {
             _startingPosition = newPos;
         }
         else
         {
-            _startingPosition = _myPos[Random.Range(0, 3)];
-            //_startingPosition = _myPos[0];
+            //_startingPosition = _myPos[Random.Range(0, 3)];
+            _startingPosition = _myPos[2];
         }
 
     }

@@ -393,7 +393,9 @@ public abstract class Enemy : MonoBehaviour
 
     private void OpenDoor(Door door)
     {
+        door.IsLocked = false;
         door.Interact();
+        
         //Refeencia a View donde hace un play de la animacion de abrir la puerta.
 
         //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));

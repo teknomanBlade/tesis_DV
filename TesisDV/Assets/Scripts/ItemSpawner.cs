@@ -11,6 +11,8 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField] private GameObject _fifthRoundItems;
     [SerializeField] private GameObject _sixthRoundItems;
 
+    [SerializeField] private List<Door> _levelDoors = new List<Door>();   //Despues obtendrán las puertas de otra forma, pero para el dia de hoy sirve.
+
     void Start()
     {
         GameVars.Values.WaveManager.OnRoundEnd += SpawnItems;
