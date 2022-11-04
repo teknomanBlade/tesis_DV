@@ -180,14 +180,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             if (_inventory.ContainsID(3, 1) || _inventory.ContainsID(11, 1) && !IsCrafting) 
             {
-                _weapon.SetOwner(this);
-                _weapon.MeleeAttack();
+                _weapon?.SetOwner(this);
+                _weapon?.MeleeAttack();
             }
 
             if (_inventory != null && (_inventory.ContainsID(14, 1)))
             {
-                _remoteControl.SetOwner(this);
-                _remoteControl.ActivatableAction();
+                _remoteControl?.SetOwner(this);
+                _remoteControl?.ActivatableAction();
             }
         }
 
@@ -222,14 +222,15 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if(Input.GetKeyDown(GameVars.Values.inventoryKey) && _craftingScreen.activeInHierarchy)
         {
-            //Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Locked;
             _craftingScreen.SetActive(false);
             _miniMapDisplay.SetActive(true);
         }
         else if(Input.GetKeyDown(GameVars.Values.inventoryKey) && !_craftingScreen.activeInHierarchy)
         {
-            //Cursor.lockState = CursorLockMode.None;
+            //Cursor.lockState = CursorLockMode.Locked;
             _craftingScreen.SetActive(true);
+            _craftingScreen.GetComponent<CraftingScreen>().BTN_PageOne();
             _miniMapDisplay.SetActive(false);
         }
 
@@ -704,6 +705,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(20f);
             return;
         }
+        if (lookingAt.gameObject.TryGetComponent<WorkBenchCraftingMenu>(out WorkBenchCraftingMenu wbCraftingMenu))
+        {
+            crosshair.sprite = GameVars.Values.crosshairWorkbenchCrafting;
+            wbCraftingMenu.SetCraftingMenu(_craftingScreen.GetComponent<CraftingScreen>());
+            ChangeCrosshairSize(40f);
+            return;
+        }
         if (lookingAt.gameObject.TryGetComponent<InventoryItem>(out InventoryItem aux))
         {
             crosshair.sprite = GameVars.Values.crosshairHandGrab;
@@ -792,6 +800,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             InteractWithInventoryItem(aux);
             return;
         }
+        if (lookingAt.gameObject.TryGetComponent<WorkBenchCraftingMenu>(out WorkBenchCraftingMenu wbCraftingMenu))
+        {
+            _craftingScreen.SetActive(true);
+            wbCraftingMenu.OpenCraftingPurchaseMenu();
+            _miniMapDisplay.SetActive(false);
+            return;
+        }
         lookingAt.Interact();
         if (lookingAt.gameObject.TryGetComponent<BaseballLauncher>(out BaseballLauncher auxBL))
         {
@@ -829,18 +844,42 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         if(_inventory.IsThereAnotherWeapon())
         {
-            if(_currentWeaponManager == _weaponGORacket)
+            if(_inventory.ContainsID(11, 1) && _currentWeaponManager == _weaponGORacket)
             {
                 _currentWeaponManager = _weaponGOBaseballBat;
                 _weaponGORacket.SetActive(false);
                 _weapon = _weaponGOBaseballBat.GetComponent<BaseballBat>();
                 _weaponGOBaseballBat.SetActive(true);
             }
-            else if(_currentWeaponManager == _weaponGOBaseballBat)
+            else if(_inventory.ContainsID(3, 1) && _currentWeaponManager == _weaponGOBaseballBat)
             {
                 _currentWeaponManager = _weaponGORacket;
                 _weaponGOBaseballBat.SetActive(false);
                 _weapon = _weaponGORacket.GetComponent<Racket>();
+                _weaponGORacket.SetActive(true);
+            }
+            else if (_inventory.ContainsID(14, 1) && _currentWeaponManager == _weaponGORacket)
+            {
+                _currentWeaponManager = _weaponGORemoteControl;
+                _weaponGORacket.SetActive(false);
+                _remoteControl = _weaponGORemoteControl.GetComponent<RemoteControl>();
+                _weapon = null;
+                _weaponGORemoteControl.SetActive(true);
+            }
+            else if (_inventory.ContainsID(14, 1) && _currentWeaponManager == _weaponGOBaseballBat)
+            {
+                _currentWeaponManager = _weaponGORemoteControl;
+                _weaponGOBaseballBat.SetActive(false);
+                _remoteControl = _weaponGORemoteControl.GetComponent<RemoteControl>();
+                _weapon = null;
+                _weaponGORemoteControl.SetActive(true);
+            }
+            else if (_inventory.ContainsID(3, 1) && _currentWeaponManager == _weaponGORemoteControl)
+            {
+                _currentWeaponManager = _weaponGORacket;
+                _weaponGORemoteControl.SetActive(false);
+                _weapon = _weaponGORacket.GetComponent<Racket>();
+                _remoteControl = null;
                 _weaponGORacket.SetActive(true);
             }
         }
