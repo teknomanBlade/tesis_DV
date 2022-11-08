@@ -41,6 +41,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     
     private AudioSource _audioSource;
     private GameObject _craftingScreen;
+    private CraftingScreen _craftingScreenScript;
     [SerializeField] private GameObject _miniMapDisplay;
     private LevelManager _lm;
     #endregion
@@ -112,7 +113,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private bool _canBuildSlowTrap = false;
     private bool _canBuildElectricTrap = false;
     private bool _canBuildDartsTrap = false;
-    
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -126,6 +126,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _skillTree.OnUpgrade += CheckForUnlocks;
 
         _craftingScreen = GameObject.Find("CraftingContainer");
+        _craftingScreenScript = _craftingScreen.GetComponent<CraftingScreen>();
         _miniMapDisplay = GameObject.Find("MiniMapDisplay");
         //_inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
         _inventory = _craftingScreen.gameObject.GetComponentInChildren<Inventory>();
@@ -175,22 +176,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
          //Cambiar la deteccion para no fijarte cada frame. Ver una mejor forma de detectar cuando tenemos un arma para no tener problema al agregar mas. Hacerlo cada vez que agarramos un item.
 
-
-        if (Input.GetKeyDown(GameVars.Values.primaryFire))
-        {
-            if (_inventory.ContainsID(3, 1) || _inventory.ContainsID(11, 1) && !IsCrafting) 
-            {
-                _weapon?.SetOwner(this);
-                _weapon?.MeleeAttack();
-            }
-
-            if (_inventory != null && (_inventory.ContainsID(14, 1)))
-            {
-                _remoteControl?.SetOwner(this);
-                _remoteControl?.ActivatableAction();
-            }
-        }
-
         if (Input.GetKeyDown(GameVars.Values.secondaryFire) && !IsCrafting)
         {
             if (lookingAt != null && lookingAt.gameObject.TryGetComponent<IMovable>(out IMovable aux) && _canMoveTraps)
@@ -224,13 +209,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             Cursor.lockState = CursorLockMode.Locked;
             _craftingScreen.SetActive(false);
+            _craftingScreenScript.IsWorkbenchScreenOpened = false;
             _miniMapDisplay.SetActive(true);
         }
         else if(Input.GetKeyDown(GameVars.Values.inventoryKey) && !_craftingScreen.activeInHierarchy)
         {
             //Cursor.lockState = CursorLockMode.Locked;
             _craftingScreen.SetActive(true);
-            _craftingScreen.GetComponent<CraftingScreen>().BTN_PageOne();
+            _craftingScreenScript.BTN_PageOne();
             _miniMapDisplay.SetActive(false);
         }
 
@@ -248,33 +234,62 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         //        contextualMenuScript.ActivatePanelTrap2();
         //    }
         //}
-
-        if (Input.GetKeyDown(KeyCode.Alpha1) && !IsCrafting)
+        if (!_craftingScreenScript.IsWorkbenchScreenOpened)
         {
-            GameVars.Values.BaseballLauncher.Craft(_inventory);
+            if (Input.GetKeyDown(GameVars.Values.primaryFire))
+            {
+                if (_inventory.ContainsID(3, 1) || _inventory.ContainsID(11, 1) && !IsCrafting)
+                {
+                    _weapon?.SetOwner(this);
+                    _weapon?.MeleeAttack();
+                }
+
+                if (_inventory != null && (_inventory.ContainsID(14, 1)))
+                {
+                    _remoteControl?.SetOwner(this);
+                    _remoteControl?.ActivatableAction();
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1) && !IsCrafting)
+            {
+                GameVars.Values.BaseballLauncher.Craft(_inventory);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting && _canBuildMicrowaveTrap)
+            {
+                GameVars.Values.MicrowaveForceFieldGenerator.Craft(_inventory);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting && _canBuildSlowTrap)
+            {
+                GameVars.Values.SlowTrap.Craft(_inventory);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting && _canBuildDartsTrap)
+            {
+                GameVars.Values.NailFiringMachine.Craft(_inventory);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting && _canBuildElectricTrap)
+            {
+                GameVars.Values.ElectricTrap.Craft(_inventory);
+            }
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                SwitchWeapon();
+            }
+            if (isGrounded)
+            {
+                if (Input.GetKeyDown(GameVars.Values.jumpKey) && !jumpOnCooldown) Jump();
+            }
+            else
+            {
+                _rb.velocity -= new Vector3(0f, 9.8f * Time.deltaTime, 0f);
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting && _canBuildMicrowaveTrap)
-        {
-            GameVars.Values.MicrowaveForceFieldGenerator.Craft(_inventory);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting && _canBuildSlowTrap)
-        {
-            GameVars.Values.SlowTrap.Craft(_inventory);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting && _canBuildDartsTrap)
-        {
-            GameVars.Values.NailFiringMachine.Craft(_inventory);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting && _canBuildElectricTrap)
-        {
-            GameVars.Values.ElectricTrap.Craft(_inventory);
-        }
-
-        if(Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
         {
             var screenPause = Instantiate(Resources.Load<ScreenPause>("PauseCanvas"));
             ScreenManager.Instance.Push(screenPause);
@@ -282,33 +297,26 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             _rb.isKinematic = true;
         }
 
-        if(Input.GetKeyDown(KeyCode.H))
-        {
-            SwitchWeapon();
-        }
+        
 
         //if (Input.GetKeyDown(GameVars.Values.dropKey))
         //{
         //    _inventory.DropItem();
         //}
 
-        if (isGrounded)
-        {
-            if (Input.GetKeyDown(GameVars.Values.jumpKey) && !jumpOnCooldown) Jump();
-        }
-        else
-        {
-            _rb.velocity -= new Vector3(0f, 9.8f * Time.deltaTime, 0f);
-        }
+        
         
     }
 
     private void FixedUpdate()
-    {  
-        if (canMoveCamera) Camera();
-        LookingForPlacement();
+    {
+        if (!_craftingScreenScript.IsWorkbenchScreenOpened)
+        {
+            if (canMoveCamera) Camera();
+            LookingForPlacement();
 
-        Walk(); 
+            Walk();
+        }
     }
     
     public void ActiveDamageEffect()

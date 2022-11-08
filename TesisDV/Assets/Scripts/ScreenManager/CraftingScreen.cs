@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class CraftingScreen : MonoBehaviour, IScreen
     public GameObject InventoryAndTrapDescriptions;
     public GameObject TrapProgressionSystem;
     public Scrollbar ScrollBarVertical;
+    public Button closeScreen;
+    public bool IsWorkbenchScreenOpened { get; set; }
     //public Button BTNPage1;
     //public Button BTNPage2;
 
@@ -58,8 +61,17 @@ public class CraftingScreen : MonoBehaviour, IScreen
         ScreenManager.Instance.Pop();
     }
 
+    public void CloseScreen()
+    {
+        Debug.Log("HACE CLICK?");
+        IsWorkbenchScreenOpened = false;
+        gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     public void BTN_PageOne()
     {
+        IsWorkbenchScreenOpened = false;
         //Cursor.lockState = CursorLockMode.Confined;
         TrapProgressionSystem.SetActive(false);
         InventoryAndTrapDescriptions.SetActive(true);
@@ -70,7 +82,7 @@ public class CraftingScreen : MonoBehaviour, IScreen
     public void BTN_PageTwo()
     {
         Cursor.lockState = CursorLockMode.Confined;
-        //HandleScrollVertical.
+        IsWorkbenchScreenOpened = true;
         TrapProgressionSystem.SetActive(true);
         InventoryAndTrapDescriptions.SetActive(false);
         //BTNPage1.interactable = true;
