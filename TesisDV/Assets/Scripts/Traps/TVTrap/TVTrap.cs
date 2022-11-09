@@ -14,6 +14,7 @@ public class TVTrap : Item, IMovable
     public GameObject batteryAddOn;
     public GameObject batteryBlueprint;
     public GameObject blueprintPrefab;
+    public GameObject TVLight;
     [SerializeField]
     private LayerMask targetMask;
     private AudioSource _as;
@@ -32,6 +33,7 @@ public class TVTrap : Item, IMovable
         _itemName = "StationaryTVTrap";
         itemType = ItemType.Weapon;
         targetMask = LayerMask.GetMask("Enemy");
+        TVLight = transform.GetChild(2).gameObject;
     }
     // Update is called once per frame
     void Update()
@@ -86,6 +88,7 @@ public class TVTrap : Item, IMovable
     {
         GameVars.Values.soundManager.StopSound(_as);
         IsTurnOn = false;
+        TVLight.SetActive(false);
         anim.SetBool("IsTurnedOn", false);
         CancelInvoke();
         gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = false;
@@ -94,6 +97,7 @@ public class TVTrap : Item, IMovable
     public void TurnOn()
     {
         IsTurnOn = true;
+        TVLight.SetActive(true);
         anim.SetBool("IsTurnedOn", true);
         GameVars.Values.soundManager.PlaySoundOnce(_as, "TvStaticSFX", 0.08f, true);
 
