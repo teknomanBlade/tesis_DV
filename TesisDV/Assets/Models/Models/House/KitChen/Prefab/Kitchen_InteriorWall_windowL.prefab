@@ -11,7 +11,10 @@ GameObject:
   - component: {fileID: 882008205002014091}
   - component: {fileID: 4292597158329250350}
   - component: {fileID: 2051012595355223780}
-  m_Layer: 0
+  - component: {fileID: 8161387900758987201}
+  - component: {fileID: 6499718941341232181}
+  - component: {fileID: 2501843853530108778}
+  m_Layer: 16
   m_Name: Kitchen_InteriorWall_windowL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,3 +84,42 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8161387900758987201
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537711104486254385}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3647904, y: 5.000002, z: 1.5947351}
+  m_Center: {x: -0.11671432, y: 0.000002861023, z: 2.7015553}
+--- !u!65 &6499718941341232181
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537711104486254385}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3647904, y: 0.4502483, z: 6.9978356}
+  m_Center: {x: -0.11671385, y: -2.274879, z: -6.817212e-15}
+--- !u!65 &2501843853530108778
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537711104486254385}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3647904, y: 0.42614633, z: 6.9978356}
+  m_Center: {x: -0.116714045, y: 2.2869556, z: 1.138768e-14}
