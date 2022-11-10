@@ -70,8 +70,8 @@ public class ProtectState : IState
         {
             
         } */
-
-        if(myPath != null && Physics.Raycast(_enemy.transform.position, targetDir, out hit, targetDir.magnitude, GameVars.Values.GetWallLayerMask()))
+                                                                                                                    //usamos obstacle mask ahora.
+        if(myPath != null && Physics.Raycast(_enemy.transform.position, targetDir, out hit, targetDir.magnitude, _enemy.obstacleMask))
         {
             if(myPath.Count >= 1)
             {

@@ -75,8 +75,8 @@ public class CatState : IState
 
         RaycastHit hit;
         Vector3 catDir = _enemy._cat.transform.position - _enemy.transform.position;
-        Vector3 moveDir;
-        if(myPath != null && Physics.Raycast(_enemy.transform.position, catDir, out hit, catDir.magnitude, GameVars.Values.GetWallLayerMask()) == true || Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) >= 5)
+        Vector3 moveDir;                                                                               //Usamos obstacle mask ahora.
+        if(myPath != null && Physics.Raycast(_enemy.transform.position, catDir, out hit, catDir.magnitude, _enemy.obstacleMask) == true || Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) >= 5)
         {
             if(myPath.Count >= 1)
             {

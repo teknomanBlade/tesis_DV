@@ -42,8 +42,8 @@ public class EscapeState : IState
         if (_enemy.hasObjective) _enemy.EscapeWithCat(); //En teoría que esto sea un if ahora no tiene sentido porque siempre va a ser true, despues lo saco y pruebo.
 
         RaycastHit hit;
-        Vector3 escapeDir = _enemy._exitPos - _enemy.transform.position;
-        if(myPath != null  && Physics.Raycast(_enemy.transform.position, escapeDir, out hit, escapeDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
+        Vector3 escapeDir = _enemy._exitPos - _enemy.transform.position;                                            //usamos obstacle mask ahora.
+        if(myPath != null  && Physics.Raycast(_enemy.transform.position, escapeDir, out hit, escapeDir.magnitude, _enemy.obstacleMask) == true)
         {
             if(myPath.Count >= 1)
             {

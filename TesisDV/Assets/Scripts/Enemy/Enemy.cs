@@ -69,7 +69,8 @@ public abstract class Enemy : MonoBehaviour
     
     public Pathfinding _pf;
     public PathfindingManager _pfManager;
-    public List<Node> Path = new List<Node>(); 
+    public List<Node> Path = new List<Node>();
+    [SerializeField] public LayerMask obstacleMask; 
 
     #endregion 
 
