@@ -14,6 +14,7 @@ public class ObstacleDetector : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         var door = other.GetComponent<Door>();
+        var forceField = other.GetComponent<ForceField>();
         //var bTrap = other.GetComponent<BaseballLauncher>(); //Después cambiar cuando haya un script Trap.
         //Se usa el OverlapSphere del Gray para detectar trampas. Esto se usa para las puertas.
 
@@ -23,9 +24,10 @@ public class ObstacleDetector : MonoBehaviour
             //_myOwner.GetDoor(other.GetComponent<Door>());
             _myOwner.GetDoor(other.GetComponent<Door>());
         }
-        //else if (bTrap && other.GetComponent<BaseballLauncher>())
-        //{
-            //_myOwner.FoundTrapInPath(other.GetComponent<BaseballLauncher>().gameObject);
-        //}
+
+        else if (forceField && other.GetComponent<ForceField>() && !_myOwner.hasObjective)
+        {
+            _myOwner._fsm.ChangeState(EnemyStatesEnum.AttackTrapState);
+        }
     }
 }

@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class ForceField : Trap
 {
-    public float Health;
+    [SerializeField] private float Health;
+    [SerializeField] private MicrowaveForceFieldGenerator _myOwner;
     void Awake()
     {
+        _myOwner = transform.parent.GetComponent<MicrowaveForceFieldGenerator>();
         active = true;
-        Health = 100f;
-    }
-
-    void Update()
-    {
-        
+        Health = 20f;
     }
 
     public void TakeDamage(float damageAmount)
@@ -22,6 +19,7 @@ public class ForceField : Trap
         if (Health <= 0f)
         {
             active = false;
+            _myOwner.Inactive();
             gameObject.SetActive(false);
         }
     }

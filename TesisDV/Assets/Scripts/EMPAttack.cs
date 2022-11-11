@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class EMPAttack : MonoBehaviour
 {
-    [SerializeField]
-    private GrayModel _myOwner;
+    [SerializeField] private GrayModel _myOwner;
+    [SerializeField] private float _damageAmount;
     //[SerializeField] private int _damageAmount;
 
     void OnTriggerEnter(Collider other)
@@ -31,6 +31,11 @@ public class EMPAttack : MonoBehaviour
         {
             other.GetComponent<Trap>().Inactive();
             _myOwner.RevertSpecialAttackBool();
+        }
+
+        if (trap && other.GetComponent<ForceField>())
+        {
+            other.GetComponent<ForceField>().TakeDamage(_damageAmount);
         }
     }
 }

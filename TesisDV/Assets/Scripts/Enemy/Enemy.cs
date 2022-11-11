@@ -224,6 +224,7 @@ public abstract class Enemy : MonoBehaviour
         }
         
     }
+
     public void ForceFieldRejection()
     {
         Debug.Log("LLEGA A FORCEFIELD REJECTION");
@@ -283,6 +284,7 @@ public abstract class Enemy : MonoBehaviour
         {
             foundTrapInPath = false;
             canBeHit = true;
+            RevertSpecialAttackBool();
         }
         /* if(_currentTrapObjective.GetComponent<NailFiringMachine>() && _currentTrapObjective.GetComponent<NailFiringMachine>().active == false)
             foundTrapInPath = false;
