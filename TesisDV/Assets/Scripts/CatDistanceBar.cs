@@ -15,6 +15,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     public GameObject Fill;
     public Text GraysAmountPerWaveText;
     public Text WittsAmountText;
+    public Text WittsAmountTextUpdatesPurchase;
     public Animator GraysAmountPerWaveTextAnim { get; private set; }
     public Text RoundText;
     public Text RestWaveTimeText;
@@ -71,6 +72,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     private void WittsAmountChanged(int newVal)
     {
         WittsAmountText.text = "X " + newVal;
+        WittsAmountTextUpdatesPurchase.text = "X " + newVal;
         //Aplicar animación.
     }
 

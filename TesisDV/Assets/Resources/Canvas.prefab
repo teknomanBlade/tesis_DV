@@ -5234,6 +5234,7 @@ MonoBehaviour:
   Fill: {fileID: 3740518843486398654}
   GraysAmountPerWaveText: {fileID: 0}
   WittsAmountText: {fileID: 2453312568678032230}
+  WittsAmountTextUpdatesPurchase: {fileID: 2276740089090851776}
   RoundText: {fileID: 0}
   RestWaveTimeText: {fileID: 0}
 --- !u!1 &3740518843646807093
@@ -6030,6 +6031,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3740518842050205187}
     m_Modifications:
+    - target: {fileID: 429028503487718451, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 429028503487718451, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 429028503487718451, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 964673239979260711, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 670.4424
+      objectReference: {fileID: 0}
+    - target: {fileID: 964673239979260711, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -427.02472
+      objectReference: {fileID: 0}
+    - target: {fileID: 3144084598510728737, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_Size
+      value: 0.21558858
+      objectReference: {fileID: 0}
+    - target: {fileID: 4051338390101894988, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4051338390101894988, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5466993242151055038, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
       propertyPath: m_Name
       value: CraftingContainer
@@ -6118,6 +6151,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6986942087693086695, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986942087693086695, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529253783339022552, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 779
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529253783339022552, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -436
+      objectReference: {fileID: 0}
+    - target: {fileID: 8716831799186294829, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_Name
+      value: TxtWittsAmountProgressionSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 9061958943879983165, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9061958943879983165, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9061958943879983165, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
 --- !u!224 &8662207083748878284 stripped
@@ -6125,3 +6190,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5466993242151055039, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
   m_PrefabInstance: {fileID: 3740518842425051507}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2276740089090851776 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3202170513749199539, guid: 80672fbde7f749640ac6bdf8869ff498, type: 3}
+  m_PrefabInstance: {fileID: 3740518842425051507}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
