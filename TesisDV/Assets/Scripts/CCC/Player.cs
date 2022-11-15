@@ -733,7 +733,21 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(40f);
             return;
         }
-        
+
+        if (lookingAt.gameObject.TryGetComponent<FootLocker>(out FootLocker fl))
+        {
+            crosshair.sprite = GameVars.Values.crosshairHandHold;
+            ChangeCrosshairSize(40f);
+            return;
+        }
+
+        if (lookingAt.gameObject.TryGetComponent<Letter>(out Letter letter))
+        {
+            crosshair.sprite = GameVars.Values.crosshairHandGrab;
+            ChangeCrosshairSize(40f);
+            return;
+        }
+
         if (lookingAt.gameObject.TryGetComponent<Door>(out Door aux1))
         {
             crosshair.sprite = GameVars.Values.crosshairDoor;
