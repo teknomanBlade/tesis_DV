@@ -10,6 +10,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] List<InventoryItem> items;
     [SerializeField] Slot[] itemSlots;
     [SerializeField] WeaponSlot[] weaponSlots;
+    private int _currentWeaponIndex = 0;
     [SerializeField] private CanvasGroup _myCanvasGroup;   
     [SerializeField] private int _wittsAmount;    
     private float fadeDelay = 1.1f;
@@ -298,14 +299,51 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        if(number >= 2)
+        if(number >= 2) //Hay mas de dos armas.
         {
             return true;
         }
-        else
+        else //Solo hay 1 arma.
         {
             return false;
         } 
+    }
+
+    public int GetNextWeapon()
+    {
+        int numberOfWeapons = 0;
+
+        for(int i = 0; i < weaponSlots.Length; i++)
+        {
+            if(!weaponSlots[i].IsFree())
+            {
+                numberOfWeapons++;
+            }
+        }
+
+        if(numberOfWeapons >= 2) //Hay mas de dos armas.
+        {
+            if(_currentWeaponIndex + 1 < weaponSlots.Length)
+            {
+                _currentWeaponIndex ++;
+                Debug.Log(weaponSlots[_currentWeaponIndex].GetItemID());
+                return weaponSlots[_currentWeaponIndex].GetItemID();
+                
+            }
+            else
+            {
+                _currentWeaponIndex = 0;
+                //Debug.Log(weaponSlots[_currentWeaponIndex].GetItemID());
+                return weaponSlots[_currentWeaponIndex].GetItemID();
+            }
+            //return true;
+        }
+        else
+        {
+            Debug.Log("soy un cornudo");
+            return 0;
+            
+        }
     }
 
     public void Fade()

@@ -86,6 +86,11 @@ public class WeaponSlot : MonoBehaviour
         _itemID = itemID;
     }
 
+    public int GetItemID()
+    {
+        return _itemID;
+    }
+
     public void DropItem()
     {
         //Primer metodo: Instanciar.

@@ -864,7 +864,39 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void SwitchWeapon()
     {
-        if(_inventory.IsThereAnotherWeapon())
+        int weaponID = _inventory.GetNextWeapon();
+        if(weaponID != 0)
+        {
+
+            Debug.Log("entro aca");
+            if(weaponID == 11)
+            {
+                Debug.Log("entro a bat");
+                _currentWeaponManager.SetActive(false);
+                _currentWeaponManager = _weaponGOBaseballBat;
+                _weapon = _weaponGOBaseballBat.GetComponent<BaseballBat>();
+                _weaponGOBaseballBat.SetActive(true);
+            }
+            else if(weaponID == 3)
+            {
+                Debug.Log("entro a racket");
+                _currentWeaponManager.SetActive(false);
+                _currentWeaponManager = _weaponGORacket;
+                _weapon = _weaponGORacket.GetComponent<Racket>();
+                _weaponGORacket.SetActive(true);
+            }
+            else if(weaponID == 14)
+            {
+                Debug.Log("entro a remotecontrol");
+                _currentWeaponManager.SetActive(false);
+                _currentWeaponManager = _weaponGORemoteControl;
+                _remoteControl = _weaponGORemoteControl.GetComponent<RemoteControl>();
+                _weapon = null;
+                _weaponGORemoteControl.SetActive(true);
+            }
+        }
+        
+        /* if(_inventory.IsThereAnotherWeapon())
         {
             if(_inventory.ContainsID(11, 1) && _currentWeaponManager == _weaponGORacket)
             {
@@ -904,7 +936,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 _remoteControl = null;
                 _weaponGORacket.SetActive(true);
             }
-        }
+        } */
     }
 
     private void OnBaseballMachineReload()

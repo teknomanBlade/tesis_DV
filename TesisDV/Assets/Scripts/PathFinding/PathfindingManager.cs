@@ -22,7 +22,7 @@ public class PathfindingManager : MonoBehaviour
     public void AddNodes(Node node)
     {
         nodes.Add(node);
-        Debug.Log("Node added");
+        //Debug.Log("Node added");
     }
 
     public Node GetStartNode(Transform position) 
