@@ -8,7 +8,7 @@ public class Letter : Item
     [SerializeField]
     private GameObject letterCanvas;
     private bool IsOpened { get; set; }
-    // Start is called before the first frame update
+
     void Awake()
     {
         IsOpened = true;
@@ -16,19 +16,17 @@ public class Letter : Item
         itemType = ItemType.Interactable;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ShowLetter()
     {
-        letterCanvas.SetActive(true);
+        //letterCanvas.SetActive(true);
+
+        var screenLetter = Instantiate(Resources.Load<LetterScreen>("LetterCanvas"));
+        screenLetter.OnCloseLetterEvent += Interact;
+        ScreenManager.Instance.Push(screenLetter);
     }
     public void HideLetter()
     {
-        letterCanvas.SetActive(false);
+        //letterCanvas.SetActive(false);
     }
 
     public override void Interact()
