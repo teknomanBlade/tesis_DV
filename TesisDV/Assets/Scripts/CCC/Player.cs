@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
@@ -188,6 +189,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     MoveTrap();
                 }
             }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            FindObjectsOfType<Door>().ToList().ForEach(x => { x.IsLocked = false; });
+        }
 
             if (Input.GetKeyDown(KeyCode.Return) && _canStartNextWave)
             {
