@@ -20,7 +20,14 @@ public class PlayerCamera : MonoBehaviour
     private float _amplitude = 0.005f;
     private float _frequency = 10.0f;
     private float _valueToChange;
-
+    [SerializeField] private float _stunDuration;
+    private float _passedTime;
+    private bool _isStunned = false;
+    [SerializeField] private float _stunXAmplitude;
+    [SerializeField] private float _stunYAmplitude;
+    [SerializeField] private float _stunXFrequency;
+    [SerializeField] private float _stunYFrequency;
+ 
     private void Awake()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -29,15 +36,40 @@ public class PlayerCamera : MonoBehaviour
         Camera = _camera;
         Animator = Camera.GetComponent<Animator>();
         SetInitPos(_camera.transform.localPosition);
+        _passedTime = _stunDuration;
     }
 
     private void LateUpdate()
     {
-        CheckMotion();
-        ResetPosition();
+        if(!_isStunned)
+        {
+            CheckMotion();
+            ResetPosition();
 
-        transform.position = Vector3.Lerp(transform.position, _player.transform.position + offset, smoothing * Time.deltaTime);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetAngle, smoothing * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, _player.transform.position + offset, smoothing * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetAngle, smoothing * Time.deltaTime);
+        }
+        else
+        {
+            
+            if(_passedTime > 0)
+            {
+                _passedTime -= Time.deltaTime;
+                PlayMotion(StunnedMotion());
+            }
+            else
+            {
+                RecoverPlayer();
+                SwitchStunnedState();
+                _passedTime = _stunDuration;
+            }
+            
+            /* Vector3 dir = Vector3.down - transform.position;
+            Quaternion lookRotation = Quaternion.LookRotation(dir);
+            Vector3 rotation = lookRotation.eulerAngles;
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, rotation.y, 0f), _stunRotationSpeed * Time.deltaTime); */
+        }
     }
 
     public Vector3 GetForward()
@@ -65,6 +97,14 @@ public class PlayerCamera : MonoBehaviour
         Vector3 pos = Vector3.zero;
         pos.y += Mathf.Sin(Time.time * _frequency) * _amplitude;
         pos.x += Mathf.Cos(Time.time * _frequency / 2) * _amplitude * 2;
+        return pos;
+    }
+
+    private Vector3 StunnedMotion()
+    {
+        Vector3 pos = Vector3.zero;
+        pos.y += Mathf.Sin(Time.time * _stunYFrequency) * _stunYAmplitude;
+        pos.x += Mathf.Cos(Time.time * _stunXFrequency / 2) * _stunXAmplitude * 2;
         return pos;
     }
 
@@ -123,6 +163,24 @@ public class PlayerCamera : MonoBehaviour
         }
 
     }
+
+    public void SwitchStunnedState()
+    {
+        if(!_isStunned)
+        {
+            _isStunned = true;
+        }
+        else
+        {
+            _isStunned = false;
+        }
+    }
+
+    public void RecoverPlayer()//Se activa con evento en animacion de NotStunned.
+    {
+        _player.Recover();
+    }
+
     public void SetInitPos(Vector3 newPos)
     {
         _initPos = newPos;

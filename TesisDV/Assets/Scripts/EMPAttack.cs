@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EMPAttack : MonoBehaviour
 {
-    [SerializeField] private GrayModel _myOwner;
+    [SerializeField] private Enemy _myOwner;
     [SerializeField] private float _damageAmount;
     //[SerializeField] private int _damageAmount;
 

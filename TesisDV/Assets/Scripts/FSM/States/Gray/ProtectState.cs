@@ -41,7 +41,7 @@ public class ProtectState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.CatState);
         }
-        if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold) //Agregar Raycast para ver al player
+        if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold && _enemy._player.isAlive) //Agregar Raycast para ver al player
         {
             _fsm.ChangeState(EnemyStatesEnum.ChaseState);
         }

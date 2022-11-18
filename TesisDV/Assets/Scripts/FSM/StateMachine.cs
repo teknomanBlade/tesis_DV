@@ -6,12 +6,15 @@ public enum EnemyStatesEnum
 {
     ChaseState,
     CatState,
+    PlayerState,
     AttackPlayerState,
     ChaseTrapState,
     AttackTrapState,
     EscapeState,
     ProtectState,
-    PathfindingState
+    PathfindingState,
+    TallGrayAttackState,
+    TallGrayEscapeState
 }
 
 public class StateMachine

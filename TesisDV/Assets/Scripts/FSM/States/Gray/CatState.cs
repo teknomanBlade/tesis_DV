@@ -30,7 +30,7 @@ public class CatState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.ProtectState);
         }
-        else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold) //Agregar Raycast para ver al player
+        else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold && _enemy._player.isAlive) //Agregar Raycast para ver al player
         {
             _fsm.ChangeState(EnemyStatesEnum.ChaseState);
         }
@@ -61,7 +61,7 @@ public class CatState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.ProtectState);
         }
-        else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold) //Agregar Raycast para ver al player
+        else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold && _enemy._player.isAlive) //Agregar Raycast para ver al player
         {
             _fsm.ChangeState(EnemyStatesEnum.ChaseState);
         }

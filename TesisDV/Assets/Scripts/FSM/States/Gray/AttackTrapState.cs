@@ -15,7 +15,7 @@ public class AttackTrapState : IState
 
     public void OnStart()
     {
-        Debug.Log("Entre a Patrol");
+        Debug.Log("Entre a AttackTrapState");
     }
     public void OnUpdate()
     {
@@ -31,6 +31,6 @@ public class AttackTrapState : IState
     }
     public void OnExit()
     {
-        Debug.Log("Sali de Patrol");
+        Debug.Log("Sali de AttackTrapState");
     }
 }

@@ -39,14 +39,14 @@ public class Node : MonoBehaviour
             {
                 if(itemHit.collider.GetComponent<Door>())
                 {
-                    Debug.Log("Soy una puerta "+ itemHit.collider.gameObject);
+                    //Debug.Log("Soy una puerta "+ itemHit.collider.gameObject);
                     if(itemHit.collider.GetComponent<Door>().IsLockedToGrays)
                     {
-                        Debug.Log("Estoy cerrada " + itemHit.collider.gameObject.name + itemHit.collider.GetComponent<Door>().IsLocked + ("soy " + this.gameObject.name + ("mi vecino es " + node.gameObject.name)));
+                        //Debug.Log("Estoy cerrada " + itemHit.collider.gameObject.name + itemHit.collider.GetComponent<Door>().IsLocked + ("soy " + this.gameObject.name + ("mi vecino es " + node.gameObject.name)));
                     }
                     else
                     {
-                        Debug.Log("Estoy abierta " + itemHit.collider.gameObject.name + itemHit.collider.GetComponent<Door>().IsLocked + ("soy " + this.gameObject.name + ("mi vecino es " + node.gameObject.name)));
+                        //Debug.Log("Estoy abierta " + itemHit.collider.gameObject.name + itemHit.collider.GetComponent<Door>().IsLocked + ("soy " + this.gameObject.name + ("mi vecino es " + node.gameObject.name)));
                         if(node != cn && Vector3.Distance(cn.transform.position, node.transform.position) <= 20)
                         {
                             _neighbors.Add(node);
@@ -63,7 +63,7 @@ public class Node : MonoBehaviour
                 {
                     _neighbors.Add(node);
                 }
-                Debug.Log("soy " + this.gameObject.name + "y agregue a " + node.gameObject.name);
+                //Debug.Log("soy " + this.gameObject.name + "y agregue a " + node.gameObject.name);
             }
         }
         return _neighbors;

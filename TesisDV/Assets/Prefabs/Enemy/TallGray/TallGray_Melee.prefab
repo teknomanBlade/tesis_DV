@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a300785d5532b3c44babc4f1297219d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myOwner: {fileID: 0}
+  _myOwner: {fileID: -3214199489047620312}
   _damageAmount: 2
 --- !u!1 &582609958653938691
 GameObject:
@@ -7203,7 +7203,6 @@ GameObject:
   - component: {fileID: 8704686938908094390}
   - component: {fileID: 8704686938908094389}
   - component: {fileID: 8704686938908094384}
-  - component: {fileID: 8704686938908094391}
   - component: {fileID: -3214199489047620312}
   - component: {fileID: 5700644261775503027}
   m_Layer: 12
@@ -7379,28 +7378,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!195 &8704686938908094391
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8362106399002743523}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.14
-  m_Speed: 2
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 0.78
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &-3214199489047620312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7446,7 +7423,7 @@ MonoBehaviour:
   Path: []
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 4259840
+    m_Bits: 54592448
   protectDistance: 3
   _target: {fileID: 0}
   _circlePos: {x: 0, y: 0, z: 0}

@@ -7,7 +7,6 @@ using UnityEngine.AI;
 
 public class TallGrayModel : Enemy
 {
-    
     IController _myController;
     
     MiniMap miniMap;
@@ -18,13 +17,8 @@ public class TallGrayModel : Enemy
         _fsm = new StateMachine();
         _pf = new Pathfinding();
         
-        _fsm.AddState(EnemyStatesEnum.CatState, new CatState(_fsm, this, _pf));
-        _fsm.AddState(EnemyStatesEnum.ChaseState, new ChaseState(_fsm, this));
-        _fsm.AddState(EnemyStatesEnum.AttackPlayerState, new AttackPlayerState(_fsm, this));
-        _fsm.AddState(EnemyStatesEnum.ChaseTrapState, new ChaseTrapState(_fsm ,this));
-        _fsm.AddState(EnemyStatesEnum.AttackTrapState, new AttackTrapState(_fsm, this));
-        _fsm.AddState(EnemyStatesEnum.EscapeState, new EscapeState(_fsm, this, _pf));
-        _fsm.AddState(EnemyStatesEnum.ProtectState, new ProtectState(_fsm, this, _pf));
+        _fsm.AddState(EnemyStatesEnum.PlayerState, new PlayerState(_fsm, this, _pf));
+        _fsm.AddState(EnemyStatesEnum.TallGrayAttackState, new TallGrayAttackState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.PathfindingState, new PathfindingState(_fsm, this, _pf));
     }
 
@@ -47,7 +41,7 @@ public class TallGrayModel : Enemy
         miniMap.grays.Add(this); // Cambiar a GrayModel
         miniMap.AddLineRenderer(lineRenderer);
 
-        _fsm.ChangeState(EnemyStatesEnum.CatState); //Cambiar estado siempre al final del Start para tener las referencias ya asignadas.
+        _fsm.ChangeState(EnemyStatesEnum.PlayerState); //Cambiar estado siempre al final del Start para tener las referencias ya asignadas.
 
         ReferenceEvent(true);//Referencia al Onwalk
     }

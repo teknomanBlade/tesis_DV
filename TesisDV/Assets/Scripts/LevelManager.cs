@@ -101,7 +101,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         //canSpawn = !enemyHasObjective;
         AmountEnemiesInScene = enemiesInScene.Count;
         //No se checkea en update.
-        if (_player.isDead) LoseGame();
+        //if (_player.isDead) LoseGame();
 
         /* if (playing)
         {

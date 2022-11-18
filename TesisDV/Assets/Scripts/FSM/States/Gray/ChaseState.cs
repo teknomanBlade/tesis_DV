@@ -25,6 +25,10 @@ public class ChaseState : IState
 
     public void OnUpdate()
     {
+        if (!_enemy._player.isAlive)
+        {
+            _fsm.ChangeState(EnemyStatesEnum.CatState);
+        }
         //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position); Ahora usamos el GetPlayerPos para que los aliens no se queden duros cuando subis a algun lugar
         //_enemy.ResetPathAndSetObjective(_enemy.GetPlayerPos()); //Se va el navmesh
         //_enemy.Move(); 

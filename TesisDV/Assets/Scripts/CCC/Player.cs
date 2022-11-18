@@ -95,6 +95,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public Vector3 lookingPlacement;
     public float timer = 0f;
     public bool isDead = false;
+    private bool _isAlive;
+    public bool isAlive { get { return _isAlive; } }
     public int hp;
     public int maxHp = 4;
     public bool HasContextualMenu = false;
@@ -115,6 +117,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private bool _canBuildDartsTrap = false;
     private void Awake()
     {
+        _isAlive = true;
         Cursor.lockState = CursorLockMode.Locked;
         _rb = GetComponent<Rigidbody>();
         Cam = GameObject.Find("CamHolder").GetComponent<PlayerCamera>();
@@ -148,169 +151,168 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void Update()
     {
-        
-        LookingAt();
-        CheckGround();
-
-        if (!GameVars.Values.crouchToggle)
+        if(_isAlive)
         {
-            if (Input.GetKey(GameVars.Values.crouchKey)) CrouchEnter();
-            else CrouchExit();
-        }
-        else if (Input.GetKeyDown(GameVars.Values.crouchKey)) CrouchToggle();
+            LookingAt();
+            CheckGround();
 
-        if (Input.GetKeyDown(GameVars.Values.sprintKey)) speed = sprintSpeed;
-        if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed;
-
-        if (Input.GetKeyDown(GameVars.Values.useKey))
-        {
-            if (lookingAt != null)
+            if (!GameVars.Values.crouchToggle)
             {
-                Interact();
+                if (Input.GetKey(GameVars.Values.crouchKey)) CrouchEnter();
+                else CrouchExit();
             }
-        }
-        if (Input.GetKeyDown(GameVars.Values.hideShowMiniMapKey))
-        {
-            _miniMapDisplay.SetActive(!_miniMapDisplay.activeSelf);
-        }
+            else if (Input.GetKeyDown(GameVars.Values.crouchKey)) CrouchToggle();
 
-         //Cambiar la deteccion para no fijarte cada frame. Ver una mejor forma de detectar cuando tenemos un arma para no tener problema al agregar mas. Hacerlo cada vez que agarramos un item.
+            if (Input.GetKeyDown(GameVars.Values.sprintKey)) speed = sprintSpeed;
+            if (Input.GetKeyUp(GameVars.Values.sprintKey)) speed = walkSpeed;
 
-        if (Input.GetKeyDown(GameVars.Values.secondaryFire) && !IsCrafting)
-        {
-            if (lookingAt != null && lookingAt.gameObject.TryGetComponent<IMovable>(out IMovable aux) && _canMoveTraps)
+            if (Input.GetKeyDown(GameVars.Values.useKey))
             {
-                SwitchIsCrafting();
-                MoveTrap();
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Return) && _canStartNextWave)
-        {
-            _canStartNextWave = false;
-            _canMoveTraps = false;
-            GameVars.Values.WaveManager.StartRound();
-        }
-
-
-        //if (Input.GetKeyDown(GameVars.Values.inventoryKey))  Dejo el c�digo del screenmanager para usarlo en las pantallas de win y loose, donde si queremos que el PJ no se pueda seguir controlando.
-        //{
-            //var screencrafting = instantiate(gamevars.values.craftingscreen);
-            //screenmanager.instance.push(screencrafting);
-            
-        //}
-        //else if (Input.GetKeyUp(GameVars.Values.inventoryKey))
-        //{
-            //screenmanager.instance.pop();
-            
-        //}
-
-        if(Input.GetKeyDown(GameVars.Values.inventoryKey) && _craftingScreen.activeInHierarchy)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            _craftingScreen.SetActive(false);
-            _craftingScreenScript.IsWorkbenchScreenOpened = false;
-            _miniMapDisplay.SetActive(true);
-        }
-        else if(Input.GetKeyDown(GameVars.Values.inventoryKey) && !_craftingScreen.activeInHierarchy)
-        {
-            //Cursor.lockState = CursorLockMode.Locked;
-            _craftingScreen.SetActive(true);
-            _craftingScreenScript.BTN_PageOne();
-            _miniMapDisplay.SetActive(false);
-        }
-
-        //if (!IsCrafting) //Va al TrapHotBar.
-        //{
-
-        //    contextualMenuAnim.SetBool("HasTraps", GameVars.Values.BaseballLauncher.CanCraft(_inventory));
-        //    if (GameVars.Values.BaseballLauncher.HasBaseballTrapItems(_inventory))
-        //    {
-        //        contextualMenuScript.ActivatePanelTrap1();
-        //    }
-
-        //    if (GameVars.Values.BaseballLauncher.HasTVTrapItems(_inventory))
-        //    {
-        //        contextualMenuScript.ActivatePanelTrap2();
-        //    }
-        //}
-        if (!_craftingScreenScript.IsWorkbenchScreenOpened)
-        {
-            if (Input.GetKeyDown(GameVars.Values.primaryFire))
-            {
-                if (_inventory.ContainsID(3, 1) || _inventory.ContainsID(11, 1) && !IsCrafting)
+                if (lookingAt != null)
                 {
-                    _weapon?.SetOwner(this);
-                    _weapon?.MeleeAttack();
+                    Interact();
                 }
+            }
+            if (Input.GetKeyDown(GameVars.Values.hideShowMiniMapKey))
+            {
+                _miniMapDisplay.SetActive(!_miniMapDisplay.activeSelf);
+            }
 
-                if (_inventory != null && (_inventory.ContainsID(14, 1)))
+            //Cambiar la deteccion para no fijarte cada frame. Ver una mejor forma de detectar cuando tenemos un arma para no tener problema al agregar mas. Hacerlo cada vez que agarramos un item.
+
+            if (Input.GetKeyDown(GameVars.Values.secondaryFire) && !IsCrafting)
+            {
+                if (lookingAt != null && lookingAt.gameObject.TryGetComponent<IMovable>(out IMovable aux) && _canMoveTraps)
                 {
-                    _remoteControl?.SetOwner(this);
-                    _remoteControl?.ActivatableAction();
+                    SwitchIsCrafting();
+                    MoveTrap();
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha1) && !IsCrafting)
+            if (Input.GetKeyDown(KeyCode.Return) && _canStartNextWave)
             {
-                GameVars.Values.BaseballLauncher.Craft(_inventory);
+                _canStartNextWave = false;
+                _canMoveTraps = false;
+                GameVars.Values.WaveManager.StartRound();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting && _canBuildMicrowaveTrap)
+
+            //if (Input.GetKeyDown(GameVars.Values.inventoryKey))  Dejo el c�digo del screenmanager para usarlo en las pantallas de win y loose, donde si queremos que el PJ no se pueda seguir controlando.
+            //{
+                //var screencrafting = instantiate(gamevars.values.craftingscreen);
+                //screenmanager.instance.push(screencrafting);
+                
+            //}
+            //else if (Input.GetKeyUp(GameVars.Values.inventoryKey))
+            //{
+                //screenmanager.instance.pop();
+                
+            //}
+
+            if(Input.GetKeyDown(GameVars.Values.inventoryKey) && _craftingScreen.activeInHierarchy)
             {
-                GameVars.Values.MicrowaveForceFieldGenerator.Craft(_inventory);
+                Cursor.lockState = CursorLockMode.Locked;
+                _craftingScreen.SetActive(false);
+                _craftingScreenScript.IsWorkbenchScreenOpened = false;
+                _miniMapDisplay.SetActive(true);
+            }
+            else if(Input.GetKeyDown(GameVars.Values.inventoryKey) && !_craftingScreen.activeInHierarchy)
+            {
+                //Cursor.lockState = CursorLockMode.Locked;
+                _craftingScreen.SetActive(true);
+                _craftingScreenScript.BTN_PageOne();
+                _miniMapDisplay.SetActive(false);
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting && _canBuildSlowTrap)
+            //if (!IsCrafting) //Va al TrapHotBar.
+            //{
+
+            //    contextualMenuAnim.SetBool("HasTraps", GameVars.Values.BaseballLauncher.CanCraft(_inventory));
+            //    if (GameVars.Values.BaseballLauncher.HasBaseballTrapItems(_inventory))
+            //    {
+            //        contextualMenuScript.ActivatePanelTrap1();
+            //    }
+
+            //    if (GameVars.Values.BaseballLauncher.HasTVTrapItems(_inventory))
+            //    {
+            //        contextualMenuScript.ActivatePanelTrap2();
+            //    }
+            //}
+            if (!_craftingScreenScript.IsWorkbenchScreenOpened)
             {
-                GameVars.Values.SlowTrap.Craft(_inventory);
+                if (Input.GetKeyDown(GameVars.Values.primaryFire))
+                {
+                    if (_inventory.ContainsID(3, 1) || _inventory.ContainsID(11, 1) && !IsCrafting)
+                    {
+                        _weapon?.SetOwner(this);
+                        _weapon?.MeleeAttack();
+                    }
+
+                    if (_inventory != null && (_inventory.ContainsID(14, 1)))
+                    {
+                        _remoteControl?.SetOwner(this);
+                        _remoteControl?.ActivatableAction();
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha1) && !IsCrafting)
+                {
+                    GameVars.Values.BaseballLauncher.Craft(_inventory);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting && _canBuildMicrowaveTrap)
+                {
+                    GameVars.Values.MicrowaveForceFieldGenerator.Craft(_inventory);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting && _canBuildSlowTrap)
+                {
+                    GameVars.Values.SlowTrap.Craft(_inventory);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting && _canBuildDartsTrap)
+                {
+                    GameVars.Values.NailFiringMachine.Craft(_inventory);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting && _canBuildElectricTrap)
+                {
+                    GameVars.Values.ElectricTrap.Craft(_inventory);
+                }
+                if (Input.GetKeyDown(KeyCode.H))
+                {
+                    SwitchWeapon();
+                }
+                if (isGrounded)
+                {
+                    if (Input.GetKeyDown(GameVars.Values.jumpKey) && !jumpOnCooldown) Jump();
+                }
+                else
+                {
+                    _rb.velocity -= new Vector3(0f, 9.8f * Time.deltaTime, 0f);
+                }
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting && _canBuildDartsTrap)
+            if (Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
             {
-                GameVars.Values.NailFiringMachine.Craft(_inventory);
+                var screenPause = Instantiate(Resources.Load<ScreenPause>("PauseCanvas"));
+                ScreenManager.Instance.Push(screenPause);
+                _rb.velocity = Vector3.zero;
+                _rb.isKinematic = true;
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting && _canBuildElectricTrap)
+            if (Input.GetKeyDown(GameVars.Values.dropKey))
             {
-                GameVars.Values.ElectricTrap.Craft(_inventory);
-            }
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                SwitchWeapon();
-            }
-            if (isGrounded)
-            {
-                if (Input.GetKeyDown(GameVars.Values.jumpKey) && !jumpOnCooldown) Jump();
-            }
-            else
-            {
-                _rb.velocity -= new Vector3(0f, 9.8f * Time.deltaTime, 0f);
-            }
+                //_inventory.DropItem();
+                Damage(1);
+            } 
         }
-
-        if (Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
-        {
-            var screenPause = Instantiate(Resources.Load<ScreenPause>("PauseCanvas"));
-            ScreenManager.Instance.Push(screenPause);
-            _rb.velocity = Vector3.zero;
-            _rb.isKinematic = true;
-        }
-
-        
-
-        //if (Input.GetKeyDown(GameVars.Values.dropKey))
-        //{
-        //    _inventory.DropItem();
-        //}
-
-        
         
     }
 
     private void FixedUpdate()
     {
-        if (!_craftingScreenScript.IsWorkbenchScreenOpened)
+        if (!_craftingScreenScript.IsWorkbenchScreenOpened && _isAlive)
         {
             if (canMoveCamera) Camera();
             LookingForPlacement();
@@ -441,12 +443,25 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void Die()
     {
+        //Ahora hacemos una animacion en la que se cae, se recupera y vuelve a tener la vida maxima.
+
         //_cam.DeactivateShake();
-        _audioSource.enabled = false;
-        _rb.isKinematic = true;
+
+        //_audioSource.enabled = false;
+        //_rb.isKinematic = true;
+        _isAlive = false;
         canMoveCamera = false;
-        Invoke("Dead", 0.5f); //Esperabamos tres segundos antes.
-        
+        _cam.SwitchStunnedState();
+
+        //Invoke("Dead", 0.5f); //Esperabamos tres segundos antes.
+    }
+
+    public void Recover()
+    {
+        hp = maxHp;
+        GameVars.Values.ShowLivesRemaining(hp, maxHp);
+        _isAlive = true;
+        canMoveCamera = true;
     }
 
     public void SwitchIsCrafting()
