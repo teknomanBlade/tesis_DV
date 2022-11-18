@@ -19,6 +19,7 @@ public class TallGrayModel : Enemy
         
         _fsm.AddState(EnemyStatesEnum.PlayerState, new PlayerState(_fsm, this, _pf));
         _fsm.AddState(EnemyStatesEnum.TallGrayAttackState, new TallGrayAttackState(_fsm, this));
+        _fsm.AddState(EnemyStatesEnum.TallGrayEscapeState, new TallGrayEscapeState(_fsm, this, _pf));
         _fsm.AddState(EnemyStatesEnum.PathfindingState, new PathfindingState(_fsm, this, _pf));
     }
 
