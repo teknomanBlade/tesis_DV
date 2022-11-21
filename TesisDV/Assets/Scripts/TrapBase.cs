@@ -6,10 +6,10 @@ public class TrapBase : MonoBehaviour
 {
     public bool _isAvailable = true;
     private GameObject _myTrap;
-
-    void Start()
+    private MeshRenderer _meshRenderer;
+    void Awake()
     {
-        
+        _meshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
     }
 
     void Update()
@@ -29,11 +29,13 @@ public class TrapBase : MonoBehaviour
     public void SetTrap(GameObject myTrap)
     {
         _myTrap = myTrap;
+        _meshRenderer.enabled = false;
     }
 
     public void ResetBase()
     {
         _isAvailable = false;
+        _meshRenderer.enabled = true;
         _myTrap = null;
     }
 }

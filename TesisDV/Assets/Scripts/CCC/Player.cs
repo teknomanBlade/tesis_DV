@@ -189,11 +189,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     MoveTrap();
                 }
             }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            FindObjectsOfType<Door>().ToList().ForEach(x => { x.IsLocked = false; });
-        }
-
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                FindObjectsOfType<Door>().ToList().ForEach(x => { x.IsLocked = false; });
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                GameVars.Values.Inventory.ReceiveWitts(100);
+            }
             if (Input.GetKeyDown(KeyCode.Return) && _canStartNextWave)
             {
                 _canStartNextWave = false;

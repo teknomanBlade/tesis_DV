@@ -36,7 +36,7 @@ using UnityEngine;
 
         public bool HasSlowTrapItems(Inventory inventory)
         {
-        return inventory.ContainsID(4, 1) && inventory.ContainsID(13,1);
+        return inventory.ContainsID(4, 1);
         }
 
         public bool HasNailFiringMachineItems(Inventory inventory)

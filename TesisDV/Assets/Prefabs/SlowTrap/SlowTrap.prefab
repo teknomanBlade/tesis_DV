@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 947582598802298165}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.012, y: 0.07, z: 0.034}
-  m_LocalScale: {x: 0.11573024, y: 0.12169448, z: 0.12169448}
+  m_LocalScale: {x: 0.08411118, y: 0.088445894, z: 0.088445894}
   m_Children: []
   m_Father: {fileID: 5529201381889959271}
   m_RootOrder: 1
@@ -230,7 +230,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _slowAmount: 0.8
   _slowAmountPlayer: 3
-  _destroyTime: 25
   _doesDamage: 0
 --- !u!82 &4646322674632208843
 AudioSource:
@@ -337,15 +336,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4884217404487439378, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.107017845
+      value: 0.07363577
       objectReference: {fileID: 0}
     - target: {fileID: 4884217404487439378, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.107017845
+      value: 0.07363577
       objectReference: {fileID: 0}
     - target: {fileID: 4884217404487439378, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.107017845
+      value: 0.07363577
       objectReference: {fileID: 0}
     - target: {fileID: 4884217404487439378, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: m_LocalPosition.x
@@ -417,15 +416,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4884217406023852483, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.17912452
+      value: 0.1386961
       objectReference: {fileID: 0}
     - target: {fileID: 4884217406023852483, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.17912452
+      value: 0.1386961
       objectReference: {fileID: 0}
     - target: {fileID: 4884217406023852483, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.17912452
+      value: 0.1386961
       objectReference: {fileID: 0}
     - target: {fileID: 4884217406023852483, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: m_LocalPosition.x
@@ -437,11 +436,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4884217406023852541, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.6320754
+      value: 0.18867922
       objectReference: {fileID: 0}
     - target: {fileID: 4884217406023852541, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.08105561
+      value: 0.024610283
       objectReference: {fileID: 0}
     - target: {fileID: 4884217406023852541, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
@@ -484,6 +483,10 @@ PrefabInstance:
     - target: {fileID: 7024693579044355870, guid: aa79a54809780354fa09b3b332dc7e7b, type: 3}
       propertyPath: m_Name
       value: WoodenTray
+      objectReference: {fileID: 0}
+    - target: {fileID: 7024693579044355870, guid: aa79a54809780354fa09b3b332dc7e7b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7653701797627274660, guid: aa79a54809780354fa09b3b332dc7e7b, type: 3}
       propertyPath: m_RootOrder

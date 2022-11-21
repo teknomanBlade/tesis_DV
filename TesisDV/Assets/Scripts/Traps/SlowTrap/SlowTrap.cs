@@ -6,7 +6,7 @@ public class SlowTrap : MonoBehaviour
 {
     [SerializeField] private float _slowAmount;
     [SerializeField] private float _slowAmountPlayer;
-    [SerializeField] private float _destroyTime;
+    //[SerializeField] private float _destroyTime;
     [SerializeField] private bool _doesDamage;
     Animator _animator;
     private AudioSource _as;
@@ -20,13 +20,13 @@ public class SlowTrap : MonoBehaviour
 
     void Update()
     {
-        _destroyTime -= Time.deltaTime;
+        /*_destroyTime -= Time.deltaTime;
 
         if (_destroyTime <=0)
         {
             _animator.SetTrigger("IsDestroyed");
             GameVars.Values.soundManager.StopSound();
-        }
+        }*/
 
         if (Input.GetKeyDown(KeyCode.G))
         {

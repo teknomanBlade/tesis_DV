@@ -171,7 +171,7 @@ Shader "HeadTeslaCoil"
 }
 /*ASEBEGIN
 Version=17800
-342;413;1307;550;1393.99;456.1692;1.740537;True;False
+305;520;1137;532;1118.985;372.6235;1.740537;True;False
 Node;AmplifyShaderEditor.WorldNormalVector;5;-771.1484,-43;Inherit;False;False;1;0;FLOAT3;0,0,1;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
 Node;AmplifyShaderEditor.ViewDirInputsCoordNode;3;-722.3701,135.2973;Inherit;False;World;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
 Node;AmplifyShaderEditor.FresnelNode;2;-467.1808,49.77839;Inherit;False;Standard;WorldNormal;ViewDir;False;False;5;0;FLOAT3;0,0,1;False;4;FLOAT3;0,0,0;False;1;FLOAT;0.2;False;2;FLOAT;-1;False;3;FLOAT;14.8;False;1;FLOAT;0
@@ -186,4 +186,4 @@ WireConnection;4;1;1;0
 WireConnection;0;8;7;0
 WireConnection;0;9;4;0
 ASEEND*/
-//CHKSM=40CFE0AFBC2E23FDD9AA1A28DB73F32DF89E68B3
+//CHKSM=DC0971111ED42B0A2FB47251F79471443E2C208C
