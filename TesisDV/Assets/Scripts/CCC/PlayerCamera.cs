@@ -60,7 +60,7 @@ public class PlayerCamera : MonoBehaviour
             else
             {
                 RecoverPlayer();
-                SwitchStunnedState();
+                SwitchStunnedState(false);
                 _passedTime = _stunDuration;
             }
             
@@ -164,16 +164,9 @@ public class PlayerCamera : MonoBehaviour
 
     }
 
-    public void SwitchStunnedState()
+    public void SwitchStunnedState(bool value)
     {
-        if(!_isStunned)
-        {
-            _isStunned = true;
-        }
-        else
-        {
-            _isStunned = false;
-        }
+        _isStunned = value;
     }
 
     public void RecoverPlayer()//Se activa con evento en animacion de NotStunned.

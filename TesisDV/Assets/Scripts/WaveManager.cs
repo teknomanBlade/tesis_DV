@@ -11,6 +11,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private GameObject parent;  
     [SerializeField]
     private UFO _myUFO;
+    [SerializeField] private Enemy _myEnemy;
 
     [Header("Wave Details")]
     [SerializeField]
@@ -80,6 +81,11 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public event OnRoundStartEndDelegate OnRoundStartEnd;
     public delegate void OnRoundEndDelegate(int round);
     public event OnRoundEndDelegate OnRoundEnd;
+
+
+
+    [SerializeField] private List<Transform> _waypoints;
+    [SerializeField] private Vector3 _startingPosHard;
 
     void Awake()
     {
@@ -154,35 +160,38 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             //TriggerRoundChange("RoundChanged");
             if(_currentRound == 1)
             {
+                Instantiate(_myEnemy, parent.transform).SetSpawnPos(_startingPosHard).SetPathHard(_waypoints);//.SetRotation(new Vector3(-90f, 0f, 0f));
+            }
+            if(_currentRound == 2)
+            {
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetGraysToSpawn(_graysUFO1);//.SetRotation(new Vector3(-90f, 0f, 0f));
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetGraysToSpawn(_graysUFO2);//.SetRotation(new Vector3(-90f, 0f, 0f));
             }
-            else if(_currentRound == 2)
+            else if(_currentRound == 3)
             {
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetGraysToSpawn(_graysUFO12);//.SetRotation(new Vector3(-90f, 0f, 0f));
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetGraysToSpawn(_graysUFO22);//.SetRotation(new Vector3(-90f, 0f, 0f));
             }
-            else if(_currentRound == 3)
+            else if(_currentRound == 4)
             {
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetGraysToSpawn(_graysUFO13);//.SetRotation(new Vector3(-90f, 0f, 0f));
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetGraysToSpawn(_graysUFO23);//.SetRotation(new Vector3(-90f, 0f, 0f));
             }
-            else if(_currentRound == 4)
+            else if(_currentRound == 5)
             {
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetGraysToSpawn(_graysUFO14);//.SetRotation(new Vector3(-90f, 0f, 0f));
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetGraysToSpawn(_graysUFO24);//.SetRotation(new Vector3(-90f, 0f, 0f));
             }
-            else if(_currentRound == 5)
+            else if(_currentRound == 6)
             {
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetGraysToSpawn(_graysUFO15);//.SetRotation(new Vector3(-90f, 0f, 0f));
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetGraysToSpawn(_graysUFO25);//.SetRotation(new Vector3(-90f, 0f, 0f));
             }
-            else if(_currentRound == 6)
+            else if(_currentRound == 7)
             {
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetGraysToSpawn(_graysUFO16);//.SetRotation(new Vector3(-90f, 0f, 0f));
                 Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetGraysToSpawn(_graysUFO26);//.SetRotation(new Vector3(-90f, 0f, 0f));
             }
-            
             
         }
         /* else

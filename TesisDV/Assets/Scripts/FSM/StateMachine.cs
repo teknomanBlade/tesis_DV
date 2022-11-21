@@ -14,7 +14,9 @@ public enum EnemyStatesEnum
     ProtectState,
     PathfindingState,
     TallGrayAttackState,
-    TallGrayEscapeState
+    TallGrayEscapeState,
+    HardcodeCatState,
+    HardcodeAttackState
 }
 
 public class StateMachine

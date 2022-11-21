@@ -14,7 +14,7 @@ public abstract class Enemy : MonoBehaviour
     public ParticleSystem witGainEffect;
     public Collider[] allTargets; //Borrar esto y probar.
     protected CapsuleCollider _capsuleCollider;
-    protected bool isAwake = false;
+    protected bool isAwake = true;
     public bool isDead = false;
 
     #region DistanceParameters
@@ -70,6 +70,7 @@ public abstract class Enemy : MonoBehaviour
     public Pathfinding _pf;
     public PathfindingManager _pfManager;
     public List<Node> Path = new List<Node>();
+    public List<Transform> PathHard = new List<Transform>();
     [SerializeField] public LayerMask obstacleMask; 
 
     #endregion 
@@ -488,6 +489,18 @@ public abstract class Enemy : MonoBehaviour
     {
         Path = null;
         Path = nodos;
+    }
+
+    public void SetPathHard(List<Transform> nodos) //esto no hace falta, es para testear.
+    {
+        Path = null;
+        PathHard = nodos;
+    }
+
+    public Enemy SetSpawnPos(Vector3 newPos)
+    {
+        transform.position = newPos;
+        return this;
     }
 
     public int GetCurrentWaypoint()

@@ -96,7 +96,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public Vector3 lookingPlacement;
     public float timer = 0f;
     public bool isDead = false;
-    private bool _isAlive;
+    [SerializeField] private bool _isAlive;
     public bool isAlive { get { return _isAlive; } }
     public int hp;
     public int maxHp = 4;
@@ -459,17 +459,17 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         //_rb.isKinematic = true;
         _isAlive = false;
         canMoveCamera = false;
-        _cam.SwitchStunnedState();
+        _cam.SwitchStunnedState(true);
 
         //Invoke("Dead", 0.5f); //Esperabamos tres segundos antes.
     }
 
     public void Recover()
     {
-        hp = maxHp;
-        GameVars.Values.ShowLivesRemaining(hp, maxHp);
         _isAlive = true;
         canMoveCamera = true;
+        hp = maxHp;
+        GameVars.Values.ShowLivesRemaining(hp, maxHp);
     }
 
     public void SwitchIsCrafting()
