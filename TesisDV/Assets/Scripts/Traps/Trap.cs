@@ -34,9 +34,9 @@ public abstract class Trap : MonoBehaviour
     {
         Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
-        collidersObjectives = allTargets.Where(x => x.GetComponent<Enemy>().isActiveAndEnabled == true).ToArray();
+        collidersObjectives = allTargets.Where(x => x.GetComponent<Enemy>().isActiveAndEnabled).ToArray();
 
-        collidersObjectivesDisabled = allTargets.Where(x => x.GetComponent<Enemy>().isActiveAndEnabled == false).ToArray();
+        collidersObjectivesDisabled = allTargets.Where(x => !x.GetComponent<Enemy>().isActiveAndEnabled).ToArray();
 
         if (allTargets.Length == 0 || _currentObjective == null)
         {
@@ -71,7 +71,7 @@ public abstract class Trap : MonoBehaviour
             //Vector3 dir = futurePos - transform.position; Esto hasta arreglar el velocity
             Vector3 dir = _currentObjective.transform.position - transform.position;
             _currentObjectiveDistance = Vector3.Distance(transform.position, _currentObjective.transform.position);
-            if (Physics.Raycast(transform.position, dir, out RaycastHit hit, dir.magnitude, obstacleMask) == false)
+            if (!Physics.Raycast(transform.position, dir, out RaycastHit hit, dir.magnitude, obstacleMask))
             {
                 _canShoot = true;
                 Debug.Log("true");

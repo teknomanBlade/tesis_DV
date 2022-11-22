@@ -28,6 +28,7 @@ public class FootLocker : Item
         if (IsOpened)
         {
             _anim.SetBool("IsOpened", true);
+            GameVars.Values.HasOpenedTrunk = true;
             LidColllider.enabled = false;
             GameVars.Values.soundManager.PlaySoundAtPoint("FootLockerOpen", transform.position, 0.8f);
             IsOpened = false;
@@ -35,6 +36,7 @@ public class FootLocker : Item
         else
         {
             LidColllider.enabled = true;
+            GameVars.Values.HasOpenedTrunk = false;
             _anim.SetBool("IsOpened", false);
             IsOpened = true;
         }

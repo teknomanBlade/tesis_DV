@@ -24,9 +24,9 @@ public class Letter : Item
         screenLetter.OnCloseLetterEvent += Interact;
         ScreenManager.Instance.Push(screenLetter);
     }
-    public void HideLetter()
+    public void ShowNotification()
     {
-        //letterCanvas.SetActive(false);
+        GameVars.Values.ShowNotification("Now you can review the Footlocker to begin tutorial.");
     }
 
     public override void Interact()
@@ -34,6 +34,7 @@ public class Letter : Item
         if (IsOpened)
         {
             _anim.SetBool("IsOpened", true);
+            GameVars.Values.HasOpenedLetter = true;
             IsOpened = false;
         }
         else

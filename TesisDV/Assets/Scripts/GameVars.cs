@@ -86,6 +86,8 @@ public class GameVars : MonoBehaviour
     [Header("Game")]
     private float _fadeDelay = 1.1f;
     private bool _isFaded;
+    public bool HasOpenedLetter { get; set; }
+    public bool HasOpenedTrunk { get; set; }
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
     public int currentShotsTrap1; //BaseballLauncher
@@ -266,6 +268,11 @@ public class GameVars : MonoBehaviour
     {
         notifications.text = text;
         StartCoroutine(ShowNotification());
+    }
+
+    public string ShowMessageNotificationByAction()
+    {
+        return HasOpenedLetter ? " First review the Footlocker at Kevin's Bed..." : " First review your father's letter in the Desk...";
     }
 
     public IEnumerator ShowNotification()

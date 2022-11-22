@@ -66,6 +66,10 @@ public class Door : Item
         doorTriggers.Select(x => x).ToList().ForEach(x => x.gameObject.SetActive(false));
         if (IsLocked)
         {
+            if (transform.tag.Equals("Tutorial"))
+            {
+                GameVars.Values.ShowNotification("You can't go out now." + GameVars.Values.ShowMessageNotificationByAction());
+            }
             _anim.SetBool("IsBlocked", true);
             GameVars.Values.soundManager.PlaySoundAtPoint("LockedDoorTry_" + RandomSound(), transform.position, 0.4f);
             Invoke("SetBlockedFalse", 0.5f);
