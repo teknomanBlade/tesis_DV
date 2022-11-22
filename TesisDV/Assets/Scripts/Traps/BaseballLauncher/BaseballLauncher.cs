@@ -51,7 +51,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     [Header("Upgrades")]
     [SerializeField] private GameObject _staticBallsBlueprint;
     [SerializeField] private GameObject _staticBallsUpgrade;
-    private int _additionalDamage = 0;
+    private int _damageAmount = 1;
     [SerializeField] private GameObject _fireRateBlueprint;
     [SerializeField] private GameObject _fireRateUpgrade;
     public bool _canActivate1Upgrade {get; private set;}
@@ -177,7 +177,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             Inactive();
         }
 
-        laser.gameObject.SetActive(true);
+        //laser.gameObject.SetActive(true);
         ShootEffect.Play();
         shotsLeft--;
         shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
@@ -333,7 +333,8 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         if(_canShoot)
         {
-            BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetAdditionalDamage(_additionalDamage).SetOwner(this);
+            //BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetAdditionalDamage(_additionalDamage).SetOwner(this);
+            _currentObjective.GetComponent<Enemy>().TakeDamage(_damageAmount);
         }
     }
 
@@ -357,7 +358,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _staticBallsBlueprint.SetActive(false);
         _staticBallsUpgrade.SetActive(true);
         //Aplicar beneficio del Upgrade
-        _additionalDamage = 2;
+        _damageAmount = 3;
     }
 
     public void ActivateSecondUpgrade()
