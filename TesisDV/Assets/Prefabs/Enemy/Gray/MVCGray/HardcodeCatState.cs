@@ -59,9 +59,11 @@ public class HardcodeCatState : IState
         }
         else if(_enemy._player.isAlive)
         {
+            Vector3 myPos = _enemy.transform.position;
             Vector3 dir = _enemy._player.transform.position - _enemy.transform.position;
             Vector3 aux = dir;
-            dir = new Vector3(aux.x, aux.y - 0.8f, aux.z);
+            
+            dir = new Vector3(aux.x, 0f, aux.z);
             _enemy.transform.forward = dir;
             _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
         }

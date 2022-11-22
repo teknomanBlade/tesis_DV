@@ -28,7 +28,7 @@ public class SlowTrap : MonoBehaviour
             GameVars.Values.soundManager.StopSound();
         }*/
 
-        if (Input.GetKeyDown(KeyCode.G))
+        /* if (Input.GetKeyDown(KeyCode.G))
         {
             if (_doesDamage)
             {
@@ -39,7 +39,7 @@ public class SlowTrap : MonoBehaviour
                 _doesDamage = true;
             }
 
-        }
+        } */
 
         
     }
