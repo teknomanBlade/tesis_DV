@@ -258,8 +258,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
                     if (_inventory != null && (_inventory.ContainsID(14, 1)))
                     {
-                        _remoteControl?.SetOwner(this);
-                        _remoteControl?.ActivatableAction();
+                        if (_weaponGORemoteControl.activeSelf)
+                        {
+                            _remoteControl?.SetOwner(this);
+                            _remoteControl?.ActivatableAction();
+                        }
                     }
                 }
 

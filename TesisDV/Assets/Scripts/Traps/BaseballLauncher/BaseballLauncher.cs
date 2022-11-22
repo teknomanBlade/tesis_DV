@@ -89,6 +89,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     private void StartTrap()
     {
         active = true;
+        SearchingForObjectives();
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
         if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
         ShootCoroutine = StartCoroutine("ActiveCoroutine");
@@ -107,12 +108,9 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         {
             Debug.Log("Active la torreta");
 
-            if (isFirstTime) { isFirstTime = false; _animator.SetBool("HasNoBalls", false); }
+            //if (isFirstTime) { isFirstTime = false; _animator.SetBool("HasNoBalls", false); }
 
-            active = true;
-            _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
-            if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
-            ShootCoroutine = StartCoroutine("ActiveCoroutine");
+            StartTrap();
         }
     }
     IEnumerator ReloadTurret()
@@ -169,7 +167,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     public void InstantiateBall()
     {
-        if  (_canShoot == false || _currentObjective.GetComponent<Enemy>().isDead)
+        if  (_canShoot == false || (_currentObjective != null && _currentObjective.GetComponent<Enemy>().isDead))
             return;
         
         if (shotsLeft == 0)
@@ -331,7 +329,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     private void FireBaseball()
     {
-        if(_canShoot)
+        if(_currentObjective != null && _canShoot)
         {
             //BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetAdditionalDamage(_additionalDamage).SetOwner(this);
             _currentObjective.GetComponent<Enemy>().TakeDamage(_damageAmount);
