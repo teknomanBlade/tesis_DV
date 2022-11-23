@@ -89,8 +89,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     #region Interactions
 
-    [SerializeField]
-    public IInteractable lookingAt;
+    [SerializeField] protected LayerMask obstacleMask;
+    [SerializeField] public IInteractable lookingAt;
     public IMovable lookingIMovable;
     public InventoryItem lookingFor;
     public Vector3 lookingPlacement;
@@ -704,8 +704,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if (Physics.Raycast(_cam.transform.position, _cam.GetForward(), out hit, 5f, GameVars.Values.GetItemLayerMask()))
         {
-            Vector3 dir = hit.transform.position - _cam.transform.position;
-            if(!Physics.Raycast(_cam.transform.position, _cam.GetForward(), out wallHit, dir.magnitude, GameVars.Values.GetWallLayerMask()))
+            Vector3 dir = hit.transform.position - _cam.transform.position;                             //Ahora usamos ObstacleMask;
+            if(!Physics.Raycast(_cam.transform.position, _cam.GetForward(), out wallHit, dir.magnitude, obstacleMask))//GameVars.Values.GetWallLayerMask()))
             {
                 if (Physics.Linecast(_cam.transform.position, hit.collider.gameObject.transform.position, out hitResult))
                 {

@@ -51,7 +51,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     [Header("Upgrades")]
     [SerializeField] private GameObject _staticBallsBlueprint;
     [SerializeField] private GameObject _staticBallsUpgrade;
-    private int _damageAmount = 1;
+    [SerializeField] private int _damageAmount;
     [SerializeField] private GameObject _fireRateBlueprint;
     [SerializeField] private GameObject _fireRateUpgrade;
     public bool _canActivate1Upgrade {get; private set;}

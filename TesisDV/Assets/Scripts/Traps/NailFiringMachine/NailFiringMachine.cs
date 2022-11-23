@@ -18,6 +18,7 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     public int shots;
     public int shotsLeft;
     private Coroutine ShootCoroutine; 
+    [SerializeField] private int _damageAmount;
     void Awake()
     {
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
@@ -92,9 +93,9 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     {
         if(_canShoot)
         {
-            NailsPool.GetObject().SetInitialPos(spawnPoint.transform.position).SetOwner(this);
+            //NailsPool.GetObject().SetInitialPos(spawnPoint.transform.position).SetOwner(this);
+            _currentObjective.GetComponent<Enemy>().TakeDamage(_damageAmount);
         }
-        
     }
 
     private void DeactivateNail(Nail o)
