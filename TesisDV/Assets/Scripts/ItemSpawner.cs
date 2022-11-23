@@ -11,7 +11,6 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField] private GameObject _fourthRoundItems;
     [SerializeField] private GameObject _fifthRoundItems;
     [SerializeField] private GameObject _sixthRoundItems;
-    [SerializeField] private GameObject _triggerBasementNotification;
 
     [SerializeField] private List<Door> _levelDoors = new List<Door>();   //Despues obtendrán las puertas de otra forma, pero para el dia de hoy sirve.
 
@@ -25,7 +24,6 @@ public class ItemSpawner : MonoBehaviour
         _fourthRoundItems = transform.GetChild(4).gameObject;
         _fifthRoundItems = transform.GetChild(5).gameObject;
         _sixthRoundItems = transform.GetChild(6).gameObject;
-        //_triggerBasementNotification = transform.GetChild(7).gameObject;
     }
 
     private void SpawnItems(int currentRound)
@@ -39,11 +37,9 @@ public class ItemSpawner : MonoBehaviour
                 _firstRoundItems.SetActive(true);
                 break;
             case 2:
-                _secondRoundItems.SetActive(true);
-                GameVars.Values.ShowNotification("You can go to the Basement at the Tools Workbench to Buy and Update Traps.");
+                GameVars.Values.ShowNotificationDefinedTime("You can go to the Basement at the Tools Workbench to Buy and Update Traps.", 4.5f, () => ActivateSecondWaveItems());
                 _levelDoors[2].IsLockedToGrays = false; //Puerta de la cocina a atras de la casa.
                 _levelDoors[5].IsLockedToGrays = false; //Puerta de la cocina al living.
-                //_triggerBasementNotification.SetActive(true);
                 break;
             case 3:
                     //_secondRoundItems.SetActive(false);
@@ -64,5 +60,12 @@ public class ItemSpawner : MonoBehaviour
                 _sixthRoundItems.SetActive(true);
                 break;
         }
+    }
+
+    public void ActivateSecondWaveItems()
+    {
+        GameVars.Values.LevelManager.WorkbenchLight.SetActive(true);
+        _secondRoundItems.SetActive(true);
+        
     }
 }

@@ -11,12 +11,10 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     [SerializeField]
     private int InitialStockUFO;
     private GameObject _panelMain;
-
+    public GameObject WorkbenchLight;
     public GameObject YouWin;
     public GameObject YouLose;
 
-    public GameObject NewHouse;
-    public GameObject OldHouse;
     private Cat _cat;
     [SerializeField]
     public List<UFO> AllUFOs = new List<UFO>();
@@ -87,7 +85,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         GameVars.Values.BaseballLauncher.RestoreBuildAmount();
         
         GameVars.Values.soundManager.PlaySound("MusicPreWave",0.14f,true);
-        
+        WorkbenchLight.SetActive(false);
         //Invoke("EndRound",8f);
     }
 
