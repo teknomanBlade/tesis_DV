@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PathfindingManager : MonoBehaviour
 {
+    static public PathfindingManager Instance;
+
     public Node startingNode;
     public Node goalNode;
     public Pathfinding _pf;
@@ -16,6 +18,8 @@ public class PathfindingManager : MonoBehaviour
 
     void Start()
     {
+        Instance = this;
+
         _pf = new Pathfinding();
     }
 

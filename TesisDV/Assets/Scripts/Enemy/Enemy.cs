@@ -68,7 +68,7 @@ public abstract class Enemy : MonoBehaviour
     #region Pathfinding
     
     public Pathfinding _pf;
-    public PathfindingManager _pfManager;
+    //public PathfindingManager _pfManager; Probamos usar pathfindingManager como clase estatica.
     public List<Node> Path = new List<Node>();
     public List<Transform> PathHard = new List<Transform>();
     [SerializeField] public LayerMask obstacleMask; 

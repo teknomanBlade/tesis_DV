@@ -119,14 +119,14 @@ public class CatState : IState
         myPath = new List<Node>();
 
         //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
-        startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
+        startingPoint = PathfindingManager.Instance.GetClosestNode(_enemy.transform.position);
         //Debug.Log("Start at " + startingPoint);
 
         _currentWaypoint = _enemy.GetCurrentWaypoint();
         
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._player.transform);
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._cat.transform.position);
-        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._cat.transform.position);
+        endingPoint = PathfindingManager.Instance.GetClosestNode(_enemy._cat.transform.position);
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
         //Debug.Log("End at " + endingPoint);
         //}

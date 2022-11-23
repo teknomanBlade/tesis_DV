@@ -85,13 +85,13 @@ public class TallGrayEscapeState : IState
         myPath = new List<Node>();
 
         //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
-        startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
+        startingPoint = PathfindingManager.Instance.GetClosestNode(_enemy.transform.position);
         //Debug.Log("Start at " + startingPoint);
 
         _currentWaypoint = _enemy.GetCurrentWaypoint();
         
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
-        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._exitPos);
+        endingPoint = PathfindingManager.Instance.GetClosestNode(_enemy._exitPos);
         //Debug.Log("End at " + endingPoint);
         //}
 

@@ -7,38 +7,56 @@ public class UFOLineRenderer : MonoBehaviour
 {
     private Cat _cat;
     [SerializeField] private GameObject owner;
-    [SerializeField] private NavMeshAgent _navMeshAgent;
     [SerializeField] private LineRenderer lineRenderer;
+
+    #region Pathfinding
+
+    private Pathfinding _pf;
+    public List<Node> myPath;
+    private List<Vector3> _myWaypoints;
+    private int _currentWaypoint;
+    private int _currentPathWaypoint = 0;
+    private Node startingPoint;
+    private Node endingPoint;
+    
+    #endregion
 
     void Start()
     {
+        _pf = new Pathfinding();
         transform.position = owner.transform.position;
         _cat = GameVars.Values.Cat;
 
-        CalculatePath(_cat.GetStartingPosition());
+        //CalculatePath(_cat.GetStartingPosition());
+        //Hacer Pathfinding.
+        GetThetaStar();
     }
 
-    private void DrawLineRenderer(Vector3[] waypoints) 
+    private void DrawLineRenderer(List<Node> waypoints) 
     {
-        lineRenderer.positionCount = waypoints.Length;
-        lineRenderer.SetPosition(0, waypoints[0]);
+        lineRenderer.positionCount = waypoints.Count;
+        lineRenderer.SetPosition(0, waypoints[0].transform.position);
 
-        for (int i = 1; i < waypoints.Length; i++)
+        for (int i = 1; i < waypoints.Count; i++)
         {
-            Vector3 pointPosition = new Vector3(waypoints[i].x, waypoints[i].y, waypoints[i].z);
+            Vector3 pointPosition = new Vector3(waypoints[i].transform.position.x, waypoints[i].transform.position.y, waypoints[i].transform.position.z);
             lineRenderer.SetPosition(i, pointPosition);
         }
     }
 
-    private void CalculatePath(Vector3 targetPosition)
+    public void GetThetaStar()
     {
-        //_navMeshAgent.ResetPath();
-        NavMeshPath path = new NavMeshPath();
-        if (NavMesh.CalculatePath(owner.transform.position, targetPosition, NavMesh.AllAreas, path))
-        {
-            //_navMeshAgent.SetPath(path); Esta linea tiraba null pero no es necesaria para mostrar el LineRenderer.
+        myPath = new List<Node>();
 
-            DrawLineRenderer(path.corners);  
-        }
+        startingPoint = PathfindingManager.Instance.GetClosestNode(transform.position);
+
+        //_currentWaypoint = _enemy.GetCurrentWaypoint();
+        
+        endingPoint = PathfindingManager.Instance.GetClosestNode(_cat.GetStartingPosition());
+
+        //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
+        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
+
+        DrawLineRenderer(myPath);
     }
 }

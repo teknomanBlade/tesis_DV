@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1105584578309789784}
   - component: {fileID: 3893893463528319858}
-  - component: {fileID: 6953824782462492716}
   - component: {fileID: 4138942480126983185}
   m_Layer: 0
   m_Name: LineRenderer
@@ -131,28 +130,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!195 &6953824782462492716
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1692049602899834247}
-  m_Enabled: 1
-  m_AgentTypeID: -1372625422
-  m_Radius: 1.0000005
-  m_Speed: 0
-  m_Acceleration: 0
-  avoidancePriority: 50
-  m_AngularSpeed: 0
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 0
-  m_AutoBraking: 0
-  m_AutoRepath: 0
-  m_Height: 0.1
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &4138942480126983185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,8 +143,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 4225338127456170435}
-  _navMeshAgent: {fileID: 6953824782462492716}
+  _navMeshAgent: {fileID: 0}
   lineRenderer: {fileID: 3893893463528319858}
+  myPath: []
 --- !u!1 &4225338127456170435
 GameObject:
   m_ObjectHideFlags: 0

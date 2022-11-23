@@ -13,7 +13,7 @@ public class TallGrayModel : Enemy
 
     private void Awake()
     {
-        _pfManager = GameObject.Find("PathfindingManager").GetComponent<PathfindingManager>();
+        //_pfManager = GameObject.Find("PathfindingManager").GetComponent<PathfindingManager>(); Probamos usar pathfindingManager como clase estatica.
         _fsm = new StateMachine();
         _pf = new Pathfinding();
         

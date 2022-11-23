@@ -83,11 +83,11 @@ public class PlayerState : IState
     {
         myPath = new List<Node>();
 
-        startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
+        startingPoint = PathfindingManager.Instance.GetClosestNode(_enemy.transform.position);
 
         _currentWaypoint = _enemy.GetCurrentWaypoint();
         
-        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._player.transform.position);
+        endingPoint = PathfindingManager.Instance.GetClosestNode(_enemy._player.transform.position);
 
         //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
         myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
