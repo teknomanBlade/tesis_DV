@@ -90,6 +90,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         active = true;
         SearchingForObjectives();
+        _animator.SetBool("HasNoBalls", false);
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
         if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
         ShootCoroutine = StartCoroutine("ActiveCoroutine");

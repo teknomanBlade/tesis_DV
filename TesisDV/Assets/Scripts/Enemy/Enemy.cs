@@ -118,6 +118,9 @@ public abstract class Enemy : MonoBehaviour
             }
             
             isDead = true;
+            if (gameObject.tag.Equals("Tutorial"))
+                GameVars.Values.ShowNotification("You gain the Wit resource by knocking down Enemies. As you can see at the right upper corner.");
+
             SendWitts();
             _capsuleCollider.enabled = false;
             GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);

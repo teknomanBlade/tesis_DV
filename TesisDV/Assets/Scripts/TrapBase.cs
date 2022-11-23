@@ -7,14 +7,26 @@ public class TrapBase : MonoBehaviour
     public bool _isAvailable = true;
     private GameObject _myTrap;
     private MeshRenderer _meshRenderer;
+    private Animator _anim;
     void Awake()
     {
         _meshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
+        _anim = transform.GetChild(0).GetComponent<Animator>();
     }
 
     void Update()
     {
         
+    }
+
+    public void SetHighIntensity()
+    {
+        _anim.SetBool("IsBlueprintOver",true);
+    }
+
+    public void SetNormalIntensity()
+    {
+        _anim.SetBool("IsBlueprintOver", false);
     }
 
     public void BuildOnBase()

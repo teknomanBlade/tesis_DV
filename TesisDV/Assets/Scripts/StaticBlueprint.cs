@@ -87,6 +87,7 @@ public class StaticBlueprint : MonoBehaviour
             //if(_trapBase._isAvailable)
             //{
                 canBuild = true;
+                _trapBase?.SetHighIntensity();
                 transform.position = hit.transform.position;
                 SetOriginalMaterial();
                 return;
@@ -95,6 +96,7 @@ public class StaticBlueprint : MonoBehaviour
         else
         {
             canBuild = false;
+            _trapBase?.SetNormalIntensity();
             ChangeMaterial();
         }
 
