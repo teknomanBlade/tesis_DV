@@ -5,7 +5,7 @@ using UnityEngine;
 public class PickColor : MonoBehaviour
 {
     // Start is called before the first frame update
-    public Shader toonShader;
+    public Material toonMaterial;
     public MeshRenderer[] renderers;
 
     [ColorUsage(true, true)]
@@ -22,7 +22,8 @@ public class PickColor : MonoBehaviour
     {
 
 
-        Material generatedMaterial = new Material(toonShader);
+        Material generatedMaterial = new Material(toonMaterial);
+        //Material generatedMaterial = new Material(Shader.Find("Standard"));
         generatedMaterial.SetColor("_Color_Base", colorOne);
 
 
@@ -33,5 +34,9 @@ public class PickColor : MonoBehaviour
             renderers[i].material = generatedMaterial;
             //renderers[i].material = generatedMaterial;        
         }
+    }
+    private void Update()
+    {
+        
     }
 }

@@ -6,7 +6,7 @@ public class BookColorRandom : MonoBehaviour
 {
     // Start is called before the first frame update
     public MeshRenderer[] renderers;
-    public Shader toonShader;
+    public Material toonMaterial;
     void Start()
     {
         //Color newColor = Random.ColorHSV();
@@ -22,7 +22,8 @@ public class BookColorRandom : MonoBehaviour
     {
 
 
-        Material generatedMaterial = new Material(toonShader);
+        //Material generatedMaterial = new Material(toonShader);
+        Material generatedMaterial = new Material(toonMaterial);
 
         generatedMaterial.SetColor("_AmbientColor", Color.white);
         generatedMaterial.SetColor("_Color_Base", colorOne);
