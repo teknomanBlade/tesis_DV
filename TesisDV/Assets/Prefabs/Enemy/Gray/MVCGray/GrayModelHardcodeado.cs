@@ -13,6 +13,7 @@ public class GrayModelHardcodeado : Enemy
     private void Awake()
     {
         //_pfManager = GameObject.Find("PathfindingManager").GetComponent<PathfindingManager>(); Probamos usar pathfindingManager como clase estatica.
+        isAwake = true;
         _fsm = new StateMachine();
         _pf = new Pathfinding();    
        

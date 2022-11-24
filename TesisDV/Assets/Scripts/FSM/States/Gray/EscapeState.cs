@@ -25,15 +25,25 @@ public class EscapeState : IState
     {
         _currentPathWaypoint = 0;
         
-        GetThetaStar();
         Debug.Log("Entre a Escape");
         
         var dir = _enemy._exitPos - _enemy.transform.position;
         _enemy.transform.forward = dir;
+
+        GetThetaStar();
     }
     public void OnUpdate()
     {
-        if (_enemy.hasObjective) _enemy.EscapeWithCat(); //En teoría que esto sea un if ahora no tiene sentido porque siempre va a ser true, despues lo saco y pruebo.
+        if (Vector3.Distance(_enemy.transform.position, _enemy._exitPos) < 1.5f)
+        {
+            _enemy.GoBackToShip();
+        }
+        else if (!_enemy._lm.enemyHasObjective)
+        {
+            _fsm.ChangeState(EnemyStatesEnum.CatState);
+        }
+
+        _enemy.EscapeWithCat();
 
         RaycastHit hit;
         Vector3 escapeDir = _enemy._exitPos - _enemy.transform.position;                                            //usamos obstacle mask ahora.
@@ -62,15 +72,6 @@ public class EscapeState : IState
         {
             _enemy.transform.forward = escapeDir;
             _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
-        }
-
-        if (Vector3.Distance(_enemy.transform.position, _enemy._exitPos) < 1.5f)
-        {
-            _enemy.GoBackToShip();
-        }
-        else if (!_enemy._lm.enemyHasObjective)
-        {
-            _fsm.ChangeState(EnemyStatesEnum.CatState);
         }
     }
     public void OnExit()

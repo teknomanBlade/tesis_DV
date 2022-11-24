@@ -14,7 +14,7 @@ public abstract class Enemy : MonoBehaviour
     public ParticleSystem witGainEffect;
     public Collider[] allTargets; //Borrar esto y probar.
     protected CapsuleCollider _capsuleCollider;
-    protected bool isAwake = true;
+    protected bool isAwake = false;
     public bool isDead = false;
 
     #region DistanceParameters

@@ -125,7 +125,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
                 //Estaba equivocado, hace falta para que el NavMesh busque path despues del awake.
 
 
-                //currentGray.AwakeGray();
+                currentGray.AwakeGray();
 
                 BeginSpawn();
             }
