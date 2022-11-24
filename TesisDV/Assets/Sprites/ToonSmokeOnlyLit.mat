@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ToonSmokeOnlyLit
+  m_Shader: {fileID: 4800000, guid: 8f9acea7566091349826ba9ec39bf60e, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Noise:
+        m_Texture: {fileID: 2800000, guid: 62f02b2b2a57f454e975c4af993f082b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 881ec4261bc362e479cc15e5bdf8f5c2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BumpOverTime: 1
+    - _ColorInterpolatorBase: 0
+    - _FadePower: 1
+    - _FadeSteps: 1
+    - _FirstPosition1: 0.87
+    - _FresnelMultiply: 4
+    - _NoiseBump: 0.03
+    - _NoisePanningSpeed: 3
+    - _NoiseScale: 0.1
+    - _SecondPosition1: 0.85
+    - _SecondPositionIntensity1: -0.51
+    - _ShadowIntensity1: 0.01
+    - _Steps: 1
+    - __dirty: 0
+    m_Colors:
+    - _SmokeColor: {r: 0.92080235, g: 1, b: 0, a: 0}
+    - _TintActive: {r: 1, g: 0.9813726, b: 0, a: 0}
+  m_BuildTextureStacks: []
