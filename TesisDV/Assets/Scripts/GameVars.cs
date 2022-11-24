@@ -82,12 +82,22 @@ public class GameVars : MonoBehaviour
     public CraftingRecipe SlowTrap;
     public CraftingRecipe NailFiringMachine;
     public CraftingRecipe ElectricTrap;
+    public bool HasBoughtMicrowaveTrap { get; set; }
+    public bool HasBoughtSlowingTrap { get; set; }
+    public bool HasBoughtDartsTrap { get; set; }
+    public bool HasBoughtElectricTrap { get; set; }
+    public bool HasElectricTrapAppearedHotBar { get; set; }
+    public bool HasMicrowaveTrapAppearedHotBar { get; set; }
+    public bool HasSlowingTrapAppearedHotBar { get; set; }
+    public bool HasDartsTrapAppearedHotBar { get; set; }
+    
 
     [Header("Game")]
     private float _fadeDelay = 1.1f;
     private bool _isFaded;
     public bool HasOpenedLetter { get; set; }
     public bool HasOpenedTrunk { get; set; }
+    
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
     public int currentShotsTrap1; //BaseballLauncher

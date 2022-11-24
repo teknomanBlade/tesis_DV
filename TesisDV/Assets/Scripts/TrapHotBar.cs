@@ -56,6 +56,7 @@ public class TrapHotBar : MonoBehaviour
                 Fade();
             }
             trapSlots[1].ActivateImage();
+            GameVars.Values.HasMicrowaveTrapAppearedHotBar = true;
         }
         else
         {
@@ -69,6 +70,7 @@ public class TrapHotBar : MonoBehaviour
                 Fade();
             }
             trapSlots[2].ActivateImage();
+            GameVars.Values.HasSlowingTrapAppearedHotBar = true;
         }
         else
         {
@@ -82,6 +84,7 @@ public class TrapHotBar : MonoBehaviour
                 Fade();
             }
             trapSlots[3].ActivateImage();
+            GameVars.Values.HasDartsTrapAppearedHotBar = true;
         }
         else
         {
@@ -95,6 +98,7 @@ public class TrapHotBar : MonoBehaviour
                 Fade();
             }
             trapSlots[4].ActivateImage();
+            GameVars.Values.HasElectricTrapAppearedHotBar = true;
         }
         else
         {

@@ -2177,7 +2177,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -0.0000060796738, y: -0.000091552734}
+  m_AnchoredPosition: {x: -0.0000060796738, y: 0}
   m_SizeDelta: {x: 219.69902, y: 850}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &214813560152022830
@@ -8994,7 +8994,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7021376046600787697}
   m_HandleRect: {fileID: 429028503487718451}
   m_Direction: 2
-  m_Value: 1.0000001
+  m_Value: 0.9999999
   m_Size: 0.21558858
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9170,6 +9170,7 @@ GameObject:
   - component: {fileID: 5466993242151055036}
   - component: {fileID: 3740518842124547047}
   - component: {fileID: 3740518843455911667}
+  - component: {fileID: 8904791359882943108}
   m_Layer: 5
   m_Name: CraftingContainer
   m_TagString: Untagged
@@ -9263,6 +9264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21f311eb77bfce74b94fe4d801c2b1ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundVolume: 0.451
   MicrowaveTrapWittCost: 180
   SlowTrapWittCost: 100
   ElectricTrapWittCost: 400
@@ -9278,6 +9280,102 @@ MonoBehaviour:
   MT1WittCost: 0
   MT2WittCost: 0
   MT3WittCost: 0
+--- !u!82 &8904791359882943108
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5466993242151055038}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5484645217138834008
 GameObject:
   m_ObjectHideFlags: 0
@@ -13712,6 +13810,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 389e4a9fbe03d5c46bb8dbc88470f717, type: 3}
+--- !u!224 &8782627264288193244 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7538884791103735209, guid: 389e4a9fbe03d5c46bb8dbc88470f717, type: 3}
+  m_PrefabInstance: {fileID: 1260259337404399477}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8782627264288193247 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7538884791103735210, guid: 389e4a9fbe03d5c46bb8dbc88470f717, type: 3}
@@ -13723,11 +13826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5697a063e10e4c4fb8715bff6dfd4ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &8782627264288193244 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7538884791103735209, guid: 389e4a9fbe03d5c46bb8dbc88470f717, type: 3}
-  m_PrefabInstance: {fileID: 1260259337404399477}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1495963716473366293
 PrefabInstance:
   m_ObjectHideFlags: 0

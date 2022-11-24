@@ -5,7 +5,9 @@ using UnityEngine;
 public class SkillTree : MonoBehaviour
 {
     private Inventory _inventory;
-
+    private AudioSource _as;
+    [Range (0,1)]
+    public float soundVolume;
     #region Trap Unlocks
 
     [Header("Microwave Trap")]
@@ -153,6 +155,7 @@ public class SkillTree : MonoBehaviour
     void Start()
     {
         _inventory = GetComponentInChildren<Inventory>();
+        _as = GetComponent<AudioSource>();
     }
 
     #region ButtonVoids
@@ -161,8 +164,10 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MicrowaveTrapWittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(MicrowaveTrapWittCost);
             _isMicrowaveTrapUnlocked = true;
+            GameVars.Values.HasBoughtMicrowaveTrap = _isMicrowaveTrapUnlocked;
             OnUpgrade?.Invoke();
         }
     }
@@ -170,8 +175,10 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isSlowTrapUnlocked && _inventory.HasEnoughWitts(SlowTrapWittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(SlowTrapWittCost);
             _isSlowTrapUnlocked = true;
+            GameVars.Values.HasBoughtSlowingTrap = _isSlowTrapUnlocked;
             OnUpgrade?.Invoke();
         }
     }
@@ -179,8 +186,10 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isElectricTrapUnlocked && _inventory.HasEnoughWitts(ElectricTrapWittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ElectricTrapWittCost);
             _isElectricTrapUnlocked = true;
+            GameVars.Values.HasBoughtElectricTrap = _isElectricTrapUnlocked;
             OnUpgrade?.Invoke();
         } 
     }
@@ -188,8 +197,10 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isDartsTrapUnlocked && _inventory.HasEnoughWitts(DartsTrapWittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(DartsTrapWittCost);
             _isDartsTrapUnlocked = true;
+            GameVars.Values.HasBoughtDartsTrap = _isDartsTrapUnlocked;
             OnUpgrade?.Invoke();
         }
         
@@ -199,6 +210,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isBL1Activated && _inventory.HasEnoughWitts(BL1WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(BL1WittCost);
             _isBL1Activated = true;
             OnUpgrade?.Invoke();
@@ -210,6 +222,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isBL2Activated && _inventory.HasEnoughWitts(BL2WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(BL2WittCost);
             _isBL2Activated = true;
             OnUpgrade?.Invoke();
@@ -220,6 +233,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isNFM1Activated && _isDartsTrapUnlocked && _inventory.HasEnoughWitts(NFM1WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(NFM1WittCost);
             _isNFM1Activated = true;
             OnUpgrade?.Invoke();
@@ -230,6 +244,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isNFM2Activated && _isDartsTrapUnlocked && _inventory.HasEnoughWitts(NFM2WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(NFM2WittCost);
             _isNFM2Activated = true;
             OnUpgrade?.Invoke();
@@ -240,6 +255,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isET1Activated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET1WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ET1WittCost);
             _isET1Activated = true;
             OnUpgrade?.Invoke();
@@ -250,6 +266,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isET2Activated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET2WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ET2WittCost);
             _isET2Activated = true;
             OnUpgrade?.Invoke();
@@ -260,6 +277,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isST1Activated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST1WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ST1WittCost);
             _isST1Activated = true;
             OnUpgrade?.Invoke();
@@ -270,6 +288,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isST2Activated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST2WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ST2WittCost);
             _isST2Activated = true;
             OnUpgrade?.Invoke();
@@ -280,6 +299,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isMT1Activated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT1WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(MT1WittCost);
             _isMT1Activated = true;
             OnUpgrade?.Invoke();
@@ -290,6 +310,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isMT2Activated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT2WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(MT2WittCost);
             _isMT2Activated = true;
             OnUpgrade?.Invoke();
@@ -300,6 +321,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isMT3Activated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT3WittCost))
         {
+            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(MT3WittCost);
             _isMT3Activated = true;
             OnUpgrade?.Invoke();

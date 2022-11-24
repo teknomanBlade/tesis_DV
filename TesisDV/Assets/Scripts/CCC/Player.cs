@@ -271,25 +271,58 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     GameVars.Values.BaseballLauncher.Craft(_inventory);
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting && _canBuildMicrowaveTrap)
+                if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting)
                 {
-                    GameVars.Values.MicrowaveForceFieldGenerator.Craft(_inventory);
+                    if (_canBuildMicrowaveTrap)
+                    {
+                        GameVars.Values.MicrowaveForceFieldGenerator.Craft(_inventory);
+                    }
+                    else
+                    {
+                        if(GameVars.Values.HasMicrowaveTrapAppearedHotBar)
+                            GameVars.Values.ShowNotification("You can't set Microwave ForceField Machine until you have bought it in the Basement");
+                    }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting && _canBuildSlowTrap)
+                if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting)
                 {
-                    GameVars.Values.SlowTrap.Craft(_inventory);
+                    if (_canBuildSlowTrap)
+                    {
+                        GameVars.Values.SlowTrap.Craft(_inventory);
+                    }
+                    else
+                    {
+                        if (GameVars.Values.HasSlowingTrapAppearedHotBar)
+                            GameVars.Values.ShowNotification("You can't set Tar Slowing Trap until you have bought it in the Basement");
+                    }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting && _canBuildDartsTrap)
+                if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting)
                 {
-                    GameVars.Values.NailFiringMachine.Craft(_inventory);
+                    if (_canBuildDartsTrap)
+                    {
+                        GameVars.Values.NailFiringMachine.Craft(_inventory);
+                    }
+                    else
+                    {
+                        if (GameVars.Values.HasDartsTrapAppearedHotBar)
+                            GameVars.Values.ShowNotification("You can't set Nails Firing Machine until you have bought it in the Basement");
+                    }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting && _canBuildElectricTrap)
+                if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting)
                 {
-                    GameVars.Values.ElectricTrap.Craft(_inventory);
+                    if (_canBuildElectricTrap)
+                    {
+                        GameVars.Values.ElectricTrap.Craft(_inventory);
+                    }
+                    else
+                    {
+                        if (GameVars.Values.HasElectricTrapAppearedHotBar)
+                            GameVars.Values.ShowNotification("You can't set the Electric Trap until you have bought it in the Basement");
+                    }
                 }
+
                 if (Input.GetKeyDown(KeyCode.H))
                 {
                     SwitchWeapon();
