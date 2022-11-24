@@ -8,6 +8,7 @@ public class UFOLineRenderer : MonoBehaviour
     private Cat _cat;
     [SerializeField] private GameObject owner;
     [SerializeField] private LineRenderer lineRenderer;
+    private float _nodeYPosition = 0.26f;
 
     #region Pathfinding
 
@@ -35,11 +36,11 @@ public class UFOLineRenderer : MonoBehaviour
     private void DrawLineRenderer(List<Node> waypoints) 
     {
         lineRenderer.positionCount = waypoints.Count;
-        lineRenderer.SetPosition(0, waypoints[0].transform.position);
+        //lineRenderer.SetPosition(0, waypoints[0].transform.position);
 
-        for (int i = 1; i < waypoints.Count; i++)
+        for (int i = 0; i < waypoints.Count; i++)
         {
-            Vector3 pointPosition = new Vector3(waypoints[i].transform.position.x, waypoints[i].transform.position.y, waypoints[i].transform.position.z);
+            Vector3 pointPosition = new Vector3(waypoints[i].transform.position.x, _nodeYPosition, waypoints[i].transform.position.z);
             lineRenderer.SetPosition(i, pointPosition);
         }
     }
