@@ -28,17 +28,11 @@ public class EscapeState : IState
         GetThetaStar();
         Debug.Log("Entre a Escape");
         
-        //_enemy.SetObjective(_enemy.currentExitUFO);
-        //_enemy.ResetPathAndSetObjective(_enemy._exitPos);
         var dir = _enemy._exitPos - _enemy.transform.position;
         _enemy.transform.forward = dir;
-        //_enemy.ResetPathAndSetObjective(_enemy._exitPos);
     }
     public void OnUpdate()
     {
-        //_enemy.ResetPathAndSetObjective(_enemy._exitPos);
-        //_enemy.Move();
-
         if (_enemy.hasObjective) _enemy.EscapeWithCat(); //En teoría que esto sea un if ahora no tiene sentido porque siempre va a ser true, despues lo saco y pruebo.
 
         RaycastHit hit;
