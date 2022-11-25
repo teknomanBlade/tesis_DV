@@ -27,6 +27,9 @@ public class Letter : Item
     public void ShowNotification()
     {
         GameVars.Values.ShowNotification("Now you can review the Footlocker to begin tutorial.");
+        var footlocker = FindObjectOfType<FootLocker>();
+        Debug.Log("FIND FOOTLOCKER? "+ footlocker != null);
+        footlocker.IsBlocked = false;
     }
 
     public override void Interact()

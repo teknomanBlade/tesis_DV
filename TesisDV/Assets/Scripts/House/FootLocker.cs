@@ -7,8 +7,8 @@ public class FootLocker : Item
     private Animator _anim;
     public BoxCollider LidColllider;
     private bool IsOpened { get; set; }
+    public bool IsBlocked;
 
-    
 
     void Awake()
     {
@@ -25,6 +25,17 @@ public class FootLocker : Item
 
     public override void Interact()
     {
+        if (IsBlocked)
+        {
+            //if (transform.tag.Equals("Tutorial"))
+            //{
+            GameVars.Values.ShowNotification("You can't go out now. First review the letter in the Desk...");
+            //}
+            _anim.SetBool("IsBlocked", true);
+            Invoke("SetBlockedFalse", 0.5f);
+            return;
+        }
+
         if (IsOpened)
         {
             _anim.SetBool("IsOpened", true);
@@ -41,9 +52,17 @@ public class FootLocker : Item
             IsOpened = true;
         }
     }
-
+    private void SetBlockedFalse()
+    {
+        _anim.SetBool("IsBlocked", false);
+    }
     public void CloseLockerDoorSound()
     {
         GameVars.Values.soundManager.PlaySoundAtPoint("FootLockerClose", transform.position, 0.8f);
+    }
+
+    public void BlockedLockerDoorSound()
+    {
+        GameVars.Values.soundManager.PlaySoundAtPoint("FootLockerBlocked", transform.position, 0.8f);
     }
 }

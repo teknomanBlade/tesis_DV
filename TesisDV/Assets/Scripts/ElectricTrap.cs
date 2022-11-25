@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElectricTrap : Trap, IInteractable
+public class ElectricTrap : Trap, IMovable, IInteractable
 {
     [SerializeField] private float _damage;
     [SerializeField] private float _damagePerSecond;
@@ -10,6 +10,7 @@ public class ElectricTrap : Trap, IInteractable
     [SerializeField] private GameObject endPositionDamage;
     //[SerializeField] private float _trapDuration;
     [SerializeField] private float _currentLife;
+    public GameObject blueprintPrefab;
     public GameObject ParticleLightning;
     private bool _isDisabledSFX;
     private AudioSource _as;
@@ -97,5 +98,14 @@ public class ElectricTrap : Trap, IInteractable
         yield return new WaitForSeconds(1f);
         GameVars.Values.soundManager.StopSound();
         _isDisabledSFX = true;
+    }
+
+    public void BecomeMovable()
+    {
+        GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
+        aux.GetComponent<StaticBlueprint>().SpendMaterials(false);
+        aux.GetComponent<StaticBlueprint>().CanBeCancelled(false);
+        _myTrapBase.ResetBase();
+        Destroy(gameObject);
     }
 }

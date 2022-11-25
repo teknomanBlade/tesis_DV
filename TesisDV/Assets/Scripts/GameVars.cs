@@ -282,7 +282,7 @@ public class GameVars : MonoBehaviour
 
     public string ShowMessageNotificationByAction()
     {
-        return HasOpenedLetter ? " First review the Footlocker at Kevin's Bed..." : " First review your father's letter in the Desk...";
+        return HasOpenedLetter ? " First review the Footlocker at Kevin's Bed..." : " First review the letter in the Desk...";
     }
 
     public IEnumerator ShowNotification()

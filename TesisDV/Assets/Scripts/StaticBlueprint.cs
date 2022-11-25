@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StaticBlueprint : MonoBehaviour
@@ -7,6 +8,7 @@ public class StaticBlueprint : MonoBehaviour
     private Player _player;
     RaycastHit hit;
     private TrapBase _trapBase;
+    private List<TrapBase> _trapBases;
     Vector3 movePoint;
     [SerializeField] private bool canBuild;
     private bool _canBeCancelled;
@@ -33,6 +35,7 @@ public class StaticBlueprint : MonoBehaviour
     {
         //_parent = GameObject.Find("MainGame");
         _player = GameObject.Find("Player").GetComponent<Player>();
+        _trapBases = FindObjectsOfType<TrapBase>().ToList();
         int layerMask = GameVars.Values.GetWallLayer();
         layerMask = ~layerMask;
         canBuild = false;
@@ -87,7 +90,8 @@ public class StaticBlueprint : MonoBehaviour
             //if(_trapBase._isAvailable)
             //{
                 canBuild = true;
-                _trapBase?.SetHighIntensity();
+                _trapBases.ForEach(x => x.SetNormalIntensity());
+                //_trapBase?.SetNormalIntensity();
                 transform.position = hit.transform.position;
                 SetOriginalMaterial();
                 return;
@@ -96,7 +100,8 @@ public class StaticBlueprint : MonoBehaviour
         else
         {
             canBuild = false;
-            _trapBase?.SetNormalIntensity();
+            _trapBases.ForEach(x => x.SetHighIntensity());
+            //_trapBase?.SetHighIntensity();
             ChangeMaterial();
         }
 
