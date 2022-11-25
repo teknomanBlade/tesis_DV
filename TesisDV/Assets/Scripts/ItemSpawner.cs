@@ -39,6 +39,7 @@ public class ItemSpawner : MonoBehaviour
             case 2:
                 GameVars.Values.ShowNotificationDefinedTime("You can go to the Basement at the Tools Workbench to Buy and Update Traps.", 4.5f, () => ActivateSecondWaveItems());
                 _levelDoors[2].IsLockedToGrays = false; //Puerta de la cocina a atras de la casa.
+                _levelDoors[3].IsLockedToGrays = false; //Puerta de la cocina a un costado de la casa.
                 _levelDoors[5].IsLockedToGrays = false; //Puerta de la cocina al living.
                 break;
             case 3:

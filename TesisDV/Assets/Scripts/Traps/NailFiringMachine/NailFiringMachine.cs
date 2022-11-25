@@ -19,6 +19,10 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     public int shotsLeft;
     private Coroutine ShootCoroutine; 
     [SerializeField] private int _damageAmount;
+
+    public ParticleSystem HitTurret;
+    public ParticleSystem ShootEffect;
+
     void Awake()
     {
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
