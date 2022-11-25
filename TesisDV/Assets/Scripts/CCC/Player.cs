@@ -81,6 +81,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     // Mouse
     public bool canMoveCamera = true;
     public Image crosshair;
+    public GameObject interactKey;
+    public GameObject movingTrapButton;
     private Vector2 mouseSens = new Vector2(1f, 1f);
     private float yaw = 0f;
     private float pitch = 0f;
@@ -140,6 +142,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _originalCamPos = _cam.transform.localPosition;
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
+
         hp = maxHp;
         GameVars.Values.ShowLivesRemaining(hp, maxHp);
         ActiveFadeInEffect(1f);    
@@ -768,6 +771,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         if (lookingAt == null)
         {
+            interactKey.SetActive(false);
+            movingTrapButton.SetActive(false);
             crosshair.sprite = GameVars.Values.crosshair;
             ChangeCrosshairSize(20f);
             return;
@@ -776,18 +781,21 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             crosshair.sprite = GameVars.Values.crosshairWorkbenchCrafting;
             wbCraftingMenu.SetCraftingMenu(_craftingScreen.GetComponent<CraftingScreen>());
+            interactKey.SetActive(true);
             ChangeCrosshairSize(40f);
             return;
         }
         if (lookingAt.gameObject.TryGetComponent<InventoryItem>(out InventoryItem aux))
         {
             crosshair.sprite = GameVars.Values.crosshairHandGrab;
+            interactKey.SetActive(true);
             ChangeCrosshairSize(40f);
             return;
         }
         if (lookingAt.gameObject.TryGetComponent<StationaryItem>(out StationaryItem stationaryItem))
         {
             crosshair.sprite = GameVars.Values.crosshairAddOnBattery;
+            interactKey.SetActive(true);
             stationaryItem.ShowBlueprint();
             ChangeCrosshairSize(40f);
             return;
@@ -796,6 +804,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (lookingAt.gameObject.TryGetComponent<FootLocker>(out FootLocker fl))
         {
             crosshair.sprite = GameVars.Values.crosshairHandHold;
+            interactKey.SetActive(true);
             ChangeCrosshairSize(40f);
             return;
         }
@@ -803,6 +812,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (lookingAt.gameObject.TryGetComponent<Letter>(out Letter letter))
         {
             crosshair.sprite = GameVars.Values.crosshairHandGrab;
+            interactKey.SetActive(true);
             ChangeCrosshairSize(40f);
             return;
         }
@@ -810,18 +820,21 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (lookingAt.gameObject.TryGetComponent<Door>(out Door aux1))
         {
             crosshair.sprite = GameVars.Values.crosshairDoor;
+            interactKey.SetActive(true);
             ChangeCrosshairSize(40f);
             return;
         }
         if (lookingAt.gameObject.TryGetComponent<PantryDoor>(out PantryDoor pantryDoor))
         {
             crosshair.sprite = GameVars.Values.crosshairDoor;
+            interactKey.SetActive(true);
             ChangeCrosshairSize(40f);
             return;
         }
         if (lookingAt.gameObject.TryGetComponent<Drawer>(out Drawer drawer))
         {
             crosshair.sprite = GameVars.Values.crosshairHandHold;
+            interactKey.SetActive(true);
             ChangeCrosshairSize(40f);
             return;
         }
@@ -835,18 +848,33 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             else
             {
                 crosshair.sprite = GameVars.Values.crosshairActivation;
+                interactKey.SetActive(true);
+                movingTrapButton.SetActive(true);
             }
 
             ChangeCrosshairSize(40f);
             return;
         }
+        
         if (lookingAt.gameObject.TryGetComponent<NailFiringMachine>(out NailFiringMachine nailFiringMachine))
         {
             crosshair.sprite = GameVars.Values.crosshairActivation;
+            interactKey.SetActive(true);
+            movingTrapButton.SetActive(true);
             ChangeCrosshairSize(40f);
             return;
         }
 
+        if (lookingAt.gameObject.TryGetComponent<ElectricTrap>(out ElectricTrap ElectricTrap))
+        {
+            crosshair.sprite = GameVars.Values.crosshairActivation;
+            interactKey.SetActive(true);
+            movingTrapButton.SetActive(true);
+            ChangeCrosshairSize(40f);
+            return;
+        }
+        
+        
         crosshair.sprite = GameVars.Values.crosshair;
         ChangeCrosshairSize(20f);
     }

@@ -29,7 +29,7 @@ public class FootLocker : Item
         {
             //if (transform.tag.Equals("Tutorial"))
             //{
-            GameVars.Values.ShowNotification("You can't go out now. First review the letter in the Desk...");
+            GameVars.Values.ShowNotification("You can't open this now. First review the letter in the Desk...");
             //}
             _anim.SetBool("IsBlocked", true);
             Invoke("SetBlockedFalse", 0.5f);
