@@ -47,11 +47,6 @@ public abstract class Enemy : MonoBehaviour
 
     public Vector3 _exitPos;
     public Vector3 trapPos;
-
-    //protected NavMeshAgent _navMeshAgent; //Se va el navmesh
-    //private NavMeshPath _navMeshPath;
-    //private bool pathIsCreated;
-    //private bool canCreatePath;
     public Vector3[] _waypoints;
     private int _currentWaypoint = 0;
     private int _currentCorner = 0;
@@ -492,6 +487,7 @@ public abstract class Enemy : MonoBehaviour
     public void ReferenceEvent(bool value)
     {
         onWalk(value);
+        onEndSpawn();
     }
 
     public void SetPath(List<Node> nodos) //esto no hace falta, es para testear.

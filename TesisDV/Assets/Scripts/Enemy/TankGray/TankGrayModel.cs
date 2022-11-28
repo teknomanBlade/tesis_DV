@@ -16,6 +16,7 @@ public class TankGrayModel : Enemy
         _fsm = new StateMachine();
         _pf = new Pathfinding();    
        
+       _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.CatState));
         _fsm.AddState(EnemyStatesEnum.CatState, new CatState(_fsm, this, _pf));
         _fsm.AddState(EnemyStatesEnum.ChaseState, new ChaseState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.AttackPlayerState, new AttackPlayerState(_fsm, this));
@@ -37,32 +38,19 @@ public class TankGrayModel : Enemy
         _player = GameVars.Values.Player;
         _cat = GameVars.Values.Cat;
 
-        //_navMeshAgent = GetComponent<NavMeshAgent>(); //Se va el navmesh
-
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        _lm.AddGray(this);  //Cambiar a GrayModel
+        _lm.AddGray(this); 
         miniMap = FindObjectOfType<MiniMap>();
-        miniMap.grays.Add(this); // Cambiar a GrayModel
+        miniMap.grays.Add(this); 
         miniMap.AddLineRenderer(lineRenderer);
 
-        _fsm.ChangeState(EnemyStatesEnum.CatState); //Cambiar estado siempre al final del Start para tener las referencias ya asignadas.
+        _fsm.ChangeState(EnemyStatesEnum.SpawningState); //Cambiar estado siempre al final del Start para tener las referencias ya asignadas.
 
-        ReferenceEvent(true);//Referencia al Onwalk
+        //ReferenceEvent(true);//Referencia al Onwalk
     }
 
     void Update()
     {
-        //_fsm.OnUpdate();
-        if(isAwake)
-        {
-            _myController.OnUpdate();
-            
-            //ResetPathAndSetObjective(); //Horrible resetear en Update, pero con el pathfinding no va a hacer falta. Se resetea en los States ahora.
-        }
+        _myController.OnUpdate();
     }
- 
-    /* public void SetObjective(GameObject targetPosition) No se usa, se usa directamente ResetPathAndSetObjective()
-    {
-        currentObjective = targetPosition;
-    } */
 }
