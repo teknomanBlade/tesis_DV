@@ -95,6 +95,11 @@ public abstract class Enemy : MonoBehaviour
 
     #endregion Events
 
+    public void ActiveGrayAttackRingCollider()
+    {
+        transform.GetComponentInChildren<GrayAttackRing>().EnableBoxCollider();
+    }
+
     public void TakeDamage(float DamageAmount)
     {
         _hp -= DamageAmount;

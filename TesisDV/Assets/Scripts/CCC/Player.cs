@@ -101,7 +101,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     [SerializeField] private bool _isAlive;
     public bool isAlive { get { return _isAlive; } }
     public int hp;
-    public int maxHp = 4;
+    public int maxHp = 3;
     public bool HasContextualMenu = false;
     public bool IsCrafting = false;
     #endregion
@@ -144,7 +144,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
 
         hp = maxHp;
-        GameVars.Values.ShowLivesRemaining(hp, maxHp);
+        GameVars.Values.ShowLivesRemaining(0,hp);
         ActiveFadeInEffect(1f);    
     }
 
@@ -484,7 +484,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         ActiveDamageEffect();
         StartCoroutine(PlayDamageSound(3.4f));
         hp -= damageAmount;
-        GameVars.Values.ShowLivesRemaining(hp, maxHp);
+        GameVars.Values.ShowLivesRemaining(damageAmount, hp, maxHp);
         if (hp <= 0) Die();
     }
 
@@ -508,7 +508,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _isAlive = true;
         canMoveCamera = true;
         hp = maxHp;
-        GameVars.Values.ShowLivesRemaining(hp, maxHp);
+        GameVars.Values.ShowLivesRemaining(0, hp);
     }
 
     public void SwitchIsCrafting()
@@ -848,7 +848,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             else
             {
                 crosshair.sprite = GameVars.Values.crosshairActivation;
-                interactKey.SetActive(true);
+                //interactKey.SetActive(true);
                 movingTrapButton.SetActive(true);
             }
 
@@ -859,7 +859,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (lookingAt.gameObject.TryGetComponent<NailFiringMachine>(out NailFiringMachine nailFiringMachine))
         {
             crosshair.sprite = GameVars.Values.crosshairActivation;
-            interactKey.SetActive(true);
+            //interactKey.SetActive(true);
             movingTrapButton.SetActive(true);
             ChangeCrosshairSize(40f);
             return;
@@ -868,7 +868,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (lookingAt.gameObject.TryGetComponent<ElectricTrap>(out ElectricTrap ElectricTrap))
         {
             crosshair.sprite = GameVars.Values.crosshairActivation;
-            interactKey.SetActive(true);
+            //interactKey.SetActive(true);
             movingTrapButton.SetActive(true);
             ChangeCrosshairSize(40f);
             return;
@@ -1106,10 +1106,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             if (_inventory.ItemCountByID(inventoryItem.myCraftingID) < 1)
             {
                 _inventory.AddItem(inventoryItem);
+                GameVars.Values.PlayBackpackItemGrabbedAnim(inventoryItem.itemImage);
             }
         }
         else
         {
+            GameVars.Values.PlayBackpackItemGrabbedAnim(inventoryItem.itemImage);
             _inventory.AddItem(inventoryItem);
         }
     }

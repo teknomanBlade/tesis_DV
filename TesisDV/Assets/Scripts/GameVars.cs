@@ -68,14 +68,15 @@ public class GameVars : MonoBehaviour
     public CraftingScreen craftingScreen;
 
     public Text notifications;
-    public Text playerLives;
+    public Image[] playerLives;
 
     public Animator playerLivesAnim { get; private set; }
 
     //public YouWinScreen youWinScreen;
     //public YouLoseScreen youLoseScreen;
     public List<AudioClip> audioClips;
-
+    public GameObject backpack;
+    public Image itemGrabbedImage;
     [Header("Crafting Recipes")]
     public CraftingRecipe BaseballLauncher;
     public CraftingRecipe MicrowaveForceFieldGenerator;
@@ -161,12 +162,10 @@ public class GameVars : MonoBehaviour
         crosshairWorkbenchCrafting = Resources.Load<Sprite>("WorkbenchCraftIcon");
         craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
         audioClips = Resources.LoadAll<AudioClip>("Sounds").ToList();
-        //youWinScreen = Resources.Load<YouWinScreen>("YouWin");
-        //youLoseScreen = Resources.Load<YouLoseScreen>("YouLose");
+        backpack = FindObjectsOfType<GameObject>().Where(x => x.name.Equals("Backpack")).First();
+        itemGrabbedImage = FindObjectsOfType<Image>(true).Where(x => x.name.Equals("ItemGrabbed")).First();
         notifications = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("NotificationsText")).First();
-        playerLives = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("HealthText")).First();
-        playerLivesAnim = playerLives.gameObject.GetComponent<Animator>();
-        playerLivesAnim.SetBool("IsDamaged", false);
+        playerLives = FindObjectsOfType<Image>().Where(x => x.gameObject.name.Contains("Life")).OrderBy(x => x.name).ToArray();
         soundManager = FindObjectOfType<SoundManager>();
         craftingContainer = FindObjectOfType<CraftingScreen>();
         soundManager.SetAudioClips(audioClips);
@@ -192,16 +191,43 @@ public class GameVars : MonoBehaviour
         player.PlayPickUpSound();
     }
 
-    public void ShowLivesRemaining(int lives, int maxHP)
+    public void PlayBackpackItemGrabbedAnim(Sprite itemImage)
     {
-        StartCoroutine(ShowAnimDamagedPlayer());
-        playerLives.text = "X " + Mathf.Clamp(lives, 0, maxHP);
+        itemGrabbedImage.sprite = itemImage;
+        StartCoroutine(ShowAnimationBackpack());
     }
-    public IEnumerator ShowAnimDamagedPlayer()
+    public IEnumerator ShowAnimationBackpack()
     {
-        playerLivesAnim.SetBool("IsDamaged", true);
-        yield return new WaitForSeconds(1f);
-        playerLivesAnim.SetBool("IsDamaged", false);
+        backpack.GetComponent<Animator>().SetBool("IsItemGrabbed", true);
+        yield return new WaitForSeconds(1.2f);
+        backpack.GetComponent<Animator>().SetBool("IsItemGrabbed", false);
+    }
+    public void ShowLivesRemaining(int damageAmount, int hp, int maxHP = 0)
+    {
+        if (hp == 3)
+        {
+            playerLives.ToList().ForEach(x => x.GetComponent<Animator>().SetBool("IsDamaged", false));
+            return;
+        }
+        //WIP Multiple Lives
+        if (damageAmount == 2)
+        {
+            playerLives.OrderBy(x => x.name).Skip(1);
+        }
+
+        if (hp == 2)
+        {
+            playerLives[maxHP - maxHP].GetComponent<Animator>().SetBool("IsDamaged", true);
+        }
+        else if (hp == 1)
+        {
+            playerLives[maxHP - 2].GetComponent<Animator>().SetBool("IsDamaged", true);
+        }
+        else if (hp == 0)
+        {
+            playerLives[maxHP - 1].GetComponent<Animator>().SetBool("IsDamaged", true);
+        }
+        
     }
     public Vector3 GetPlayerPrefabPlacement()
     {
