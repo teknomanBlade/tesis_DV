@@ -51,6 +51,9 @@ public class TankGrayModel : Enemy
 
     void Update()
     {
-        _myController.OnUpdate();
+        if(!isDead)
+        {
+            _myController.OnUpdate();
+        }
     }
 }

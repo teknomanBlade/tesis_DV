@@ -48,7 +48,10 @@ public class TallGrayModel : Enemy
 
     void Update()
     {
-        _myController.OnUpdate();
+        if(!isDead)
+        {
+            _myController.OnUpdate();
+        }
     }
 
     public void Destroy() //Se llama desde la animacion.
