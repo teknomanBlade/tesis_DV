@@ -52,7 +52,7 @@ public abstract class Enemy : MonoBehaviour
     private int _currentCorner = 0;
     public bool foundTrapInPath = false;
     [SerializeField] private LayerMask _trapMask;
-    public Collider _currentTrapObjective { get; private set; }
+    public Collider _currentTrapObjective; //{ get; private set; }
     private float _currentTrapObjectiveDistance = 1000f;
     public const float MAX_CURRENT_OBJECTIVE_DISTANCE = 1000;
     public StateMachine _fsm;
@@ -195,13 +195,13 @@ public abstract class Enemy : MonoBehaviour
     {
         allTargets = Physics.OverlapSphere(transform.position, _trapViewRadius, _trapMask);
 
-        if (allTargets.Length == 0 || _currentTrapObjective == null)
+        if (allTargets.Length == 0 || _currentTrapObjective == null || !_currentTrapObjective.GetComponent<Trap>().active)
         {
             _currentTrapObjective = null;
             _currentTrapObjectiveDistance = MAX_CURRENT_OBJECTIVE_DISTANCE;
         }
 
-        if (_currentTrapObjective == null || !_currentTrapObjective.GetComponent<Trap>().active || _currentTrapObjectiveDistance > _trapViewRadius) //cambiar el baseballLauncher por clase padre de trampas.
+        if (_currentTrapObjective == null || !_currentTrapObjective.GetComponent<Trap>().active || _currentTrapObjectiveDistance > _trapViewRadius)
         {
             
             foreach (var item in allTargets)
@@ -211,23 +211,34 @@ public abstract class Enemy : MonoBehaviour
                                                                                                                                                                                                          //Ahora usamos obstacleMask                                                           
                 if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance && item.GetComponent<Trap>() && !Physics.Raycast(transform.position, dir, out hit, dir.magnitude, obstacleMask))//GameVars.Values.GetWallLayerMask()))
                 {
-                    var trap = item.GetComponent<Trap>(); //Después cambiar cuando haya un script Trap.
+                    var trap = item.GetComponent<Trap>();
                     
-                    if (trap && item.GetComponent<Trap>().active) //cambiar el baseballLauncher por clase padre de trampas.
+                    if (trap && item.GetComponent<Trap>().active)
                     {
-                        _currentTrapObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
-                        _currentTrapObjective = item;
+                        if(item.GetComponent<ForceField>())
+                        {
+                            RaycastHit forceFieldHit;
+                            Physics.Raycast(transform.position, dir, out forceFieldHit, Mathf.Infinity, GameVars.Values.GetItemLayerMask());
+                            _currentTrapObjectiveDistance = forceFieldHit.distance;
+                            _currentTrapObjective = item;
+                            Debug.Log("soy forcefield " + _currentTrapObjectiveDistance);
+                        }
+                        else
+                        {
+                            _currentTrapObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
+                            _currentTrapObjective = item;
+                            Debug.Log("soy otra coasa " + _currentTrapObjectiveDistance);
+                        }
+                        
                     }
                 }
-            }
-            
+            }   
         }
 
-        if (_currentTrapObjectiveDistance < _trapViewRadius && _currentTrapObjective != null && _currentTrapObjective.GetComponent<Trap>().active) //Agregar esto como estaba antes cuando haya clase padre de Trap.
+        if (_currentTrapObjectiveDistance < _trapViewRadius && _currentTrapObjective != null && _currentTrapObjective.GetComponent<Trap>().active)
         {
             foundTrapInPath = true;
         }
-        
     }
 
     public void ForceFieldRejection()
@@ -288,7 +299,8 @@ public abstract class Enemy : MonoBehaviour
         if(_currentTrapObjective.GetComponent<Trap>() && _currentTrapObjective.GetComponent<Trap>().active == false)
         {
             foundTrapInPath = false;
-            canBeHit = true;
+
+            //canBeHit = true;
             RevertSpecialAttackBool();
         }
         /* if(_currentTrapObjective.GetComponent<NailFiringMachine>() && _currentTrapObjective.GetComponent<NailFiringMachine>().active == false)
@@ -300,12 +312,13 @@ public abstract class Enemy : MonoBehaviour
     public void RevertSpecialAttackBool() //Esto se llama por la animación de ataque.
     {
         isSpecialAttacking = false;
-        foundTrapInPath = false;
+        //foundTrapInPath = false;
         onAttackSpecial(isSpecialAttacking);
         //_navMeshAgent.speed = 1; //Se va el navmesh
         onWalk(!isSpecialAttacking);
-            
-        _fsm.ChangeState(EnemyStatesEnum.CatState);
+        //_currentTrapObjectiveDistance = MAX_CURRENT_OBJECTIVE_DISTANCE;
+        Debug.Log("Chau chau");
+        //_fsm.ChangeState(EnemyStatesEnum.CatState);
     }
 
     public void RevertAttackBool() //Esto se llama por la animación de ataque.

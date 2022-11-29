@@ -24,13 +24,13 @@ public class EMPAttack : MonoBehaviour
         if (trap && other.GetComponent<ElectricTrap>())
         {
             trap.Inactive();
-            _myOwner.RevertSpecialAttackBool();
+            //_myOwner.RevertSpecialAttackBool();
         }
 
         if (trap && other.GetComponent<BaseballLauncher>())
         {
             trap.Inactive();
-            _myOwner.RevertSpecialAttackBool();
+           // _myOwner.RevertSpecialAttackBool();
         }
 
         if (trap && other.GetComponent<ForceField>())
