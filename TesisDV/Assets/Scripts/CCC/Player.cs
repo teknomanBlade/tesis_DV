@@ -118,6 +118,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private bool _canBuildSlowTrap = false;
     private bool _canBuildElectricTrap = false;
     private bool _canBuildDartsTrap = false;
+    public MicrowaveForceFieldGenerator microwaveFFG;
+
     private void Awake()
     {
         _isAlive = true;
@@ -351,7 +353,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             if (Input.GetKeyDown(GameVars.Values.dropKey))
             {
                 //_inventory.DropItem();
-                Damage(1);
+                
+                microwaveFFG = FindObjectOfType<MicrowaveForceFieldGenerator>();
+                microwaveFFG?.Inactive();
+                //Damage(1);
             } 
         }
         
@@ -850,6 +855,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 crosshair.sprite = GameVars.Values.crosshairActivation;
                 //interactKey.SetActive(true);
                 movingTrapButton.SetActive(true);
+                movingTrapButton.GetComponent<Image>().sprite = GameVars.Values.crosshairRightClickIcon;
+                movingTrapButton.transform.GetChild(0).GetComponent<Image>().gameObject.SetActive(true);
             }
 
             ChangeCrosshairSize(40f);
@@ -929,6 +936,19 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 auxBL.ActivateFirstUpgrade();
             }
         }
+        if (lookingAt.gameObject.TryGetComponent<MicrowaveForceFieldGenerator>(out MicrowaveForceFieldGenerator microwaveFFG))
+        {
+            if (!_inventory.ContainsID(2, 1) && microwaveFFG.IsBatteryFried)
+            {
+                GameVars.Values.ShowNotification("You need a new Battery to replace it!");
+                microwaveFFG.OnMicrowaveBatteryReplaced += OnMicrowaveReplaceBattery;
+            }
+            else
+            {
+                microwaveFFG.BatteryReplaced();
+            }
+            
+        }
         if (lookingAt.gameObject.TryGetComponent<StationaryItem>(out StationaryItem stationaryItem))
         {
             if (_inventory.ContainsID(2, 1))
@@ -945,7 +965,19 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         if (lookingAt.gameObject.TryGetComponent<Door>(out Door door))
         {
-            _lm.ChangeDoorsStatus();
+            if (door.IsLocked)
+            {
+                movingTrapButton.SetActive(true);
+                movingTrapButton.GetComponent<Image>().sprite = GameVars.Values.crosshairLockDoor;
+                movingTrapButton.transform.GetChild(0).GetComponent<Image>().gameObject.SetActive(false);
+            }
+            else
+            {
+                movingTrapButton.SetActive(false);
+                movingTrapButton.GetComponent<Image>().sprite = GameVars.Values.crosshairRightClickIcon;
+                movingTrapButton.transform.GetChild(0).GetComponent<Image>().gameObject.SetActive(true);
+                _lm.ChangeDoorsStatus();
+            }
         }
     }
 
@@ -1030,6 +1062,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         if (_inventory.ContainsID(8, 1))
             _inventory.RemoveItemID(8, 1);
+    }
+
+    private void OnMicrowaveReplaceBattery()
+    {
+        if (_inventory.ContainsID(2, 1))
+            _inventory.RemoveItemID(2, 1);
     }
 
     public void MoveTrap()

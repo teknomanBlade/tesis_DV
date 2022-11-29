@@ -64,6 +64,9 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairHandHold;
     public Sprite crosshairAddOnBattery;
     public Sprite crosshairWorkbenchCrafting;
+    public Sprite crosshairLockDoor;
+    public Sprite crosshairMovingTrap;
+    public Sprite crosshairRightClickIcon;
     public Sprite imageBaseballTrap;
     public CraftingScreen craftingScreen;
 
@@ -159,6 +162,9 @@ public class GameVars : MonoBehaviour
         crosshairActivation = Resources.Load<Sprite>("ButtonPress");
         crosshairReloadTrap1 = Resources.Load<Sprite>("ReloadTrap1");
         imageBaseballTrap = Resources.Load<Sprite>("SpriteBaseballLauncher");
+        crosshairLockDoor = Resources.Load<Sprite>("LockDoorIcon");
+        crosshairMovingTrap = Resources.Load<Sprite>("MovingTrapIcon");
+        crosshairRightClickIcon = Resources.Load<Sprite>("RightClickMouseIcon");
         crosshairWorkbenchCrafting = Resources.Load<Sprite>("WorkbenchCraftIcon");
         craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
         audioClips = Resources.LoadAll<AudioClip>("Sounds").ToList();
