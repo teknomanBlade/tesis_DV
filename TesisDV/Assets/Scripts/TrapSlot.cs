@@ -25,34 +25,34 @@ public class TrapSlot : MonoBehaviour
     private float fadeDelay = 1.1f;
     private bool isFaded;
     private Vector3 auxVector;
-    private Image _slotImage;
+    public Image SlotImage { get; set; }
 
     void Awake()
     {
         _slotCanvasGroup = GetComponent<CanvasGroup>();
-        _slotImage = transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        SlotImage = transform.GetChild(0).GetChild(0).GetComponent<Image>();
     }
 
     private void Update()
     {
         if (GameVars.Values.HasBoughtMicrowaveTrap && _trapID == 2)
         {
-            _slotImage.sprite = _trapSpriteEnabled;
+            SlotImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtMicrowaveTrap = false;
         }
         if (GameVars.Values.HasBoughtSlowingTrap && _trapID == 3)
         {
-            _slotImage.sprite = _trapSpriteEnabled;
+            SlotImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtSlowingTrap = false;
         }
         if (GameVars.Values.HasBoughtDartsTrap && _trapID == 4)
         {
-            _slotImage.sprite = _trapSpriteEnabled;
+            SlotImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtDartsTrap = false;
         }
         if (GameVars.Values.HasBoughtElectricTrap && _trapID == 5)
         {
-            _slotImage.sprite = _trapSpriteEnabled;
+            SlotImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtElectricTrap = false;
         }
     }
@@ -60,12 +60,12 @@ public class TrapSlot : MonoBehaviour
     {
         //_image.enabled = true;
         
-        _slotImage.enabled = true;
+        SlotImage.enabled = true;
     }
 
     public void DeactivateImage()
     {
         //_image.enabled = false;
-        _slotImage.enabled = false;
+        SlotImage.enabled = false;
     }
 }

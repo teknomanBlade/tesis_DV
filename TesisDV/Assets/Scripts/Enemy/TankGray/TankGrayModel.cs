@@ -56,4 +56,9 @@ public class TankGrayModel : Enemy
             _myController.OnUpdate();
         }
     }
+
+    public void Destroy() //Se llama desde la animacion.
+    {
+        Destroy(gameObject);
+    }
 }

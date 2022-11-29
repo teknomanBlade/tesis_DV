@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TrapHotBar : MonoBehaviour
 {
     [SerializeField] TrapSlot[] trapSlots;
-
+    private Animator _anim;
     [SerializeField] private CanvasGroup _myCanvasGroup;
     private float fadeDelay = 1.1f;
     private bool isFaded;
@@ -13,10 +14,28 @@ public class TrapHotBar : MonoBehaviour
     private void Awake()
     {
         _myCanvasGroup = GetComponent<CanvasGroup>();
+        _anim = GetComponent<Animator>();
         isFaded = true;
     }
+    public void FadeIn()
+    {
+        _anim.SetBool("IsFadeIn", true);
+    }
+    public void FadeOut()
+    {
+        _anim.SetBool("IsFadeIn", false);
+    }
+    public bool IsAllSlotsDisabled()
+    {
+        var isSlotsDisabled = trapSlots.ToList().Any(x => !x.SlotImage.enabled);
+        if (isSlotsDisabled)
+        {
+            FadeOut();
+        }
 
-    public void Fade()
+       return isSlotsDisabled;
+    }
+    /*public void Fade()
     {
         StartCoroutine(DoFade(_myCanvasGroup.alpha, 1));
         isFaded = !isFaded;
@@ -32,7 +51,7 @@ public class TrapHotBar : MonoBehaviour
 
             yield return null;
         }
-    }
+    }*/
 
     public void CheckRecipeRequirements(Inventory inventory)
     {
@@ -40,7 +59,7 @@ public class TrapHotBar : MonoBehaviour
         {
             if(isFaded)
             {
-                Fade();
+                FadeIn();
             }
             trapSlots[0].ActivateImage();
         }
@@ -53,7 +72,7 @@ public class TrapHotBar : MonoBehaviour
         {
             if (isFaded)
             {
-                Fade();
+                FadeIn();
             }
             trapSlots[1].ActivateImage();
             GameVars.Values.HasMicrowaveTrapAppearedHotBar = true;
@@ -67,7 +86,7 @@ public class TrapHotBar : MonoBehaviour
         {
             if(isFaded)
             {
-                Fade();
+                FadeIn();
             }
             trapSlots[2].ActivateImage();
             GameVars.Values.HasSlowingTrapAppearedHotBar = true;
@@ -81,7 +100,7 @@ public class TrapHotBar : MonoBehaviour
         {
             if(isFaded)
             {
-                Fade();
+                FadeIn();
             }
             trapSlots[3].ActivateImage();
             GameVars.Values.HasDartsTrapAppearedHotBar = true;
@@ -95,7 +114,7 @@ public class TrapHotBar : MonoBehaviour
         {
             if(isFaded)
             {
-                Fade();
+                FadeIn();
             }
             trapSlots[4].ActivateImage();
             GameVars.Values.HasElectricTrapAppearedHotBar = true;

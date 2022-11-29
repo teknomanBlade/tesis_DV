@@ -15,6 +15,7 @@ public class SlowTrap : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _as = GetComponent<AudioSource>();
+        GameVars.Values.IsAllSlotsDisabled();
         GameVars.Values.soundManager.PlaySoundOnce(_as, "TarLiquidSFX", 0.15f, true);
     }
 

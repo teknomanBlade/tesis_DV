@@ -14,6 +14,7 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     {
         active = true;
         _as = GetComponent<AudioSource>();
+        GameVars.Values.IsAllSlotsDisabled();
         //GameVars.Values.soundManager.PlaySoundOnce(_as, "EMRingWavesSFX", 0.25f, true);
     }
 

@@ -18,6 +18,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     {
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
         _myTrapBase.SetTrap(this.gameObject);
+        GameVars.Values.IsAllSlotsDisabled();
         active = true; // Ahora las trampas empiezan encendidas.   
         _as = GetComponent<AudioSource>();
         GameVars.Values.soundManager.PlaySoundOnce(_as, "ElectricTrapSFX", 0.25f, true);

@@ -33,7 +33,7 @@ public class GameVars : MonoBehaviour
     {
         get { return inventory; }
     }
-
+    [SerializeField] private TrapHotBar TrapHotBar;
     [SerializeField] private bool _isCatCaptured;
     public bool IsCatCaptured { get { return _isCatCaptured; } }
 
@@ -162,6 +162,7 @@ public class GameVars : MonoBehaviour
         crosshairWorkbenchCrafting = Resources.Load<Sprite>("WorkbenchCraftIcon");
         craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
         audioClips = Resources.LoadAll<AudioClip>("Sounds").ToList();
+        TrapHotBar = FindObjectOfType<TrapHotBar>();
         backpack = FindObjectsOfType<GameObject>().Where(x => x.name.Equals("Backpack")).First();
         itemGrabbedImage = FindObjectsOfType<Image>(true).Where(x => x.name.Equals("ItemGrabbed")).First();
         notifications = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("NotificationsText")).First();
@@ -172,7 +173,14 @@ public class GameVars : MonoBehaviour
         LevelManager = GetComponent<LevelManager>();
         WaveManager = GetComponent<WaveManager>();
     }
+    #region TrapHotBar
 
+    public bool IsAllSlotsDisabled()
+    {
+        return TrapHotBar.IsAllSlotsDisabled();
+    }
+
+    #endregion
     #region Player
 
     public Player GetPlayer()
@@ -212,22 +220,25 @@ public class GameVars : MonoBehaviour
         //WIP Multiple Lives
         if (damageAmount == 2)
         {
-            playerLives.OrderBy(x => x.name).Skip(1);
+            var lives = playerLives.OrderByDescending(x => x.name).Skip(1);
+            lives.ToList().ForEach(x => x.GetComponent<Animator>().SetBool("IsDamaged", true));
+            Debug.Log("VIDAS: " + lives.Count());
         }
-
-        if (hp == 2)
+        else
         {
-            playerLives[maxHP - maxHP].GetComponent<Animator>().SetBool("IsDamaged", true);
+            if (hp == 2)
+            {
+                playerLives[maxHP - maxHP].GetComponent<Animator>().SetBool("IsDamaged", true);
+            }
+            else if (hp == 1)
+            {
+                playerLives[maxHP - 2].GetComponent<Animator>().SetBool("IsDamaged", true);
+            }
+            else if (hp == 0)
+            {
+                playerLives[maxHP - 1].GetComponent<Animator>().SetBool("IsDamaged", true);
+            }
         }
-        else if (hp == 1)
-        {
-            playerLives[maxHP - 2].GetComponent<Animator>().SetBool("IsDamaged", true);
-        }
-        else if (hp == 0)
-        {
-            playerLives[maxHP - 1].GetComponent<Animator>().SetBool("IsDamaged", true);
-        }
-        
     }
     public Vector3 GetPlayerPrefabPlacement()
     {

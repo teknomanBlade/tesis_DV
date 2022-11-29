@@ -27,6 +27,7 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     {
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
         _myTrapBase.SetTrap(this.gameObject);
+        GameVars.Values.IsAllSlotsDisabled();
         active = true; // Ahora las trampas empiezan encendidas.
         _animator = GetComponent<Animator>();
         shotsLeft = shots;

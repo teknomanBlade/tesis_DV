@@ -64,7 +64,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         //active = false; Ahora las trampas empiezan encendidas.
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
         _myTrapBase.SetTrap(this.gameObject);
-
+        GameVars.Values.IsAllSlotsDisabled();
         _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
