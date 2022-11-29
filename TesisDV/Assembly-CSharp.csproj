@@ -181,6 +181,11 @@
      <Compile Include="Assets\Scripts\UI\UIController.cs" />
      <Compile Include="Assets\Scripts\Traps\NailFiringMachine\NailFiringMachine.cs" />
      <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
+     <Compile Include="Assets\Scripts\Cat\CatController.cs" />
+     <Compile Include="Assets\Scripts\Cat\CatView.cs" />
+     <Compile Include="Assets\Scripts\FSM\States\Cat\IdleState.cs" />
+     <Compile Include="Assets\Scripts\FSM\States\Cat\WalkingState.cs" />
+     <Compile Include="Assets\Scripts\FSM\States\Cat\TakenState.cs" />
      <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_SimpleDivideOpNode.shader" />
