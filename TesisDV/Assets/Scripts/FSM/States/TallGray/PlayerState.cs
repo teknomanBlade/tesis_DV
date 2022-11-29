@@ -14,6 +14,8 @@ public class PlayerState : IState
     private Node startingPoint;
     private Node endingPoint;
 
+    private bool _needsPathfinding = false;
+
     public PlayerState(StateMachine fsm, Enemy p, Pathfinding pf)
     {
         _fsm = fsm;
@@ -30,6 +32,8 @@ public class PlayerState : IState
     }
     public void OnUpdate()
     {
+        _enemy.DetectForceFields();
+
         if(!_enemy._player.isAlive)
         {
             _fsm.ChangeState(EnemyStatesEnum.TallGrayEscapeState);
@@ -39,17 +43,27 @@ public class PlayerState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.TallGrayAttackState);
         }
+        else if(_enemy.foundTrapInPath)
+        {
+            _fsm.ChangeState(EnemyStatesEnum.ChaseForceFieldState);
+        }
 
         RaycastHit hit;
         Vector3 playerDir = _enemy._player.transform.position - _enemy.transform.position;                                                                             //Usamos obstacle mask ahora.
         if(myPath != null && Physics.Raycast(_enemy.transform.position, playerDir, out hit, playerDir.magnitude, _enemy.obstacleMask) == true) // || Vector3.Distance(_enemy.transform.position, _enemy._player.transform.position) >= _enemy.pursueThreshold)
         {
+            if(_needsPathfinding)
+            {
+                GetThetaStar();
+                _needsPathfinding = false;
+            }
             if(myPath.Count >= 1)
             {
                 Vector3 dir = myPath[_currentPathWaypoint].transform.position - _enemy.transform.position;
 
                 Vector3 aux = dir;
-                dir = new Vector3 (aux.x ,aux.y, aux.z);
+                dir = new Vector3 (aux.x , aux.y, aux.z);
+                Debug.Log(aux.y);
                 _enemy.transform.forward = dir;
                 _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
 
@@ -72,6 +86,10 @@ public class PlayerState : IState
             dir = new Vector3(aux.x, 0f, aux.z);
             _enemy.transform.forward = dir;
             _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
+
+            Vector3 transformFix = _enemy.transform.position;
+            _enemy.transform.position = new Vector3(transformFix.x, 0.26f, transformFix.z);
+            _needsPathfinding = true;
         }
     }
     public void OnExit()

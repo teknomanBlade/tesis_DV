@@ -30,8 +30,6 @@ public class WalkingState : IState
 
             _cat._navMeshAgent.speed = _cat._runninngSpeed;
             _cat._navMeshAgent.destination = dest;
-
-            Debug.Log("soy gato distancia jaja " + Vector3.Distance(_cat.transform.position, _cat._startingPosition));
         }
         else
         {

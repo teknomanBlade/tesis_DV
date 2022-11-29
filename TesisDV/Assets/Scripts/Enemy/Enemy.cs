@@ -221,13 +221,11 @@ public abstract class Enemy : MonoBehaviour
                             Physics.Raycast(transform.position, dir, out forceFieldHit, Mathf.Infinity, GameVars.Values.GetItemLayerMask());
                             _currentTrapObjectiveDistance = forceFieldHit.distance;
                             _currentTrapObjective = item;
-                            Debug.Log("soy forcefield " + _currentTrapObjectiveDistance);
                         }
                         else
                         {
                             _currentTrapObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
                             _currentTrapObjective = item;
-                            Debug.Log("soy otra coasa " + _currentTrapObjectiveDistance);
                         }
                         
                     }
@@ -240,6 +238,50 @@ public abstract class Enemy : MonoBehaviour
             foundTrapInPath = true;
         }
     }
+
+    public void DetectForceFields()
+    {
+        allTargets = Physics.OverlapSphere(transform.position, _trapViewRadius, _trapMask);
+
+        if (allTargets.Length == 0 || _currentTrapObjective == null || !_currentTrapObjective.GetComponent<Trap>().active)
+        {
+            _currentTrapObjective = null;
+            _currentTrapObjectiveDistance = MAX_CURRENT_OBJECTIVE_DISTANCE;
+        }
+
+        if (_currentTrapObjective == null || !_currentTrapObjective.GetComponent<Trap>().active || _currentTrapObjectiveDistance > _trapViewRadius)
+        {
+            foreach (var item in allTargets)
+            {
+                RaycastHit hit;
+                Vector3 dir = item.transform.position - transform.position;                                                                                                                                            
+                                                                                                                                                                                                         //Ahora usamos obstacleMask                                                           
+                if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance && item.GetComponent<Trap>() && !Physics.Raycast(transform.position, dir, out hit, dir.magnitude, obstacleMask))//GameVars.Values.GetWallLayerMask()))
+                {
+                    var trap = item.GetComponent<Trap>();
+
+                    if (trap && item.GetComponent<Trap>().active)
+                    {
+                        if(item.GetComponent<ForceField>())
+                        {
+                            RaycastHit forceFieldHit;
+                            Physics.Raycast(transform.position, dir, out forceFieldHit, Mathf.Infinity, GameVars.Values.GetItemLayerMask());
+                            _currentTrapObjectiveDistance = forceFieldHit.distance;
+                            _currentTrapObjective = item;
+                            foundTrapInPath = true;
+
+                        }                        
+                    }
+                }
+            }   
+        }
+
+        if (_currentTrapObjectiveDistance < _trapViewRadius && _currentTrapObjective != null && _currentTrapObjective.GetComponent<Trap>().active)
+        {
+            foundTrapInPath = true;
+        }
+    }
+
 
     public void ForceFieldRejection()
     {

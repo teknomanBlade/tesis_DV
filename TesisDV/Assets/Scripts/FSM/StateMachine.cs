@@ -11,6 +11,8 @@ public enum EnemyStatesEnum
     AttackPlayerState,
     ChaseTrapState,
     AttackTrapState,
+    AttackForceFieldState,
+    ChaseForceFieldState,
     EscapeState,
     ProtectState,
     PathfindingState,
