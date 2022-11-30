@@ -10,6 +10,8 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     public GameObject blueprintPrefab;
     public GameObject particleRipples;
     public GameObject EMPFriedEffect;
+    public GameObject ForceField;
+    private ForceField _forceFieldScript;
     private AudioSource _as;
     private bool _isDisabledSFX;
     public bool IsBatteryFried;
@@ -17,7 +19,9 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     void Awake()
     {
         active = true;
+        IsBatteryFried = false;
         _as = GetComponent<AudioSource>();
+        _forceFieldScript = ForceField.GetComponent<ForceField>();
         GameVars.Values.IsAllSlotsDisabled();
         GameVars.Values.soundManager.PlaySoundOnce(_as, "EMRingWavesSFX", 0.15f, true);
     }
@@ -31,9 +35,6 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     public void BecomeMovable()
     {
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
-        aux.GetComponent<StaticBlueprint>().SpendMaterials(false);
-        aux.GetComponent<StaticBlueprint>().CanBeCancelled(false);
-        _myTrapBase.ResetBase();
         Destroy(gameObject);
     }
 
@@ -42,7 +43,6 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         if (!active)
         {
             Debug.Log("Active el Campo de fuerza");
-            particleRipples.SetActive(true);
         }
     }
 
@@ -59,6 +59,9 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     {
         EMPFriedEffect.SetActive(false);
         GameVars.Values.soundManager.PlaySoundOnce(_as, "EMRingWavesSFX", 0.15f, true);
+        ForceField.SetActive(true);
+        _forceFieldScript.Health = 20f;
+        particleRipples.SetActive(true);
         IsBatteryFried = false;
         OnMicrowaveBatteryReplaced?.Invoke();
         active = true;

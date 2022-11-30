@@ -880,8 +880,29 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(40f);
             return;
         }
-        
-        
+
+        if (lookingAt.gameObject.TryGetComponent<MicrowaveForceFieldGenerator>
+            (out MicrowaveForceFieldGenerator microwaveFFG))
+        {
+            if (microwaveFFG.IsBatteryFried)
+            {
+                crosshair.sprite = GameVars.Values.crosshairAddOnBattery;
+                movingTrapButton.SetActive(true);
+                ChangeCrosshairSize(40f);
+            }
+            else
+            {
+                crosshair.sprite = GameVars.Values.crosshairActivation;
+                movingTrapButton.SetActive(true);
+                movingTrapButton.GetComponent<Image>().sprite = GameVars.Values.crosshairRightClickIcon;
+                movingTrapButton.transform.GetChild(0).GetComponent<Image>().gameObject.SetActive(true);
+                ChangeCrosshairSize(40f);
+            }
+            
+            return;
+        }
+
+
         crosshair.sprite = GameVars.Values.crosshair;
         ChangeCrosshairSize(20f);
     }

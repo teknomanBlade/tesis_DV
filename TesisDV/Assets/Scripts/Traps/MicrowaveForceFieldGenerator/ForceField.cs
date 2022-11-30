@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ForceField : Trap
 {
-    [SerializeField] private float Health;
+    [SerializeField] private float _health;
+    public float Health { get { return _health; } set { _health = value; } }
     [SerializeField] private MicrowaveForceFieldGenerator _myOwner;
     void Awake()
     {

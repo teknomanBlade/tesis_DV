@@ -51,7 +51,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     [Header("Upgrades")]
     [SerializeField] private GameObject _staticBallsBlueprint;
     [SerializeField] private GameObject _staticBallsUpgrade;
-    [SerializeField] private int _damageAmount;
+    [SerializeField] private float _damageAmount;
     [SerializeField] private GameObject _fireRateBlueprint;
     [SerializeField] private GameObject _fireRateUpgrade;
     public bool _canActivate1Upgrade {get; private set;}
@@ -330,10 +330,37 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     private void FireBaseball()
     {
-        if(_currentObjective != null && _canShoot)
+        if(_canShoot)
         {
             //BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetAdditionalDamage(_additionalDamage).SetOwner(this);
-            _currentObjective.GetComponent<Enemy>().TakeDamage(_damageAmount);
+            var enemy = _currentObjective?.GetComponent<Enemy>();
+            EnemyDamageDifferential(enemy);
+            
+        }
+    }
+
+    public void EnemyDamageDifferential(Enemy enemy)
+    {
+        if(enemy == null)
+            return;
+
+        if (enemy.name.Contains("GrayMVC"))
+        {
+            _damageAmount = 1f;
+            Debug.Log("DAÑO GRAY: " + _damageAmount);
+            enemy.TakeDamage(_damageAmount);
+        }
+        else if (enemy.name.Contains("Melee"))
+        {
+            _damageAmount = 0.25f;
+            Debug.Log("DAÑO MELEE: " + _damageAmount);
+            enemy.TakeDamage(_damageAmount);
+        }
+        else if (enemy.name.Contains("Tank"))
+        {
+            _damageAmount = 0.1f;
+            Debug.Log("DAÑO TANK: " + _damageAmount);
+            enemy.TakeDamage(_damageAmount);
         }
     }
 
