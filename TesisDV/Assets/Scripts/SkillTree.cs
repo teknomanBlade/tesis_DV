@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SkillTree : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class SkillTree : MonoBehaviour
     [Header("Microwave Trap")]
     [Header("Trap Unlocks")]
     [SerializeField] private int MicrowaveTrapWittCost;
+    public Text MicrowaveWitCostText;
     private bool _isMicrowaveTrapUnlocked;
     public bool isMicrowaveTrapUnlocked
     {
@@ -20,6 +22,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Slow Trap")]
     [SerializeField] private int SlowTrapWittCost;
+    public Text SlowTrapWitCostText;
     private bool _isSlowTrapUnlocked;
     public bool isSlowTrapUnlocked
     {
@@ -27,6 +30,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Electric Trap")]
     [SerializeField] private int ElectricTrapWittCost;
+    public Text ElectricTrapWitCostText;
     private bool _isElectricTrapUnlocked;
     public bool isElectricTrapUnlocked
     {
@@ -34,6 +38,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Darts Trap")]
     [SerializeField] private int DartsTrapWittCost;
+    public Text DartsTrapWitCostText;
     private bool _isDartsTrapUnlocked;
     public bool isDartsTrapUnlocked
     {
@@ -47,6 +52,7 @@ public class SkillTree : MonoBehaviour
     [Header("Static Balls")]
     [Header("BaseballLauncher Upgrades")]
     [SerializeField] private int BL1WittCost;
+    public Text BaseballLauncherUpdateWitCostText;
     private bool _isBL1Activated;
     public bool isBL1Activated
     {
@@ -148,12 +154,19 @@ public class SkillTree : MonoBehaviour
     }
 
     #endregion
+
+
     
     public delegate void OnUpgradeDelegate();
     public event OnUpgradeDelegate OnUpgrade;
 
-    void Start()
+    void Awake()
     {
+        MicrowaveWitCostText.text = MicrowaveTrapWittCost.ToString();
+        BaseballLauncherUpdateWitCostText.text = BL1WittCost.ToString();
+        SlowTrapWitCostText.text = SlowTrapWittCost.ToString();
+        DartsTrapWitCostText.text = DartsTrapWittCost.ToString();
+        ElectricTrapWitCostText.text = ElectricTrapWittCost.ToString();
         _inventory = GetComponentInChildren<Inventory>();
         _as = GetComponent<AudioSource>();
     }

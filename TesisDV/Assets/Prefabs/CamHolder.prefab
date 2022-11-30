@@ -10,8 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2071769670}
   - component: {fileID: 2071769672}
-  - component: {fileID: 2071769671}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Camera Weapons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +54,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -75,14 +74,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &2071769671
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2071769669}
-  m_Enabled: 1
 --- !u!1 &1034464405380897926
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,8 +353,8 @@ MonoBehaviour:
   _player: {fileID: 0}
   _camera: {fileID: 0}
   _stunDuration: 8
-  _stunXAmplitude: 0.004
-  _stunYAmplitude: 0.002
+  _stunXAmplitude: 0.015
+  _stunYAmplitude: 0.009
   _stunXFrequency: 10
   _stunYFrequency: 5
 --- !u!1 &8292986824927337311
@@ -415,6 +406,10 @@ PrefabInstance:
     - target: {fileID: 4013575385267729239, guid: 49c498a35328736498b8a78ce133fafe, type: 3}
       propertyPath: m_Name
       value: NewRacket
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013575385267729239, guid: 49c498a35328736498b8a78ce133fafe, type: 3}
+      propertyPath: m_Layer
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 4013575385267729239, guid: 49c498a35328736498b8a78ce133fafe, type: 3}
       propertyPath: m_IsActive
@@ -539,6 +534,10 @@ PrefabInstance:
       value: BaseballBat
       objectReference: {fileID: 0}
     - target: {fileID: 1184483644812247978, guid: 55bcbf1435f56ff4294eecdf78c046bb, type: 3}
+      propertyPath: m_Layer
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184483644812247978, guid: 55bcbf1435f56ff4294eecdf78c046bb, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -566,7 +565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8238341032156834064, guid: b704fd6fb28e3ea4587ffdea087b3e49, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 8238341032156834064, guid: b704fd6fb28e3ea4587ffdea087b3e49, type: 3}
       propertyPath: m_IsActive
