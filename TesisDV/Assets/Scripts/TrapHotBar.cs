@@ -19,11 +19,11 @@ public class TrapHotBar : MonoBehaviour
     }
     public void FadeIn()
     {
-        _anim.SetBool("IsFadeIn", true);
+        _anim.SetBool("IsHotBarUp", true);
     }
     public void FadeOut()
     {
-        _anim.SetBool("IsFadeIn", false);
+        _anim.SetBool("IsHotBarUp", false);
     }
     public bool IsAllSlotsDisabled()
     {

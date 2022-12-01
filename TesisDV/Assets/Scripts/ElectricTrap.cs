@@ -10,6 +10,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     [SerializeField] private GameObject endPositionDamage;
     //[SerializeField] private float _trapDuration;
     [SerializeField] private float _currentLife;
+    public ElectricityLineRenderer ElectricityLineRenderer;
     public GameObject blueprintPrefab;
     public GameObject ParticleLightning;
     private bool _isDisabledSFX;
@@ -21,6 +22,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         GameVars.Values.IsAllSlotsDisabled();
         active = true; // Ahora las trampas empiezan encendidas.   
         _as = GetComponent<AudioSource>();
+        ElectricityLineRenderer = GetComponent<ElectricityLineRenderer>();
         GameVars.Values.soundManager.PlaySoundOnce(_as, "ElectricTrapSFX", 0.25f, true);
     }
 
@@ -43,6 +45,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
             active = true;
             GameVars.Values.soundManager.PlaySoundOnce(_as, "ElectricTrapSFX", 0.25f, true);
             ParticleLightning.SetActive(true);
+            ElectricityLineRenderer.DisableEnableLightAndLineRenderer(true);
         }
         /* if(_trapDuration <= 0) La trampa ya no se apaga sola
         {
@@ -89,6 +92,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     {
         if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
         ParticleLightning.SetActive(false);
+        ElectricityLineRenderer.DisableEnableLightAndLineRenderer(false);
         active = false;
     }
 

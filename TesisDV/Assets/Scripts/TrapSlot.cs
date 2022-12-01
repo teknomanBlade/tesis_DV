@@ -26,11 +26,14 @@ public class TrapSlot : MonoBehaviour
     private bool isFaded;
     private Vector3 auxVector;
     public Image SlotImage { get; set; }
+    [SerializeField]
+    private Animator _animKeySlot;
 
     void Awake()
     {
         _slotCanvasGroup = GetComponent<CanvasGroup>();
         SlotImage = transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        _animKeySlot = transform.GetChild(1).GetComponent<Animator>();
     }
 
     private void Update()
@@ -56,10 +59,18 @@ public class TrapSlot : MonoBehaviour
             GameVars.Values.HasBoughtElectricTrap = false;
         }
     }
+
+    IEnumerator PlayKeySlotAnim()
+    {
+        _animKeySlot.SetBool("IsHighlighted", true);
+        yield return new WaitForSeconds(2f);
+        _animKeySlot.SetBool("IsHighlighted", false);
+    }
+
     public void ActivateImage()
     {
         //_image.enabled = true;
-        
+        StartCoroutine(PlayKeySlotAnim());
         SlotImage.enabled = true;
     }
 

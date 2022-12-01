@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -90,6 +91,17 @@ public class ElectricityLineRenderer : MonoBehaviour
         }
 
         initialized = true;
+    }
+
+    public void DisableEnableLightAndLineRenderer(bool enabled)
+    {
+        lineCombos.ToList().ForEach(x => 
+        {
+            x.lineRenderer.gameObject.SetActive(enabled);
+            x.startLight.gameObject.SetActive(enabled);
+            x.midLight.gameObject.SetActive(enabled);
+            x.endLight.gameObject.SetActive(enabled);
+        });
     }
 
     public Vector3 GetBezierCurvePosition(float t, Vector3 p0, Vector3 p1, Vector3 p2)

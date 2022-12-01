@@ -330,10 +330,10 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     private void FireBaseball()
     {
-        if(_canShoot)
+        if(_currentObjective != null && _canShoot)
         {
             //BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetAdditionalDamage(_additionalDamage).SetOwner(this);
-            var enemy = _currentObjective?.GetComponent<Enemy>();
+            var enemy = _currentObjective.GetComponent<Enemy>();
             EnemyDamageDifferential(enemy);
             
         }

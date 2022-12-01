@@ -118,7 +118,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private bool _canBuildSlowTrap = false;
     private bool _canBuildElectricTrap = false;
     private bool _canBuildDartsTrap = false;
-    public MicrowaveForceFieldGenerator microwaveFFG;
+    //public MicrowaveForceFieldGenerator microwaveFFG;
+    public ElectricTrap ElectricTrap;
 
     private void Awake()
     {
@@ -353,9 +354,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             if (Input.GetKeyDown(GameVars.Values.dropKey))
             {
                 //_inventory.DropItem();
-                
-                microwaveFFG = FindObjectOfType<MicrowaveForceFieldGenerator>();
-                microwaveFFG?.Inactive();
+                ElectricTrap = FindObjectOfType<ElectricTrap>();
+                ElectricTrap?.Inactive();
+                //microwaveFFG = FindObjectOfType<MicrowaveForceFieldGenerator>();
+                //microwaveFFG?.Inactive();
                 //Damage(1);
             } 
         }
