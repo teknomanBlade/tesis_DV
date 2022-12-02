@@ -19,9 +19,11 @@ public class Cat : MonoBehaviour
     private Vector3 _exitPos;
     private Animator _animator;
     [SerializeField] private List<Vector3> _myPos = new List<Vector3>();
-    public GameObject ForceField;
+    public List<Transform> Path = new List<Transform>();
 
     public StateMachine _fsm { get; private set; }
+
+    public bool canMove;
 
     #region Events
 
@@ -39,11 +41,15 @@ public class Cat : MonoBehaviour
         _isHeld = false;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.speed = 0.6f;
+
+        _navMeshAgent.enabled = false;
+
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _animator = GetComponent<Animator>();
         _animator.SetBool("IsIdle", true);
 
         _fsm.AddCatState(CatStatesEnum.IdleState, new IdleState(_fsm, this));
+        _fsm.AddCatState(CatStatesEnum.RoomState, new RoomState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.WalkingState, new WalkingState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.TakenState, new TakenState(_fsm, this));
     }
@@ -52,7 +58,7 @@ public class Cat : MonoBehaviour
     {
         SetStartingPosition();
 
-        _fsm.ChangeCatState(CatStatesEnum.IdleState);
+        _fsm.ChangeCatState(CatStatesEnum.RoomState);
     }
 
     void Update()
@@ -119,7 +125,7 @@ public class Cat : MonoBehaviour
         if(!_isHeld)
         {
             //transform.position = _myPos[Random.Range(0, 3)];
-            transform.position = _myPos[2];
+            //transform.position = _myPos[2];
             //_startingPositionGameObject.transform.position = transform.position;
             _startingPosition = _myPos[2];
         }
@@ -150,9 +156,9 @@ public class Cat : MonoBehaviour
         return Vector3.Distance(transform.position, _exitPos);
     }
 
-    public bool GetCatHeld()
+    public void CanMove()
     {
-        return _isHeld;
+        canMove = true;
     }
 
     public void GetDoor(Door door)

@@ -26,7 +26,8 @@ public enum CatStatesEnum
 {
     IdleState,
     WalkingState,
-    TakenState
+    TakenState,
+    RoomState
 }
 
 public class StateMachine

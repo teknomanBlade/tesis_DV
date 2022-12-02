@@ -54,6 +54,10 @@ public class GrayModelHardcodeado : Enemy
             
             //ResetPathAndSetObjective(); //Horrible resetear en Update, pero con el pathfinding no va a hacer falta. Se resetea en los States ahora.
         }
+        if(isDead)
+        {
+            GameVars.Values.Cat.CanMove();
+        }
     }
  
     /* public void SetObjective(GameObject targetPosition) No se usa, se usa directamente ResetPathAndSetObjective()
