@@ -27250,7 +27250,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1611684875}
-  m_RootOrder: 104
+  m_RootOrder: 105
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!108 &1608227475
 Light:
@@ -30025,6 +30025,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5188191909350062185, guid: 77f4fd469eb66f246801045e3c3e3832, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 5196370953233083058, guid: 77f4fd469eb66f246801045e3c3e3832, type: 3}
       propertyPath: m_RootOrder
       value: 96
@@ -32688,6 +32692,96 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.12035968, y: 1.4525156, z: 0.093395606}
   m_Center: {x: 0.019128146, y: 0.00000008119043, z: 0.018074527}
+--- !u!1 &1611684894 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4675978260217064613, guid: 77f4fd469eb66f246801045e3c3e3832, type: 3}
+  m_PrefabInstance: {fileID: 1611684858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1611684895 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 609917517801245257, guid: 77f4fd469eb66f246801045e3c3e3832, type: 3}
+  m_PrefabInstance: {fileID: 1611684858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1611684896 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3534728452483532491, guid: 77f4fd469eb66f246801045e3c3e3832, type: 3}
+  m_PrefabInstance: {fileID: 1611684858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1611684897 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 917574275925908449, guid: 77f4fd469eb66f246801045e3c3e3832, type: 3}
+  m_PrefabInstance: {fileID: 1611684858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1611684898 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3914069923915903567, guid: 77f4fd469eb66f246801045e3c3e3832, type: 3}
+  m_PrefabInstance: {fileID: 1611684858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1611684899
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611684894}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.971139, y: 0.34423265, z: 6.9978366}
+  m_Center: {x: 0.05115056, y: -0.10174658, z: -3.5197554}
+--- !u!65 &1611684900
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611684895}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.0000043, y: 0.13136522, z: 6.997837}
+  m_Center: {x: 2.5158703, y: -0.0036484576, z: -3.5197546}
+--- !u!65 &1611684901
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611684896}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.000003, y: 0.13136639, z: 6.9978375}
+  m_Center: {x: 2.5158658, y: -0.003647872, z: -3.519755}
+--- !u!65 &1611684902
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611684897}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.000002, y: 0.13136482, z: 6.997835}
+  m_Center: {x: 2.5158672, y: -0.003645897, z: -3.5197535}
+--- !u!65 &1611684903
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611684898}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3647899, y: 5.0000033, z: 6.997837}
+  m_Center: {x: -0.116710596, y: 0.000007008631, z: -3.4715576}
 --- !u!1 &1616493573 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1616493573, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
