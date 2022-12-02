@@ -16,7 +16,8 @@ public class TallGrayModel : Enemy
         //_pfManager = GameObject.Find("PathfindingManager").GetComponent<PathfindingManager>(); Probamos usar pathfindingManager como clase estatica.
         _fsm = new StateMachine();
         _pf = new Pathfinding();
-        
+        HP = 10f;
+        GameVars.Values.WaveManager.EnhanceEnemyStatsPerWave(this);
         _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.PlayerState));
         _fsm.AddState(EnemyStatesEnum.PlayerState, new PlayerState(_fsm, this, _pf));
         _fsm.AddState(EnemyStatesEnum.ChaseForceFieldState, new ChaseForceFieldState(_fsm, this));

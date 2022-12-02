@@ -19,6 +19,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     public Animator GraysAmountPerWaveTextAnim { get; private set; }
     public Text RoundText;
     public Text RestWaveTimeText;
+    public Animator _animCatDistanceBar;
     public Animator RestWaveTimeAnim { get; private set; }
     public Animator RoundTextAnim { get; private set; }
     public float _valueToChange { get; private set; }
@@ -26,14 +27,14 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     void Start()
     {
         _mySlider = GetComponent<Slider>();
-        RoundText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRound")).FirstOrDefault();
+        //RoundText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRound")).FirstOrDefault();
         RoundTextAnim = RoundText.GetComponent<Animator>();
         RoundTextAnim.SetBool("IsNewRound", false);
-        GraysAmountPerWaveText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtGrayAmountPerWave")).FirstOrDefault();
+        //GraysAmountPerWaveText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtGrayAmountPerWave")).FirstOrDefault();
         GraysAmountPerWaveTextAnim = GraysAmountPerWaveText.GetComponentInChildren<Image>().gameObject.GetComponent<Animator>();
-        RestWaveTimeText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRestWaveTime")).FirstOrDefault();
+        //RestWaveTimeText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRestWaveTime")).FirstOrDefault();
         RestWaveTimeAnim = RestWaveTimeText.gameObject.GetComponent<Animator>();
-
+        _animCatDistanceBar = GetComponent<Animator>();
         GameVars.Values.WaveManager.AddObserver(this);
         GameVars.Values.WaveManager.OnRoundChanged += RoundChanged;
         GameVars.Values.WaveManager.OnTimeWaveChange += TimeWaveChanged;
@@ -51,6 +52,15 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         _currentDistance = _maxDistance;
         _mySlider.value = _currentDistance;
         
+    }
+
+    public void PlayFadeIn()
+    {
+        _animCatDistanceBar.SetBool("IsFadeIn", true);
+    }
+    public void PlayFadeOut()
+    {
+        _animCatDistanceBar.SetBool("IsFadeIn", false);
     }
 
     private void RoundChanged(int newVal)

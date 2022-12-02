@@ -70,10 +70,10 @@ public class UFO : MonoBehaviour, IInRoundObserver
         //UFOIndicator.transform.position = auxVector;
     }
 
-    private void RotateUFOSpinner()
+    /*private void RotateUFOSpinner()
     {
         if(_UFOSpinner != null) _UFOSpinner.transform.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime));
-    }
+    }*/
     public void PlayAnimBeam(bool active)
     {
         _animBeam.SetBool("IsBeamSpawnerDeployed", active);
@@ -110,7 +110,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
     }
     private void Update()
     {
-        RotateUFOSpinner();
+        //RotateUFOSpinner();
         EnterPlanet();
         ExitPlanet();
 

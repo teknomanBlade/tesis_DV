@@ -15,7 +15,7 @@ public class GameVars : MonoBehaviour
     public CraftingScreen craftingContainer { get; private set; }
     public LevelManager LevelManager { get; set; }
     public WaveManager WaveManager { get; set; }
-    
+    public CatDistanceBar CatDistanceBar;
     [SerializeField] private Player player;
     public Player Player
     {
@@ -355,6 +355,7 @@ public class GameVars : MonoBehaviour
     public void SetCatFree()
     {
         _isCatCaptured = false;
+        CatDistanceBar.PlayFadeOut();
         OnCapturedCatChange(_isCatCaptured);
         cat.CatHasBeenReleased();
     }
@@ -367,6 +368,7 @@ public class GameVars : MonoBehaviour
     public void TakeCat(Vector3 exitPos)
     {
         _isCatCaptured = true;
+        CatDistanceBar.PlayFadeIn();
         OnCapturedCatChange(_isCatCaptured);
         cat.CatIsBeingTaken();
         cat.SetExitPos(exitPos);

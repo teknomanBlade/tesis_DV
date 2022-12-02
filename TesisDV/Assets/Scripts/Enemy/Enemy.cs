@@ -5,9 +5,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum EnemyType { Common, Melee, Tank }
 public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] private float _hp;
+    public float HP { get { return _hp; } set { _hp = value; } }
     [SerializeField] private int _myWittsValue;
     public float _movingSpeed;
     [SerializeField] private Transform _catGrabPos;
@@ -16,7 +18,7 @@ public abstract class Enemy : MonoBehaviour
     protected CapsuleCollider _capsuleCollider;
     protected bool isAwake = false;
     public bool isDead = false;
-
+    public EnemyType enemyType;
     #region DistanceParameters
 
     //Distancia a la que empieza a perseguir al Player

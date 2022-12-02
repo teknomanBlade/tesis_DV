@@ -14,9 +14,10 @@ public class TankGrayModel : Enemy
     {
         //_pfManager = GameObject.Find("PathfindingManager").GetComponent<PathfindingManager>();  Probamos usar pathfindingManager como clase estatica.
         _fsm = new StateMachine();
-        _pf = new Pathfinding();    
-       
-       _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.CatState));
+        _pf = new Pathfinding();
+        HP = 18f;
+        GameVars.Values.WaveManager.EnhanceEnemyStatsPerWave(this);
+        _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.CatState));
         _fsm.AddState(EnemyStatesEnum.CatState, new CatState(_fsm, this, _pf));
         _fsm.AddState(EnemyStatesEnum.ChaseState, new ChaseState(_fsm, this));
         _fsm.AddState(EnemyStatesEnum.AttackPlayerState, new AttackPlayerState(_fsm, this));
