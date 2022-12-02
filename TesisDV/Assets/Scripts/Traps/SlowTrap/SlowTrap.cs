@@ -40,9 +40,7 @@ public class SlowTrap : MonoBehaviour
                 _doesDamage = true;
             }
 
-        } */
-
-        
+        } */        
     }
 
     public void DestroyTrap()
@@ -53,30 +51,30 @@ public class SlowTrap : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         var enemy = other.GetComponent<Enemy>(); //Despues hacer uno de estos para cada enemigo por ahora para ver cuanto sacale 
-        var player = other.GetComponent<Player>();
+        //var player = other.GetComponent<Player>();
 
         if (enemy)
         {
             other.GetComponent<Enemy>().SlowDown(_slowAmount);
         }
-        else if (player && other.GetComponent<Player>())
-        {
-            other.GetComponent<Player>().SlowDown(_slowAmountPlayer);
-        }
+        //else if (player && other.GetComponent<Player>())
+        //{
+            //other.GetComponent<Player>().SlowDown(_slowAmountPlayer);
+        //}
     }
 
     void OnTriggerExit(Collider other)
     {
         var enemy = other.GetComponent<Enemy>(); //Despues hacer uno de estos para cada enemigo por ahora para ver cuanto sacale 
-        var player = other.GetComponent<Player>();
+        //var player = other.GetComponent<Player>();
 
         if (enemy)
         {
             other.GetComponent<Enemy>().SlowDown(-_slowAmount);
         }
-        else if (player && other.GetComponent<Player>())
-        {
-            other.GetComponent<Player>().SlowDown(-_slowAmountPlayer);
-        }
+        //else if (player && other.GetComponent<Player>())
+        //{
+            //other.GetComponent<Player>().SlowDown(-_slowAmountPlayer);
+        //}
     }
 }
