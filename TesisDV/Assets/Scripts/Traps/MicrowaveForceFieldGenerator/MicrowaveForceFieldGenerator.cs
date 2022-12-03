@@ -11,6 +11,7 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     public GameObject particleRipples;
     public GameObject EMPFriedEffect;
     public GameObject ForceField;
+    private Animator _animForceField;
     private ForceField _forceFieldScript;
     private AudioSource _as;
     private bool _isDisabledSFX;
@@ -22,6 +23,8 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         IsBatteryFried = false;
         _as = GetComponent<AudioSource>();
         _forceFieldScript = ForceField.GetComponent<ForceField>();
+        _animForceField = ForceField.GetComponent<Animator>();
+        //_animForceField.SetBool("IsForceFieldOn", true);
         GameVars.Values.IsAllSlotsDisabled();
         GameVars.Values.soundManager.PlaySoundOnce(_as, "EMRingWavesSFX", 0.15f, true);
     }
@@ -51,6 +54,7 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
         EMPFriedEffect.SetActive(true);
         particleRipples.SetActive(false);
+        //_animForceField.SetBool("IsForceFieldOn", false);
         IsBatteryFried = true;
         active = false;
     }
@@ -61,6 +65,7 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         GameVars.Values.soundManager.PlaySoundOnce(_as, "EMRingWavesSFX", 0.15f, true);
         ForceField.SetActive(true);
         _forceFieldScript.Health = 20f;
+        //_animForceField.SetBool("IsForceFieldOn", true);
         particleRipples.SetActive(true);
         IsBatteryFried = false;
         OnMicrowaveBatteryReplaced?.Invoke();
