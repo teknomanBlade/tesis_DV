@@ -65,8 +65,8 @@ public class ItemSpawner : MonoBehaviour
 
     public void ActivateSecondWaveItems()
     {
+        GameVars.Values.BasementDirectionMarkers.SetActive(true);
         GameVars.Values.LevelManager.WorkbenchLight.SetActive(true);
         _secondRoundItems.SetActive(true);
-        
     }
 }

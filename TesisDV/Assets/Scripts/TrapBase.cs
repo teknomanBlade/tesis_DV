@@ -11,7 +11,7 @@ public class TrapBase : MonoBehaviour
     private Animator _anim;
     void Awake()
     {
-        ArrowIndicator.SetActive(false);
+        //ArrowIndicator.SetActive(false);
         _meshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
         _anim = transform.GetChild(0).GetComponent<Animator>();
     }
@@ -23,13 +23,17 @@ public class TrapBase : MonoBehaviour
 
     public void SetHighIntensity()
     {
-        ArrowIndicator.SetActive(true);
+        if(_isAvailable)
+            ArrowIndicator.SetActive(true);
+
         _anim.SetBool("IsBlueprintOver",true);
     }
 
     public void SetNormalIntensity()
     {
-        ArrowIndicator.SetActive(false);
+        if (!_isAvailable)
+            ArrowIndicator.SetActive(false);
+
         _anim.SetBool("IsBlueprintOver", false);
     }
 
@@ -54,6 +58,7 @@ public class TrapBase : MonoBehaviour
     public void ResetBase()
     {
         _isAvailable = false;
+        ArrowIndicator.SetActive(true);
         _meshRenderer.enabled = true;
         _myTrap = null;
     }

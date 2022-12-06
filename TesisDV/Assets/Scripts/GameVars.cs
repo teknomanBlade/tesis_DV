@@ -107,7 +107,7 @@ public class GameVars : MonoBehaviour
     public int currentShotsTrap1; //BaseballLauncher
     public int currentShotsTrap2; //NailFiringMachine
     public List<List<Node>> levelRoutes;
-
+    public GameObject BasementDirectionMarkers;
     #region Events
     public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
     public event OnCapturedCatChangeDelegate OnCapturedCatChange;
