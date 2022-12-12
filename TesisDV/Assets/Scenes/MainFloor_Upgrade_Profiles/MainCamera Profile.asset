@@ -19,6 +19,39 @@ MonoBehaviour:
   _Intensity:
     overrideState: 1
     value: 1
+--- !u!114 &-8271937153360209957
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a992b9fd3d0cdc488838a57736ec3e3, type: 3}
+  m_Name: StunnedPlayerPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  _Intensity:
+    overrideState: 1
+    value: 1.5
+  _MinX:
+    overrideState: 1
+    value: 0.26
+  _MaxX:
+    overrideState: 1
+    value: 0.64
+  _DistortionNormalMap:
+    overrideState: 1
+    value: {fileID: 2800000, guid: e98c6a1c109e03849af833a46af5e805, type: 3}
+    defaultState: 1
+  _TextureSample1:
+    overrideState: 1
+    value: {fileID: 2800000, guid: 42dd0f3a91fe7bc44b6dd490cf56b914, type: 3}
+    defaultState: 1
 --- !u!114 &-7738506496544460641
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -79,6 +112,7 @@ MonoBehaviour:
   - {fileID: 3367993628471389551}
   - {fileID: -8371041300080731982}
   - {fileID: -7738506496544460641}
+  - {fileID: -8271937153360209957}
 --- !u!114 &3367993628471389551
 MonoBehaviour:
   m_ObjectHideFlags: 3
