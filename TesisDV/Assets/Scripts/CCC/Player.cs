@@ -28,6 +28,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public PostProcessVolume volume;
     public Vignette postProcessDamage;
     public FadeInOutScenesPPSSettings postProcessFadeInOutScenes;
+    public StunnedPlayerPPSSettings postProcessStunnedPlayer;
+    private Coroutine StunnedPlayerCoroutine;
+    private Coroutine UnstunnedPlayerCoroutine;
     private Coroutine FadeOutSceneCoroutine;
     private Coroutine FadeInSceneCoroutine;
     [SerializeField] private Inventory _inventory;
@@ -437,6 +440,51 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutRestartEffect(1f));
         }
     }
+
+    public void ActiveStunnedEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessStunnedPlayer))
+        {
+            if (StunnedPlayerCoroutine != null) StopCoroutine(StunnedPlayerCoroutine);
+            StunnedPlayerCoroutine = StartCoroutine(LerpStunnedEffect(1f));
+        }
+    }
+
+    public void ActiveUnstunnedEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessStunnedPlayer))
+        {
+            if (UnstunnedPlayerCoroutine != null) StopCoroutine(UnstunnedPlayerCoroutine);
+            UnstunnedPlayerCoroutine = StartCoroutine(LerpUnstunnedEffect(1f));
+        }
+    }
+
+    IEnumerator LerpStunnedEffect(float duration)
+    {
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            postProcessStunnedPlayer._Intensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
+        }
+    }
+
+    IEnumerator LerpUnstunnedEffect(float duration)
+    {
+        float time = 0.98f;
+
+        while (time > 0 && time < duration)
+        {
+            time -= Time.deltaTime;
+
+            postProcessStunnedPlayer._Intensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
+        }
+    }
+
     IEnumerator LerpFadeInEffect(float duration)
     {
         float time = 0f;
@@ -506,12 +554,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _isAlive = false;
         canMoveCamera = false;
         _cam.SwitchStunnedState(true);
-
+        ActiveStunnedEffect();
         //Invoke("Dead", 0.5f); //Esperabamos tres segundos antes.
     }
 
     public void Recover()
     {
+        ActiveUnstunnedEffect();
         _isAlive = true;
         canMoveCamera = true;
         hp = maxHp;

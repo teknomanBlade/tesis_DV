@@ -21,6 +21,11 @@ public class PlayerCamera : MonoBehaviour
     private float _frequency = 10.0f;
     private float _valueToChange;
     [SerializeField] private float _stunDuration;
+    public float StunDuration
+    {
+        get { return _stunDuration; }
+        set { _stunDuration = value; }
+    }
     private float _passedTime;
     private bool _isStunned = false;
     [SerializeField] private float _stunXAmplitude;
