@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class GrayAttackRing : MonoBehaviour
 {
-    public GrayModel _myOwner;
+    public Enemy _myOwner;
     public int _damageAmount;
 
     private void Awake()
     {
-        _myOwner = transform.GetComponentInParent<GrayModel>();
+        _myOwner = transform.GetComponentInParent<Enemy>();
     }
 
     public void EnableBoxCollider()
@@ -29,7 +29,7 @@ public class GrayAttackRing : MonoBehaviour
         if (player)
         {
             //Debug.Log("ENTRA EN TRIGGER DAMAGE?");
-            other.GetComponent<Player>().Damage(_damageAmount);
+            other.GetComponent<Player>().Damage(_damageAmount, _myOwner.enemyType);
             GetComponent<BoxCollider>().enabled = false;
         }
     }

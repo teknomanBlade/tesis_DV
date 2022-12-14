@@ -19,7 +19,7 @@ public class EnemyAttackArea : MonoBehaviour
 
         if (player)
         {
-            other.GetComponent<Player>().Damage(_damageAmount);   
+            other.GetComponent<Player>().Damage(_damageAmount, _myOwner.enemyType);   
         }
 
         var forceField = other.GetComponent<ForceField>();

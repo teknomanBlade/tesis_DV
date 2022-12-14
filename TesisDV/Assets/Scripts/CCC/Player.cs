@@ -28,7 +28,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public PostProcessVolume volume;
     public Vignette postProcessDamage;
     public FadeInOutScenesPPSSettings postProcessFadeInOutScenes;
+    public ElectricWaveDamagePlayerPPSSettings postProcessElectricWaveDamagePlayer;
     public StunnedPlayerPPSSettings postProcessStunnedPlayer;
+    private Coroutine ElectricPlayerWaveDamageCoroutine;
     private Coroutine StunnedPlayerCoroutine;
     private Coroutine UnstunnedPlayerCoroutine;
     private Coroutine FadeOutSceneCoroutine;
@@ -441,6 +443,24 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
     }
 
+    public void ActiveElectricWaveDamageEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessElectricWaveDamagePlayer))
+        {
+            if (StunnedPlayerCoroutine != null) StopCoroutine(StunnedPlayerCoroutine);
+            StunnedPlayerCoroutine = StartCoroutine(LerpElectricWaveDamageEffect(1f));
+        }
+    }
+
+    /*public void ActiveUnstunnedEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessElectricWaveDamagePlayer))
+        {
+            if (UnstunnedPlayerCoroutine != null) StopCoroutine(UnstunnedPlayerCoroutine);
+            UnstunnedPlayerCoroutine = StartCoroutine(LerpUnstunnedEffect(1f));
+        }
+    }*/
+
     public void ActiveStunnedEffect()
     {
         if (volume.profile.TryGetSettings(out postProcessStunnedPlayer))
@@ -458,7 +478,32 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             UnstunnedPlayerCoroutine = StartCoroutine(LerpUnstunnedEffect(1f));
         }
     }
+    IEnumerator LerpElectricWaveDamageEffect(float duration)
+    {
+        float time = 0f;
 
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            postProcessElectricWaveDamagePlayer._ElectricDamageIntensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
+        }
+        ElectricPlayerWaveDamageCoroutine = StartCoroutine(LerpElectricWaveDamageWearOffEffect(1f));
+    }
+
+    IEnumerator LerpElectricWaveDamageWearOffEffect(float duration)
+    {
+        float time = 0.98f;
+
+        while (time > 0 && time < duration)
+        {
+            time -= Time.deltaTime;
+
+            postProcessElectricWaveDamagePlayer._ElectricDamageIntensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
+        }
+    }
     IEnumerator LerpStunnedEffect(float duration)
     {
         float time = 0f;
@@ -533,14 +578,31 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             SceneManager.LoadScene(1);
         }
     }
-    public void Damage(int damageAmount)
+    public void Damage(int damageAmount, EnemyType type)
     {
         _cam.CameraShakeDamage(1f, 0.8f);
-        ActiveDamageEffect();
+        SelectDamagePostProcessEffectByType(type);
         StartCoroutine(PlayDamageSound(3.4f));
         hp -= damageAmount;
         GameVars.Values.ShowLivesRemaining(damageAmount, hp, maxHp);
         if (hp <= 0) Die();
+    }
+
+    public void SelectDamagePostProcessEffectByType(EnemyType type)
+    {
+        if (type == EnemyType.Melee)
+        {
+            ActiveDamageEffect();
+        }
+        else if (type == EnemyType.Tank)
+        {
+            ActiveDamageEffect();
+        }
+        else
+        {
+            ActiveElectricWaveDamageEffect();
+        }
+
     }
 
     public void Die()
