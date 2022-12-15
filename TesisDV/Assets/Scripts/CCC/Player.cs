@@ -29,7 +29,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public Vignette postProcessDamage;
     public FadeInOutScenesPPSSettings postProcessFadeInOutScenes;
     public ElectricWaveDamagePlayerPPSSettings postProcessElectricWaveDamagePlayer;
+    public TankHitFistDamagePlayerPPSSettings postProcessTankHitFistDamagePlayer;
     public StunnedPlayerPPSSettings postProcessStunnedPlayer;
+    private Coroutine TankHitFistDamagePlayerCoroutine;
     private Coroutine ElectricPlayerWaveDamageCoroutine;
     private Coroutine StunnedPlayerCoroutine;
     private Coroutine UnstunnedPlayerCoroutine;
@@ -361,9 +363,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 //_inventory.DropItem();
                 //ElectricTrap = FindObjectOfType<ElectricTrap>();
                 //ElectricTrap?.Inactive();
-                microwaveFFG = FindObjectOfType<MicrowaveForceFieldGenerator>();
-                microwaveFFG?.Inactive();
-                //Damage(1);
+                //microwaveFFG = FindObjectOfType<MicrowaveForceFieldGenerator>();
+                //microwaveFFG?.Inactive();
+                Damage(2, EnemyType.Tank);
+                ActiveTankHitFistDamageEffect();
             } 
         }
         
@@ -416,6 +419,32 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         _valueToChange = endValue;
         StartCoroutine(LerpDamageEffect(0f,1f));
+    }
+    public void ActiveTankHitFistDamageEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessTankHitFistDamagePlayer))
+        {
+            if (TankHitFistDamagePlayerCoroutine != null) StopCoroutine(TankHitFistDamagePlayerCoroutine);
+            TankHitFistDamagePlayerCoroutine = StartCoroutine(LerpTankHitFistDamageEffect(0.5f, 1f));
+        }
+    }
+    IEnumerator LerpTankHitFistDamageEffect(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _valueToChange;
+
+        while (time < duration)
+        {
+            _valueToChange = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+
+            postProcessTankHitFistDamagePlayer._Intensity.value = _valueToChange;
+            yield return null;
+        }
+
+        _valueToChange = endValue;
+        if (TankHitFistDamagePlayerCoroutine != null) StopCoroutine(TankHitFistDamagePlayerCoroutine);
+        TankHitFistDamagePlayerCoroutine = StartCoroutine(LerpTankHitFistDamageEffect(0f, 1f));
     }
 
     public void ActiveFadeInEffect(float duration)
@@ -596,7 +625,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
         else if (type == EnemyType.Tank)
         {
-            ActiveDamageEffect();
+            ActiveTankHitFistDamageEffect();
         }
         else
         {
