@@ -55,6 +55,14 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture0:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -62,10 +70,13 @@ Material:
     m_Floats:
     - _Alpha1: 0.42652938
     - _BumpScale: 1
-    - _Cutoff: 0.5
+    - _Cutoff: 0.75
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Frequency: 200
+    - _Float0: 0
+    - _Float1: 1
+    - _Float2: 22
+    - _Frequency: 15
     - _Frequency1: 15
     - _FresnelBias: 1
     - _FresnelPower: 90
@@ -73,21 +84,26 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _Max1: 0.51
     - _Metallic: 0
+    - _Min1: 0.09
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Opacity: 0.5
+    - _Offset: 0.2
+    - _Opacity: 1
     - _OutlineWidth1: 0
     - _Parallax: 0.02
-    - _PosterizePower: 90
+    - _PosterizePower: 70
     - _PosterizePowerRotateExternal: 22.9
     - _PosterizeRotatePower: 13.4
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TimeScale: 0.1
+    - _Tiling: 0.01
+    - _TimeScale: -0.5
     - _TimeScale1: 1
     - _UVSec: 0
+    - _Width: 0.12
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
