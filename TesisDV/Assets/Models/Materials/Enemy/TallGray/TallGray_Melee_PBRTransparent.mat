@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TallGray_Melee_PBR
-  m_Shader: {fileID: 4800000, guid: 08e0d79f887268142a5ac990e3c977f5, type: 3}
+  m_Name: TallGray_Melee_PBRTransparent
+  m_Shader: {fileID: 4800000, guid: d10d4409f3bcedc4b9ac245e10f1ddd8, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -19,11 +19,23 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _AmbientOcclusion:
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 3bae34aab64e7a849b871eb540c85cbf, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AmbientOcclusion1:
         m_Texture: {fileID: 2800000, guid: cd9b5ceb0044b3d45b5843654c351e19, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Cube:
+        m_Texture: {fileID: 8900000, guid: 2dcdb6de6a0e9d847b4c39986367c8ae, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CubeMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -39,7 +51,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _DisplacementMap:
+    - _DisplacementMap1:
         m_Texture: {fileID: 2800000, guid: 5d86ad3f68d19664f99caa1fcda32df8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -47,7 +59,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _EyesEmission:
+    - _EyesEmission1:
         m_Texture: {fileID: 2800000, guid: 892b9e4b3c0a8ac4e8e956d838fb2e3d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -59,8 +71,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Normal_Map:
+    - _Normal:
         m_Texture: {fileID: 2800000, guid: 273ecc34bf0df054e8bfcc48d04e49ee, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalCloakNoise:
+        m_Texture: {fileID: 2800000, guid: b2c6804fbd79f6b45bd5d25cc74c2f0a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -71,24 +87,16 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _PumpingParts:
-        m_Texture: {fileID: 2800000, guid: b3f262f2ea0a1b946aaf412596ccceed, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _PumpingParts1:
         m_Texture: {fileID: 2800000, guid: b3f262f2ea0a1b946aaf412596ccceed, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Specular:
+    - _Specular1:
         m_Texture: {fileID: 2800000, guid: b6f9c35186fa35644a797ff1ec8c2699, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureSample0:
-        m_Texture: {fileID: 2800000, guid: 5d86ad3f68d19664f99caa1fcda32df8, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Texture_Albedo:
-        m_Texture: {fileID: 2800000, guid: 3bae34aab64e7a849b871eb540c85cbf, type: 3}
+        m_Texture: {fileID: 8900000, guid: 5f2002442b929b94db29850e7e8e162d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -96,31 +104,33 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _BumpMax: 3.95
-    - _BumpMin: 0.78
+    - _ActivateCloak: 0
     - _BumpScale: 1
-    - _BumpValue: 0
+    - _ChromaticAberration: 0.1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Float0: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GlowLimit: 1
     - _Metallic: 0
     - _Mode: 0
+    - _NoisePower: -4
     - _OcclusionStrength: 1
-    - _Offset: 0.41
+    - _Opacity: 1
     - _Parallax: 0.02
-    - _PeriodGlowing: 2.5
+    - _PeriodGlowing1: 2.5
+    - _Refraction: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _TilingCloakNoise: 100
+    - _TimeScaleNoise: -4
     - _UVSec: 0
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
+    - _CloakTint: {r: 0, g: 0.67326546, b: 1, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

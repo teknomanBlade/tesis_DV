@@ -209,6 +209,8 @@
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\AttackForceFieldState.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\TakenState.cs" />
+    <Compile Include="Assets\Scripts\Enemy\TallGray\PBRCloakTallGray.cs" />
+    <Compile Include="Assets\CameraManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
@@ -248,6 +250,7 @@
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ScaleAndOffsetNode.shader" />
     <None Include="Assets\Models\Materials\Enemy\Gray\WitGainPlus50.shader" />
     <None Include="Assets\Models\Materials\Enemy\Gray\ToonShadowsGray.shader" />
+    <None Include="Assets\Models\Materials\Enemy\TallGray\TallGray_Melee_PBRTransparent.shader" />
     <None Include="Assets\Models\Materials\UFO\DirectionalDissolve.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Templates\Legacy\MultiPassUnlit.shader" />
     <None Include="Assets\Models\Materials\UFO\ToonShadowsUFO.shader" />
@@ -295,6 +298,7 @@
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ObjectToWorldTransfNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_EncodeFloatRGHlpNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_IndirectDiffuseLight.shader" />
+    <None Include="Assets\Models\Materials\Enemy\Gray\PBRMaterial\GrayOld_PBR_MAT.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_SinTimeNode.shader" />
     <None Include="Assets\Models\Materials\Baseball Machine\BaseballMachinePart1.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_SwitchByFaceNode.shader" />
