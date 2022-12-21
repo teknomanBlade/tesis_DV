@@ -91,6 +91,7 @@
     <Compile Include="Assets\Scripts\Inventory\InventoryItem.cs" />
     <Compile Include="Assets\Scripts\House\PantryDoor.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\WalkingState.cs" />
+    <Compile Include="Assets\Scripts\Enemy\TallGray\PBRCloakTallGray.cs" />
     <Compile Include="Assets\ElectricityLineRenderer\Scripts\ElectricityProximity.cs" />
     <Compile Include="Assets\Scripts\House\FootLocker.cs" />
     <Compile Include="Assets\Prefabs\Enemy\Gray\MVCGray\GrayModelHardcodeado.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IDoorGrayInteractObserver.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Enemy\GrayModel.cs" />
+    <Compile Include="Assets\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Enemy\GrayController.cs" />
     <Compile Include="Assets\Scripts\Traps\BaseballLauncher\BaseballLauncherDestroyAnim.cs" />
     <Compile Include="Assets\ElectricityLineRenderer\Scripts\TriggerLightning.cs" />
@@ -209,8 +211,6 @@
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\AttackForceFieldState.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\TakenState.cs" />
-    <Compile Include="Assets\Scripts\Enemy\TallGray\PBRCloakTallGray.cs" />
-    <Compile Include="Assets\CameraManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
@@ -528,6 +528,7 @@
     <None Include="Assets\Models\Materials\UFO\Line_Renderer.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_SimpleRemainderNode.shader" />
     <None Include="Assets\Models\Materials\UFO\UFOBeam.shader" />
+    <None Include="Assets\Models\Materials\Enemy\Gray\PBRMaterial\GrayOld_PBR_Transparent.shader" />
     <None Include="Assets\Circuit Lines.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_PiNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_DynamicAppendNode.shader" />
