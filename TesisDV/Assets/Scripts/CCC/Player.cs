@@ -621,10 +621,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         if (type == EnemyType.Melee)
         {
+            StartCoroutine(PlayDamageMeleeSound(1f));
             ActiveDamageEffect();
         }
         else if (type == EnemyType.Tank)
         {
+            StartCoroutine(PlayDamageTankSound(1f));
             ActiveTankHitFistDamageEffect();
         }
         else
@@ -645,6 +647,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _isAlive = false;
         canMoveCamera = false;
         _cam.SwitchStunnedState(true);
+        StartCoroutine(PlayStunnedBirdsSound(_cam.StunDuration));
         ActiveStunnedEffect();
         //Invoke("Dead", 0.5f); //Esperabamos tres segundos antes.
     }
@@ -1245,7 +1248,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
         //lookingIMovable.BecomeMovable();
     }
-
+    public IEnumerator PlayStunnedBirdsSound(float timer)
+    {
+        isAttacking = true;
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "StunnedBirds", 0.15f, false);
+        yield return new WaitForSecondsRealtime(timer);
+        isAttacking = false;
+    }
     public IEnumerator PlayRacketSwingSound(float timer)
     {
         isAttacking = true;
@@ -1261,6 +1270,20 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         yield return new WaitForSecondsRealtime(timer);
         isDamaged = false;
+    }
+
+    public IEnumerator PlayDamageMeleeSound(float timer)
+    {
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "PunchHit_Melee", 0.3f, false);
+
+        yield return new WaitForSecondsRealtime(timer);
+    }
+
+    public IEnumerator PlayDamageTankSound(float timer)
+    {
+        GameVars.Values.soundManager.PlaySoundOnce(_audioSource, "PunchHit_Tank", 0.3f, false);
+
+        yield return new WaitForSecondsRealtime(timer);
     }
 
     public IEnumerator PlayCrouchSound(float timer)
