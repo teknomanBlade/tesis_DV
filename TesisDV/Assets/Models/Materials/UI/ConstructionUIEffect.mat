@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _ArrowIndicatorTexture:
+        m_Texture: {fileID: 2800000, guid: 32fc667360160ac4fbf5631ba451efcc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -59,6 +63,14 @@ Material:
         m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _TextureArrows:
+        m_Texture: {fileID: 2800000, guid: 32fc667360160ac4fbf5631ba451efcc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureArrows1:
+        m_Texture: {fileID: 2800000, guid: 32fc667360160ac4fbf5631ba451efcc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _TextureSample0:
         m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 1, y: 1}
@@ -76,7 +88,7 @@ Material:
     - _Float0: 0
     - _Float1: 1
     - _Float2: 22
-    - _Frequency: 15
+    - _Frequency: 25
     - _Frequency1: 15
     - _FresnelBias: 1
     - _FresnelPower: 90
@@ -90,17 +102,18 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Offset: 0.2
-    - _Opacity: 1
+    - _Opacity: 0.676
     - _OutlineWidth1: 0
     - _Parallax: 0.02
-    - _PosterizePower: 70
+    - _PosterizePower: 86.3
     - _PosterizePowerRotateExternal: 22.9
     - _PosterizeRotatePower: 13.4
+    - _RotationAngle: 1021.4
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Tiling: 0.01
-    - _TimeScale: -0.5
+    - _TimeScale: 0.8
     - _TimeScale1: 1
     - _UVSec: 0
     - _Width: 0.12
@@ -108,13 +121,19 @@ Material:
     - __dirty: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color0: {r: 0, g: 0.7075472, b: 0.15187393, a: 0}
+    - _Color0: {r: 0, g: 0.0323627, b: 1, a: 0}
     - _Color1: {r: 0.5565186, g: 1, b: 0.4575472, a: 0}
-    - _ColorPrimary: {r: 0, g: 0.764151, b: 0.05405111, a: 0}
-    - _ColorTintSecondary: {r: 0.19883592, g: 0.9433962, b: 0, a: 0}
+    - _ColorPrimary: {r: 0, g: 1, b: 0.07179499, a: 0}
+    - _ColorTintSecondary: {r: 0.20242472, g: 1, b: 0.18396229, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Offset: {r: 0.1, g: 0, b: 0, a: 0}
     - _OutlineColor1: {r: 0, g: 0, b: 0, a: 0}
+    - _Pivot: {r: 0, g: 0, b: 38.75, a: 0}
+    - _Pos: {r: 1, g: 0, b: 0, a: 0}
     - _RotateColorExternal: {r: 1, g: 1, b: 1, a: 0}
     - _RotateColorInternal: {r: 0, g: 0.5377358, b: 0.052719165, a: 0}
+    - _Speed: {r: 0, g: 1, b: 0, a: 0}
+    - _Vector0: {r: -0.98, g: 0.72, b: 0, a: 0}
+    - _Vector1: {r: 0, g: 0, b: 0, a: 0}
+    - _Vector2: {r: 5, g: 5, b: 0, a: 0}
   m_BuildTextureStacks: []
