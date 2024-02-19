@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1849417433888350077
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -15.71941
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8.198894
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 11.588996
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5754084199372789682, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 458f0906683969f4fa5de518aa8f66ce, type: 2}
+    - target: {fileID: 919132149155446097, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+      propertyPath: m_Name
+      value: FERNMinigun
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+--- !u!1 &1543356478928806444 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+  m_PrefabInstance: {fileID: 1849417433888350077}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &2994631740890691379 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: -5754084199372789682, guid: c1710a22a6e284a4f8ff87be4e8b2402, type: 3}
+  m_PrefabInstance: {fileID: 1849417433888350077}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &749896443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543356478928806444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a253498a390e744589d5c4e22550e15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshFilter: {fileID: 2994631740890691379}
