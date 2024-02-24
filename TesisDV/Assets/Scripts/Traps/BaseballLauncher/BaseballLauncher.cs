@@ -17,7 +17,8 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public GameObject projectilePrefab;
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
-    public GameObject ballsState1, ballsState2, ballsState3;
+    //public GameObject ballsState1, ballsState2, ballsState3;
+    public GameObject ballsContainerSmall, ballsContainerLarge;
     [SerializeField] private GameObject trapDestroyPrefab;
     public int shots;
     public int shotsLeft;
@@ -28,7 +29,8 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             return shotsLeft == 0;
         }
     }
-    public bool HasPlayerTennisBallBox { get; set; }
+    public bool HasTennisBallContainerSmall { get; set; }
+    public bool HasTennisBallContainerLarge { get; set; }
     public float interval;
     Vector3 auxVector;
     private float _searchSpeed = 2.5f;
@@ -82,7 +84,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         Baseball = Resources.Load<Baseball>("tennisBallaux");
         InitialStock = 20;
         BaseballPool = new PoolObject<Baseball>(BaseballFactory, ActivateBaseball, DeactivateBaseball, InitialStock, true);
-        ActiveBallsState1();
+        ActiveDeactivateBallStates(true, false);
         StartTrap();
     }
 
@@ -98,7 +100,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     public void Interact()
     {
-        if (HasPlayerTennisBallBox && IsEmpty)
+        if ((HasTennisBallContainerSmall || HasTennisBallContainerLarge) && IsEmpty)
         {
             if (ReloadCoroutine != null) StopCoroutine(ReloadCoroutine);
             ReloadCoroutine = StartCoroutine(ReloadTurret());
@@ -146,7 +148,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _isDisabledSFX = false;
         _animator.enabled = true;
         _animator.SetBool("HasNoBalls", false);
-        ActiveDeactivateBallStates(true, false, false);
+        //ActiveDeactivateBallStates(true, false, false);
         OnReload?.Invoke();
         GameVars.Values.ShowNotification("The Turret has been reloaded.");
     }
@@ -180,17 +182,17 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         ShootEffect.Play();
         shotsLeft--;
         shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
-        ChangeBallsState(shotsLeft);
+        //ChangeBallsState(shotsLeft);
         FireBaseball();
         //GameObject aux = Instantiate(projectilePrefab, exitPoint.transform.position, Quaternion.identity);
         //aux.GetComponent<Rigidbody>().AddForce(35f * exitPoint.transform.forward, ForceMode.Impulse);     Usamos Pool :D
         GameVars.Values.soundManager.PlaySoundAtPoint("BallLaunched", transform.position, 0.7f);
     }
 
-    public void ActiveBallsState1()
+    /*public void ActiveBallsState1()
     {
         ballsState1.SetActive(true);
-    }
+    }*/
 
     public void TakeDamage(float dmgAmount)
     {
@@ -210,21 +212,21 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         if (shotsLeft <= 0)
         {
-            ActiveDeactivateBallStates(false, false, false);
+            //ActiveDeactivateBallStates(false, false, false);
             return;
         }
 
         if (shotsLeft == 15)
         {
-            ActiveDeactivateBallStates(true, false, false);
+            //ActiveDeactivateBallStates(true, false, false);
         }
         else if (shotsLeft == 11)
         {
-            ActiveDeactivateBallStates(false, !ballsState2.activeSelf, false);
+            //ActiveDeactivateBallStates(false, !ballsState2.activeSelf, false);
         }
         else if (shotsLeft == 6)
         {
-            ActiveDeactivateBallStates(false, false, !ballsState3.activeSelf);
+            //ActiveDeactivateBallStates(false, false, !ballsState3.activeSelf);
         }
     }
 
@@ -272,11 +274,10 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _animator.SetBool("IsDetectingTarget", false);
     }
 
-    public void ActiveDeactivateBallStates(bool state1, bool state2, bool state3)
+    public void ActiveDeactivateBallStates(bool ballContainerSmall, bool ballContainerLarge)
     {
-        ballsState1.SetActive(state1);
-        ballsState2.SetActive(state2);
-        ballsState3.SetActive(state3);
+        ballsContainerSmall.SetActive(ballContainerSmall);
+        ballsContainerLarge.SetActive(ballContainerLarge);
     }
 
     public void BecomeMovable()

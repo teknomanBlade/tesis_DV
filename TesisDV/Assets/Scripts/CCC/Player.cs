@@ -990,7 +990,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
         if (lookingAt.gameObject.TryGetComponent<BaseballLauncher>(out BaseballLauncher baseballLauncher))
         {
-            baseballLauncher.HasPlayerTennisBallBox = _inventory.ContainsID(8, 1);
+            baseballLauncher.HasTennisBallContainerSmall = _inventory.ContainsID(8, 1);
+            baseballLauncher.HasTennisBallContainerLarge = _inventory.ContainsID(15, 1);
             if (baseballLauncher.IsEmpty)
             {
                 crosshair.sprite = GameVars.Values.crosshairReloadTrap1;
@@ -1094,7 +1095,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             if (auxBL.IsEmpty)
             {
-                GameVars.Values.ShowNotification("You need a Tennis Ball Box to reload!");
+                GameVars.Values.ShowNotification("You need a Tennis Ball Container to reload!");
                 auxBL.OnReload += OnBaseballMachineReload;
             }
             if (auxBL._canActivate1Upgrade && _inventory.ContainsID(2,1))
