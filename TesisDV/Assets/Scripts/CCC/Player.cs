@@ -1009,7 +1009,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             return;
         }
         
-        if (lookingAt.gameObject.TryGetComponent<NailFiringMachine>(out NailFiringMachine nailFiringMachine))
+        if (lookingAt.gameObject.TryGetComponent<FERNPaintballMinigun>(out FERNPaintballMinigun FERNPaintballMinigun))
         {
             crosshair.sprite = GameVars.Values.crosshairActivation;
             //interactKey.SetActive(true);
@@ -1115,6 +1115,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 microwaveFFG.BatteryReplaced();
             }
             
+        }
+        if (lookingAt.gameObject.TryGetComponent<FERNPaintballMinigun>(out FERNPaintballMinigun FERNPaintballMinigun)) 
+        {
+            if (FERNPaintballMinigun.IsEmpty)
+            {
+                GameVars.Values.ShowNotification("You need a Paintball Pellet Magazine to reload!");
+                FERNPaintballMinigun.OnReload += OnFERNPaintballMinigunReload;
+            }
         }
         if (lookingAt.gameObject.TryGetComponent<StationaryItem>(out StationaryItem stationaryItem))
         {
@@ -1223,6 +1231,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 _weaponGORacket.SetActive(true);
             }
         } */
+    }
+
+    private void OnFERNPaintballMinigunReload()
+    {
+        if (_inventory.ContainsID(7, 1))
+            _inventory.RemoveItemID(7, 1);
     }
 
     private void OnBaseballMachineReload()

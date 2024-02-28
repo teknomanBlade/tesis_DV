@@ -20,25 +20,25 @@ AnimationClip:
       - serializedVersion: 3
         time: 0
         value: {x: 0, y: 0, z: 0}
-        inSlope: {x: -2166.273, y: 0, z: 0}
-        outSlope: {x: -2166.273, y: 0, z: 0}
+        inSlope: {x: -3862.8892, y: 0, z: 0}
+        outSlope: {x: -3862.8892, y: 0, z: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.36405176, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.1310549, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 0.16666667
+        time: 0.083333336
         value: {x: -360, y: 0, z: 0}
-        inSlope: {x: -2164.2708, y: 0, z: 0}
-        outSlope: {x: -2164.2708, y: 0, z: 0}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.82425106, y: 0.33333334, z: 0.33333334}
+        weightedMode: 3
+        inWeight: {x: 0.9703546, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: MinigunPivot/FERNMinigunPivot
+    path: MinigunPivot/FERNMinigunLoaderPivot/FERNMinigunPivot
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves: []
@@ -51,7 +51,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3358366855
+      path: 1017753139
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -63,7 +63,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.16666667
+    m_StopTime: 0.083333336
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -85,26 +85,26 @@ AnimationClip:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: -2166.273
-        outSlope: -2166.273
+        inSlope: -3862.8892
+        outSlope: -3862.8892
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.36405176
+        outWeight: 0.1310549
       - serializedVersion: 3
-        time: 0.16666667
+        time: 0.083333336
         value: -360
-        inSlope: -2164.2708
-        outSlope: -2164.2708
+        inSlope: 0
+        outSlope: 0
         tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.82425106
+        weightedMode: 3
+        inWeight: 0.9703546
         outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: MinigunPivot/FERNMinigunPivot
+    path: MinigunPivot/FERNMinigunLoaderPivot/FERNMinigunPivot
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -112,15 +112,6 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.16666667
         value: 0
         inSlope: 0
         outSlope: 0
@@ -132,7 +123,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: MinigunPivot/FERNMinigunPivot
+    path: MinigunPivot/FERNMinigunLoaderPivot/FERNMinigunPivot
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -147,20 +138,11 @@ AnimationClip:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.16666667
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: MinigunPivot/FERNMinigunPivot
+    path: MinigunPivot/FERNMinigunLoaderPivot/FERNMinigunPivot
     classID: 4
     script: {fileID: 0}
   m_EulerEditorCurves:
@@ -171,7 +153,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: MinigunPivot/FERNMinigunPivot
+    path: MinigunPivot/FERNMinigunLoaderPivot/FERNMinigunPivot
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -181,7 +163,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: MinigunPivot/FERNMinigunPivot
+    path: MinigunPivot/FERNMinigunLoaderPivot/FERNMinigunPivot
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -191,7 +173,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: MinigunPivot/FERNMinigunPivot
+    path: MinigunPivot/FERNMinigunLoaderPivot/FERNMinigunPivot
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0
