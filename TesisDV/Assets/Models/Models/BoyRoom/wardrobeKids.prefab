@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 2626582659618324015}
   - component: {fileID: 4565001819697173758}
   - component: {fileID: 1585270556993912732}
-  - component: {fileID: 5175298027986884274}
-  m_Layer: 23
+  m_Layer: 10
   m_Name: Object004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,19 +81,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5175298027986884274
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 322043066705104145}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.07510238, y: 1.8237135, z: 2.7709389}
-  m_Center: {x: 0.037552927, y: 0.011212946, z: 0.009860876}
 --- !u!1 &1109582684945306158
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,8 +282,7 @@ GameObject:
   - component: {fileID: 3587338261795693483}
   - component: {fileID: 1944828223684246032}
   - component: {fileID: 2843690814277854410}
-  - component: {fileID: 3230012809986275052}
-  m_Layer: 23
+  m_Layer: 10
   m_Name: Object005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -367,19 +352,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3230012809986275052
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3581020098156917905}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.07510238, y: 1.8237135, z: 2.7709389}
-  m_Center: {x: 0.037552927, y: -0.011209131, z: 0.009860876}
 --- !u!1 &4213065311654367878
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,7 +456,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5766864638041506191}
-  m_Layer: 23
+  - component: {fileID: 9119761018750469445}
+  - component: {fileID: 4625425397531872697}
+  - component: {fileID: 6088503878230717233}
+  m_Layer: 10
   m_Name: WardrobeLeftDoorPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -506,6 +481,56 @@ Transform:
   m_Father: {fileID: 6237076362336323297}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9119761018750469445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5312166250235101904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3a64b04de7a2a4abf901cb2b69a2c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemName: WardrobeLeftDoor
+  _itemImage: {fileID: 0}
+  itemType: 3
+  IsLocked: 1
+  IsLockedToGrays: 0
+  IsFront: 0
+  doorTriggers: []
+--- !u!114 &4625425397531872697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5312166250235101904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!65 &6088503878230717233
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5312166250235101904}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.14327443, y: 1.8325896, z: 2.7000182}
+  m_Center: {x: 0.037763022, y: -0.89423233, z: 0.010116473}
 --- !u!1 &6756907195444141147
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,7 +576,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8355716947962105742}
-  m_Layer: 23
+  - component: {fileID: 8232369235361073611}
+  - component: {fileID: 5500519410655871333}
+  - component: {fileID: 4726683531924957936}
+  m_Layer: 10
   m_Name: WardrobeRightDoorPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -573,6 +601,56 @@ Transform:
   m_Father: {fileID: 6237076362336323297}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8232369235361073611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510751672840582207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3a64b04de7a2a4abf901cb2b69a2c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemName: WardrobeRightDoor
+  _itemImage: {fileID: 0}
+  itemType: 3
+  IsLocked: 1
+  IsLockedToGrays: 0
+  IsFront: 0
+  doorTriggers: []
+--- !u!114 &5500519410655871333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510751672840582207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!65 &4726683531924957936
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510751672840582207}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.13425356, y: 1.7776399, z: 2.7074149}
+  m_Center: {x: 0.057922326, y: 0.89408004, z: 0.0074462737}
 --- !u!1 &8667026033171158938
 GameObject:
   m_ObjectHideFlags: 0

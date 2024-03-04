@@ -11,6 +11,8 @@ public class GameVars : MonoBehaviour
     private static GameVars _gameVars;
     public static GameVars Values { get { return _gameVars; } }
 
+    public bool HasSmallContainer;
+    public bool HasLargeContainer;
     public SoundManager soundManager { get; private set; }
     public CraftingScreen craftingContainer { get; private set; }
     public LevelManager LevelManager { get; set; }

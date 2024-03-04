@@ -10,6 +10,8 @@ public abstract class Trap : MonoBehaviour
     public bool active;
     protected bool _canShoot = false;
     protected Animator _animator;
+    [SerializeField] protected GameObject UITrapIndicator;
+    [SerializeField] protected Texture UITexture;
 
     [SerializeField] protected float viewRadius;
     [SerializeField] protected float viewAngle;
@@ -96,6 +98,12 @@ public abstract class Trap : MonoBehaviour
             searchingForTargetCoroutine = StartCoroutine("RoutineSearchingForObjectives");
             laser.gameObject.SetActive(false);
         } */
+    }
+    protected void SetUIIndicator(string UIIndicatorName) 
+    {
+        UITexture = Resources.Load<Texture>(UIIndicatorName);
+        UITrapIndicator = transform.GetComponentsInChildren<Transform>().FirstOrDefault(x => x.name.Equals("MiniMapIndicatorActive")).gameObject;
+        UITrapIndicator.GetComponent<MeshRenderer>().material.SetTexture("_Placeholder", UITexture);
     }
 
     public virtual void Inactive()

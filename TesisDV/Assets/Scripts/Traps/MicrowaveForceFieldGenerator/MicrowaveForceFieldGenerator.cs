@@ -27,6 +27,7 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         //_animForceField.SetBool("IsForceFieldOn", true);
         GameVars.Values.IsAllSlotsDisabled();
         GameVars.Values.soundManager.PlaySoundOnce(_as, "EMRingWavesSFX", 0.15f, true);
+        SetUIIndicator("UI_MicrowaveForceFieldGenerator_Indicator");
     }
 
     // Update is called once per frame

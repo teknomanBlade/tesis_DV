@@ -1077,13 +1077,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void Interact()
     {
-        if (lookingAt.gameObject.TryGetComponent<InventoryItem>(out InventoryItem aux))
+        
+        if (lookingAt.gameObject.TryGetComponent(out InventoryItem aux))
         {
             aux.AddObserver(this);
             InteractWithInventoryItem(aux);
             return;
         }
-        if (lookingAt.gameObject.TryGetComponent<WorkBenchCraftingMenu>(out WorkBenchCraftingMenu wbCraftingMenu))
+        if (lookingAt.gameObject.TryGetComponent(out WorkBenchCraftingMenu wbCraftingMenu))
         {
             _craftingScreen.SetActive(true);
             wbCraftingMenu.OpenCraftingPurchaseMenu();
@@ -1091,7 +1092,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             return;
         }
         lookingAt.Interact();
-        if (lookingAt.gameObject.TryGetComponent<BaseballLauncher>(out BaseballLauncher auxBL))
+        if (lookingAt.gameObject.TryGetComponent(out BaseballLauncher auxBL))
         {
             if (auxBL.IsEmpty)
             {
@@ -1103,7 +1104,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 auxBL.ActivateFirstUpgrade();
             }
         }
-        if (lookingAt.gameObject.TryGetComponent<MicrowaveForceFieldGenerator>(out MicrowaveForceFieldGenerator microwaveFFG))
+        if (lookingAt.gameObject.TryGetComponent(out MicrowaveForceFieldGenerator microwaveFFG))
         {
             if (!_inventory.ContainsID(2, 1) && microwaveFFG.IsBatteryFried)
             {
@@ -1116,15 +1117,15 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             }
             
         }
-        if (lookingAt.gameObject.TryGetComponent<FERNPaintballMinigun>(out FERNPaintballMinigun FERNPaintballMinigun)) 
+        if (lookingAt.gameObject.TryGetComponent(out FERNPaintballMinigun FERNPaintballMinigun)) 
         {
-            if (FERNPaintballMinigun.IsEmpty)
+            if (!_inventory.ContainsID(7, 1) && FERNPaintballMinigun.IsEmpty)
             {
                 GameVars.Values.ShowNotification("You need a Paintball Pellet Magazine to reload!");
                 FERNPaintballMinigun.OnReload += OnFERNPaintballMinigunReload;
             }
         }
-        if (lookingAt.gameObject.TryGetComponent<StationaryItem>(out StationaryItem stationaryItem))
+        if (lookingAt.gameObject.TryGetComponent(out StationaryItem stationaryItem))
         {
             if (_inventory.ContainsID(2, 1))
             {
@@ -1138,7 +1139,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             }
         }
 
-        if (lookingAt.gameObject.TryGetComponent<Door>(out Door door))
+        if (lookingAt.gameObject.TryGetComponent(out Door door))
         {
             if (door.IsLocked)
             {
@@ -1189,48 +1190,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 _weaponGORemoteControl.SetActive(true);
             }
         }
-        
-        /* if(_inventory.IsThereAnotherWeapon())
-        {
-            if(_inventory.ContainsID(11, 1) && _currentWeaponManager == _weaponGORacket)
-            {
-                _currentWeaponManager = _weaponGOBaseballBat;
-                _weaponGORacket.SetActive(false);
-                _weapon = _weaponGOBaseballBat.GetComponent<BaseballBat>();
-                _weaponGOBaseballBat.SetActive(true);
-            }
-            else if(_inventory.ContainsID(3, 1) && _currentWeaponManager == _weaponGOBaseballBat)
-            {
-                _currentWeaponManager = _weaponGORacket;
-                _weaponGOBaseballBat.SetActive(false);
-                _weapon = _weaponGORacket.GetComponent<Racket>();
-                _weaponGORacket.SetActive(true);
-            }
-            else if (_inventory.ContainsID(14, 1) && _currentWeaponManager == _weaponGORacket)
-            {
-                _currentWeaponManager = _weaponGORemoteControl;
-                _weaponGORacket.SetActive(false);
-                _remoteControl = _weaponGORemoteControl.GetComponent<RemoteControl>();
-                _weapon = null;
-                _weaponGORemoteControl.SetActive(true);
-            }
-            else if (_inventory.ContainsID(14, 1) && _currentWeaponManager == _weaponGOBaseballBat)
-            {
-                _currentWeaponManager = _weaponGORemoteControl;
-                _weaponGOBaseballBat.SetActive(false);
-                _remoteControl = _weaponGORemoteControl.GetComponent<RemoteControl>();
-                _weapon = null;
-                _weaponGORemoteControl.SetActive(true);
-            }
-            else if (_inventory.ContainsID(3, 1) && _currentWeaponManager == _weaponGORemoteControl)
-            {
-                _currentWeaponManager = _weaponGORacket;
-                _weaponGORemoteControl.SetActive(false);
-                _weapon = _weaponGORacket.GetComponent<Racket>();
-                _remoteControl = null;
-                _weaponGORacket.SetActive(true);
-            }
-        } */
     }
 
     private void OnFERNPaintballMinigunReload()
@@ -1350,6 +1309,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
         else
         {
+            if (inventoryItem.myCraftingID == 8)
+            {
+                GameVars.Values.HasSmallContainer = true;
+            }
+            else if (inventoryItem.myCraftingID == 15) 
+            {
+                GameVars.Values.HasLargeContainer = true;
+            }
             GameVars.Values.PlayBackpackItemGrabbedAnim(inventoryItem.itemImage);
             _inventory.AddItem(inventoryItem);
         }

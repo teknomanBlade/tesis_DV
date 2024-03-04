@@ -8,6 +8,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
 {
     private float _maxLife = 10f;
     [SerializeField] private float _currentLife;
+    private AudioSource _as;
     public int shots;
     public int shotsLeft;
     public float interval;
@@ -18,6 +19,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
             return shotsLeft == 0;
         }
     }
+    public bool HasPaintballPelletMagazine { get; set; }
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
     public delegate void OnReloadDelegate();
@@ -32,15 +34,18 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     {
         _currentLife = _maxLife;
         InitialStock = shots = 300;
+        _as = GetComponent<AudioSource>();
         PaintballPellet = Resources.Load<PaintballPellet>("PaintballPellet");
         exitPoint = transform.GetComponentsInChildren<Transform>().FirstOrDefault(x => x.name.Equals("BulletSpawnPoint")).gameObject;
         PaintballPelletsPool = new PoolObject<PaintballPellet>(PaintballPelletFactory, PaintballPelletActivate, PaintballPelletDeactivate, InitialStock, true);
+        SetUIIndicator("UI_FERNPaintballMinigun_Indicator");
     }
 
     private void PaintballPelletDeactivate(PaintballPellet pp)
     {
         pp.gameObject.SetActive(false);
         pp.transform.localPosition = new Vector3(0f, 0f, 0f);
+        pp.transform.SetParent(transform);
     }
 
     private void PaintballPelletActivate(PaintballPellet pp)
@@ -89,8 +94,31 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
 
     public void Interact()
     {
+        if (HasPaintballPelletMagazine && IsEmpty)
+        {
+            if (ReloadCoroutine != null) StopCoroutine(ReloadCoroutine);
+            ReloadCoroutine = StartCoroutine(ReloadTurret());
+            return;
+        }
 
+        if (!active)
+        {
+            Debug.Log("Active la Torreta de Paintball");
+
+            //if (isFirstTime) { isFirstTime = false; _animator.SetBool("HasNoBalls", false); }
+
+            StartTrap();
+        }
     }
+    IEnumerator ReloadTurret()
+    {
+        GameVars.Values.ShowNotification("Reloading turret...");
+        //GameVars.Values.soundManager.PlaySoundOnce(_as, "ReloadingTurret1", 0.8f, false);
+        yield return new WaitForSeconds(2.5f);
+        Debug.Log("LLEGA A RELOAD?");
+        Reload();
+    }
+
     public void TakeDamage(float dmgAmount)
     {
         _currentLife -= dmgAmount;

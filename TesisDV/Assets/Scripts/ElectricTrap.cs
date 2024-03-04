@@ -17,6 +17,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     private AudioSource _as;
     private void Start()
     {
+        
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
         _myTrapBase.SetTrap(this.gameObject);
         GameVars.Values.IsAllSlotsDisabled();
@@ -24,6 +25,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         _as = GetComponent<AudioSource>();
         ElectricityLineRenderer = GetComponent<ElectricityLineRenderer>();
         GameVars.Values.soundManager.PlaySoundOnce(_as, "ElectricTrapSFX", 0.25f, true);
+        SetUIIndicator("UI_ElectricTrap_Indicator");
     }
 
     private void Update()

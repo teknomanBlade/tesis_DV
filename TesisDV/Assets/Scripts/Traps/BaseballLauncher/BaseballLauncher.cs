@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BaseballLauncher : Trap, IMovable, IInteractable
@@ -72,20 +73,22 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
         _skillTree.OnUpgrade += CheckForUpgrades;
         CheckForUpgrades();
-        //_animator.SetBool("HasNoBalls", true); Ahora las trampas empiezan encendidas.
-        //GameVars.Values.ShowNotification("The Turret is inactive. Get near until you see the Active Button Icon."); Ahora las trampas empiezan encendidas.
         isFirstTime = true;
         myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
         _as = GetComponent<AudioSource>();
-        //Debug.Log(transform.GetChild(2));
-        shotsLeft = shots;
         laser.gameObject.SetActive(false);
         Baseball = Resources.Load<Baseball>("tennisBallaux");
         InitialStock = 20;
         BaseballPool = new PoolObject<Baseball>(BaseballFactory, ActivateBaseball, DeactivateBaseball, InitialStock, true);
         ActiveDeactivateBallStates(true, false);
         StartTrap();
+        SetUIIndicator("UI_BaseballLauncher_Indicator");
+    }
+
+    public void SetShots(int shots) 
+    {
+        shotsLeft = this.shots = shots;
     }
 
     private void StartTrap()
