@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.FilePathAttribute;
 
 public class FERNPaintballMinigun : Trap, IMovable, IInteractable
 {
@@ -22,6 +23,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     public bool HasPaintballPelletMagazine { get; set; }
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
+    [SerializeField] private float _damageAmount;
     public delegate void OnReloadDelegate();
     public event OnReloadDelegate OnReload;
     public PoolObject<PaintballPellet> PaintballPelletsPool { get; set; }
@@ -33,11 +35,13 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     void Awake()
     {
         _currentLife = _maxLife;
-        InitialStock = shots = 300;
+        InitialStock = shotsLeft = shots = 300;
         _as = GetComponent<AudioSource>();
+        _animator = GetComponent<Animator>();
         PaintballPellet = Resources.Load<PaintballPellet>("PaintballPellet");
         exitPoint = transform.GetComponentsInChildren<Transform>().FirstOrDefault(x => x.name.Equals("BulletSpawnPoint")).gameObject;
         PaintballPelletsPool = new PoolObject<PaintballPellet>(PaintballPelletFactory, PaintballPelletActivate, PaintballPelletDeactivate, InitialStock, true);
+        StartTrap();
         SetUIIndicator("UI_FERNPaintballMinigun_Indicator");
     }
 
@@ -45,7 +49,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     {
         pp.gameObject.SetActive(false);
         pp.transform.localPosition = new Vector3(0f, 0f, 0f);
-        pp.transform.SetParent(transform);
+        //pp.transform.SetParent(transform);
     }
 
     private void PaintballPelletActivate(PaintballPellet pp)
@@ -67,6 +71,14 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
             FieldOfView();
         }
     }
+    public override void ShootAnimation(Vector3 rotation)
+    {
+        //Debug.Log("ENTRA EN SHOOT ANIMATION?");
+        var minigunSpeedRotation = 500f;
+        var speedMultiplier = 2.5f;
+        myCannon.transform.Rotate(Vector3.right, minigunSpeedRotation * speedMultiplier * Time.deltaTime);
+    }
+
     private void StartTrap()
     {
         active = true;
@@ -74,12 +86,11 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
         _animator.SetBool("HasNoPellets", false);
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
         if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
-        ShootCoroutine = StartCoroutine("ActiveCoroutine");
+        ShootCoroutine = StartCoroutine(ActiveCoroutine());
     }
     private void SearchingForObjectives()
     {
         _animator.enabled = true;
-        _animator.SetBool("IsFiring", false);
     }
 
     public void BecomeMovable()
@@ -104,8 +115,6 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
         if (!active)
         {
             Debug.Log("Active la Torreta de Paintball");
-
-            //if (isFirstTime) { isFirstTime = false; _animator.SetBool("HasNoBalls", false); }
 
             StartTrap();
         }
@@ -150,7 +159,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
         {
             GetPaintballPellet();
             yield return new WaitForSeconds(interval);
-            if (shotsLeft != 0) StartCoroutine("ActiveCoroutine");
+            if (shotsLeft != 0) StartCoroutine(ActiveCoroutine());
             else active = false;
         }
         else
@@ -162,7 +171,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
 
     public void GetPaintballPellet()
     {
-        if (_canShoot == false || (_currentObjective != null && _currentObjective.GetComponent<Enemy>().isDead))
+        if (!_canShoot || (_currentObjective != null && _currentObjective.GetComponent<Enemy>().isDead))
             return;
 
         if (shotsLeft == 0)
@@ -181,13 +190,35 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     {
         if (_currentObjective != null && _canShoot)
         {
-            PaintballPelletsPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetOwner(this)/*.SetAdditionalDamage(_additionalDamage)*/;
-            var enemy = _currentObjective.GetComponent<Enemy>();
-            //EnemyDamageDifferential(enemy);
+            PaintballPelletsPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.right).SetOwner(this)/*.SetAdditionalDamage(_additionalDamage)*/;
+            EnemyDamageDifferential(_currentObjective.GetComponent<Enemy>());
 
         }
     }
+    public void EnemyDamageDifferential(Enemy enemy)
+    {
+        if (enemy == null)
+            return;
 
+        if (enemy.name.Contains("GrayMVC"))
+        {
+            _damageAmount = 0.05f;
+            Debug.Log("DAÑO GRAY: " + _damageAmount);
+            enemy.TakeDamage(_damageAmount);
+        }
+        else if (enemy.name.Contains("Melee"))
+        {
+            _damageAmount = 0.25f;
+            Debug.Log("DAÑO MELEE: " + _damageAmount);
+            enemy.TakeDamage(_damageAmount);
+        }
+        else if (enemy.name.Contains("Tank"))
+        {
+            _damageAmount = 0.35f;
+            Debug.Log("DAÑO TANK: " + _damageAmount);
+            enemy.TakeDamage(_damageAmount);
+        }
+    }
     void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, viewRadius);

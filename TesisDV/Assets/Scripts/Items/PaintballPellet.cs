@@ -9,7 +9,7 @@ public class PaintballPellet : Projectile
     private Vector3 shootDirection;
     private FERNPaintballMinigun _fpm;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
         base.Start();
         Invoke("ReturnToPool", 5f);

@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class FERNPaintballMinigunConstructing : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject trapPrefab;
+    Animator myAnimator;
+    private GameObject parent;
     void Start()
     {
-        
+        myAnimator = GetComponent<Animator>();
+        //parent = GameObject.Find("MainGame");
+        parent = transform.parent.gameObject;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void FinishAnim()
     {
-        
+        GameObject aux = Instantiate(trapPrefab, transform.position, transform.rotation, parent.transform);
+       
+        if (GameVars.Values.currentShotsTrap2 > 0)
+            aux.GetComponent<FERNPaintballMinigun>().shotsLeft = GameVars.Values.currentShotsTrap2;
+
+        Destroy(aux.GetComponent<InventoryItem>());
+        Destroy(gameObject);
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.FilePathAttribute;
 
 public class BaseballLauncher : Trap, IMovable, IInteractable
 {
@@ -331,7 +332,13 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         o.gameObject.SetActive(true);
     }
-
+    public override void ShootAnimation(Vector3 rotation)
+    {
+        //Debug.Log("ENTRA EN SHOOT ANIMATION?");
+        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y, rotation.z), _shootSpeed * Time.deltaTime);
+        //_animator.enabled = true;
+        //_animator.SetBool("IsFiring", true);
+    }
     private void FireBaseball()
     {
         if(_currentObjective != null && _canShoot)
