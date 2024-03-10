@@ -48,10 +48,10 @@ public class TrapSlot : MonoBehaviour
             SlotImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtSlowingTrap = false;
         }
-        if (GameVars.Values.HasBoughtDartsTrap && _trapID == 4)
+        if (GameVars.Values.HasBoughtPaintballMinigunTrap && _trapID == 4)
         {
             SlotImage.sprite = _trapSpriteEnabled;
-            GameVars.Values.HasBoughtDartsTrap = false;
+            GameVars.Values.HasBoughtPaintballMinigunTrap = false;
         }
         if (GameVars.Values.HasBoughtElectricTrap && _trapID == 5)
         {

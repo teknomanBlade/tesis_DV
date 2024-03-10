@@ -36,13 +36,13 @@ public class SkillTree : MonoBehaviour
     {
         get { return _isElectricTrapUnlocked; }
     }
-    [Header("Darts Trap")]
-    [SerializeField] private int DartsTrapWittCost;
-    public Text DartsTrapWitCostText;
-    private bool _isDartsTrapUnlocked;
-    public bool isDartsTrapUnlocked
+    [Header("Paintball Minigun Trap")]
+    [SerializeField] private int PaintballMinigunTrapWittCost;
+    public Text PaintballMinigunTrapWitCostText;
+    private bool _isPaintballMinigunTrapUnlocked;
+    public bool isPaintballMinigunTrapUnlocked
     {
-        get { return _isDartsTrapUnlocked; }
+        get { return _isPaintballMinigunTrapUnlocked; }
     }
 
     #endregion
@@ -71,19 +71,19 @@ public class SkillTree : MonoBehaviour
     #region NailFiringMachine Upgrades
 
     [Header("Damage Upgrade")]
-    [Header("NailFiringMachine Upgrades")]
-    [SerializeField] private int NFM1WittCost;
-    private bool _isNFM1Activated;
-    public bool isNFM1Activated
+    [Header("FERN Paintball Minigun Upgrades")]
+    [SerializeField] private int FPM1WittCost;
+    private bool _isFPM1Activated;
+    public bool isFPM1Activated
     {
-        get { return _isNFM1Activated; }
+        get { return _isFPM1Activated; }
     }
     [Header("Toxic Damage")]
-    [SerializeField] private int NFM2WittCost;
-    private bool _isNFM2Activated;
-    public bool isNFM2Activated
+    [SerializeField] private int FPM2WittCost;
+    private bool _isFPM2Activated;
+    public bool isFPM2Activated
     {
-        get { return _isNFM2Activated; }
+        get { return _isFPM2Activated; }
     }
 
     #endregion
@@ -165,7 +165,7 @@ public class SkillTree : MonoBehaviour
         MicrowaveWitCostText.text = MicrowaveTrapWittCost.ToString();
         BaseballLauncherUpdateWitCostText.text = BL1WittCost.ToString();
         SlowTrapWitCostText.text = SlowTrapWittCost.ToString();
-        DartsTrapWitCostText.text = DartsTrapWittCost.ToString();
+        PaintballMinigunTrapWitCostText.text = PaintballMinigunTrapWittCost.ToString();
         ElectricTrapWitCostText.text = ElectricTrapWittCost.ToString();
         _inventory = GetComponentInChildren<Inventory>();
         _as = GetComponent<AudioSource>();
@@ -206,14 +206,14 @@ public class SkillTree : MonoBehaviour
             OnUpgrade?.Invoke();
         } 
     }
-    public void UnlockDartsTrap()
+    public void UnlockPaintballMinigunTrap()
     {
-        if(!_isDartsTrapUnlocked && _inventory.HasEnoughWitts(DartsTrapWittCost))
+        if(!_isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(PaintballMinigunTrapWittCost))
         {
             GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(DartsTrapWittCost);
-            _isDartsTrapUnlocked = true;
-            GameVars.Values.HasBoughtDartsTrap = _isDartsTrapUnlocked;
+            _inventory.RemoveWitts(PaintballMinigunTrapWittCost);
+            _isPaintballMinigunTrapUnlocked = true;
+            GameVars.Values.HasBoughtPaintballMinigunTrap = _isPaintballMinigunTrapUnlocked;
             OnUpgrade?.Invoke();
         }
         
@@ -242,24 +242,24 @@ public class SkillTree : MonoBehaviour
         }
     }
 
-    public void UpgradeNailFiringMachine1()
+    public void UpgradeFERNPaintballMinigun1()
     {
-        if(!_isNFM1Activated && _isDartsTrapUnlocked && _inventory.HasEnoughWitts(NFM1WittCost))
+        if(!_isFPM1Activated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM1WittCost))
         {
             GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(NFM1WittCost);
-            _isNFM1Activated = true;
+            _inventory.RemoveWitts(FPM1WittCost);
+            _isFPM1Activated = true;
             OnUpgrade?.Invoke();
         }
     }
 
-    public void UpgradeNailFiringMachine2()
+    public void UpgradeFERNPaintballMinigun2()
     {
-        if(!_isNFM2Activated && _isDartsTrapUnlocked && _inventory.HasEnoughWitts(NFM2WittCost))
+        if(!_isFPM2Activated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM2WittCost))
         {
             GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(NFM2WittCost);
-            _isNFM2Activated = true;
+            _inventory.RemoveWitts(FPM2WittCost);
+            _isFPM2Activated = true;
             OnUpgrade?.Invoke();
         }
     }

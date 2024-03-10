@@ -74,23 +74,15 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         _panelMain = GameObject.Find("Panel");
         allDoorsAreClosed = true;
         _cat = objective.GetComponent<Cat>();
-        /*YouWin = Instantiate(GameVars.Values.youWinScreen);
-        YouWin.transform.SetParent(_panelMain.transform);
-        YouLose = Instantiate(GameVars.Values.youLoseScreen);
-        YouLose.transform.SetParent(_panelMain.transform);
-        ScreenManager.Instance.Push(YouWin);
-        ScreenManager.Instance.Push(YouLose);*/
-        //craftingRecipe.RestoreBuildAmount();
 
         GameVars.Values.BaseballLauncher.RestoreBuildAmount();
         GameVars.Values.MicrowaveForceFieldGenerator.RestoreBuildAmount();
         GameVars.Values.SlowTrap.RestoreBuildAmount();
         GameVars.Values.ElectricTrap.RestoreBuildAmount();
-        GameVars.Values.NailFiringMachine.RestoreBuildAmount();
+        GameVars.Values.FERNPaintballMinigun.RestoreBuildAmount();
 
         GameVars.Values.soundManager.PlaySound("MusicPreWave",0.14f,true);
         WorkbenchLight.SetActive(false);
-        //Invoke("EndRound",8f);
     }
 
     private void Update()

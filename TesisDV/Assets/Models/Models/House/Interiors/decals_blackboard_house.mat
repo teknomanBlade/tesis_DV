@@ -9,7 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: decals_blackboard_house
   m_Shader: {fileID: 4800000, guid: ba981c8acfa78a14ab51f304c061e6e2, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: _KEYWORD0_KEY0 _OPACITYEXPERIMENT_FIRSTTOSECOND _OPACITYEXPERIMENT_KEY1
+    _SWITCHOPACITYEXPERIMENT_KEY0
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -27,8 +28,24 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DecalsBlackBoardOpacityMapBlackboard_2:
+        m_Texture: {fileID: 2800000, guid: c0bcf2310c79d3949bd9f35c54880a6b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalsBlackBoardOpacityMapBlackboard_3:
+        m_Texture: {fileID: 2800000, guid: 62ee81da676c3ca4796f789e5e6b7a8a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalsBlackBoardOpacityMapBlackboard_4:
+        m_Texture: {fileID: 2800000, guid: ba08d9425b70d9240908d46927cb0938, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalsBlackBoardOpacityMapBlackboard_5:
+        m_Texture: {fileID: 2800000, guid: 8762f26605c6d54488c6aaa037a14d10, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _DecalsBlackboard_OpacityMap:
-        m_Texture: {fileID: 2800000, guid: 70857d2f8398c5845b1bbeaed172ae55, type: 3}
+        m_Texture: {fileID: 2800000, guid: e4c032728aa8278449e26f15b6896e56, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -71,6 +88,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: e4c032728aa8278449e26f15b6896e56, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -83,15 +104,19 @@ Material:
     - _Distortion: 2.67
     - _DstBlend: 0
     - _FirstPosition: -11.62
+    - _FirstToSecond: 0
+    - _FourthToFifth: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.27
     - _GlossyReflections: 1
     - _InternalColourPower: 4
+    - _Keyword0: 0
     - _Max: -0.02
     - _Metallic: 0
     - _Min: -67.41
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _OpacityExperiment: 0
     - _Parallax: 0.02
     - _PointLightPunchthrough: 1
     - _Rim: 0.212
@@ -101,6 +126,7 @@ Material:
     - _SSSScale: 1
     - _SecondPosition: 31.11
     - _SecondPositionIntensity: 56.13
+    - _SecondToThird: 0
     - _ShadowIntensity: 0.45
     - _ShadowStrength: 1
     - _ShadowStrength1: 1
@@ -109,6 +135,8 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SubsurfaceDistortion: 0.5
+    - _SwitchOpacityExperiment: 0
+    - _ThirdToFourth: 0
     - _UVSec: 0
     - _Width: 0.01
     - _ZWrite: 1

@@ -182,21 +182,29 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             Inactive();
         }
 
-        //laser.gameObject.SetActive(true);
         ShootEffect.Play();
         shotsLeft--;
         shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
-        //ChangeBallsState(shotsLeft);
+        
+        if (ballsContainerSmall.activeSelf) 
+        {
+            RemoveLastVisualTennisBall();
+        }
+        else if(ballsContainerLarge.activeSelf) 
+        {
+            RemoveLastVisualTennisBall();
+        }
+        
         FireBaseball();
-        //GameObject aux = Instantiate(projectilePrefab, exitPoint.transform.position, Quaternion.identity);
-        //aux.GetComponent<Rigidbody>().AddForce(35f * exitPoint.transform.forward, ForceMode.Impulse);     Usamos Pool :D
         GameVars.Values.soundManager.PlaySoundAtPoint("BallLaunched", transform.position, 0.7f);
     }
 
-    /*public void ActiveBallsState1()
+    public void RemoveLastVisualTennisBall()
     {
-        ballsState1.SetActive(true);
-    }*/
+        var tennisBalls = ballsContainerSmall.transform.GetComponentsInChildren<Transform>().Where(x => x.name.Contains("tennisBall"));
+        Debug.Log("Tennis Balls: " + tennisBalls.Count());
+        tennisBalls.Last().gameObject.SetActive(false);
+    }
 
     public void TakeDamage(float dmgAmount)
     {

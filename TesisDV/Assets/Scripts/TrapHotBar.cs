@@ -103,7 +103,7 @@ public class TrapHotBar : MonoBehaviour
                 FadeIn();
             }
             trapSlots[3].ActivateImage();
-            GameVars.Values.HasDartsTrapAppearedHotBar = true;
+            GameVars.Values.HasPaintballMinigunTrapAppearedHotBar = true;
         }
         else
         {

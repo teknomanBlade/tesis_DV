@@ -124,7 +124,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private bool _canBuildMicrowaveTrap = false;
     private bool _canBuildSlowTrap = false;
     private bool _canBuildElectricTrap = false;
-    private bool _canBuildDartsTrap = false;
+    private bool _canBuildPaintballMinigunTrap = false;
     public MicrowaveForceFieldGenerator microwaveFFG;
     //public ElectricTrap ElectricTrap;
 
@@ -312,14 +312,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
                 if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting)
                 {
-                    if (_canBuildDartsTrap)
+                    if (_canBuildPaintballMinigunTrap)
                     {
-                        GameVars.Values.NailFiringMachine.Craft(_inventory);
+                        GameVars.Values.FERNPaintballMinigun.Craft(_inventory);
                     }
                     else
                     {
-                        if (GameVars.Values.HasDartsTrapAppearedHotBar)
-                            GameVars.Values.ShowNotification("You can't set Nails Firing Machine until you have bought it in the Basement");
+                        if (GameVars.Values.HasPaintballMinigunTrapAppearedHotBar)
+                            GameVars.Values.ShowNotification("You can't set FERN Paintball Minigun until you have bought it in the Basement");
                     }
                 }
 
@@ -688,9 +688,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             _canBuildElectricTrap = true;
         }
-        if(_skillTree.isDartsTrapUnlocked)
+        if(_skillTree.isPaintballMinigunTrapUnlocked)
         {
-            _canBuildDartsTrap = true;
+            _canBuildPaintballMinigunTrap = true;
         }
     }
 

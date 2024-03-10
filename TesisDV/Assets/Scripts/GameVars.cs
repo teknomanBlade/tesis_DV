@@ -86,16 +86,16 @@ public class GameVars : MonoBehaviour
     public CraftingRecipe BaseballLauncher;
     public CraftingRecipe MicrowaveForceFieldGenerator;
     public CraftingRecipe SlowTrap;
-    public CraftingRecipe NailFiringMachine;
+    public CraftingRecipe FERNPaintballMinigun;
     public CraftingRecipe ElectricTrap;
     public bool HasBoughtMicrowaveTrap { get; set; }
     public bool HasBoughtSlowingTrap { get; set; }
-    public bool HasBoughtDartsTrap { get; set; }
+    public bool HasBoughtPaintballMinigunTrap { get; set; }
     public bool HasBoughtElectricTrap { get; set; }
     public bool HasElectricTrapAppearedHotBar { get; set; }
     public bool HasMicrowaveTrapAppearedHotBar { get; set; }
     public bool HasSlowingTrapAppearedHotBar { get; set; }
-    public bool HasDartsTrapAppearedHotBar { get; set; }
+    public bool HasPaintballMinigunTrapAppearedHotBar { get; set; }
     
 
     [Header("Game")]
