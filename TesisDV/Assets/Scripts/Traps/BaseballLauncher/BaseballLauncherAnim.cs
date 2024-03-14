@@ -25,8 +25,11 @@ public class BaseballLauncherAnim : MonoBehaviour
         {
             aux.GetComponent<BaseballLauncher>().SetShots(8);
         }
-        if (GameVars.Values.currentShotsTrap1 > 0)
+        if (GameVars.Values.currentShotsTrap1 > 0) 
+        {
             aux.GetComponent<BaseballLauncher>().shotsLeft = GameVars.Values.currentShotsTrap1;
+            aux.GetComponent<BaseballLauncher>().RemoveVisualTennisBallsByShotsLeft();
+        }
 
         Destroy(aux.GetComponent<InventoryItem>());
         Destroy(gameObject);

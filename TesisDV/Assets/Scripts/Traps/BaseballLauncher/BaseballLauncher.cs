@@ -199,11 +199,22 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         GameVars.Values.soundManager.PlaySoundAtPoint("BallLaunched", transform.position, 0.7f);
     }
 
+    public void RemoveVisualTennisBallsByShotsLeft() 
+    {
+        var tennisBalls = ballsContainerSmall.transform.GetComponentsInChildren<Transform>().Where(x => x.name.Contains("tennisBall"));
+        if (tennisBalls.Count() <= 0) return;
+
+        var amountToDeactivate = shots - shotsLeft;
+        tennisBalls.Reverse().Take(amountToDeactivate).ToList().ForEach(x => x.gameObject.SetActive(false));
+    }
+
     public void RemoveLastVisualTennisBall()
     {
         var tennisBalls = ballsContainerSmall.transform.GetComponentsInChildren<Transform>().Where(x => x.name.Contains("tennisBall"));
         Debug.Log("Tennis Balls: " + tennisBalls.Count());
-        tennisBalls.Last().gameObject.SetActive(false);
+        if (tennisBalls.Count() <= 0) return;
+
+        tennisBalls.LastOrDefault().gameObject.SetActive(false);
     }
 
     public void TakeDamage(float dmgAmount)
