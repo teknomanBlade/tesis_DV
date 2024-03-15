@@ -152,7 +152,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _isDisabledSFX = false;
         _animator.enabled = true;
         _animator.SetBool("HasNoBalls", false);
-        //ActiveDeactivateBallStates(true, false, false);
+        ActivateTennisBallsByReload();
         OnReload?.Invoke();
         GameVars.Values.ShowNotification("The Turret has been reloaded.");
     }
@@ -197,6 +197,14 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         
         FireBaseball();
         GameVars.Values.soundManager.PlaySoundAtPoint("BallLaunched", transform.position, 0.7f);
+    }
+
+    public void ActivateTennisBallsByReload() 
+    {
+        var tennisBalls = ballsContainerSmall.transform.GetComponentsInChildren<Transform>(true).Where(x => x.name.Contains("tennisBall"));
+        if (tennisBalls.Count() <= 0) return;
+        
+        tennisBalls.ToList().ForEach(x => x.gameObject.SetActive(true));
     }
 
     public void RemoveVisualTennisBallsByShotsLeft() 

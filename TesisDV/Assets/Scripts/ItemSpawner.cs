@@ -13,7 +13,7 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField] private GameObject _fifthRoundItems;
     [SerializeField] private GameObject _sixthRoundItems;
     [SerializeField] private GameObject _blackboard;
-    private Coroutine FadeInSceneCoroutine;
+    private Coroutine FadeOutSceneCoroutine;
     [SerializeField] private List<Door> _levelDoors = new List<Door>();   //Despues obtendrán las puertas de otra forma, pero para el dia de hoy sirve.
 
     void Start()
@@ -27,27 +27,21 @@ public class ItemSpawner : MonoBehaviour
         _fifthRoundItems = transform.GetChild(5).gameObject;
         _sixthRoundItems = transform.GetChild(6).gameObject;
         _blackboard = FindObjectsOfType<GameObject>().Where(x => x.name.Equals("DecalsBlackBoardHouse")).FirstOrDefault();
-        _blackboard.GetComponent<MeshRenderer>().material.EnableKeyword("_SwitchExperiment_Key0");
-        _blackboard.GetComponent<MeshRenderer>().material.shaderKeywords.ToList().ForEach(x => Debug.Log(x));
-        Debug.Log("KEYWORD FIRST TO SECOND ENABLED? " + _blackboard.GetComponent<MeshRenderer>().material.IsKeywordEnabled("_SwitchExperiment_Key0"));
-        
     }
 
+   
     private void SpawnItems(int currentRound)
     {
         switch(currentRound)
         {
             case 0:
                 _tutorialRoundItems.SetActive(true);
+                ActiveFadeOutExperiment("_FirstExperimentColumn", 0.366f, 0.6f);
                 break;
             case 1:
                 _firstRoundItems.SetActive(true);
-                ActiveFadeInExperiment("_FirstToSecond",1f);
                 break;
             case 2:
-                _blackboard.GetComponent<MeshRenderer>().material.DisableKeyword("_SwitchExperiment_Key0");
-                _blackboard.GetComponent<MeshRenderer>().material.EnableKeyword("_SwitchExperiment_Key1");
-                Debug.Log("KEYWORD SECOND TO THIRD ENABLED? " + _blackboard.GetComponent<MeshRenderer>().material.IsKeywordEnabled("_SwitchExperiment_Key1"));
                 GameVars.Values.ShowNotificationDefinedTime("You can go to the Basement at the Tools Workbench to Buy and Update Traps.", 4.5f, () => ActivateSecondWaveItems());
                 _levelDoors[2].IsLockedToGrays = false; //Puerta de la cocina a atras de la casa.
                 _levelDoors[3].IsLockedToGrays = false; //Puerta de la cocina a un costado de la casa.
@@ -55,39 +49,43 @@ public class ItemSpawner : MonoBehaviour
                 break;
             case 3:
                 _thirdRoundItems.SetActive(true);
+                ActiveFadeOutExperiment("_FirstExperimentColumn", 0f, 0.22f);
                 _levelDoors[1].IsLockedToGrays = false; //Puerta del baño al patio.
                 _levelDoors[7].IsLockedToGrays = false; //Puerta del baño al living.
                 _levelDoors[8].IsLockedToGrays = false; //Puerta entre el baño y el patio
                 break;
             case 4:
                 _fourthRoundItems.SetActive(true);
-                _blackboard.GetComponent<MeshRenderer>().material.EnableKeyword("_SwitchExperiment_Key2");
-                ActiveFadeInExperiment("_ThirdToFourth", 1f);
+                ActiveFadeOutExperiment("_SecondExperimentColumn", 0.23f, 0.65f);
+                ActiveFadeOutExperiment("_FourthFifthExperimentRow", 0.33f, 0.54f);
                 break;
             case 5:
                 _fifthRoundItems.SetActive(true);
-                _blackboard.GetComponent<MeshRenderer>().material.EnableKeyword("_SwitchExperiment_Key3");
-                ActiveFadeInExperiment("_FourthToFifth", 1f);
+                ActiveFadeOutExperiment("_FourthFifthExperimentRow", 0.05f, 0.54f);
                 break;
             case 6:
                 _sixthRoundItems.SetActive(true);
                 break;
         }
     }
-    public void ActiveFadeInExperiment(string param,float duration) 
+    public void ActiveFadeOutExperiment(string param,float duration, float maxValue) 
     {
-        if (FadeInSceneCoroutine != null) StopCoroutine(FadeInSceneCoroutine);
-        FadeInSceneCoroutine = StartCoroutine(LerpFadeInEffect(param,duration));
+        if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
+        FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(param, duration, maxValue));
     }
-    IEnumerator LerpFadeInEffect(string param,float duration)
+    //Referencia 0.6f - Inicio, 0.366f Primer Experimento, 0.25f - Segundo Experimento, 0.0f - Tercer Experimento
+    //Referencia SecondExperimentColumn 0.65f - Inicio, 0.23f Cuarto y Quinto Experimento
+    //Referencia FourthFifth 0.54f - Inicio, 0.1f Cuarto y Quinto Experimento
+    IEnumerator LerpFadeOutEffect(string param, float duration, float maxValue)
     {
-        float time = 0f;
+        float time = maxValue;
 
-        while (time < duration)
+        while (time > 0 && time > duration)
         {
-            time += Time.deltaTime;
+            time -= Time.deltaTime;
+            var value = Mathf.Clamp(time, duration, maxValue);
 
-            _blackboard.GetComponent<MeshRenderer>().material.SetFloat(param, Mathf.Clamp01(time / duration));
+            _blackboard.GetComponent<MeshRenderer>().material.SetFloat(param, value);
             yield return null;
         }
     }
@@ -95,7 +93,7 @@ public class ItemSpawner : MonoBehaviour
     {
         GameVars.Values.BasementDirectionMarkers.SetActive(true);
         GameVars.Values.LevelManager.WorkbenchLight.SetActive(true);
-        ActiveFadeInExperiment("_SecondToThird", 1f);
+        ActiveFadeOutExperiment("_FirstExperimentColumn", 0.22f, 0.366f);
         _secondRoundItems.SetActive(true);
     }
 }
