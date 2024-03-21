@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 1485791471494492713}
   - component: {fileID: 3709383007982520035}
   - component: {fileID: 2888895333980934040}
+  - component: {fileID: 2462322665716240198}
+  - component: {fileID: 3654390975900716939}
   m_Layer: 0
   m_Name: BlackBoardWallHose
   m_TagString: Untagged
@@ -96,6 +98,36 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 27.738426, y: 31.177494, z: 1.5478852}
   m_Center: {x: 1.0033113, y: -1.6927643, z: 2.3107402}
+--- !u!114 &2462322665716240198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2916815513676195638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 1, b: 0.034508705, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &3654390975900716939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2916815513676195638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d187f513f67239e4c9d5a959623ca71f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5393768759624115705
 PrefabInstance:
   m_ObjectHideFlags: 0
