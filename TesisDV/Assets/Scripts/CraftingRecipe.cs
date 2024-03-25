@@ -29,24 +29,21 @@ using UnityEngine;
         {
             return inventory.ContainsID(5, 1) && inventory.ContainsID(2, 1) && inventory.ContainsID(8, 1);
         }
+        public bool HasSlowTrapItems(Inventory inventory)
+        {
+            return inventory.ContainsID(4, 1);
+        }
         public bool HasMicrowaveForceFieldGeneratorItems(Inventory inventory)
         {
             return inventory.ContainsID(2, 1) && inventory.ContainsID(12, 1);
         }
-
-        public bool HasSlowTrapItems(Inventory inventory)
-        {
-        return inventory.ContainsID(4, 1);
-        }
-
-        public bool HasNailFiringMachineItems(Inventory inventory)
-        {
-            return inventory.ContainsID(2, 1) && inventory.ContainsID(7, 1);
-        }
-
         public bool HasElectricTrapItems(Inventory inventory)
         {
             return inventory.ContainsID(2, 1) && inventory.ContainsID(9, 1) && inventory.ContainsID(10, 1);
+        }
+        public bool HasFERNPaintballMinigunItems(Inventory inventory)
+        {
+            return inventory.ContainsID(2, 1) && inventory.ContainsID(7, 1) && inventory.ContainsID(16, 1);
         }
 
         public bool CanCraft(Inventory inventory)

@@ -68,56 +68,58 @@ public class TrapHotBar : MonoBehaviour
             trapSlots[0].DeactivateImage();
         }
 
-        if (GameVars.Values.MicrowaveForceFieldGenerator.HasMicrowaveForceFieldGeneratorItems(inventory))
+        if (GameVars.Values.SlowTrap.HasSlowTrapItems(inventory))
         {
             if (isFaded)
             {
                 FadeIn();
             }
             trapSlots[1].ActivateImage();
-            GameVars.Values.HasMicrowaveTrapAppearedHotBar = true;
+            GameVars.Values.HasSlowingTrapAppearedHotBar = true;
         }
         else
         {
             trapSlots[1].DeactivateImage();
         }
 
-        if (GameVars.Values.SlowTrap.HasSlowTrapItems(inventory))
+        if (GameVars.Values.MicrowaveForceFieldGenerator.HasMicrowaveForceFieldGeneratorItems(inventory))
         {
-            if(isFaded)
+            if (isFaded)
             {
                 FadeIn();
             }
             trapSlots[2].ActivateImage();
-            GameVars.Values.HasSlowingTrapAppearedHotBar = true;
+            GameVars.Values.HasMicrowaveTrapAppearedHotBar = true;
         }
         else
         {
             trapSlots[2].DeactivateImage();
         }
 
-        if (GameVars.Values.SlowTrap.HasNailFiringMachineItems(inventory))
+        
+
+        if (GameVars.Values.ElectricTrap.HasElectricTrapItems(inventory))
         {
             if(isFaded)
             {
                 FadeIn();
             }
             trapSlots[3].ActivateImage();
-            GameVars.Values.HasPaintballMinigunTrapAppearedHotBar = true;
+            GameVars.Values.HasElectricTrapAppearedHotBar = true;
         }
         else
         {
             trapSlots[3].DeactivateImage();
         }
 
-        if (GameVars.Values.SlowTrap.HasElectricTrapItems(inventory))
+        if (GameVars.Values.FERNPaintballMinigun.HasFERNPaintballMinigunItems(inventory))
         {
             if(isFaded)
             {
                 FadeIn();
             }
             trapSlots[4].ActivateImage();
-            GameVars.Values.HasElectricTrapAppearedHotBar = true;
+            GameVars.Values.HasPaintballMinigunTrapAppearedHotBar = true;
         }
         else
         {

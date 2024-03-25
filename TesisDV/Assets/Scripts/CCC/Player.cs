@@ -16,6 +16,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     #region Events
     public delegate void OnNewRacketGrabbedDelegate();
     public event OnNewRacketGrabbedDelegate OnNewRacketGrabbed;
+    public delegate void OnMagazineInInventoryDelegate(bool HasMagazineOnInventory);
+    public event OnMagazineInInventoryDelegate OnMagazineInInventory;
     #endregion
 
     #region Components
@@ -286,19 +288,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
                 if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting)
                 {
-                    if (_canBuildMicrowaveTrap)
-                    {
-                        GameVars.Values.MicrowaveForceFieldGenerator.Craft(_inventory);
-                    }
-                    else
-                    {
-                        if(GameVars.Values.HasMicrowaveTrapAppearedHotBar)
-                            GameVars.Values.ShowNotification("You can't set Microwave ForceField Machine until you have bought it in the Basement");
-                    }
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting)
-                {
                     if (_canBuildSlowTrap)
                     {
                         GameVars.Values.SlowTrap.Craft(_inventory);
@@ -310,20 +299,20 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting)
+                if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting)
                 {
-                    if (_canBuildPaintballMinigunTrap)
+                    if (_canBuildMicrowaveTrap)
                     {
-                        GameVars.Values.FERNPaintballMinigun.Craft(_inventory);
+                        GameVars.Values.MicrowaveForceFieldGenerator.Craft(_inventory);
                     }
                     else
                     {
-                        if (GameVars.Values.HasPaintballMinigunTrapAppearedHotBar)
-                            GameVars.Values.ShowNotification("You can't set FERN Paintball Minigun until you have bought it in the Basement");
+                        if(GameVars.Values.HasMicrowaveTrapAppearedHotBar)
+                            GameVars.Values.ShowNotification("You can't set Microwave ForceField Machine until you have bought it in the Basement");
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting)
+                if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting)
                 {
                     if (_canBuildElectricTrap)
                     {
@@ -333,6 +322,19 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     {
                         if (GameVars.Values.HasElectricTrapAppearedHotBar)
                             GameVars.Values.ShowNotification("You can't set the Electric Trap until you have bought it in the Basement");
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting)
+                {
+                    if (_canBuildPaintballMinigunTrap)
+                    {
+                        GameVars.Values.FERNPaintballMinigun.Craft(_inventory);
+                    }
+                    else
+                    {
+                        if (GameVars.Values.HasPaintballMinigunTrapAppearedHotBar)
+                            GameVars.Values.ShowNotification("You can't set FERN Paintball Minigun until you have bought it in the Basement");
                     }
                 }
 
@@ -1027,8 +1029,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             return;
         }
 
-        if (lookingAt.gameObject.TryGetComponent<MicrowaveForceFieldGenerator>
-            (out MicrowaveForceFieldGenerator microwaveFFG))
+        if (lookingAt.gameObject.TryGetComponent<MicrowaveForceFieldGenerator>(out MicrowaveForceFieldGenerator microwaveFFG))
         {
             if (microwaveFFG.IsBatteryFried)
             {
@@ -1081,6 +1082,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (lookingAt.gameObject.TryGetComponent(out InventoryItem aux))
         {
             aux.AddObserver(this);
+            
             InteractWithInventoryItem(aux);
             return;
         }
@@ -1119,10 +1121,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
         if (lookingAt.gameObject.TryGetComponent(out FERNPaintballMinigun FERNPaintballMinigun)) 
         {
-            if (!_inventory.ContainsID(7, 1) && FERNPaintballMinigun.IsEmpty)
+            if (FERNPaintballMinigun.IsEmpty)
             {
                 GameVars.Values.ShowNotification("You need a Paintball Pellet Magazine to reload!");
                 FERNPaintballMinigun.OnReload += OnFERNPaintballMinigunReload;
+                OnMagazineInInventory += FERNPaintballMinigun.HasPaintballMagazine;
+                OnMagazineInInventory(_inventory.ContainsID(7, 1));
             }
         }
         if (lookingAt.gameObject.TryGetComponent(out StationaryItem stationaryItem))
@@ -1194,7 +1198,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void OnFERNPaintballMinigunReload()
     {
-        if (_inventory.ContainsID(7, 1))
+        if (_inventory.ContainsID(7, 1)) 
             _inventory.RemoveItemID(7, 1);
     }
 

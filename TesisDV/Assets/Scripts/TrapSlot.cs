@@ -38,25 +38,25 @@ public class TrapSlot : MonoBehaviour
 
     private void Update()
     {
-        if (GameVars.Values.HasBoughtMicrowaveTrap && _trapID == 2)
-        {
-            SlotImage.sprite = _trapSpriteEnabled;
-            GameVars.Values.HasBoughtMicrowaveTrap = false;
-        }
-        if (GameVars.Values.HasBoughtSlowingTrap && _trapID == 3)
+        if (GameVars.Values.HasBoughtSlowingTrap && _trapID == 2)
         {
             SlotImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtSlowingTrap = false;
         }
-        if (GameVars.Values.HasBoughtPaintballMinigunTrap && _trapID == 4)
+        if (GameVars.Values.HasBoughtMicrowaveTrap && _trapID == 3)
         {
             SlotImage.sprite = _trapSpriteEnabled;
-            GameVars.Values.HasBoughtPaintballMinigunTrap = false;
+            GameVars.Values.HasBoughtMicrowaveTrap = false;
         }
-        if (GameVars.Values.HasBoughtElectricTrap && _trapID == 5)
+        if (GameVars.Values.HasBoughtElectricTrap && _trapID == 4)
         {
             SlotImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtElectricTrap = false;
+        }
+        if (GameVars.Values.HasBoughtPaintballMinigunTrap && _trapID == 5)
+        {
+            SlotImage.sprite = _trapSpriteEnabled;
+            GameVars.Values.HasBoughtPaintballMinigunTrap = false;
         }
     }
 

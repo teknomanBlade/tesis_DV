@@ -13,7 +13,7 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField] private GameObject _fifthRoundItems;
     [SerializeField] private GameObject _sixthRoundItems;
     [SerializeField] private GameObject _blackboard;
-    private Coroutine FadeOutSceneCoroutine;
+    private Blackboard Blackboard;
     [SerializeField] private List<Door> _levelDoors = new List<Door>();   //Despues obtendrán las puertas de otra forma, pero para el dia de hoy sirve.
 
     void Start()
@@ -27,16 +27,19 @@ public class ItemSpawner : MonoBehaviour
         _fifthRoundItems = transform.GetChild(5).gameObject;
         _sixthRoundItems = transform.GetChild(6).gameObject;
         _blackboard = FindObjectsOfType<GameObject>().Where(x => x.name.Equals("DecalsBlackBoardHouse")).FirstOrDefault();
+        Blackboard = _blackboard.GetComponentInParent<Blackboard>();
     }
 
    
     private void SpawnItems(int currentRound)
     {
+        
         switch(currentRound)
         {
             case 0:
                 _tutorialRoundItems.SetActive(true);
-                ActiveFadeOutExperiment("_FirstExperimentColumn", 0.366f, 0.6f);
+                Blackboard.ActiveFadeOutExperiment("_FirstExperimentColumn", 0.366f, 0.6f);
+                Blackboard.ActiveOutlineGlowEffect(1f,5f);
                 break;
             case 1:
                 _firstRoundItems.SetActive(true);
@@ -49,51 +52,40 @@ public class ItemSpawner : MonoBehaviour
                 break;
             case 3:
                 _thirdRoundItems.SetActive(true);
-                ActiveFadeOutExperiment("_FirstExperimentColumn", 0f, 0.22f);
+                Blackboard.ActiveFadeOutExperiment("_FirstExperimentColumn", 0f, 0.22f);
+                Blackboard.ActiveOutlineGlowEffect(1f, 5f);
+                GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
                 _levelDoors[1].IsLockedToGrays = false; //Puerta del baño al patio.
                 _levelDoors[7].IsLockedToGrays = false; //Puerta del baño al living.
                 _levelDoors[8].IsLockedToGrays = false; //Puerta entre el baño y el patio
                 break;
             case 4:
                 _fourthRoundItems.SetActive(true);
-                ActiveFadeOutExperiment("_SecondExperimentColumn", 0.23f, 0.65f);
-                ActiveFadeOutExperiment("_FourthFifthExperimentRow", 0.33f, 0.54f);
+                Blackboard.ActiveOutlineGlowEffect(1f, 5f);
+                Blackboard.ActiveFadeOutExperiment("_SecondExperimentColumn", 0.23f, 0.65f);
+                Blackboard.ActiveFadeOutExperiment("_FourthFifthExperimentRow", 0.33f, 0.54f);
+                GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
                 break;
             case 5:
                 _fifthRoundItems.SetActive(true);
-                ActiveFadeOutExperiment("_FourthFifthExperimentRow", 0.05f, 0.54f);
+                Blackboard.ActiveOutlineGlowEffect(1f, 5f);
+                Blackboard.ActiveFadeOutExperiment("_FourthFifthExperimentRow", 0.05f, 0.54f);
+                GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
                 break;
             case 6:
                 _sixthRoundItems.SetActive(true);
                 break;
         }
     }
-    public void ActiveFadeOutExperiment(string param,float duration, float maxValue) 
-    {
-        if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
-        FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(param, duration, maxValue));
-    }
-    //Referencia 0.6f - Inicio, 0.366f Primer Experimento, 0.25f - Segundo Experimento, 0.0f - Tercer Experimento
-    //Referencia SecondExperimentColumn 0.65f - Inicio, 0.23f Cuarto y Quinto Experimento
-    //Referencia FourthFifth 0.54f - Inicio, 0.1f Cuarto y Quinto Experimento
-    IEnumerator LerpFadeOutEffect(string param, float duration, float maxValue)
-    {
-        float time = maxValue;
-
-        while (time > 0 && time > duration)
-        {
-            time -= Time.deltaTime;
-            var value = Mathf.Clamp(time, duration, maxValue);
-
-            _blackboard.GetComponent<MeshRenderer>().material.SetFloat(param, value);
-            yield return null;
-        }
-    }
+    
     public void ActivateSecondWaveItems()
     {
         GameVars.Values.BasementDirectionMarkers.SetActive(true);
         GameVars.Values.LevelManager.WorkbenchLight.SetActive(true);
-        ActiveFadeOutExperiment("_FirstExperimentColumn", 0.22f, 0.366f);
+        Blackboard.ActiveFadeOutExperiment("_FirstExperimentColumn", 0.22f, 0.366f);
+        Blackboard.ActiveOutlineGlowEffect(1f, 5f);
+        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
+        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
         _secondRoundItems.SetActive(true);
     }
 
