@@ -47,6 +47,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     [SerializeField] private Remote _remoteControl;
     private GameObject _currentWeaponManager;
     private bool _weaponIsActive = false;
+    private bool _hasMagicBoard = false;
     public string typeFloor { get; private set; }
     
     private AudioSource _audioSource;
@@ -242,9 +243,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             else if(Input.GetKeyDown(GameVars.Values.inventoryKey) && !_craftingScreen.activeInHierarchy)
             {
                 //Cursor.lockState = CursorLockMode.Locked;
-                _craftingScreen.SetActive(true);
-                _craftingScreenScript.BTN_PageOne();
-                _miniMapDisplay.SetActive(false);
+                if (_hasMagicBoard) 
+                {
+                    _craftingScreen.SetActive(true);
+                    _craftingScreenScript.BTN_PageOne();
+                    _miniMapDisplay.SetActive(false);
+                }
             }
 
             //if (!IsCrafting) //Va al TrapHotBar.
@@ -1303,6 +1307,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void InteractWithInventoryItem(InventoryItem inventoryItem)
     {
+        if (inventoryItem.myCraftingID == 0) 
+        {
+            _hasMagicBoard = true;
+            GameVars.Values.PlayBackpackItemGrabbedAnim(inventoryItem.itemImage);
+            inventoryItem.Interact();
+            return;
+        }
+
         if ((inventoryItem.myCraftingID == 3 || inventoryItem.myCraftingID == 11))
         {
             if (_inventory.ItemCountByID(inventoryItem.myCraftingID) < 1)

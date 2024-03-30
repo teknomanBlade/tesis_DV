@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 8600434059140967935}
   - component: {fileID: 1041216905255470094}
   - component: {fileID: 5068964463055939321}
-  m_Layer: 0
+  - component: {fileID: 274959960032476944}
+  - component: {fileID: 4095901334002778965}
+  m_Layer: 10
   m_Name: MagicBoard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,3 +97,39 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.28378978, y: 0.28073648, z: 0.028435199}
   m_Center: {x: 0.014534721, y: 0.0001281351, z: 0.014217599}
+--- !u!114 &274959960032476944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156826765908847966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1f3e8ca3b011ec4ab82a267f583b2b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemName: MagicBoard
+  _itemImage: {fileID: 21300000, guid: 421c99bea004f0a4fa2a0f1ff771a7e8, type: 3}
+  itemType: 3
+  myCraftingID: 0
+  myPrefab: {fileID: 4156826765908847966}
+  timeLimit: 3
+--- !u!114 &4095901334002778965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156826765908847966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

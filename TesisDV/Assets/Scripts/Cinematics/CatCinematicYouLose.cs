@@ -8,10 +8,15 @@ public class CatCinematicYouLose : MonoBehaviour
     
     public delegate void OnFinishCatAnimDelegate();
     public event OnFinishCatAnimDelegate OnFinishCatAnim;
+    public Animator Animator;
+    public AudioSource Audio;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        Audio = GetComponent<AudioSource>();
+        Audio.Play();
+        Animator = GetComponent<Animator>();
+        Animator.SetBool("IsAbducted",true);
     }
 
     // Update is called once per frame
@@ -23,5 +28,6 @@ public class CatCinematicYouLose : MonoBehaviour
     internal void CallFinishAnim()
     {
         OnFinishCatAnim?.Invoke();
+        Animator.enabled = false;
     }
 }

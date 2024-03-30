@@ -63,6 +63,8 @@ public class Inventory : MonoBehaviour
         else
         {
             //Si no, lo agregamos a un ItemSlot.
+            if (item.myCraftingID == 0)
+                return;
 
             for (int i = 0; i < itemSlots.Length; i++)
             {

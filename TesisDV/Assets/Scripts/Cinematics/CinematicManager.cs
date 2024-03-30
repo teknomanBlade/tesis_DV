@@ -8,12 +8,15 @@ public class CinematicManager : MonoBehaviour
 {
     public GameObject cat;
     public GameObject UFOBeam;
+    public AudioSource Audio;
     public PostProcessVolume volume;
     public FadeInOutScenesPPSSettings postProcessFadeInOutScenes;
     private Coroutine FadeOutSceneCoroutine;
     // Start is called before the first frame update
     void Awake()
     {
+        Audio = GetComponent<AudioSource>();
+        Audio.Play();
         cat.GetComponent<CatCinematicYouLose>().OnFinishCatAnim += CallFinishShaderFadeOut;
     }
 
@@ -26,7 +29,7 @@ public class CinematicManager : MonoBehaviour
     public void CallFinishShaderFadeOut() 
     {
         UFOBeam.GetComponent<Animator>().SetBool("IsRetracted", true);
-        Invoke(nameof(ActiveFadeOutEffect), 3f);
+        //Invoke(nameof(ActiveFadeOutEffect), 3f);
     }
 
     public void ActiveFadeOutEffect()
