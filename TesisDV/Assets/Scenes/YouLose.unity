@@ -431,18 +431,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 253700736}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e38f0a35f0e11f54193e11e7adac6e54, type: 3}
+  m_Script: {fileID: 11500000, guid: a83b42ad69917aa48b0bb6b03c9f6a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cat: {fileID: 6093837005754900355}
-  UFOBeam: {fileID: 7141605}
-  UFO: {fileID: 516741864}
-  TextYouLose: {fileID: 1972235792}
   BtnRestart: {fileID: 878759312}
   BtnBackToMainMenu: {fileID: 1289511679}
   Audio: {fileID: 0}
   volume: {fileID: 356980264}
   postProcessFadeInOutScenes: {fileID: 0}
+  cat: {fileID: 6093837005754900355}
+  UFOBeam: {fileID: 7141605}
+  UFO: {fileID: 516741864}
+  TextYouLose: {fileID: 1972235792}
 --- !u!82 &253700739
 AudioSource:
   m_ObjectHideFlags: 0
@@ -453,9 +453,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 78616167cc6d87f4b991900037ff011f, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 33879c2c3ef4ff74293e3b5dc1080cd5, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.558
+  m_Volume: 0.492
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -863,10 +863,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 78616167cc6d87f4b991900037ff011f, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
+  m_PlayOnAwake: 1
+  m_Volume: 0.522
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -908,7 +908,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -3105,6 +3105,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 253700738}
+    - target: {fileID: 8162123784011325011, guid: 75736795c5dd7b1448fe52f3d4967ea5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BackToMainMenu
+      objectReference: {fileID: 0}
     - target: {fileID: 8162123784405749602, guid: 75736795c5dd7b1448fe52f3d4967ea5, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3197,6 +3201,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 253700738}
+    - target: {fileID: 8162123784409559232, guid: 75736795c5dd7b1448fe52f3d4967ea5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Restart
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75736795c5dd7b1448fe52f3d4967ea5, type: 3}
 --- !u!1 &8311175282702806109

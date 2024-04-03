@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class LevelManager : MonoBehaviour, IInRoundObservable
 {
@@ -169,10 +170,11 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         //YouWin.SetActive(true);
         //SceneManager.LoadScene("MainFloor_Upgrade");
 
-        var screenWin = Instantiate(Resources.Load<YouWinScreen>("YouWinCanvas"));
+        /*var screenWin = Instantiate(Resources.Load<YouWinScreen>("YouWinCanvas"));
         screenWin.OnBackToMainMenuEvent += _player.ActiveFadeOutEffect;
         screenWin.OnRestartEvent += _player.ActiveFadeOutRestartEffect;
-        ScreenManager.Instance.Push(screenWin);
+        ScreenManager.Instance.Push(screenWin);*/
+        _player.ActiveFadeOutYouWinEffect();
         _player.SwitchKinematics();
     } 
 
@@ -187,10 +189,11 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
         //SceneManager.LoadScene("MainFloor_Upgrade");
 
-        var screenLose = Instantiate(Resources.Load<YouLoseScreen>("YouLoseCanvas"));
+        /*var screenLose = Instantiate(Resources.Load<YouLoseScreen>("YouLoseCanvas"));
         screenLose.OnBackToMainMenuEvent += _player.ActiveFadeOutEffect;
         screenLose.OnRestartEvent += _player.ActiveFadeOutRestartEffect;
-        ScreenManager.Instance.Push(screenLose);
+        ScreenManager.Instance.Push(screenLose);*/
+        _player.ActiveFadeOutYouLoseEffect();
         _player.SwitchKinematics();
         
     }

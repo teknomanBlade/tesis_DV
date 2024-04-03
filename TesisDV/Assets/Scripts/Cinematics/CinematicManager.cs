@@ -8,23 +8,16 @@ using UnityEngine.UI;
 
 public class CinematicManager : MonoBehaviour
 {
-    public GameObject cat;
-    public GameObject UFOBeam;
-    public GameObject UFO;
-    public GameObject TextYouLose;
     public GameObject BtnRestart, BtnBackToMainMenu;
     public AudioSource Audio;
     public PostProcessVolume volume;
     public FadeInOutScenesPPSSettings postProcessFadeInOutScenes;
     private Coroutine FadeOutSceneCoroutine;
+    private Coroutine FadeInSceneCoroutine;
     // Start is called before the first frame update
     void Awake()
     {
-        Audio = GetComponent<AudioSource>();
-        Audio.Play();
-        cat.GetComponent<CatCinematicYouLose>().OnFinishCatAnim += CallFinishShaderFadeOut;
-        UFOBeam.GetComponent<UFOBeamCinematicYouLose>().OnFinishUFOBeam += CallFinishAnimUFO;
-        UFO.GetComponent<UFOCinematicYouLose>().OnFinishUFOWarpingAway += CallYouLoseAnimation;
+
     }
 
     // Update is called once per frame
@@ -32,27 +25,15 @@ public class CinematicManager : MonoBehaviour
     {
 
     }
-    public void CallYouLoseAnimation() 
-    {
-        TextYouLose.GetComponent<TextCinematicYouLoseAnim>().CallYouLoseTextAnimation();
-        Invoke(nameof(ActiveFadeInButtons),7.0f);
-    }
+    
 
-    private void ActiveFadeInButtons()
+    protected void ActiveFadeInButtons()
     {
         BtnRestart.GetComponent<Animator>().SetBool("IsFadeIn", true);
         BtnBackToMainMenu.GetComponent<Animator>().SetBool("IsFadeIn", true);
     }
 
-    public void CallFinishAnimUFO() 
-    {
-        UFO.GetComponent<Animator>().SetBool("IsWarpingAway", true);
-    }
-    public void CallFinishShaderFadeOut() 
-    {
-        UFOBeam.GetComponent<Animator>().SetBool("IsRetracted", true);
-        //Invoke(nameof(ActiveFadeOutEffect), 3f);
-    }
+    
     public void BackToMainMenu() 
     {
         ActiveFadeOutEffect("BackToMainMenu");
@@ -94,6 +75,26 @@ public class CinematicManager : MonoBehaviour
                 SceneManager.LoadScene(1);
             }
             
+        }
+    }
+    public void ActiveFadeInEffect(float duration)
+    {
+        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        {
+            if (FadeInSceneCoroutine != null) StopCoroutine(FadeInSceneCoroutine);
+            FadeInSceneCoroutine = StartCoroutine(LerpFadeInEffect(duration));
+        }
+    }
+    IEnumerator LerpFadeInEffect(float duration)
+    {
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
         }
     }
 }

@@ -477,6 +477,22 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutRestartEffect(1f));
         }
     }
+    public void ActiveFadeOutYouWinEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        {
+            if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
+            FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutYouWinEffect(1f));
+        }
+    }
+    public void ActiveFadeOutYouLoseEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        {
+            if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
+            FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutYouLoseEffect(1f));
+        }
+    }
 
     public void ActiveElectricWaveDamageEffect()
     {
@@ -593,6 +609,42 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             Debug.Log("LLEGO AL FINAL??");
             SceneManager.LoadScene(0);
+        }
+    }
+    IEnumerator LerpFadeOutYouLoseEffect(float duration)
+    {
+        float time = 0.98f;
+
+        while (time > 0 && time < duration)
+        {
+            time -= Time.deltaTime;
+
+            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
+        }
+
+        if (time < 0f)
+        {
+            Debug.Log("LLEGO AL FINAL??");
+            SceneManager.LoadScene(2);
+        }
+    }
+    IEnumerator LerpFadeOutYouWinEffect(float duration)
+    {
+        float time = 0.98f;
+
+        while (time > 0 && time < duration)
+        {
+            time -= Time.deltaTime;
+
+            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
+        }
+
+        if (time < 0f)
+        {
+            Debug.Log("LLEGO AL FINAL??");
+            SceneManager.LoadScene(3);
         }
     }
     IEnumerator LerpFadeOutRestartEffect(float duration)

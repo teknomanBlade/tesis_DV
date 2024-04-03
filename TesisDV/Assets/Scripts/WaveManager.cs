@@ -279,7 +279,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     {
         if (_currentRound >= _totalRounds)
         {
-            Invoke("SendWinGame", 1f);
+            Invoke(nameof(SendWinGame), 1f);
             return;
         }
         _inRound = false;
