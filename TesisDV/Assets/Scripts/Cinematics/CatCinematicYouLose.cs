@@ -29,5 +29,6 @@ public class CatCinematicYouLose : MonoBehaviour
     {
         OnFinishCatAnim?.Invoke();
         Animator.enabled = false;
+        gameObject.SetActive(false);
     }
 }
