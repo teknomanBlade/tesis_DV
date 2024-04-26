@@ -139,8 +139,10 @@
     <Compile Include="Assets\Scripts\Interfaces\IPlayerDamageObserver.cs" />
     <Compile Include="Assets\Scripts\Inventory\ContextualTrapMenu.cs" />
     <Compile Include="Assets\Scripts\SoundManager\SoundManager.cs" />
+    <Compile Include="Assets\Scripts\Cinematics\CinematicManagerYouWin.cs" />
     <Compile Include="Assets\Scripts\Gray.cs" />
     <Compile Include="Assets\Scripts\PathFinding\Pathfinding.cs" />
+    <Compile Include="Assets\Scripts\Cinematics\UFOCinematicYouWin.cs" />
     <Compile Include="Assets\Scripts\House\AuxDoor.cs" />
     <Compile Include="Assets\Models\Materials\PostProcess\TankHitFistDamagePlayerPPSSettings.cs" />
     <Compile Include="Assets\Scripts\CatDistanceBar.cs" />
@@ -187,6 +189,7 @@
     <Compile Include="Assets\Scripts\FSM\States\TallGray\TallGrayEscapeState.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IHittableObserver.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\ChaseForceFieldState.cs" />
+    <Compile Include="Assets\Scripts\Cinematics\TextCinematicYouWin.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInteractableItemObserver.cs" />
     <Compile Include="Assets\Scripts\Enemy\TallGray\TallGrayModel.cs" />
     <Compile Include="Assets\Scripts\PathFinding\ThetaStar.cs" />
@@ -198,6 +201,7 @@
     <Compile Include="Assets\Scripts\GameVars.cs" />
     <Compile Include="Assets\Scripts\Traps\Blueprint.cs" />
     <Compile Include="Assets\Scripts\WeaponSlot.cs" />
+    <Compile Include="Assets\Scripts\Cinematics\CinematicManagerYouLose.cs" />
     <Compile Include="Assets\Scripts\Switch.cs" />
     <Compile Include="Assets\Scripts\Triggers\TriggerSecondaryStairs.cs" />
     <Compile Include="Assets\Scripts\ScreenManager\Config.cs" />
@@ -223,10 +227,9 @@
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\AttackForceFieldState.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\TakenState.cs" />
-    <Compile Include="Assets\Scripts\Cinematics\CinematicManagerYouLose.cs" />
-    <Compile Include="Assets\Scripts\Cinematics\CinematicManagerYouWin.cs" />
-    <Compile Include="Assets\Scripts\Cinematics\TextCinematicYouWin.cs" />
-    <Compile Include="Assets\Scripts\Cinematics\UFOCinematicYouWin.cs" />
+    <Compile Include="Assets\Scripts\Enemy\GrayDog\GrayDogModel.cs" />
+    <Compile Include="Assets\Scripts\Enemy\GrayDog\GrayDogView.cs" />
+    <Compile Include="Assets\Scripts\Enemy\GrayDog\GrayDogController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
@@ -527,6 +530,7 @@
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ToggleSwitchNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CeilOpNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_Exp2OpNode.shader" />
+    <None Include="Assets\Models\Materials\Enemy\GrayDog\SDR_GrayDog.shader" />
     <None Include="Assets\Models\Materials\Grass\Grass_3.shader" />
     <None Include="Assets\Models\Materials\Enemy\Gray\HitWave.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
