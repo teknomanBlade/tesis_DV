@@ -108,6 +108,7 @@
     <Compile Include="Assets\Scripts\Cat\CatController.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Gray\ChaseState.cs" />
+    <Compile Include="Assets\Scripts\Enemy\GrayDog\GrayDogModel.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\TallGrayAttackState.cs" />
     <Compile Include="Assets\Scripts\EnemyAttackArea.cs" />
     <Compile Include="Assets\Scripts\Traps\Trap.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Assets\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Enemy\GrayController.cs" />
     <Compile Include="Assets\Scripts\Traps\BaseballLauncher\BaseballLauncherDestroyAnim.cs" />
+    <Compile Include="Assets\Scripts\Enemy\GrayDog\GrayDogView.cs" />
     <Compile Include="Assets\Scripts\Cinematics\TextCinematicYouLoseAnim.cs" />
     <Compile Include="Assets\ElectricityLineRenderer\Scripts\TriggerLightning.cs" />
     <Compile Include="Assets\Scripts\Items\Remote.cs" />
@@ -209,6 +211,7 @@
     <Compile Include="Assets\Scripts\PoolObject\PoolObject.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInRoundObserver.cs" />
     <Compile Include="Assets\Scripts\LetterScreen.cs" />
+    <Compile Include="Assets\Scripts\Enemy\GrayDog\GrayDogController.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Gray\SpawningState.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInteractable.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
@@ -227,9 +230,6 @@
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\AttackForceFieldState.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\TakenState.cs" />
-    <Compile Include="Assets\Scripts\Enemy\GrayDog\GrayDogModel.cs" />
-    <Compile Include="Assets\Scripts\Enemy\GrayDog\GrayDogView.cs" />
-    <Compile Include="Assets\Scripts\Enemy\GrayDog\GrayDogController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
@@ -267,7 +267,6 @@
     <None Include="Assets\Models\Models\NewHome\Materials\WindowsLarge.shader" />
     <None Include="Assets\Models\Materials\Enemy\Gray\EMPAttack.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ScaleAndOffsetNode.shader" />
-    <None Include="Assets\Models\Materials\Enemy\Gray\WitGainPlus50.shader" />
     <None Include="Assets\Models\Materials\Enemy\Gray\ToonShadowsGray.shader" />
     <None Include="Assets\Models\Materials\Enemy\TallGray\TallGray_Melee_PBRTransparent.shader" />
     <None Include="Assets\Models\Materials\UFO\DirectionalDissolve.shader" />
@@ -468,7 +467,6 @@
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_UnpackScaleNormalNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ClampOpNode.shader" />
     <None Include="Assets\Models\Materials\Basement\Shelfs\BasementShelfs.shader" />
-    <None Include="Assets\Models\Materials\Enemy\Gray\WitGainPlus100.shader" />
     <None Include="Assets\Materials\ArrowBasementIndicator.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_DecodeDepthNormalNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ReflectOpNode.shader" />

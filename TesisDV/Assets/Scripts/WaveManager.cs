@@ -160,6 +160,11 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             e.HP += CurrentRound;
             Debug.Log("MELEE GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
         }
+        else if (e.enemyType == EnemyType.Dog)
+        {
+            e.HP += CurrentRound;
+            Debug.Log("GRAY DOG NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
+        }
         else if (e.enemyType == EnemyType.Tank && CurrentRound == 7)
         {
             e.HP += CurrentRound;

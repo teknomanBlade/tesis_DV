@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum EnemyType { Common, Melee, Tank }
+public enum EnemyType { Common, Melee, Tank, Dog }
 public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] private float _hp;
