@@ -15623,12 +15623,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4993016087989928857}
+  - component: {fileID: 8188055648448647315}
+  - component: {fileID: 8552485591303705428}
   - component: {fileID: 4809977240887370865}
   - component: {fileID: 1388021197548754304}
   - component: {fileID: 2756828370694884898}
   - component: {fileID: 3590700537783239107}
-  - component: {fileID: 8552485591303705428}
-  - component: {fileID: 8188055648448647315}
   m_Layer: 12
   m_Name: GrayMVC
   m_TagString: Untagged
@@ -15662,6 +15662,75 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8188055648448647315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5620792506208950563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f4e738f40bc84e48a0c588c5aa56b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myAnimator: {fileID: 1388021197548754304}
+  dissolveMaterial: {fileID: 2100000, guid: 692cfd8edbf1f9341a9f823bb400229e, type: 2}
+  sphereEffectMaterial: {fileID: 2100000, guid: 7be8a71e69411474b90722aaf39ca989, type: 2}
+  _hitEffect: {fileID: 1599742001145485040}
+  _deathEffect: {fileID: 1874793657888937727}
+  _hitWave: {fileID: 5748750279412306119}
+--- !u!114 &8552485591303705428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5620792506208950563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f1c4cc106a05dc4a8bc1b2486b8c8d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hp: 3
+  _myWittsValue: 50
+  _movingSpeed: 3
+  _catGrabPos: {fileID: 3281648521745189981}
+  witGainEffect: {fileID: 2721786807121455338}
+  allTargets: []
+  isDead: 0
+  enemyType: 0
+  pursueThreshold: 4
+  disengageThreshold: 4.5
+  attackThreshold: 2
+  attackDisengageThreshold: 3
+  _trapViewRadius: 5
+  attackTrapThreshold: 1.9
+  _player: {fileID: 0}
+  _cat: {fileID: 0}
+  hasObjective: 0
+  isSpecialAttacking: 0
+  isAttacking: 0
+  isStunned: 0
+  isForceFieldRejected: 0
+  _exitPos: {x: 0, y: 0, z: 0}
+  trapPos: {x: 0, y: 0, z: 0}
+  _waypoints: []
+  foundTrapInPath: 0
+  _trapMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  _currentTrapObjective: {fileID: 0}
+  _lm: {fileID: 0}
+  lineRenderer: {fileID: 2830093908131666664}
+  Path: []
+  PathHard: []
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 62981057
+  protectDistance: 1
+  _target: {fileID: 0}
+  _circlePos: {x: 0, y: 0, z: 0}
 --- !u!136 &4809977240887370865
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15807,75 +15876,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8552485591303705428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5620792506208950563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f1c4cc106a05dc4a8bc1b2486b8c8d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hp: 3
-  _myWittsValue: 50
-  _movingSpeed: 3
-  _catGrabPos: {fileID: 3281648521745189981}
-  witGainEffect: {fileID: 2721786807121455338}
-  allTargets: []
-  isDead: 0
-  enemyType: 0
-  pursueThreshold: 4
-  disengageThreshold: 4.5
-  attackThreshold: 2
-  attackDisengageThreshold: 3
-  _trapViewRadius: 5
-  attackTrapThreshold: 1.9
-  _player: {fileID: 0}
-  _cat: {fileID: 0}
-  hasObjective: 0
-  isSpecialAttacking: 0
-  isAttacking: 0
-  isStunned: 0
-  isForceFieldRejected: 0
-  _exitPos: {x: 0, y: 0, z: 0}
-  trapPos: {x: 0, y: 0, z: 0}
-  _waypoints: []
-  foundTrapInPath: 0
-  _trapMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  _currentTrapObjective: {fileID: 0}
-  _lm: {fileID: 0}
-  lineRenderer: {fileID: 2830093908131666664}
-  Path: []
-  PathHard: []
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 62981057
-  protectDistance: 1
-  _target: {fileID: 0}
-  _circlePos: {x: 0, y: 0, z: 0}
---- !u!114 &8188055648448647315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5620792506208950563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f4e738f40bc84e48a0c588c5aa56b5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _myAnimator: {fileID: 1388021197548754304}
-  dissolveMaterial: {fileID: 2100000, guid: 692cfd8edbf1f9341a9f823bb400229e, type: 2}
-  sphereEffectMaterial: {fileID: 2100000, guid: 7be8a71e69411474b90722aaf39ca989, type: 2}
-  _hitEffect: {fileID: 1599742001145485040}
-  _deathEffect: {fileID: 1874793657888937727}
-  _hitWave: {fileID: 5748750279412306119}
 --- !u!1 &5685346073406636324
 GameObject:
   m_ObjectHideFlags: 0

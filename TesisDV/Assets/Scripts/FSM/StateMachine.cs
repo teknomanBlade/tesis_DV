@@ -19,7 +19,9 @@ public enum EnemyStatesEnum
     TallGrayAttackState,
     TallGrayEscapeState,
     HardcodeCatState,
-    HardcodeAttackState
+    HardcodeAttackState,
+    GrayDogCatState,
+    GrayDogEscapeState
 }
 
 public enum CatStatesEnum

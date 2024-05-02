@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,11 +10,17 @@ public class GrayDogView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _hitEffect;
     [SerializeField]
+    private ParticleSystem _ringWavesEffect;
+    [SerializeField]
     private GameObject _hitWave;
+    private AudioSource _as;
     // Start is called before the first frame update
     void Start()
     {
+        _as = GetComponent<AudioSource>();
         _myAnimator = GetComponent<Animator>();
+        _myAnimator.SetBool("IsSpawning", true);
+        _ringWavesEffect.Stop();
     }
 
     // Update is called once per frame
@@ -44,11 +51,13 @@ public class GrayDogView : MonoBehaviour
 
     public void RunningAnimation()
     {
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "SFX_AlienDogGallop", 0.45f, false);
         _myAnimator.SetBool("IsRunning", true);
     }
 
     public void CatGrabAnimation(bool value)
     {
-
+        _ringWavesEffect.Play();
+        _myAnimator.SetBool("IsCatGrabbed", value);
     }
 }

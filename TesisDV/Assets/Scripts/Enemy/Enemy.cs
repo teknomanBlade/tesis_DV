@@ -63,14 +63,14 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected LineRenderer lineRenderer;
 
     #region Pathfinding
-    
+
     public Pathfinding _pf;
     //public PathfindingManager _pfManager; Probamos usar pathfindingManager como clase estatica.
     public List<Node> Path = new List<Node>();
     public List<Transform> PathHard = new List<Transform>();
-    [SerializeField] public LayerMask obstacleMask; 
+    [SerializeField] public LayerMask obstacleMask;
 
-    #endregion 
+    #endregion
 
     [Header("BattleCircle AI")]
     public float protectDistance;
@@ -101,24 +101,24 @@ public abstract class Enemy : MonoBehaviour
     {
         _hp -= DamageAmount;
         GameVars.Values.soundManager.PlaySoundAtPoint("BallHit", transform.position, 0.45f);
-        
-        if(_hp > 0)
+
+        if (_hp > 0)
         {
-            if(canBeHit)
+            if (canBeHit)
             {
-                onHit();    
+                onHit();
             }
-            
+
         }
         else
         {
-            isAwake= false;
+            isAwake = false;
             AIManager.Instance.RemoveEnemyFromList(this, hasObjective);
-            if(hasObjective)
+            if (hasObjective)
             {
                 DropCat();
             }
-            
+
             isDead = true;
             if (gameObject.tag.Equals("Tutorial"))
                 GameVars.Values.ShowNotification("You gain the Wit resource by knocking down Enemies. As you can see at the right upper corner.");
@@ -128,7 +128,7 @@ public abstract class Enemy : MonoBehaviour
             GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
             _lm.RemoveGray(this);
-            
+
             //_navMeshAgent.speed = 0; //Se va el navmesh
 
             //Desabilitar colliders y lo que haga falta.
@@ -205,19 +205,19 @@ public abstract class Enemy : MonoBehaviour
 
         if (_currentTrapObjective == null || !_currentTrapObjective.GetComponent<Trap>().active || _currentTrapObjectiveDistance > _trapViewRadius)
         {
-            
+
             foreach (var item in allTargets)
             {
                 RaycastHit hit;
-                Vector3 dir = item.transform.position - transform.position;                                                                                                                                            
-                                                                                                                                                                                                         //Ahora usamos obstacleMask                                                           
+                Vector3 dir = item.transform.position - transform.position;
+                //Ahora usamos obstacleMask                                                           
                 if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance && item.GetComponent<Trap>() && !Physics.Raycast(transform.position, dir, out hit, dir.magnitude, obstacleMask))//GameVars.Values.GetWallLayerMask()))
                 {
                     var trap = item.GetComponent<Trap>();
-                    
+
                     if (trap && item.GetComponent<Trap>().active)
                     {
-                        if(item.GetComponent<ForceField>())
+                        if (item.GetComponent<ForceField>())
                         {
                             RaycastHit forceFieldHit;
                             Physics.Raycast(transform.position, dir, out forceFieldHit, Mathf.Infinity, GameVars.Values.GetItemLayerMask());
@@ -229,10 +229,10 @@ public abstract class Enemy : MonoBehaviour
                             _currentTrapObjectiveDistance = Vector3.Distance(transform.position, item.transform.position);
                             _currentTrapObjective = item;
                         }
-                        
+
                     }
                 }
-            }   
+            }
         }
 
         if (_currentTrapObjectiveDistance < _trapViewRadius && _currentTrapObjective != null && _currentTrapObjective.GetComponent<Trap>().active)
@@ -256,15 +256,15 @@ public abstract class Enemy : MonoBehaviour
             foreach (var item in allTargets)
             {
                 RaycastHit hit;
-                Vector3 dir = item.transform.position - transform.position;                                                                                                                                            
-                                                                                                                                                                                                         //Ahora usamos obstacleMask                                                           
+                Vector3 dir = item.transform.position - transform.position;
+                //Ahora usamos obstacleMask                                                           
                 if (Vector3.Distance(transform.position, item.transform.position) < _currentTrapObjectiveDistance && item.GetComponent<Trap>() && !Physics.Raycast(transform.position, dir, out hit, dir.magnitude, obstacleMask))//GameVars.Values.GetWallLayerMask()))
                 {
                     var trap = item.GetComponent<Trap>();
 
                     if (trap && item.GetComponent<Trap>().active)
                     {
-                        if(item.GetComponent<ForceField>())
+                        if (item.GetComponent<ForceField>())
                         {
                             RaycastHit forceFieldHit;
                             Physics.Raycast(transform.position, dir, out forceFieldHit, Mathf.Infinity, GameVars.Values.GetItemLayerMask());
@@ -272,10 +272,10 @@ public abstract class Enemy : MonoBehaviour
                             _currentTrapObjective = item;
                             foundTrapInPath = true;
 
-                        }                        
+                        }
                     }
                 }
-            }   
+            }
         }
 
         if (_currentTrapObjectiveDistance < _trapViewRadius && _currentTrapObjective != null && _currentTrapObjective.GetComponent<Trap>().active)
@@ -290,7 +290,7 @@ public abstract class Enemy : MonoBehaviour
         Debug.Log("LLEGA A FORCEFIELD REJECTION");
         if (!isForceFieldRejected)
         {
-            Debug.Log("LLEGA A FORCEFIELD REJECTION IF "+ isForceFieldRejected);
+            Debug.Log("LLEGA A FORCEFIELD REJECTION IF " + isForceFieldRejected);
             onForceFieldRejection(!isForceFieldRejected);
             onWalk(isForceFieldRejected);
             isForceFieldRejected = true;
@@ -312,7 +312,7 @@ public abstract class Enemy : MonoBehaviour
 
     public void AttackPlayer() //Verifica que no estemos atacando para mirar hacia el jugador y envia nuevamente la animacion de ataque. El booleano se resetea con un AnimEvent.
     {
-        if(!isAttacking)
+        if (!isAttacking)
         {
             var dir = _player.transform.position - transform.position;
             Vector3 aux = dir;
@@ -321,14 +321,14 @@ public abstract class Enemy : MonoBehaviour
             //_navMeshAgent.speed = 0; //Se va el navmesh
             onWalk(isAttacking);
             onAttack(!isAttacking);
-            isAttacking = true; 
+            isAttacking = true;
         }
-       
+
     }
 
     public void AttackTrap()
     {
-        if(!isSpecialAttacking)
+        if (!isSpecialAttacking)
         {
             canBeHit = false;
             var dir = _currentTrapObjective.transform.position - transform.position;
@@ -337,10 +337,10 @@ public abstract class Enemy : MonoBehaviour
             onWalk(isSpecialAttacking);
             onAttackSpecial(!isSpecialAttacking);
             //onAttack(!isAttacking);
-            isSpecialAttacking = true; 
+            isSpecialAttacking = true;
             //_currentTrapObjective.GetComponent<BaseballLauncher>().Inactive();
         }
-        if(_currentTrapObjective.GetComponent<Trap>() && _currentTrapObjective.GetComponent<Trap>().active == false)
+        if (_currentTrapObjective.GetComponent<Trap>() && _currentTrapObjective.GetComponent<Trap>().active == false)
         {
             foundTrapInPath = false;
 
@@ -414,14 +414,14 @@ public abstract class Enemy : MonoBehaviour
 
         foreach (UFO ufo in _lm.AllUFOs)
         {
-            if(Vector3.Distance(transform.position, ufo.transform.position) < currentDistance)
+            if (Vector3.Distance(transform.position, ufo.transform.position) < currentDistance)
             {
                 currentDistance = Vector3.Distance(transform.position, ufo.transform.position);
                 currentExitPos = ufo.transform.position;
-            } 
-            
+            }
+
         }
-        
+
         Vector3 aux = currentExitPos;
         _exitPos = new Vector3(aux.x, 0f, aux.z);
         //_fsm.ChangeState(EnemyStatesEnum.EscapeState); 
@@ -460,7 +460,7 @@ public abstract class Enemy : MonoBehaviour
     {
         door.IsLocked = false;
         door.Interact();
-        
+
         //Refeencia a View donde hace un play de la animacion de abrir la puerta.
 
         //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
@@ -502,7 +502,7 @@ public abstract class Enemy : MonoBehaviour
     {
         //_navMeshAgent.speed -= slowAmount; //Se va el navmesh
         _movingSpeed -= slowAmount;
-    }   
+    }
 
     private void DrawLineRenderer(Vector3[] waypoints)  //Esto deberia ir en el view T.T Apenas este todo bien lindo lo cambio
     {
@@ -533,7 +533,8 @@ public abstract class Enemy : MonoBehaviour
     public void ReduceSpeed()
     {
         //_navMeshAgent.speed *= 0.4f; //Se va el navmesh
-        _movingSpeed *= 0.4f;
+        if(enemyType != EnemyType.Dog)
+            _movingSpeed *= 0.4f;
     }
 
     public void GetProtectTarget()
@@ -543,8 +544,21 @@ public abstract class Enemy : MonoBehaviour
 
     public void ReferenceEvent(bool value)
     {
-        onWalk(value);
+        if (enemyType != EnemyType.Dog)
+        {
+            onWalk(value);
+        }
+        else
+        {
+            OnSpecialChildEvent();
+        }
+
         onEndSpawn();
+    }
+
+    public virtual void OnSpecialChildEvent() 
+    {
+        
     }
 
     public void SetPath(List<Node> nodos) //esto no hace falta, es para testear.

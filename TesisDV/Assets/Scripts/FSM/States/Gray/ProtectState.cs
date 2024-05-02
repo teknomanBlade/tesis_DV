@@ -15,6 +15,7 @@ public class ProtectState : IState
     private int _currentPathWaypoint = 0;
     private Node startingPoint;
     private Node endingPoint;
+    private Vector3 targetDir;
     public ProtectState(StateMachine fsm, Enemy p, Pathfinding pf)
     {
         _fsm = fsm;
@@ -57,9 +58,11 @@ public class ProtectState : IState
 
         RaycastHit hit;
         Vector3 protectDir = _enemy._circlePos - _enemy.transform.position;
-        Vector3 targetDir = _enemy._target.transform.position - _enemy.transform.position;
+        if(_enemy._target != null) 
+        {
+            targetDir = _enemy._target.transform.position - _enemy.transform.position;
+        }
 
-        //                                                     
         if(!Physics.Raycast(_enemy.transform.position, protectDir, out hit, protectDir.magnitude, _enemy.obstacleMask)) //Usamos obstacle mask ahora.
         {
             if ((Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.5f))
@@ -69,24 +72,6 @@ public class ProtectState : IState
                 _enemy.transform.forward = protectDir;
                 _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
             }
-            /* if(myPath.Count >= 1)
-            {
-                Vector3 dir = myPath[_currentPathWaypoint].transform.position - _enemy.transform.position;
-
-                _enemy.transform.forward = dir;
-                _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
-
-                if (dir.magnitude < 0.4f)
-                {
-                    _currentPathWaypoint++;
-                    if (_currentPathWaypoint > myPath.Count - 1)
-                    {
-                        Debug.Log("No encontré mi objetivo, recalculando.");
-                        _currentPathWaypoint = 0;
-                        GetThetaStar();
-                    }
-                }
-            } */
         }
         else if (!Physics.Raycast(_enemy.transform.position, targetDir, out hit, targetDir.magnitude, _enemy.obstacleMask))
         {

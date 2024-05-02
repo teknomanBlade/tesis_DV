@@ -126,26 +126,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     public void EnhanceEnemyStatsPerWave(Enemy e)
     {
-        if (CurrentRound == 3)
-        {
-            AugumentStatsPerType(e, CurrentRound);
-        }
-        else if (CurrentRound == 4)
-        {
-            AugumentStatsPerType(e, CurrentRound);
-        }
-        else if (CurrentRound == 5)
-        {
-            AugumentStatsPerType(e, CurrentRound);
-        }
-        else if (CurrentRound == 6)
-        {
-            AugumentStatsPerType(e, CurrentRound);
-        }
-        else if (CurrentRound == 7)
-        {
-            AugumentStatsPerType(e, CurrentRound);
-        }
+        AugumentStatsPerType(e, CurrentRound);
     }
 
     public void AugumentStatsPerType(Enemy e, int CurrentRound)

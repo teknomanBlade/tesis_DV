@@ -15,9 +15,14 @@ public class CinematicManager : MonoBehaviour
     private Coroutine FadeOutSceneCoroutine;
     private Coroutine FadeInSceneCoroutine;
     // Start is called before the first frame update
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+    }
     void Awake()
     {
-
+        
     }
 
     // Update is called once per frame

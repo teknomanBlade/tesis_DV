@@ -15383,7 +15383,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a16b66be944a34c40bfd1edf8ac6bf7e, type: 2}
+  - {fileID: 2100000, guid: d021330c9c535314eabc2b2477a87b6a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15844,6 +15844,7 @@ MonoBehaviour:
   witGainEffect: {fileID: 2721786807121455338}
   allTargets: []
   isDead: 0
+  enemyType: 0
   pursueThreshold: 4
   disengageThreshold: 4.5
   attackThreshold: 2
@@ -15864,6 +15865,7 @@ MonoBehaviour:
   _trapMask:
     serializedVersion: 2
     m_Bits: 1024
+  _currentTrapObjective: {fileID: 0}
   _lm: {fileID: 0}
   lineRenderer: {fileID: 2830093908131666664}
   Path: []

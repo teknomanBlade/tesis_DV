@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\FSM\States\TallGray\PlayerState.cs" />
     <Compile Include="Assets\Scripts\UFOGrayDeath.cs" />
+    <Compile Include="Assets\Scripts\FSM\States\GrayDog\GrayDogCatState.cs" />
     <Compile Include="Assets\Scripts\PathFinding\PriorityQueue.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IState.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Gray\EscapeState.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\AttackForceFieldState.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\TakenState.cs" />
+    <Compile Include="Assets\Scripts\FSM\States\GrayDog\GrayDogEscapeState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />

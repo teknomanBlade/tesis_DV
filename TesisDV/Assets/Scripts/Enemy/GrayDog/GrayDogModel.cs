@@ -15,7 +15,9 @@ public class GrayDogModel : Enemy
         _pf = new Pathfinding();
         HP = 1.5f;
         GameVars.Values.WaveManager.EnhanceEnemyStatsPerWave(this);
-        _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.CatState));
+        _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.GrayDogCatState));
+        _fsm.AddState(EnemyStatesEnum.GrayDogCatState, new GrayDogCatState(_fsm, this, _pf));
+        _fsm.AddState(EnemyStatesEnum.GrayDogEscapeState, new GrayDogEscapeState(_fsm, this, _pf));
     }
     // Start is called before the first frame update
     void Start()
@@ -46,7 +48,10 @@ public class GrayDogModel : Enemy
             _myController.OnUpdate();
         }
     }
-
+    public override void OnSpecialChildEvent()
+    {
+        onRunning();
+    }
     public void Destroy() //Se llama desde la animacion.
     {
         Destroy(gameObject);
