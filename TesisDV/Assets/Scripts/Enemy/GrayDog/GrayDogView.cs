@@ -51,7 +51,7 @@ public class GrayDogView : MonoBehaviour
 
     public void RunningAnimation()
     {
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "SFX_AlienDogGallop", 0.45f, false);
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "SFX_AlienDogGallop", 0.25f, true);
         _myAnimator.SetBool("IsRunning", true);
     }
 

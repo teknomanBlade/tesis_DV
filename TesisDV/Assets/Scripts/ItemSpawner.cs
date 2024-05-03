@@ -38,7 +38,7 @@ public class ItemSpawner : MonoBehaviour
         {
             case 0:
                 _tutorialRoundItems.SetActive(true);
-                Blackboard.ActiveFadeOutExperiment("_FirstExperimentColumn", 0.366f, 0.6f);
+                Blackboard.ActiveFirstExperiment();
                 Blackboard.ActiveOutlineGlowEffect(1f,5f);
                 break;
             case 1:
@@ -52,9 +52,8 @@ public class ItemSpawner : MonoBehaviour
                 break;
             case 3:
                 _thirdRoundItems.SetActive(true);
-                Blackboard.ActiveFadeOutExperiment("_FirstExperimentColumn", 0f, 0.22f);
+                Blackboard.ActiveThirdExperiment();
                 Blackboard.ActiveOutlineGlowEffect(1f, 5f);
-                GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
                 _levelDoors[1].IsLockedToGrays = false; //Puerta del baño al patio.
                 _levelDoors[7].IsLockedToGrays = false; //Puerta del baño al living.
                 _levelDoors[8].IsLockedToGrays = false; //Puerta entre el baño y el patio
@@ -62,15 +61,12 @@ public class ItemSpawner : MonoBehaviour
             case 4:
                 _fourthRoundItems.SetActive(true);
                 Blackboard.ActiveOutlineGlowEffect(1f, 5f);
-                Blackboard.ActiveFadeOutExperiment("_SecondExperimentColumn", 0.23f, 0.65f);
-                Blackboard.ActiveFadeOutExperiment("_FourthFifthExperimentRow", 0.33f, 0.54f);
-                GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
+                Blackboard.ActiveFourthExperiment();
                 break;
             case 5:
                 _fifthRoundItems.SetActive(true);
                 Blackboard.ActiveOutlineGlowEffect(1f, 5f);
-                Blackboard.ActiveFadeOutExperiment("_FourthFifthExperimentRow", 0.05f, 0.54f);
-                GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
+                Blackboard.ActiveFifthExperiment();
                 break;
             case 6:
                 _sixthRoundItems.SetActive(true);
@@ -82,10 +78,8 @@ public class ItemSpawner : MonoBehaviour
     {
         GameVars.Values.BasementDirectionMarkers.SetActive(true);
         GameVars.Values.LevelManager.WorkbenchLight.SetActive(true);
-        Blackboard.ActiveFadeOutExperiment("_FirstExperimentColumn", 0.22f, 0.366f);
+        Blackboard.ActiveSecondExperiment();
         Blackboard.ActiveOutlineGlowEffect(1f, 5f);
-        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
-        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
         _secondRoundItems.SetActive(true);
     }
 

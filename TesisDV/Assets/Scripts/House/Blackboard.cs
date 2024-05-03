@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class Blackboard : MonoBehaviour
 {
-    private Coroutine FadeOutSceneCoroutine;
     private Coroutine OutlineGlowCoroutine;
+    private Animator _animator;
     // Start is called before the first frame update
     void Start()
     {
-        
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -18,30 +18,42 @@ public class Blackboard : MonoBehaviour
     {
         
     }
-    public void ActiveFadeOutExperiment(string param, float duration, float maxValue)
+    public void ActiveFirstExperiment()
     {
-        if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
-        FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(param, duration, maxValue));
+        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
     }
-    //Referencia 0.6f - Inicio, 0.366f Primer Experimento, 0.25f - Segundo Experimento, 0.0f - Tercer Experimento
-    //Referencia SecondExperimentColumn 0.65f - Inicio, 0.23f Cuarto y Quinto Experimento
-    //Referencia FourthFifth 0.54f - Inicio, 0.1f Cuarto y Quinto Experimento
-    IEnumerator LerpFadeOutEffect(string param, float duration, float maxValue)
+
+    public void ActiveSecondExperiment() 
     {
-        float time = maxValue;
-
-        while (time > 0 && time > duration)
-        {
-            time -= Time.deltaTime;
-            var value = Mathf.Clamp(time, duration, maxValue);
-
-            GetComponent<MeshRenderer>().material.SetFloat(param, value);
-            yield return null;
-        }
+        _animator.SetBool("IsSecondExperiment", true);
+        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
+        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
     }
+    public void ActiveThirdExperiment()
+    {
+        _animator.SetBool("IsSecondExperiment", false);
+        _animator.SetBool("IsThirdExperiment", true);
+        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
+        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
+    }
+    public void ActiveFourthExperiment()
+    {
+        _animator.SetBool("IsThirdExperiment", false);
+        _animator.SetBool("IsFourthExperiment", true);
+        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
+        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
+    }
+    public void ActiveFifthExperiment()
+    {
+        _animator.SetBool("IsFourthExperiment", false);
+        _animator.SetBool("IsFifthExperiment", true);
+        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
+        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
+    }
+    
     public void ActiveOutlineGlowEffect(float duration, float maxValue)
     {
-        if (OutlineGlowCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
+        if (OutlineGlowCoroutine != null) StopCoroutine(OutlineGlowCoroutine);
         OutlineGlowCoroutine = StartCoroutine(LerpOutlineGlowInEffect(duration, maxValue));
     }
     IEnumerator LerpOutlineGlowOutEffect(float duration, float maxValue) 
