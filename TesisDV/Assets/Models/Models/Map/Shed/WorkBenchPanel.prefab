@@ -11,9 +11,6 @@ GameObject:
   - component: {fileID: 1768985007128922093}
   - component: {fileID: 3396674991618934856}
   - component: {fileID: 632648689125866626}
-  - component: {fileID: 2203741790475992219}
-  - component: {fileID: 5817074966777310366}
-  - component: {fileID: 4463151329405727183}
   m_Layer: 10
   m_Name: WorkBenchPanel
   m_TagString: Untagged
@@ -84,46 +81,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2203741790475992219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1425216458087538007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b561c31f95686347a764f2a4d4fc903, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!65 &5817074966777310366
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1425216458087538007}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.9322006, y: 0.08742735, z: 0.5375337}
-  m_Center: {x: -0.0056152344, y: -0.04570334, z: 0.2687669}
---- !u!114 &4463151329405727183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1425216458087538007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eff336826a44a54d998e356a1055d34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 0, g: 1, b: 0.14043546, a: 1}
-  outlineWidth: 0
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []

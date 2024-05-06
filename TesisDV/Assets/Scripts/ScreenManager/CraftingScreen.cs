@@ -9,8 +9,12 @@ public class CraftingScreen : MonoBehaviour, IScreen
     Button[] _buttons;
     public GameObject InventoryAndTrapDescriptions;
     public GameObject TrapProgressionSystem;
+    public GameObject MainUI;
+    public GameObject MainUITitle;
     public Scrollbar ScrollBarVertical;
     public Button closeScreen;
+    public Sprite mainUIImage;
+    public Sprite mainUITitleImage;
     public bool IsWorkbenchScreenOpened { get; set; }
     //public Button BTNPage1;
     //public Button BTNPage2;
@@ -18,16 +22,6 @@ public class CraftingScreen : MonoBehaviour, IScreen
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Confined;
-        /*if (InventoryAndTrapDescriptions.activeSelf)
-        {
-            BTNPage1.interactable = false;
-        }*/
-        /*_buttons = GetComponentsInChildren<Button>();
-
-        foreach(var button in _buttons)
-        {
-            button.interactable = false;
-        }*/
     }
 
     void Start()
@@ -72,6 +66,11 @@ public class CraftingScreen : MonoBehaviour, IScreen
     public void BTN_PageOne()
     {
         IsWorkbenchScreenOpened = false;
+        mainUIImage = Resources.Load<Sprite>("MagicBoardCraftMenu");
+        mainUITitleImage = Resources.Load<Sprite>("CraftMenuTitle");
+        MainUI.GetComponent<Image>().sprite = mainUIImage;
+        MainUITitle.GetComponent<Image>().sprite = mainUITitleImage;
+        MainUITitle.GetComponent<Image>().rectTransform.offsetMax = new Vector2(-752.8196f, 15.4702f);
         //Cursor.lockState = CursorLockMode.Confined;
         TrapProgressionSystem.SetActive(false);
         InventoryAndTrapDescriptions.SetActive(true);
@@ -82,6 +81,11 @@ public class CraftingScreen : MonoBehaviour, IScreen
     public void BTN_PageTwo()
     {
         Cursor.lockState = CursorLockMode.Confined;
+        mainUIImage = Resources.Load<Sprite>("BlueprintUITrapUpgrades_Background");
+        mainUITitleImage = Resources.Load<Sprite>("BlueprintUITrapUpgrades_Title");
+        MainUI.GetComponent<Image>().sprite = mainUIImage;
+        MainUITitle.GetComponent<Image>().sprite = mainUITitleImage;
+        MainUITitle.GetComponent<Image>().rectTransform.offsetMax = new Vector2(-671.75f, 26.84324f);
         IsWorkbenchScreenOpened = true;
         TrapProgressionSystem.SetActive(true);
         InventoryAndTrapDescriptions.SetActive(false);
