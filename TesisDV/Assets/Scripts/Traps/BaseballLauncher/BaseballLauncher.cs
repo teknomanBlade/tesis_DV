@@ -405,12 +405,12 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     #region Upgrade Voids
     private void CheckForUpgrades()
     {
-        if(_skillTree.isBL1Activated)
+        if(_skillTree.isBL1aActivated)
         {
             _staticBallsBlueprint.SetActive(true);
             _canActivate1Upgrade = true;
         }
-        else if (_skillTree.isBL2Activated)
+        else if (_skillTree.isBL21bActivated)
         {
             _fireRateBlueprint.SetActive(true);
             _canActivate2Upgrade = true;

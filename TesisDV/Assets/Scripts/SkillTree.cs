@@ -7,7 +7,7 @@ public class SkillTree : MonoBehaviour
 {
     private Inventory _inventory;
     private AudioSource _as;
-    [Range (0,1)]
+    [Range(0, 1)]
     public float soundVolume;
     #region Trap Unlocks
 
@@ -49,42 +49,117 @@ public class SkillTree : MonoBehaviour
 
     #region BaseballLauncher Upgrades
 
-    [Header("Static Balls")]
+    [Header("Damage Upgrade")]
     [Header("BaseballLauncher Upgrades")]
-    [SerializeField] private int BL1WittCost;
-    public Text BaseballLauncherUpdateWitCostText;
-    private bool _isBL1Activated;
-    public bool isBL1Activated
+    [Space]
+    [SerializeField] private int BL1aWittCost;
+    public Text BaseballLauncherUpdate1aWitCostText;
+    private bool _isBL1aActivated;
+    public bool isBL1aActivated
     {
-        get { return _isBL1Activated; }
+        get { return _isBL1aActivated; }
     }
-    [Header("Firerate Upgrade")]
-    [SerializeField] private int BL2WittCost;
-    private bool _isBL2Activated;
-    public bool isBL2Activated
+    [Header("Static Balls")]
+    [SerializeField] private int BL1bWittCost;
+    public Text BaseballLauncherUpdate1bWitCostText;
+    private bool _isBL1bActivated;
+    public bool isBL21bActivated
     {
-        get { return _isBL2Activated; }
+        get { return _isBL1bActivated; }
+    }
+    [Header("Double Loader Small")]
+    [SerializeField] private int BL2aWittCost;
+    public Text BaseballLauncherUpdate2aWitCostText;
+    private bool _isBL2aActivated;
+    public bool isBL2aActivated
+    {
+        get { return _isBL2aActivated; }
+    }
+    [Header("Double Loader Large")]
+    [SerializeField] private int BL2bWittCost;
+    public Text BaseballLauncherUpdate2bWitCostText;
+    private bool _isBL2bActivated;
+    public bool isBL2bActivated
+    {
+        get { return _isBL2bActivated; }
     }
 
     #endregion
 
-    #region NailFiringMachine Upgrades
+    #region SlowTrap Upgrades
 
-    [Header("Damage Upgrade")]
-    [Header("FERN Paintball Minigun Upgrades")]
-    [SerializeField] private int FPM1WittCost;
-    private bool _isFPM1Activated;
-    public bool isFPM1Activated
+    [Header("Slow Increase +50 Upgrade")]
+    [Header("SlowTrap Upgrades")]
+    [SerializeField] private int ST1aWittCost;
+    public Text SlowTrapUpdate1aWitCostText;
+    private bool _isST1aActivated;
+    public bool isST1aActivated
     {
-        get { return _isFPM1Activated; }
+        get { return _isST1aActivated; }
+    }
+    [Header("Slow Increase +100 Upgrade")]
+    [SerializeField] private int ST1bWittCost;
+    public Text SlowTrapUpdate1bWitCostText;
+    private bool _isST1bActivated;
+    public bool isST1bActivated
+    {
+        get { return _isST1bActivated; }
     }
     [Header("Toxic Damage")]
-    [SerializeField] private int FPM2WittCost;
-    private bool _isFPM2Activated;
-    public bool isFPM2Activated
+    [SerializeField] private int ST2aWittCost;
+    public Text SlowTrapUpdate2aWitCostText;
+    private bool _isST2aActivated;
+    public bool isST2aActivated
     {
-        get { return _isFPM2Activated; }
+        get { return _isST2aActivated; }
     }
+    [Header("Toxic Damage Increase")]
+    [SerializeField] private int ST2bWittCost;
+    public Text SlowTrapUpdate2bWitCostText;
+    private bool _isST2bActivated;
+    public bool isST2bActivated
+    {
+        get { return _isST2bActivated; }
+    }
+
+    #endregion
+
+    #region MicrowaveTrap Upgrades
+
+    [Header("+ 100 Resistance")]
+    [Header("MicrowaveTrap Upgrades")]
+    [SerializeField] private int MT1aWittCost;
+    public Text MicrowaveTrapUpdate1aWitCostText;
+    private bool _isMT1aActivated;
+    public bool isMT1aActivated
+    {
+        get { return _isMT1aActivated; }
+    }
+    [Header("+ 200 Resistance")]
+    [SerializeField] private int MT1bWittCost;
+    public Text MicrowaveTrapUpdate1bWitCostText;
+    private bool _isMT1bActivated;
+    public bool isMT1bActivated
+    {
+        get { return _isMT1bActivated; }
+    }
+    [Header("Double Shieldings")]
+    [SerializeField] private int MT2aWittCost;
+    public Text MicrowaveTrapUpdate2aWitCostText;
+    private bool _isMT2aActivated;
+    public bool isMT2aActivated
+    {
+        get { return _isMT2aActivated; }
+    }
+    [Header("Return Damage")]
+    [SerializeField] private int MT2bWittCost;
+    public Text MicrowaveTrapUpdate2bWitCostText;
+    private bool _isMT2bActivated;
+    public bool isMT2bActivated
+    {
+        get { return _isMT2bActivated; }
+    }
+
 
     #endregion
 
@@ -92,81 +167,108 @@ public class SkillTree : MonoBehaviour
 
     [Header("Focus On Enemy")]
     [Header("ElectricTrap Upgrades")]
-    [SerializeField] private int ET1WittCost;
-    private bool _isET1Activated;
-    public bool isET1Activated
+    [SerializeField] private int ET1aWittCost;
+    public Text ElectricTrapUpdate1aWitCostText;
+    private bool _isET1aActivated;
+    public bool isET1aActivated
     {
-        get { return _isET1Activated; }
+        get { return _isET1aActivated; }
+    }
+    [Header("Focus On Enemy")]
+    [SerializeField] private int ET1bWittCost;
+    public Text ElectricTrapUpdate1bWitCostText;
+    private bool _isET1bActivated;
+    public bool isET1bActivated
+    {
+        get { return _isET1bActivated; }
     }
     [Header("Area Upgrade")]
-    [SerializeField] private int ET2WittCost;
-    private bool _isET2Activated;
-    public bool isET2Activated
+    [SerializeField] private int ET2aWittCost;
+    public Text ElectricTrapUpdate2aWitCostText;
+    private bool _isET2aActivated;
+    public bool isET2aActivated
     {
-        get { return _isET2Activated; }
+        get { return _isET2aActivated; }
+    }
+    [Header("Area Upgrade")]
+    [SerializeField] private int ET2bWittCost;
+    public Text ElectricTrapUpdate2bWitCostText;
+    private bool _isET2bActivated;
+    public bool isET2bActivated
+    {
+        get { return _isET2bActivated; }
     }
 
     #endregion
 
-    #region SlowTrap Upgrades
+    #region FERN Paintball Minigun Upgrades
 
-    [Header("Effect Upgrade")]
-    [Header("SlowTrap Upgrades")]
-    [SerializeField] private int ST1WittCost;
-    private bool _isST1Activated;
-    public bool isST1Activated
+    [Header("Damage Upgrade")]
+    [Header("FERN Paintball Minigun Upgrades")]
+    [SerializeField] private int FPM1aWittCost;
+    public Text FERNPaintballMinigunUpdate1aWitCostText;
+    private bool _isFPM1aActivated;
+    public bool isFPM1aActivated
     {
-        get { return _isST1Activated; }
+        get { return _isFPM1aActivated; }
+    }
+    [SerializeField] private int FPM1bWittCost;
+    public Text FERNPaintballMinigunUpdate1bWitCostText;
+    private bool _isFPM1bActivated;
+    public bool isFPM1bActivated
+    {
+        get { return _isFPM1bActivated; }
     }
     [Header("Toxic Damage")]
-    [SerializeField] private int ST2WittCost;
-    private bool _isST2Activated;
-    public bool isST2Activated
+    [SerializeField] private int FPM2aWittCost;
+    public Text FERNPaintballMinigunUpdate2aWitCostText;
+    private bool _isFPM2aActivated;
+    public bool isFPM2aActivated
     {
-        get { return _isST2Activated; }
+        get { return _isFPM2aActivated; }
+    }
+    [Header("Toxic Damage")]
+    [SerializeField] private int FPM2bWittCost;
+    public Text FERNPaintballMinigunUpdate2bWitCostText;
+    private bool _isFPM2bActivated;
+    public bool isFPM2bActivated
+    {
+        get { return _isFPM2bActivated; }
     }
 
     #endregion
 
-    #region MicrowaveTrap Upgrades
-
-    [Header("More Resistance")]
-    [Header("MicrowaveTrap Upgrades")]
-    [SerializeField] private int MT1WittCost;
-    private bool _isMT1Activated;
-    public bool isMT1Activated
-    {
-        get { return _isMT1Activated; }
-    }
-    [Header("Return Damage")]
-    [SerializeField] private int MT2WittCost;
-    private bool _isMT2Activated;
-    public bool isMT2Activated
-    {
-        get { return _isMT2Activated; }
-    }
-    [Header("Explode On Death")]
-    [SerializeField] private int MT3WittCost;
-    private bool _isMT3Activated;
-    public bool isMT3Activated
-    {
-        get { return _isMT3Activated; }
-    }
-
-    #endregion
-
-
-    
     public delegate void OnUpgradeDelegate();
     public event OnUpgradeDelegate OnUpgrade;
 
     void Awake()
     {
-        MicrowaveWitCostText.text = MicrowaveTrapWittCost.ToString();
-        BaseballLauncherUpdateWitCostText.text = BL1WittCost.ToString();
         SlowTrapWitCostText.text = SlowTrapWittCost.ToString();
+        MicrowaveWitCostText.text = MicrowaveTrapWittCost.ToString();
         PaintballMinigunTrapWitCostText.text = PaintballMinigunTrapWittCost.ToString();
         ElectricTrapWitCostText.text = ElectricTrapWittCost.ToString();
+
+        BaseballLauncherUpdate1aWitCostText.text = BL1aWittCost.ToString();
+        BaseballLauncherUpdate1bWitCostText.text = BL1bWittCost.ToString();
+        BaseballLauncherUpdate2aWitCostText.text = BL2aWittCost.ToString();
+        BaseballLauncherUpdate2bWitCostText.text = BL2bWittCost.ToString();
+        SlowTrapUpdate1aWitCostText.text = ST1aWittCost.ToString();
+        SlowTrapUpdate1bWitCostText.text = ST1bWittCost.ToString();
+        SlowTrapUpdate2aWitCostText.text = ST2aWittCost.ToString();
+        SlowTrapUpdate2bWitCostText.text = ST2bWittCost.ToString();
+        MicrowaveTrapUpdate1aWitCostText.text = MT1aWittCost.ToString();
+        MicrowaveTrapUpdate1bWitCostText.text = MT1bWittCost.ToString();
+        MicrowaveTrapUpdate2aWitCostText.text = MT2aWittCost.ToString();
+        MicrowaveTrapUpdate2bWitCostText.text = MT2bWittCost.ToString();
+        ElectricTrapUpdate1aWitCostText.text = ET1aWittCost.ToString();
+        ElectricTrapUpdate1bWitCostText.text = ET1bWittCost.ToString();
+        ElectricTrapUpdate2aWitCostText.text = ET2aWittCost.ToString();
+        ElectricTrapUpdate2bWitCostText.text = ET2bWittCost.ToString();
+        FERNPaintballMinigunUpdate1aWitCostText.text = FPM1aWittCost.ToString();
+        FERNPaintballMinigunUpdate1bWitCostText.text = FPM1bWittCost.ToString();
+        FERNPaintballMinigunUpdate2aWitCostText.text = FPM2aWittCost.ToString();
+        FERNPaintballMinigunUpdate2bWitCostText.text = FPM2bWittCost.ToString();
+
         _inventory = GetComponentInChildren<Inventory>();
         _as = GetComponent<AudioSource>();
     }
@@ -177,7 +279,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MicrowaveTrapWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as,"CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(MicrowaveTrapWittCost);
             _isMicrowaveTrapUnlocked = true;
             GameVars.Values.HasBoughtMicrowaveTrap = _isMicrowaveTrapUnlocked;
@@ -188,7 +290,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isSlowTrapUnlocked && _inventory.HasEnoughWitts(SlowTrapWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(SlowTrapWittCost);
             _isSlowTrapUnlocked = true;
             GameVars.Values.HasBoughtSlowingTrap = _isSlowTrapUnlocked;
@@ -199,7 +301,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isElectricTrapUnlocked && _inventory.HasEnoughWitts(ElectricTrapWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ElectricTrapWittCost);
             _isElectricTrapUnlocked = true;
             GameVars.Values.HasBoughtElectricTrap = _isElectricTrapUnlocked;
@@ -210,7 +312,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(PaintballMinigunTrapWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(PaintballMinigunTrapWittCost);
             _isPaintballMinigunTrapUnlocked = true;
             GameVars.Values.HasBoughtPaintballMinigunTrap = _isPaintballMinigunTrapUnlocked;
@@ -219,127 +321,218 @@ public class SkillTree : MonoBehaviour
         
     }
 
-    public void UpgradeBaseballLauncher1()
+    public void UpgradeBaseballLauncher1a()
     {
-        if(!_isBL1Activated && _inventory.HasEnoughWitts(BL1WittCost))
+        if(!_isBL1aActivated && _inventory.HasEnoughWitts(BL1aWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(BL1WittCost);
-            _isBL1Activated = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(BL1aWittCost);
+            _isBL1aActivated = true;
             OnUpgrade?.Invoke();
         }
         
     }
-
-    public void UpgradeBaseballLauncher2()
+    public void UpgradeBaseballLauncher1b()
     {
-        if(!_isBL2Activated && _inventory.HasEnoughWitts(BL2WittCost))
+        if (!_isBL1bActivated && _inventory.HasEnoughWitts(BL1bWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(BL2WittCost);
-            _isBL2Activated = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(BL1bWittCost);
+            _isBL1bActivated = true;
+            OnUpgrade?.Invoke();
+        }
+
+    }
+
+    public void UpgradeBaseballLauncher2a()
+    {
+        if(!_isBL2aActivated && _inventory.HasEnoughWitts(BL2aWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(BL2aWittCost);
+            _isBL2aActivated = true;
+            OnUpgrade?.Invoke();
+        }
+    }
+    public void UpgradeBaseballLauncher2b()
+    {
+        if (!_isBL2bActivated && _inventory.HasEnoughWitts(BL2bWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(BL2bWittCost);
+            _isBL2bActivated = true;
             OnUpgrade?.Invoke();
         }
     }
 
-    public void UpgradeFERNPaintballMinigun1()
+    public void UpgradeFERNPaintballMinigun1a()
     {
-        if(!_isFPM1Activated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM1WittCost))
+        if(!_isFPM1aActivated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM1aWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(FPM1WittCost);
-            _isFPM1Activated = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(FPM1aWittCost);
+            _isFPM1aActivated = true;
+            OnUpgrade?.Invoke();
+        }
+    }
+    public void UpgradeFERNPaintballMinigun1b()
+    {
+        if (!_isFPM1bActivated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM1bWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(FPM1bWittCost);
+            _isFPM1bActivated = true;
             OnUpgrade?.Invoke();
         }
     }
 
-    public void UpgradeFERNPaintballMinigun2()
+    public void UpgradeFERNPaintballMinigun2a()
     {
-        if(!_isFPM2Activated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM2WittCost))
+        if(!_isFPM2aActivated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM2aWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(FPM2WittCost);
-            _isFPM2Activated = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(FPM2aWittCost);
+            _isFPM2aActivated = true;
+            OnUpgrade?.Invoke();
+        }
+    }
+    public void UpgradeFERNPaintballMinigun2b()
+    {
+        if (!_isFPM2bActivated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM2bWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(FPM2bWittCost);
+            _isFPM2bActivated = true;
             OnUpgrade?.Invoke();
         }
     }
 
-    public void UpgradeElectricTrap1()
+    public void UpgradeElectricTrap1a()
     {
-        if(!_isET1Activated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET1WittCost))
+        if(!_isET1aActivated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET1aWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(ET1WittCost);
-            _isET1Activated = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(ET1aWittCost);
+            _isET1aActivated = true;
+            OnUpgrade?.Invoke();
+        }
+    }
+    public void UpgradeElectricTrap1b()
+    {
+        if (!_isET1bActivated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET1bWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(ET1bWittCost);
+            _isET1bActivated = true;
             OnUpgrade?.Invoke();
         }
     }
 
-    public void UpgradeElectricTrap2()
+    public void UpgradeElectricTrap2a()
     {
-        if(!_isET2Activated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET2WittCost))
+        if(!_isET2aActivated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET2aWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(ET2WittCost);
-            _isET2Activated = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(ET2aWittCost);
+            _isET2aActivated = true;
+            OnUpgrade?.Invoke();
+        }
+    }
+    public void UpgradeElectricTrap2b()
+    {
+        if (!_isET2bActivated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET2bWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(ET2bWittCost);
+            _isET2bActivated = true;
             OnUpgrade?.Invoke();
         }
     }
 
-    public void UpgradeSlowTrap1()
+    public void UpgradeSlowTrap1a()
     {
-        if(!_isST1Activated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST1WittCost))
+        if(!_isST1aActivated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST1aWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(ST1WittCost);
-            _isST1Activated = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(ST1aWittCost);
+            _isST1aActivated = true;
+            OnUpgrade?.Invoke();
+        }
+    }
+    public void UpgradeSlowTrap1b()
+    {
+        if (!_isST1bActivated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST1bWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(ST1bWittCost);
+            _isST1bActivated = true;
             OnUpgrade?.Invoke();
         }
     }
 
-    public void UpgradeSlowTrap2()
+    public void UpgradeSlowTrap2a()
     {
-        if(!_isST2Activated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST2WittCost))
+        if(!_isST2aActivated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST2aWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(ST2WittCost);
-            _isST2Activated = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(ST2aWittCost);
+            _isST2aActivated = true;
+            OnUpgrade?.Invoke();
+        }
+    }
+    public void UpgradeSlowTrap2b()
+    {
+        if (!_isST2bActivated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST2bWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(ST2bWittCost);
+            _isST2bActivated = true;
             OnUpgrade?.Invoke();
         }
     }
 
-    public void UpgradeMicrowaveTrap1()
+    public void UpgradeMicrowaveTrap1a()
     {
-        if(!_isMT1Activated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT1WittCost))
+        if(!_isMT1aActivated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT1aWittCost))
         {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(MT1WittCost);
-            _isMT1Activated = true;
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(MT1aWittCost);
+            _isMT1aActivated = true;
+            OnUpgrade?.Invoke();
+        }
+    }
+    public void UpgradeMicrowaveTrap1b()
+    {
+        if (!_isMT1bActivated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT1bWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(MT1bWittCost);
+            _isMT1bActivated = true;
+            OnUpgrade?.Invoke();
+        }
+    }
+    public void UpgradeMicrowaveTrap2a()
+    {
+        if(!_isMT2aActivated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT2aWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(MT2aWittCost);
+            _isMT2aActivated = true;
+            OnUpgrade?.Invoke();
+        }
+    }
+    public void UpgradeMicrowaveTrap2b()
+    {
+        if (!_isMT2bActivated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT2bWittCost))
+        {
+            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            _inventory.RemoveWitts(MT2bWittCost);
+            _isMT2bActivated = true;
             OnUpgrade?.Invoke();
         }
     }
 
-    public void UpgradeMicrowaveTrap2()
-    {
-        if(!_isMT2Activated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT2WittCost))
-        {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(MT2WittCost);
-            _isMT2Activated = true;
-            OnUpgrade?.Invoke();
-        }
-    }
 
-    public void UpgradeMicrowaveTrap3()
-    {
-        if(!_isMT3Activated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT3WittCost))
-        {
-            GameVars.Values.soundManager.PlaySoundOnce("CoinSFX", soundVolume, false);
-            _inventory.RemoveWitts(MT3WittCost);
-            _isMT3Activated = true;
-            OnUpgrade?.Invoke();
-        }
-    }
 
     #endregion
 }

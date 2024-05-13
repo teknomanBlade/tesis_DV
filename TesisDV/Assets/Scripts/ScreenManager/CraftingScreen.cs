@@ -35,11 +35,11 @@ public class CraftingScreen : MonoBehaviour, IScreen
     {
         if (Input.mouseScrollDelta.y < 0 || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            ScrollBarVertical.value = Mathf.Clamp(ScrollBarVertical.value - 0.1f,0.3f,1f);
+            ScrollBarVertical.value = Mathf.Clamp(ScrollBarVertical.value - 0.05f,0.1f,1f);
         }
         else if (Input.mouseScrollDelta.y > 0 || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            ScrollBarVertical.value = Mathf.Clamp(ScrollBarVertical.value + 0.1f, 0.3f, 1f);
+            ScrollBarVertical.value = Mathf.Clamp(ScrollBarVertical.value + 0.05f, 0.1f, 1f);
         }
         /*if (Input.GetKeyDown(KeyCode.Alpha1))
         {
