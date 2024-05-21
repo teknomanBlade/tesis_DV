@@ -343,6 +343,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   active: 1
+  UITrapIndicator: {fileID: 0}
+  UITexture: {fileID: 0}
   viewRadius: 0
   viewAngle: 0
   targetMask:
@@ -515,7 +517,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     movementStrength: 0.1
   randomlyOffsetGradient: 0
-  simultaneousLines: 1
+  simultaneousLines: 4
 --- !u!114 &4026469627388165018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1292,11 +1294,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9159043515912618844, guid: 90b6ee0221f3ec64383c902a39c8bc57, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.71599996
+      value: 0.716
       objectReference: {fileID: 0}
     - target: {fileID: 9159043515912618844, guid: 90b6ee0221f3ec64383c902a39c8bc57, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.0032
+      value: -0.007
       objectReference: {fileID: 0}
     - target: {fileID: 9159043515912618844, guid: 90b6ee0221f3ec64383c902a39c8bc57, type: 3}
       propertyPath: m_LocalRotation.w

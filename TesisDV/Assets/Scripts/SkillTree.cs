@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,7 @@ public class SkillTree : MonoBehaviour
     [Header("Microwave Trap")]
     [Header("Trap Unlocks")]
     [SerializeField] private int MicrowaveTrapWittCost;
-    public Text MicrowaveWitCostText;
+    public Text MTWitCostText;
     private bool _isMicrowaveTrapUnlocked;
     public bool isMicrowaveTrapUnlocked
     {
@@ -22,7 +23,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Slow Trap")]
     [SerializeField] private int SlowTrapWittCost;
-    public Text SlowTrapWitCostText;
+    public Text STWitCostText;
     private bool _isSlowTrapUnlocked;
     public bool isSlowTrapUnlocked
     {
@@ -30,7 +31,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Electric Trap")]
     [SerializeField] private int ElectricTrapWittCost;
-    public Text ElectricTrapWitCostText;
+    public Text ETWitCostText;
     private bool _isElectricTrapUnlocked;
     public bool isElectricTrapUnlocked
     {
@@ -38,7 +39,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Paintball Minigun Trap")]
     [SerializeField] private int PaintballMinigunTrapWittCost;
-    public Text PaintballMinigunTrapWitCostText;
+    public Text FPMTrapWitCostText;
     private bool _isPaintballMinigunTrapUnlocked;
     public bool isPaintballMinigunTrapUnlocked
     {
@@ -53,7 +54,7 @@ public class SkillTree : MonoBehaviour
     [Header("BaseballLauncher Upgrades")]
     [Space]
     [SerializeField] private int BL1aWittCost;
-    public Text BaseballLauncherUpdate1aWitCostText;
+    public Text BLUpdate1aWitCostText;
     private bool _isBL1aActivated;
     public bool isBL1aActivated
     {
@@ -61,15 +62,15 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Static Balls")]
     [SerializeField] private int BL1bWittCost;
-    public Text BaseballLauncherUpdate1bWitCostText;
+    public Text BLUpdate1bWitCostText;
     private bool _isBL1bActivated;
-    public bool isBL21bActivated
+    public bool isBL1bActivated
     {
         get { return _isBL1bActivated; }
     }
     [Header("Double Loader Small")]
     [SerializeField] private int BL2aWittCost;
-    public Text BaseballLauncherUpdate2aWitCostText;
+    public Text BLUpdate2aWitCostText;
     private bool _isBL2aActivated;
     public bool isBL2aActivated
     {
@@ -77,7 +78,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Double Loader Large")]
     [SerializeField] private int BL2bWittCost;
-    public Text BaseballLauncherUpdate2bWitCostText;
+    public Text BLUpdate2bWitCostText;
     private bool _isBL2bActivated;
     public bool isBL2bActivated
     {
@@ -91,7 +92,7 @@ public class SkillTree : MonoBehaviour
     [Header("Slow Increase +50 Upgrade")]
     [Header("SlowTrap Upgrades")]
     [SerializeField] private int ST1aWittCost;
-    public Text SlowTrapUpdate1aWitCostText;
+    public Text STUpdate1aWitCostText;
     private bool _isST1aActivated;
     public bool isST1aActivated
     {
@@ -99,7 +100,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Slow Increase +100 Upgrade")]
     [SerializeField] private int ST1bWittCost;
-    public Text SlowTrapUpdate1bWitCostText;
+    public Text STUpdate1bWitCostText;
     private bool _isST1bActivated;
     public bool isST1bActivated
     {
@@ -107,7 +108,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Toxic Damage")]
     [SerializeField] private int ST2aWittCost;
-    public Text SlowTrapUpdate2aWitCostText;
+    public Text STUpdate2aWitCostText;
     private bool _isST2aActivated;
     public bool isST2aActivated
     {
@@ -115,7 +116,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Toxic Damage Increase")]
     [SerializeField] private int ST2bWittCost;
-    public Text SlowTrapUpdate2bWitCostText;
+    public Text STUpdate2bWitCostText;
     private bool _isST2bActivated;
     public bool isST2bActivated
     {
@@ -129,7 +130,7 @@ public class SkillTree : MonoBehaviour
     [Header("+ 100 Resistance")]
     [Header("MicrowaveTrap Upgrades")]
     [SerializeField] private int MT1aWittCost;
-    public Text MicrowaveTrapUpdate1aWitCostText;
+    public Text MTUpdate1aWitCostText;
     private bool _isMT1aActivated;
     public bool isMT1aActivated
     {
@@ -137,7 +138,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("+ 200 Resistance")]
     [SerializeField] private int MT1bWittCost;
-    public Text MicrowaveTrapUpdate1bWitCostText;
+    public Text MTUpdate1bWitCostText;
     private bool _isMT1bActivated;
     public bool isMT1bActivated
     {
@@ -145,7 +146,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Double Shieldings")]
     [SerializeField] private int MT2aWittCost;
-    public Text MicrowaveTrapUpdate2aWitCostText;
+    public Text MTUpdate2aWitCostText;
     private bool _isMT2aActivated;
     public bool isMT2aActivated
     {
@@ -153,7 +154,7 @@ public class SkillTree : MonoBehaviour
     }
     [Header("Return Damage")]
     [SerializeField] private int MT2bWittCost;
-    public Text MicrowaveTrapUpdate2bWitCostText;
+    public Text MTUpdate2bWitCostText;
     private bool _isMT2bActivated;
     public bool isMT2bActivated
     {
@@ -165,34 +166,34 @@ public class SkillTree : MonoBehaviour
 
     #region ElectricTrap Upgrades
 
-    [Header("Focus On Enemy")]
+    [Header("Double Damage Upgrade")]
     [Header("ElectricTrap Upgrades")]
     [SerializeField] private int ET1aWittCost;
-    public Text ElectricTrapUpdate1aWitCostText;
+    public Text ETUpdate1aWitCostText;
     private bool _isET1aActivated;
     public bool isET1aActivated
     {
         get { return _isET1aActivated; }
     }
-    [Header("Focus On Enemy")]
+    [Header("DPS Increase Upgrade")]
     [SerializeField] private int ET1bWittCost;
-    public Text ElectricTrapUpdate1bWitCostText;
+    public Text ETUpdate1bWitCostText;
     private bool _isET1bActivated;
     public bool isET1bActivated
     {
         get { return _isET1bActivated; }
     }
-    [Header("Area Upgrade")]
+    [Header("Double Range Upgrade")]
     [SerializeField] private int ET2aWittCost;
-    public Text ElectricTrapUpdate2aWitCostText;
+    public Text ETUpdate2aWitCostText;
     private bool _isET2aActivated;
     public bool isET2aActivated
     {
         get { return _isET2aActivated; }
     }
-    [Header("Area Upgrade")]
+    [Header("Area of Effect Upgrade")]
     [SerializeField] private int ET2bWittCost;
-    public Text ElectricTrapUpdate2bWitCostText;
+    public Text ETUpdate2bWitCostText;
     private bool _isET2bActivated;
     public bool isET2bActivated
     {
@@ -203,33 +204,34 @@ public class SkillTree : MonoBehaviour
 
     #region FERN Paintball Minigun Upgrades
 
-    [Header("Damage Upgrade")]
+    [Header("Double Damage Upgrade")]
     [Header("FERN Paintball Minigun Upgrades")]
     [SerializeField] private int FPM1aWittCost;
-    public Text FERNPaintballMinigunUpdate1aWitCostText;
+    public Text FPMUpdate1aWitCostText;
     private bool _isFPM1aActivated;
     public bool isFPM1aActivated
     {
         get { return _isFPM1aActivated; }
     }
+    [Header("Pepper Pellets Upgrade")]
     [SerializeField] private int FPM1bWittCost;
-    public Text FERNPaintballMinigunUpdate1bWitCostText;
+    public Text FPMUpdate1bWitCostText;
     private bool _isFPM1bActivated;
     public bool isFPM1bActivated
     {
         get { return _isFPM1bActivated; }
     }
-    [Header("Toxic Damage")]
+    [Header("+ 50 Shots")]
     [SerializeField] private int FPM2aWittCost;
-    public Text FERNPaintballMinigunUpdate2aWitCostText;
+    public Text FPMUpdate2aWitCostText;
     private bool _isFPM2aActivated;
     public bool isFPM2aActivated
     {
         get { return _isFPM2aActivated; }
     }
-    [Header("Toxic Damage")]
+    [Header("+ 5 Hit Points")]
     [SerializeField] private int FPM2bWittCost;
-    public Text FERNPaintballMinigunUpdate2bWitCostText;
+    public Text FPMUpdate2bWitCostText;
     private bool _isFPM2bActivated;
     public bool isFPM2bActivated
     {
@@ -243,31 +245,31 @@ public class SkillTree : MonoBehaviour
 
     void Awake()
     {
-        SlowTrapWitCostText.text = SlowTrapWittCost.ToString();
-        MicrowaveWitCostText.text = MicrowaveTrapWittCost.ToString();
-        PaintballMinigunTrapWitCostText.text = PaintballMinigunTrapWittCost.ToString();
-        ElectricTrapWitCostText.text = ElectricTrapWittCost.ToString();
+        STWitCostText.text = SlowTrapWittCost.ToString();
+        MTWitCostText.text = MicrowaveTrapWittCost.ToString();
+        FPMTrapWitCostText.text = PaintballMinigunTrapWittCost.ToString();
+        ETWitCostText.text = ElectricTrapWittCost.ToString();
 
-        BaseballLauncherUpdate1aWitCostText.text = BL1aWittCost.ToString();
-        BaseballLauncherUpdate1bWitCostText.text = BL1bWittCost.ToString();
-        BaseballLauncherUpdate2aWitCostText.text = BL2aWittCost.ToString();
-        BaseballLauncherUpdate2bWitCostText.text = BL2bWittCost.ToString();
-        SlowTrapUpdate1aWitCostText.text = ST1aWittCost.ToString();
-        SlowTrapUpdate1bWitCostText.text = ST1bWittCost.ToString();
-        SlowTrapUpdate2aWitCostText.text = ST2aWittCost.ToString();
-        SlowTrapUpdate2bWitCostText.text = ST2bWittCost.ToString();
-        MicrowaveTrapUpdate1aWitCostText.text = MT1aWittCost.ToString();
-        MicrowaveTrapUpdate1bWitCostText.text = MT1bWittCost.ToString();
-        MicrowaveTrapUpdate2aWitCostText.text = MT2aWittCost.ToString();
-        MicrowaveTrapUpdate2bWitCostText.text = MT2bWittCost.ToString();
-        ElectricTrapUpdate1aWitCostText.text = ET1aWittCost.ToString();
-        ElectricTrapUpdate1bWitCostText.text = ET1bWittCost.ToString();
-        ElectricTrapUpdate2aWitCostText.text = ET2aWittCost.ToString();
-        ElectricTrapUpdate2bWitCostText.text = ET2bWittCost.ToString();
-        FERNPaintballMinigunUpdate1aWitCostText.text = FPM1aWittCost.ToString();
-        FERNPaintballMinigunUpdate1bWitCostText.text = FPM1bWittCost.ToString();
-        FERNPaintballMinigunUpdate2aWitCostText.text = FPM2aWittCost.ToString();
-        FERNPaintballMinigunUpdate2bWitCostText.text = FPM2bWittCost.ToString();
+        BLUpdate1aWitCostText.text = BL1aWittCost.ToString();
+        BLUpdate1bWitCostText.text = BL1bWittCost.ToString();
+        BLUpdate2aWitCostText.text = BL2aWittCost.ToString();
+        BLUpdate2bWitCostText.text = BL2bWittCost.ToString();
+        STUpdate1aWitCostText.text = ST1aWittCost.ToString();
+        STUpdate1bWitCostText.text = ST1bWittCost.ToString();
+        STUpdate2aWitCostText.text = ST2aWittCost.ToString();
+        STUpdate2bWitCostText.text = ST2bWittCost.ToString();
+        MTUpdate1aWitCostText.text = MT1aWittCost.ToString();
+        MTUpdate1bWitCostText.text = MT1bWittCost.ToString();
+        MTUpdate2aWitCostText.text = MT2aWittCost.ToString();
+        MTUpdate2bWitCostText.text = MT2bWittCost.ToString();
+        ETUpdate1aWitCostText.text = ET1aWittCost.ToString();
+        ETUpdate1bWitCostText.text = ET1bWittCost.ToString();
+        ETUpdate2aWitCostText.text = ET2aWittCost.ToString();
+        ETUpdate2bWitCostText.text = ET2bWittCost.ToString();
+        FPMUpdate1aWitCostText.text = FPM1aWittCost.ToString();
+        FPMUpdate1bWitCostText.text = FPM1bWittCost.ToString();
+        FPMUpdate2aWitCostText.text = FPM2aWittCost.ToString();
+        FPMUpdate2bWitCostText.text = FPM2bWittCost.ToString();
 
         _inventory = GetComponentInChildren<Inventory>();
         _as = GetComponent<AudioSource>();

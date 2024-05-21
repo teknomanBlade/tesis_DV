@@ -14,6 +14,7 @@ public class GrayDogModel : Enemy
         _fsm = new StateMachine();
         _pf = new Pathfinding();
         HP = 1.5f;
+        _startSpeed = _movingSpeed;
         GameVars.Values.WaveManager.EnhanceEnemyStatsPerWave(this);
         _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.GrayDogCatState));
         _fsm.AddState(EnemyStatesEnum.GrayDogCatState, new GrayDogCatState(_fsm, this, _pf));

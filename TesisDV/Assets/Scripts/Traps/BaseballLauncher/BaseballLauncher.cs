@@ -24,6 +24,9 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     [SerializeField] private GameObject trapDestroyPrefab;
     public int shots;
     public int shotsLeft;
+    [SerializeField] private float _damageAmount;
+    [SerializeField] private float _coefMelee;
+    [SerializeField] private float _coefTank;
     public bool IsEmpty
     {
         get
@@ -53,13 +56,20 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     #region Upgrades
     [Header("Upgrades")]
+    [SerializeField] private float _damageBoostCoef;
+    [SerializeField] private float _staticChargeSlowAmount;
     [SerializeField] private GameObject _staticBallsBlueprint;
     [SerializeField] private GameObject _staticBallsUpgrade;
-    [SerializeField] private float _damageAmount;
-    [SerializeField] private GameObject _fireRateBlueprint;
-    [SerializeField] private GameObject _fireRateUpgrade;
-    public bool _canActivate1Upgrade {get; private set;}
-    public bool _canActivate2Upgrade {get; private set;}
+    [SerializeField] private GameObject _damageBoostBlueprint;
+    [SerializeField] private GameObject _damageBoostUpgrade;
+    [SerializeField] private GameObject _doubleLoaderSmallBlueprint;
+    [SerializeField] private GameObject _doubleLoaderSmallUpgrade;
+    [SerializeField] private GameObject _doubleLoaderLargeBlueprint;
+    [SerializeField] private GameObject _doubleLoaderLargeUpgrade;
+    public bool _canActivate1aUpgrade {get; private set;}
+    public bool _canActivate2aUpgrade {get; private set;}
+    public bool _canActivate1bUpgrade { get; private set; }
+    public bool _canActivate2bUpgrade { get; private set; }
     private SkillTree _skillTree;
 
     #endregion
@@ -75,6 +85,10 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _skillTree.OnUpgrade += CheckForUpgrades;
         CheckForUpgrades();
         isFirstTime = true;
+        _coefMelee = 3f;
+        _coefTank = 5f;
+        _damageBoostCoef = 1.5f;
+        _staticChargeSlowAmount = 2.0f;
         myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
         _as = GetComponent<AudioSource>();
@@ -239,28 +253,6 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         }
     }
 
-    public void ChangeBallsState(int shotsLeft)
-    {
-        if (shotsLeft <= 0)
-        {
-            //ActiveDeactivateBallStates(false, false, false);
-            return;
-        }
-
-        if (shotsLeft == 15)
-        {
-            //ActiveDeactivateBallStates(true, false, false);
-        }
-        else if (shotsLeft == 11)
-        {
-            //ActiveDeactivateBallStates(false, !ballsState2.activeSelf, false);
-        }
-        else if (shotsLeft == 6)
-        {
-            //ActiveDeactivateBallStates(false, false, !ballsState3.activeSelf);
-        }
-    }
-
     public override void Inactive()
     {
         if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
@@ -363,8 +355,6 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         //Debug.Log("ENTRA EN SHOOT ANIMATION?");
         myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y, rotation.z), _shootSpeed * Time.deltaTime);
-        //_animator.enabled = true;
-        //_animator.SetBool("IsFiring", true);
     }
     private void FireBaseball()
     {
@@ -373,7 +363,6 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             //BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetAdditionalDamage(_additionalDamage).SetOwner(this);
             var enemy = _currentObjective.GetComponent<Enemy>();
             EnemyDamageDifferential(enemy);
-            
         }
     }
 
@@ -382,21 +371,26 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         if(enemy == null)
             return;
 
+        if (_canActivate1bUpgrade) 
+        {
+            Debug.Log("ACTIVO SLOW STATIC CHARGE...");
+            enemy.SlowDebuff(_staticChargeSlowAmount);
+        }
+
         if (enemy.name.Contains("GrayMVC"))
         {
-            _damageAmount = 1f;
             Debug.Log("DAÑO GRAY: " + _damageAmount);
             enemy.TakeDamage(_damageAmount);
         }
         else if (enemy.name.Contains("Melee"))
         {
-            _damageAmount = 0.25f;
+            _damageAmount /= _coefMelee;
             Debug.Log("DAÑO MELEE: " + _damageAmount);
             enemy.TakeDamage(_damageAmount);
         }
         else if (enemy.name.Contains("Tank"))
         {
-            _damageAmount = 0.1f;
+            _damageAmount /= _coefTank;
             Debug.Log("DAÑO TANK: " + _damageAmount);
             enemy.TakeDamage(_damageAmount);
         }
@@ -407,28 +401,51 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         if(_skillTree.isBL1aActivated)
         {
-            _staticBallsBlueprint.SetActive(true);
-            _canActivate1Upgrade = true;
+            _damageBoostBlueprint.SetActive(true);
+            _canActivate1aUpgrade = true;
         }
-        else if (_skillTree.isBL21bActivated)
+        else if (_skillTree.isBL1bActivated)
         {
-            _fireRateBlueprint.SetActive(true);
-            _canActivate2Upgrade = true;
+            _staticBallsBlueprint.SetActive(true);
+            _canActivate1bUpgrade = true;
+        }
+        else if (_skillTree.isBL2aActivated)
+        {
+            _doubleLoaderSmallBlueprint.SetActive(true);
+            _canActivate2aUpgrade = true;
+        }
+        else if (_skillTree.isBL2bActivated)
+        {
+            _doubleLoaderLargeBlueprint.SetActive(true);
+            _canActivate2bUpgrade = true;
         }
     }
 
-    public void ActivateFirstUpgrade()
+    public void Activate1aUpgrade()
+    {
+        _damageBoostBlueprint.SetActive(false);
+        _damageBoostUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+        _damageAmount *= _damageBoostCoef;
+    }
+    public void Activate1bUpgrade()
     {
         _staticBallsBlueprint.SetActive(false);
         _staticBallsUpgrade.SetActive(true);
         //Aplicar beneficio del Upgrade
-        _damageAmount = 3;
+        _damageAmount *= _damageBoostCoef;
     }
 
-    public void ActivateSecondUpgrade()
+    public void Activate2aUpgrade()
     {
-        _fireRateBlueprint.SetActive(false);
-        _fireRateUpgrade.SetActive(true);
+        _doubleLoaderSmallBlueprint.SetActive(false);
+        _doubleLoaderSmallUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+    public void Activate2bUpgrade()
+    {
+        _doubleLoaderLargeBlueprint.SetActive(false);
+        _doubleLoaderLargeUpgrade.SetActive(true);
         //Aplicar beneficio del Upgrade
     }
 

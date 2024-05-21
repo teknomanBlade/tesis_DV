@@ -1157,9 +1157,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 GameVars.Values.ShowNotification("You need a Tennis Ball Container to reload!");
                 auxBL.OnReload += OnBaseballMachineReload;
             }
-            if (auxBL._canActivate1Upgrade && _inventory.ContainsID(2,1))
+            if (auxBL._canActivate1aUpgrade && _inventory.ContainsID(2,1))
             {
-                auxBL.ActivateFirstUpgrade();
+                auxBL.Activate1aUpgrade();
             }
         }
         if (lookingAt.gameObject.TryGetComponent(out MicrowaveForceFieldGenerator microwaveFFG))

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,30 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     private AudioSource _as;
     private bool _isDisabledSFX;
     public bool IsBatteryFried;
+    #region Upgrades
+    [Header("Upgrades")]
+    [SerializeField] private GameObject _plus100SPBlueprint;
+    [SerializeField] private GameObject _plus100SPUpgrade;
+    [SerializeField] private GameObject _plus200SPBlueprint;
+    [SerializeField] private GameObject _plus200SPUpgrade;
+    [SerializeField] private GameObject _secondaryShieldsBlueprint;
+    [SerializeField] private GameObject _secondaryShieldsUpgrade;
+    [SerializeField] private GameObject _returnDamageBlueprint;
+    [SerializeField] private GameObject _returnDamageUpgrade;
+    public bool _canActivate1aUpgrade { get; private set; }
+    public bool _canActivate2aUpgrade { get; private set; }
+    public bool _canActivate1bUpgrade { get; private set; }
+    public bool _canActivate2bUpgrade { get; private set; }
+    private SkillTree _skillTree;
+
+    #endregion
     // Start is called before the first frame update
     void Awake()
     {
         active = true;
+        _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
+        _skillTree.OnUpgrade += CheckForUpgrades;
+        CheckForUpgrades();
         IsBatteryFried = false;
         _as = GetComponent<AudioSource>();
         _forceFieldScript = ForceField.GetComponent<ForceField>();
@@ -29,6 +50,59 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         GameVars.Values.soundManager.PlaySoundOnce(_as, "EMRingWavesSFX", 0.15f, true);
         SetUIIndicator("UI_MicrowaveForceFieldGenerator_Indicator");
     }
+
+    #region Upgrade Voids
+    private void CheckForUpgrades()
+    {
+        if (_skillTree.isMT1aActivated)
+        {
+            _plus100SPBlueprint.SetActive(true);
+            _canActivate1aUpgrade = true;
+        }
+        else if (_skillTree.isMT1bActivated)
+        {
+            _plus200SPBlueprint.SetActive(true);
+            _canActivate1bUpgrade = true;
+        }
+        else if (_skillTree.isMT2aActivated)
+        {
+            _secondaryShieldsBlueprint.SetActive(true);
+            _canActivate2aUpgrade = true;
+        }
+        else if (_skillTree.isMT2bActivated)
+        {
+            _returnDamageBlueprint.SetActive(true);
+            _canActivate2bUpgrade = true;
+        }
+    }
+
+    public void Activate1aUpgrade()
+    {
+        _plus100SPBlueprint.SetActive(false);
+        _plus100SPUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+    public void Activate1bUpgrade()
+    {
+        _plus200SPBlueprint.SetActive(false);
+        _plus200SPUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+
+    public void Activate2aUpgrade()
+    {
+        _secondaryShieldsBlueprint.SetActive(false);
+        _secondaryShieldsUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+    public void Activate2bUpgrade()
+    {
+        _returnDamageBlueprint.SetActive(false);
+        _returnDamageUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+
+    #endregion
 
     // Update is called once per frame
     void Update()

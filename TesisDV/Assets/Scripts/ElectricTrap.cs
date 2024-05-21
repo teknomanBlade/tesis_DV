@@ -5,7 +5,9 @@ using UnityEngine;
 public class ElectricTrap : Trap, IMovable, IInteractable
 {
     [SerializeField] private float _damage;
+    [SerializeField] private float _damageBoostCoef;
     [SerializeField] private float _damagePerSecond;
+    [SerializeField] private float _dpsBoostCoef;
     [SerializeField] private GameObject midPositionDamage;
     [SerializeField] private GameObject endPositionDamage;
     //[SerializeField] private float _trapDuration;
@@ -15,9 +17,29 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     public GameObject ParticleLightning;
     private bool _isDisabledSFX;
     private AudioSource _as;
+
+    #region Upgrades
+    [Header("Upgrades")]
+    [SerializeField] private GameObject _doubleDamageBlueprint;
+    [SerializeField] private GameObject _doubleDamageUpgrade;
+    [SerializeField] private GameObject _dpsIncreaseBlueprint;
+    [SerializeField] private GameObject _dpsIncreaseUpgrade;
+    [SerializeField] private GameObject _doubleRangeBlueprint;
+    [SerializeField] private GameObject _doubleRangeUpgrade;
+    [SerializeField] private GameObject _areaOfEffectBlueprint;
+    [SerializeField] private GameObject _areaOfEffectUpgrade;
+    public bool _canActivate1aUpgrade { get; private set; }
+    public bool _canActivate2aUpgrade { get; private set; }
+    public bool _canActivate1bUpgrade { get; private set; }
+    public bool _canActivate2bUpgrade { get; private set; }
+    private SkillTree _skillTree;
+
+    #endregion
     private void Start()
     {
-        
+        _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
+        _skillTree.OnUpgrade += CheckForUpgrades;
+        CheckForUpgrades();
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
         _myTrapBase.SetTrap(this.gameObject);
         GameVars.Values.IsAllSlotsDisabled();
@@ -85,9 +107,9 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     {
         var enemyGray = other.GetComponent<Enemy>();
 
-        if(enemyGray && !other.GetComponent<GrayModel>() && active)
+        if(enemyGray && active)
         {
-            other.GetComponent<Enemy>().TakeDamage(_damage);
+            other.GetComponent<Enemy>().TakeDamage(_damagePerSecond);
         }
     }
     public override void Inactive()
@@ -115,4 +137,58 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         _myTrapBase.ResetBase();
         Destroy(gameObject);
     }
+    #region Upgrade Voids
+    private void CheckForUpgrades()
+    {
+        if (_skillTree.isET1aActivated)
+        {
+            _doubleDamageBlueprint.SetActive(true);
+            _canActivate1aUpgrade = true;
+        }
+        else if (_skillTree.isET1bActivated)
+        {
+            _dpsIncreaseBlueprint.SetActive(true);
+            _canActivate1bUpgrade = true;
+        }
+        else if (_skillTree.isET2aActivated)
+        {
+            _doubleRangeBlueprint.SetActive(true);
+            _canActivate2aUpgrade = true;
+        }
+        else if (_skillTree.isET2bActivated)
+        {
+            _areaOfEffectBlueprint.SetActive(true);
+            _canActivate2bUpgrade = true;
+        }
+    }
+
+    public void Activate1aUpgrade()
+    {
+        _doubleDamageBlueprint.SetActive(false);
+        _doubleDamageUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+        //_damageAmount *= _damageBoostCoef;
+    }
+    public void Activate1bUpgrade()
+    {
+        _dpsIncreaseBlueprint.SetActive(false);
+        _dpsIncreaseUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+        //_damageAmount *= _damageBoostCoef;
+    }
+
+    public void Activate2aUpgrade()
+    {
+        _doubleRangeBlueprint.SetActive(false);
+        _doubleRangeUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+    public void Activate2bUpgrade()
+    {
+        _areaOfEffectBlueprint.SetActive(false);
+        _areaOfEffectUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+
+    #endregion
 }

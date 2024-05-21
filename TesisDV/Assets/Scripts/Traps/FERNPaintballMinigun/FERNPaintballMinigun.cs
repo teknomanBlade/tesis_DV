@@ -42,7 +42,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
         _myTrapBase.SetTrap(this.gameObject);
         _magazine = transform.GetComponentsInChildren<Transform>(true).Where(x => x.name.Equals("FERNMinigunPelletsMagazine")).FirstOrDefault().gameObject;
         _currentLife = _maxLife;
-        InitialStock = shotsLeft = shots = 20;
+        InitialStock = shotsLeft = shots = 150;
         _as = GetComponent<AudioSource>();
         _animator = GetComponent<Animator>();
         PaintballPellet = Resources.Load<PaintballPellet>("PaintballPellet");

@@ -8,10 +8,12 @@ using UnityEngine.AI;
 public enum EnemyType { Common, Melee, Tank, Dog }
 public abstract class Enemy : MonoBehaviour
 {
+    public Coroutine SlowDebuffCoroutine;
     [SerializeField] private float _hp;
     public float HP { get { return _hp; } set { _hp = value; } }
     [SerializeField] private int _myWittsValue;
     public float _movingSpeed;
+    public float _startSpeed;
     [SerializeField] private Transform _catGrabPos;
     public ParticleSystem witGainEffect;
     public Collider[] allTargets; //Borrar esto y probar.
@@ -502,6 +504,18 @@ public abstract class Enemy : MonoBehaviour
     {
         //_navMeshAgent.speed -= slowAmount; //Se va el navmesh
         _movingSpeed -= slowAmount;
+    }
+
+    public void SlowDebuff(float slowAmount) 
+    {
+        SlowDebuffCoroutine = StartCoroutine(SlowDebuffActive(slowAmount));
+    }
+
+    IEnumerator SlowDebuffActive(float slowAmount) 
+    {
+        _movingSpeed -= slowAmount;
+        yield return new WaitForSeconds(2f);
+        _movingSpeed = _startSpeed;
     }
 
     private void DrawLineRenderer(Vector3[] waypoints)  //Esto deberia ir en el view T.T Apenas este todo bien lindo lo cambio
