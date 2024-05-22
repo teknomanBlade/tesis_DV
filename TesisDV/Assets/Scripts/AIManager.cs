@@ -57,6 +57,8 @@ public class AIManager : MonoBehaviour
 
     public Vector3 RequestPosition(Enemy enemy)
     {
+        if (enemy == null) return Vector3.zero;
+
         if (_enemiesPosition.ContainsKey(enemy))
         {
             /* Vector3 aux = _enemiesPosition[enemy].transform.position;
@@ -82,6 +84,8 @@ public class AIManager : MonoBehaviour
 
             foreach(GameObject marker in markers)
             {
+                if (parent != null) return;
+
                 marker.transform.SetParent(parent.transform);
             } 
         }

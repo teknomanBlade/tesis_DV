@@ -6,18 +6,23 @@ public class SlowTrap : MonoBehaviour
 {
     [SerializeField] private float _slowAmount;
     [SerializeField] private float _slowAmountPlayer;
-    //[SerializeField] private float _destroyTime;
+    [SerializeField] private float _slow20BoostCoefMultiplier;
+    [SerializeField] private float _slow30BoostCoefMultiplier;
     [SerializeField] private bool _doesDamage;
+    private MeshRenderer _tarStainMR;
+    private ParticleSystem _bubblesParticleSystem;
     #region Upgrades
     [Header("Upgrades")]
-    [SerializeField] private GameObject _plus50SlowBlueprint;
-    [SerializeField] private GameObject _plus50SlowUpgrade;
-    [SerializeField] private GameObject _plus100SlowBlueprint;
-    [SerializeField] private GameObject _plus100SlowUpgrade;
-    [SerializeField] private GameObject _minus1HPPoisonDamageBlueprint;
-    [SerializeField] private GameObject _minus1HPPoisonDamageUpgrade;
-    [SerializeField] private GameObject _minus2HPPoisonDamageBlueprint;
-    [SerializeField] private GameObject _minus2HPPoisonDamageUpgrade;
+    [SerializeField] private GameObject _plus20SlowBlueprint;
+    [SerializeField] private GameObject _plus20SlowUpgrade;
+    [SerializeField] private GameObject _plus30SlowBlueprint;
+    [SerializeField] private GameObject _plus30SlowUpgrade;
+    [SerializeField] private GameObject _minus10PercentPoisonDamageBlueprint;
+    [SerializeField] private GameObject _minus10PercentPoisonDamageUpgrade;
+    [SerializeField] private GameObject _minus20PercentPoisonDamageBlueprint;
+    [SerializeField] private GameObject _minus20PercentPoisonDamageUpgrade;
+    [SerializeField] private GameObject _tarStain;
+    [SerializeField] private GameObject _bubblesParticles;
     public bool _canActivate1aUpgrade { get; private set; }
     public bool _canActivate2aUpgrade { get; private set; }
     public bool _canActivate1bUpgrade { get; private set; }
@@ -28,8 +33,10 @@ public class SlowTrap : MonoBehaviour
     Animator _animator;
     private AudioSource _as;
 
-    void Start()
+    void Awake()
     {
+        _tarStainMR = _tarStain.GetComponent<MeshRenderer>();
+        _bubblesParticleSystem = _bubblesParticles.GetComponent<ParticleSystem>();
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
         _skillTree.OnUpgrade += CheckForUpgrades;
         CheckForUpgrades();
@@ -41,26 +48,7 @@ public class SlowTrap : MonoBehaviour
 
     void Update()
     {
-        /*_destroyTime -= Time.deltaTime;
-
-        if (_destroyTime <=0)
-        {
-            _animator.SetTrigger("IsDestroyed");
-            GameVars.Values.soundManager.StopSound();
-        }*/
-
-        /* if (Input.GetKeyDown(KeyCode.G))
-        {
-            if (_doesDamage)
-            {
-                _doesDamage = false;
-            }
-            else
-            {
-                _doesDamage = true;
-            }
-
-        } */        
+            
     }
 
     public void DestroyTrap()
@@ -71,18 +59,43 @@ public class SlowTrap : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         var enemy = other.GetComponent<Enemy>(); //Despues hacer uno de estos para cada enemigo por ahora para ver cuanto sacale 
-        //var player = other.GetComponent<Player>();
 
         if (enemy)
         {
-            other.GetComponent<Enemy>().SlowDown(_slowAmount);
+            if (_canActivate1aUpgrade)
+            {
+                var new20PercentSlow = _slowAmount * _slow20BoostCoefMultiplier;
+                other.GetComponent<Enemy>().SlowDown(new20PercentSlow);
+            }
+            else if (_canActivate1bUpgrade)
+            {
+                var new30PercentSlow = _slowAmount * _slow30BoostCoefMultiplier;
+                other.GetComponent<Enemy>().SlowDown(new30PercentSlow);
+            }
+            else 
+            {
+                other.GetComponent<Enemy>().SlowDown(_slowAmount);
+            }
         }
-        //else if (player && other.GetComponent<Player>())
-        //{
-            //other.GetComponent<Player>().SlowDown(_slowAmountPlayer);
-        //}
     }
+    private void OnTriggerStay(Collider other)
+    {
+        var enemy = other.GetComponent<Enemy>();
 
+        if (enemy) 
+        {
+            if (_canActivate2aUpgrade) 
+            {
+                var tenPercentDamage = enemy.HP * 0.1f;
+                enemy.TakeDamage(tenPercentDamage);
+            }
+            else if (_canActivate2bUpgrade) 
+            {
+                var twentyPercentDamage = enemy.HP * 0.2f;
+                enemy.TakeDamage(twentyPercentDamage);
+            }
+        }
+    }
     void OnTriggerExit(Collider other)
     {
         var enemy = other.GetComponent<Enemy>(); //Despues hacer uno de estos para cada enemigo por ahora para ver cuanto sacale 
@@ -101,52 +114,60 @@ public class SlowTrap : MonoBehaviour
     #region Upgrade Voids
     private void CheckForUpgrades()
     {
-        if (_skillTree.isMT1aActivated)
+        if (_skillTree.isST1aActivated)
         {
-            _plus50SlowBlueprint.SetActive(true);
-            _canActivate1aUpgrade = true;
+            Debug.Log("UPGRADE 1A BOUGHT");
+            Activate1aUpgrade();
         }
-        else if (_skillTree.isMT1bActivated)
+        else if (_skillTree.isST1bActivated)
         {
-            _plus100SlowBlueprint.SetActive(true);
-            _canActivate1bUpgrade = true;
+            Debug.Log("UPGRADE 1B BOUGHT");
+            Activate1bUpgrade();
         }
-        else if (_skillTree.isMT2aActivated)
+        else if (_skillTree.isST2aActivated)
         {
-            _minus1HPPoisonDamageBlueprint.SetActive(true);
-            _canActivate2aUpgrade = true;
+            Debug.Log("UPGRADE 2A BOUGHT");
+            ChangeColorToStainAndBubbles();
+            Activate2aUpgrade();
+
         }
-        else if (_skillTree.isMT2bActivated)
+        else if (_skillTree.isST2bActivated)
         {
-            _minus2HPPoisonDamageBlueprint.SetActive(true);
-            _canActivate2bUpgrade = true;
+            Debug.Log("UPGRADE 2B BOUGHT");
+            ChangeColorToStainAndBubbles();
+            Activate2bUpgrade();
         }
+    }
+
+    public void ChangeColorToStainAndBubbles() 
+    {
+        _tarStainMR.material.SetFloat("_TarUpgradeTransition", 1f);
+        ParticleSystem.MainModule main = _bubblesParticleSystem.main;
+        main.startColor = new Color(0f, 0.427451f, 0.1886792f,1f);
     }
 
     public void Activate1aUpgrade()
     {
-        _plus50SlowBlueprint.SetActive(false);
-        _plus50SlowUpgrade.SetActive(true);
-        //Aplicar beneficio del Upgrade
+        _canActivate1aUpgrade = true;
     }
     public void Activate1bUpgrade()
     {
-        _plus100SlowBlueprint.SetActive(false);
-        _plus100SlowUpgrade.SetActive(true);
-        //Aplicar beneficio del Upgrade
+        _canActivate1bUpgrade = true;
+        _canActivate1aUpgrade = false;
     }
 
     public void Activate2aUpgrade()
     {
-        _minus1HPPoisonDamageBlueprint.SetActive(false);
-        _minus1HPPoisonDamageUpgrade.SetActive(true);
-        //Aplicar beneficio del Upgrade
+        _canActivate1bUpgrade = false;
+        _canActivate1aUpgrade = false;
+        _canActivate2aUpgrade = true;
     }
     public void Activate2bUpgrade()
     {
-        _minus2HPPoisonDamageBlueprint.SetActive(false);
-        _minus2HPPoisonDamageUpgrade.SetActive(true);
-        //Aplicar beneficio del Upgrade
+        _canActivate1bUpgrade = false;
+        _canActivate1aUpgrade = false;
+        _canActivate2aUpgrade = false;
+        _canActivate2bUpgrade = true;
     }
 
     #endregion

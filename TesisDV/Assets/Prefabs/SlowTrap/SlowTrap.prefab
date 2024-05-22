@@ -230,15 +230,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _slowAmount: 0.8
   _slowAmountPlayer: 3
+  _slow20BoostCoefMultiplier: 0
+  _slow30BoostCoefMultiplier: 0
   _doesDamage: 0
-  _plus50SlowBlueprint: {fileID: 0}
-  _plus50SlowUpgrade: {fileID: 0}
-  _plus100SlowBlueprint: {fileID: 0}
-  _plus100SlowUpgrade: {fileID: 0}
-  _minus1HPPoisonDamageBlueprint: {fileID: 0}
-  _minus1HPPoisonDamageUpgrade: {fileID: 0}
-  _minus2HPPoisonDamageBlueprint: {fileID: 0}
-  _minus2HPPoisonDamageUpgrade: {fileID: 0}
+  _plus20SlowBlueprint: {fileID: 0}
+  _plus20SlowUpgrade: {fileID: 0}
+  _plus30SlowBlueprint: {fileID: 0}
+  _plus30SlowUpgrade: {fileID: 0}
+  _minus10PercentPoisonDamageBlueprint: {fileID: 0}
+  _minus10PercentPoisonDamageUpgrade: {fileID: 0}
+  _minus20PercentPoisonDamageBlueprint: {fileID: 0}
+  _minus20PercentPoisonDamageUpgrade: {fileID: 0}
+  _tarStain: {fileID: 947582598802298165}
+  _bubblesParticles: {fileID: 2572021686152496688}
 --- !u!82 &4646322674632208843
 AudioSource:
   m_ObjectHideFlags: 0
@@ -295,7 +299,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -310,7 +314,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.51111114
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -483,6 +487,11 @@ PrefabInstance:
 --- !u!4 &2572021687240102965 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4884217404900537285, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
+  m_PrefabInstance: {fileID: 6951747765695965168}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2572021686152496688 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4884217406023852480, guid: 0c6fcdb89ad31124cbc379472167c928, type: 3}
   m_PrefabInstance: {fileID: 6951747765695965168}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8277106310266703915
