@@ -43,7 +43,8 @@ public class SlowTrap : MonoBehaviour
         _animator = GetComponent<Animator>();
         _as = GetComponent<AudioSource>();
         GameVars.Values.IsAllSlotsDisabled();
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "TarLiquidSFX", 0.15f, true);
+        Invoke(nameof(ActiveInitSound),7.0f);
+        
     }
 
     void Update()
@@ -55,7 +56,11 @@ public class SlowTrap : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
+    
+    public void ActiveInitSound() 
+    {
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "TarLiquidSFX", 0.15f, true);
+    }
     void OnTriggerEnter(Collider other)
     {
         var enemy = other.GetComponent<Enemy>(); //Despues hacer uno de estos para cada enemigo por ahora para ver cuanto sacale 

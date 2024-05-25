@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,34 @@ public class SkillTree : MonoBehaviour
     private AudioSource _as;
     [Range(0, 1)]
     public float soundVolume;
+
+    #region Upgrades UI Components
+    public GameObject UnlockSTTrap;
+    public GameObject UnlockMTTrap;
+    public GameObject UnlockETTrap;
+    public GameObject UnlockFPMTrap;
+    public GameObject UpgradeBL1a;
+    public GameObject UpgradeBL1b;
+    public GameObject UpgradeBL2a;
+    public GameObject UpgradeBL2b;
+    public GameObject UpgradeST1a;
+    public GameObject UpgradeST1b;
+    public GameObject UpgradeST2a;
+    public GameObject UpgradeST2b;
+    public GameObject UpgradeMT1a;
+    public GameObject UpgradeMT1b;
+    public GameObject UpgradeMT2a;
+    public GameObject UpgradeMT2b;
+    public GameObject UpgradeET1a;
+    public GameObject UpgradeET1b;
+    public GameObject UpgradeET2a;
+    public GameObject UpgradeET2b;
+    public GameObject UpgradeFPM1a;
+    public GameObject UpgradeFPM1b;
+    public GameObject UpgradeFPM2a;
+    public GameObject UpgradeFPM2b;
+    #endregion
+
     #region Trap Unlocks
 
     [Header("Microwave Trap")]
@@ -275,6 +304,453 @@ public class SkillTree : MonoBehaviour
         _as = GetComponent<AudioSource>();
     }
 
+    #region Upgrades UI Methods
+    public void HandleUISTUnlockComponents() 
+    {
+        UnlockSTTrap.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (x.name.Contains("SpriteTarSlowingTrap"))
+            {
+                 x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+            }
+
+            if (x.name.Contains("BtnBuyTrapUnlock"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIMTUnlockComponents()
+    {
+        UnlockMTTrap.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (x.name.Contains("SpriteMicrowaveForceFieldTrap"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+            }
+
+            if (x.name.Contains("BtnBuyTrapUnlock"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIETUnlockComponents()
+    {
+        UnlockETTrap.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (x.name.Contains("SpriteElectricTrap"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+            }
+
+            if (x.name.Contains("BtnBuyTrapUnlock"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIFPMUnlockComponents()
+    {
+        UnlockFPMTrap.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (x.name.Contains("SpriteFERNPaintballMinigun"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+            }
+
+            if (x.name.Contains("BtnBuyTrapUnlock"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIBL1aComponents(bool onlyBuyBtnDisabled) 
+    {
+        UpgradeBL1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled) 
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption1a"))
+            {
+                x.GetComponent<Image>().color = new Color(1f,1f,1f,0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIBL1bComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeBL1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption1b"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIBL2aComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeBL2a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption2a"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIBL2bComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeBL2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption2b"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIST1aComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeST1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption1a"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIST1bComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeST1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption1b"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIST2aComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeST2a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption2a"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIST2bComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeST2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption2b"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIMT1aComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeMT1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption1a"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIMT1bComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeMT1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption1b"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIMT2aComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeMT2a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption2a"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIMT2bComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeMT2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption2b"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIET1aComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeET1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption1a"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIET1bComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeET1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption1b"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIET2aComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeET2a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption2a"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIET2bComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeET2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption2b"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIFPM1aComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeFPM1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption1a"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIFPM1bComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeFPM1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption1b"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIFPM2aComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeFPM2a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption2a"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    public void HandleUIFPM2bComponents(bool onlyBuyBtnDisabled)
+    {
+        UpgradeFPM2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (!onlyBuyBtnDisabled)
+            {
+                if (x.name.Contains("ImgBoughtOption"))
+                {
+                    x.gameObject.SetActive(true);
+                }
+            }
+
+            if (x.name.Contains("BtnBuyOption2b"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+    #endregion
+
     #region ButtonVoids
 
     public void UnlockMicrowaveTrap()
@@ -327,6 +803,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isBL1aActivated && _inventory.HasEnoughWitts(BL1aWittCost))
         {
+            HandleUIBL2aComponents(false);
+            HandleUIBL2bComponents(false);
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(BL1aWittCost);
             _isBL1aActivated = true;
@@ -343,13 +821,14 @@ public class SkillTree : MonoBehaviour
             _isBL1bActivated = true;
             OnUpgrade?.Invoke();
         }
-
     }
 
     public void UpgradeBaseballLauncher2a()
     {
         if(!_isBL2aActivated && _inventory.HasEnoughWitts(BL2aWittCost))
         {
+            HandleUIBL1aComponents(false);
+            HandleUIBL1bComponents(false);
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(BL2aWittCost);
             _isBL2aActivated = true;

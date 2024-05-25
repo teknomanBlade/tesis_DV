@@ -109,16 +109,22 @@ public class Blueprint : MonoBehaviour
     private IEnumerator BuildTrap()
     {
         _canBeCancelled = false;
-        var particlesInstantiated = Instantiate(particles, transform.position, transform.rotation);
-        //myRenderer.enabled = false; //Probar despues de arreglar posicionamiento.
+        if (!trapAnimPrefab.name.Equals("SlowTrap")) 
+        {
+            var particlesInstantiated = Instantiate(particles, transform.position, transform.rotation);
+            GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
+        }
+        else
+        {
+            GameVars.Values.soundManager.PlaySoundAtPoint("SFX_TarPouringLiquid", transform.position, 0.9f);
+        }
 
-        //Renderer[] rs = GetComponentsInChildren<Renderer>();
         foreach (Renderer r in _myChildrenRenderers)
             r.enabled = false;
 
         //Canbuild provisional.
         canBuild = false;
-        GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
+       
         yield return new WaitForSeconds(2f);
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, parent.transform);
         //Destroy(aux.GetComponent<InventoryItem>());
