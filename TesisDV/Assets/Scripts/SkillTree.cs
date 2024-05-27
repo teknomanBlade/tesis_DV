@@ -369,16 +369,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIBL1aComponents(bool onlyBuyBtnDisabled) 
+    public void HandleUIBL1aComponents() 
     {
         UpgradeBL1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled) 
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption1a"))
@@ -388,16 +385,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIBL1bComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIBL1bComponents()
     {
         UpgradeBL1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption1b"))
@@ -407,16 +401,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIBL2aComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIBL2aComponents()
     {
         UpgradeBL2a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption2a"))
@@ -426,16 +417,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIBL2bComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIBL2bComponents()
     {
         UpgradeBL2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption2b"))
@@ -445,16 +433,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIST1aComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIST1aComponents()
     {
         UpgradeST1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption1a"))
@@ -464,16 +449,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIST1bComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIST1bComponents()
     {
         UpgradeST1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption1b"))
@@ -483,16 +465,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIST2aComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIST2aComponents()
     {
         UpgradeST2a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption2a"))
@@ -502,16 +481,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIST2bComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIST2bComponents()
     {
         UpgradeST2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption2b"))
@@ -521,16 +497,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIMT1aComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIMT1aComponents()
     {
         UpgradeMT1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption1a"))
@@ -540,16 +513,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIMT1bComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIMT1bComponents()
     {
         UpgradeMT1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption1b"))
@@ -559,16 +529,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIMT2aComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIMT2aComponents()
     {
         UpgradeMT2a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption2a"))
@@ -578,16 +545,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIMT2bComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIMT2bComponents()
     {
         UpgradeMT2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption2b"))
@@ -597,16 +561,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIET1aComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIET1aComponents()
     {
         UpgradeET1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption1a"))
@@ -616,16 +577,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIET1bComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIET1bComponents()
     {
         UpgradeET1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption1b"))
@@ -635,16 +593,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIET2aComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIET2aComponents()
     {
         UpgradeET2a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption2a"))
@@ -654,16 +609,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIET2bComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIET2bComponents()
     {
         UpgradeET2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption2b"))
@@ -673,16 +625,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIFPM1aComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIFPM1aComponents()
     {
         UpgradeFPM1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption1a"))
@@ -692,16 +641,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIFPM1bComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIFPM1bComponents()
     {
         UpgradeFPM1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption1b"))
@@ -711,16 +657,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIFPM2aComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIFPM2aComponents()
     {
         UpgradeFPM2a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption2a"))
@@ -730,16 +673,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIFPM2bComponents(bool onlyBuyBtnDisabled)
+    public void HandleUIFPM2bComponents()
     {
         UpgradeFPM2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
-            if (!onlyBuyBtnDisabled)
+            if (x.name.Contains("ImgBoughtOption"))
             {
-                if (x.name.Contains("ImgBoughtOption"))
-                {
-                    x.gameObject.SetActive(true);
-                }
+                x.gameObject.SetActive(true);
             }
 
             if (x.name.Contains("BtnBuyOption2b"))
@@ -757,6 +697,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MicrowaveTrapWittCost))
         {
+            HandleUIMTUnlockComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as,"CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(MicrowaveTrapWittCost);
             _isMicrowaveTrapUnlocked = true;
@@ -768,6 +709,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isSlowTrapUnlocked && _inventory.HasEnoughWitts(SlowTrapWittCost))
         {
+            HandleUISTUnlockComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(SlowTrapWittCost);
             _isSlowTrapUnlocked = true;
@@ -779,6 +721,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isElectricTrapUnlocked && _inventory.HasEnoughWitts(ElectricTrapWittCost))
         {
+            HandleUIETUnlockComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ElectricTrapWittCost);
             _isElectricTrapUnlocked = true;
@@ -790,6 +733,7 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(PaintballMinigunTrapWittCost))
         {
+            HandleUIFPMUnlockComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(PaintballMinigunTrapWittCost);
             _isPaintballMinigunTrapUnlocked = true;
@@ -803,8 +747,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isBL1aActivated && _inventory.HasEnoughWitts(BL1aWittCost))
         {
-            HandleUIBL2aComponents(false);
-            HandleUIBL2bComponents(false);
+            HandleUIBL2aComponents();
+            HandleUIBL2bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(BL1aWittCost);
             _isBL1aActivated = true;
@@ -827,8 +771,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isBL2aActivated && _inventory.HasEnoughWitts(BL2aWittCost))
         {
-            HandleUIBL1aComponents(false);
-            HandleUIBL1bComponents(false);
+            HandleUIBL1aComponents();
+            HandleUIBL1bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(BL2aWittCost);
             _isBL2aActivated = true;
@@ -850,6 +794,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isFPM1aActivated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM1aWittCost))
         {
+            HandleUIFPM2aComponents();
+            HandleUIFPM2bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(FPM1aWittCost);
             _isFPM1aActivated = true;
@@ -871,6 +817,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isFPM2aActivated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM2aWittCost))
         {
+            HandleUIFPM1aComponents();
+            HandleUIFPM1bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(FPM2aWittCost);
             _isFPM2aActivated = true;
@@ -892,6 +840,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isET1aActivated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET1aWittCost))
         {
+            HandleUIET2aComponents();
+            HandleUIET2bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ET1aWittCost);
             _isET1aActivated = true;
@@ -913,6 +863,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isET2aActivated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET2aWittCost))
         {
+            HandleUIET1aComponents();
+            HandleUIET1bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ET2aWittCost);
             _isET2aActivated = true;
@@ -934,6 +886,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isST1aActivated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST1aWittCost))
         {
+            HandleUIST2aComponents();
+            HandleUIST2bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ST1aWittCost);
             _isST1aActivated = true;
@@ -955,6 +909,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isST2aActivated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST2aWittCost))
         {
+            HandleUIST1aComponents();
+            HandleUIST1bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ST2aWittCost);
             _isST2aActivated = true;
@@ -976,6 +932,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isMT1aActivated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT1aWittCost))
         {
+            HandleUIMT2aComponents();
+            HandleUIMT2bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(MT1aWittCost);
             _isMT1aActivated = true;
@@ -996,6 +954,8 @@ public class SkillTree : MonoBehaviour
     {
         if(!_isMT2aActivated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT2aWittCost))
         {
+            HandleUIST1aComponents();
+            HandleUIST1bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(MT2aWittCost);
             _isMT2aActivated = true;

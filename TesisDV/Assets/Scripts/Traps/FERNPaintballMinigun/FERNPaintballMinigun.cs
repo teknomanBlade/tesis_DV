@@ -35,9 +35,29 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     public int InitialStock { get; private set; }
     private Coroutine ReloadCoroutine;
     private Coroutine ShootCoroutine;
+    #region Upgrades
+    [Header("Upgrades")]
+    [SerializeField] private GameObject _plus100SPBlueprint;
+    [SerializeField] private GameObject _plus100SPUpgrade;
+    [SerializeField] private GameObject _plus200SPBlueprint;
+    [SerializeField] private GameObject _plus200SPUpgrade;
+    [SerializeField] private GameObject _secondaryShieldsBlueprint;
+    [SerializeField] private GameObject _secondaryShieldsUpgrade;
+    [SerializeField] private GameObject _returnDamageBlueprint;
+    [SerializeField] private GameObject _returnDamageUpgrade;
+    public bool _canActivate1aUpgrade { get; private set; }
+    public bool _canActivate2aUpgrade { get; private set; }
+    public bool _canActivate1bUpgrade { get; private set; }
+    public bool _canActivate2bUpgrade { get; private set; }
+    private SkillTree _skillTree;
+
+    #endregion
     // Start is called before the first frame update
     void Awake()
     {
+        _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
+        _skillTree.OnUpgrade += CheckForUpgrades;
+        CheckForUpgrades();
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
         _myTrapBase.SetTrap(this.gameObject);
         _magazine = transform.GetComponentsInChildren<Transform>(true).Where(x => x.name.Equals("FERNMinigunPelletsMagazine")).FirstOrDefault().gameObject;
@@ -265,4 +285,56 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     {
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0 , Mathf.Cos(angle * Mathf.Deg2Rad));
     }
+    #region Upgrade Voids
+    private void CheckForUpgrades()
+    {
+        if (_skillTree.isFPM1aActivated)
+        {
+            _plus100SPBlueprint.SetActive(true);
+            _canActivate1aUpgrade = true;
+        }
+        else if (_skillTree.isFPM1bActivated)
+        {
+            _plus200SPBlueprint.SetActive(true);
+            _canActivate1bUpgrade = true;
+        }
+        else if (_skillTree.isFPM2aActivated)
+        {
+            _secondaryShieldsBlueprint.SetActive(true);
+            _canActivate2aUpgrade = true;
+        }
+        else if (_skillTree.isFPM2bActivated)
+        {
+            _returnDamageBlueprint.SetActive(true);
+            _canActivate2bUpgrade = true;
+        }
+    }
+
+    public void Activate1aUpgrade()
+    {
+        _plus100SPBlueprint.SetActive(false);
+        _plus100SPUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+    public void Activate1bUpgrade()
+    {
+        _plus200SPBlueprint.SetActive(false);
+        _plus200SPUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+
+    public void Activate2aUpgrade()
+    {
+        _secondaryShieldsBlueprint.SetActive(false);
+        _secondaryShieldsUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+    public void Activate2bUpgrade()
+    {
+        _returnDamageBlueprint.SetActive(false);
+        _returnDamageUpgrade.SetActive(true);
+        //Aplicar beneficio del Upgrade
+    }
+
+    #endregion
 }

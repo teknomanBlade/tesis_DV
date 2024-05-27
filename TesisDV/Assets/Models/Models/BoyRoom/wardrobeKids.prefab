@@ -456,9 +456,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5766864638041506191}
-  - component: {fileID: 9119761018750469445}
+  - component: {fileID: 6035566825430777510}
   - component: {fileID: 4625425397531872697}
   - component: {fileID: 6088503878230717233}
+  - component: {fileID: 1624579007732251849}
   m_Layer: 10
   m_Name: WardrobeLeftDoorPivot
   m_TagString: Untagged
@@ -481,7 +482,7 @@ Transform:
   m_Father: {fileID: 6237076362336323297}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9119761018750469445
+--- !u!114 &6035566825430777510
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -490,10 +491,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5312166250235101904}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c3a64b04de7a2a4abf901cb2b69a2c7, type: 3}
+  m_Script: {fileID: 11500000, guid: c30649185ce77634d97b6cc02e179263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemName: WardrobeLeftDoor
+  _itemName: 
   _itemImage: {fileID: 0}
   itemType: 3
   IsLocked: 1
@@ -531,6 +532,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.14327443, y: 1.8325896, z: 2.7000182}
   m_Center: {x: 0.037763022, y: -0.89423233, z: 0.010116473}
+--- !u!95 &1624579007732251849
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5312166250235101904}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: effb9fdfb73469f4398611295d4b0b3d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6756907195444141147
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,9 +596,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8355716947962105742}
-  - component: {fileID: 8232369235361073611}
+  - component: {fileID: 3494372138077589509}
   - component: {fileID: 5500519410655871333}
   - component: {fileID: 4726683531924957936}
+  - component: {fileID: 44793525799948948}
   m_Layer: 10
   m_Name: WardrobeRightDoorPivot
   m_TagString: Untagged
@@ -601,7 +622,7 @@ Transform:
   m_Father: {fileID: 6237076362336323297}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8232369235361073611
+--- !u!114 &3494372138077589509
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -610,10 +631,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7510751672840582207}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c3a64b04de7a2a4abf901cb2b69a2c7, type: 3}
+  m_Script: {fileID: 11500000, guid: c30649185ce77634d97b6cc02e179263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemName: WardrobeRightDoor
+  _itemName: 
   _itemImage: {fileID: 0}
   itemType: 3
   IsLocked: 1
@@ -651,6 +672,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.13425356, y: 1.7776399, z: 2.7074149}
   m_Center: {x: 0.057922326, y: 0.89408004, z: 0.0074462737}
+--- !u!95 &44793525799948948
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510751672840582207}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ead332dc9b0833c42b104b19c9a5dcd1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8667026033171158938
 GameObject:
   m_ObjectHideFlags: 0

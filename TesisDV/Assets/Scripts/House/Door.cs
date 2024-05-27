@@ -7,10 +7,10 @@ using System.Linq;
 
 public class Door : Item
 {
-    private Animator _anim;
+    protected Animator _anim;
     private float _valueToChange;
     private NavMeshObstacle _navMeshObstacle;
-    private bool IsOpened { get; set; }
+    protected bool IsOpened { get; set; }
     public bool IsLocked;
     public bool IsLockedToGrays;
     public bool IsFront = false;
@@ -98,7 +98,7 @@ public class Door : Item
         _anim.SetBool("IsBlocked", false);
     }
 
-    private string RandomSound()
+    protected string RandomSound()
     {
         return UnityEngine.Random.Range(1,3).ToString();
     }
