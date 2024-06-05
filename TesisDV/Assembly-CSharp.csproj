@@ -56,6 +56,7 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\House\WardrobeDoor.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\PlayerState.cs" />
     <Compile Include="Assets\Scripts\UFOGrayDeath.cs" />
     <Compile Include="Assets\Scripts\FSM\States\GrayDog\GrayDogCatState.cs" />
@@ -200,7 +201,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IDoorGrayInteractObservable.cs" />
     <Compile Include="Assets\Scripts\Items\RacketManager.cs" />
     <Compile Include="Assets\Scripts\Traps\SlowTrap\SlowTrap.cs" />
-    <Compile Include="Assets\Scripts\ElectricTrap.cs" />
+    <Compile Include="Assets\Scripts\Traps\ElectricTeslaTrap\ElectricTrap.cs" />
     <Compile Include="Assets\Scripts\GameVars.cs" />
     <Compile Include="Assets\Scripts\Traps\Blueprint.cs" />
     <Compile Include="Assets\Scripts\WeaponSlot.cs" />
@@ -232,7 +233,6 @@
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\AttackForceFieldState.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\TakenState.cs" />
-    <Compile Include="Assets\Scripts\House\WardrobeDoor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
@@ -376,6 +376,7 @@
     <None Include="Assets\Models\Materials\Traps\TrapPlaceholder.shader" />
     <None Include="Assets\Models\Materials\ExplosionCloud\SDR_ExplosionCloud.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_SimpleSubtractOpNode.shader" />
+    <None Include="Assets\Models\Materials\PaintballPellet\PaintballPellet_SDR.shader" />
     <None Include="Assets\Models\Materials\Enemy\Gray\HitWaveExpansion.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_TriplanarNode.shader" />
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_ComputeScreenPos.shader" />

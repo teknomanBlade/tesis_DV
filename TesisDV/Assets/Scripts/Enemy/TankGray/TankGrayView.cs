@@ -19,6 +19,8 @@ public class TankGrayView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _deathEffect;
     [SerializeField]
+    private ParticleSystem _pepperEffect;
+    [SerializeField]
     private GameObject _hitWave;
 
     void Start()
@@ -54,7 +56,10 @@ public class TankGrayView : MonoBehaviour
     {
         _myAnimator.Play("Hit");
     }
-
+    public void PepperHitEffect()
+    {
+        _pepperEffect.Play();
+    }
     public void CatGrabAnimation(bool value)
     {
         _myAnimator.SetBool("IsGrab", value);

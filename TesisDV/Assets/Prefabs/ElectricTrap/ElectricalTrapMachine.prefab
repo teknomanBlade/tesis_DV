@@ -26,12 +26,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 595942975147660892}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.156, y: 0.61, z: -0.259}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.928, y: 0.015295923, z: -0.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7959137243294076457}
-  m_RootOrder: 2
+  m_Father: {fileID: 6830245231205269516}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4409258232370452172
 MeshFilter:
@@ -140,12 +140,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7959137243294076457}
+  - component: {fileID: 7563792352725659563}
   - component: {fileID: 3861253924358264624}
   - component: {fileID: 2632709413722482004}
   - component: {fileID: 8622832083812791110}
   - component: {fileID: 5184652544793431943}
   - component: {fileID: 4811209757660947990}
-  - component: {fileID: 7563792352725659563}
   - component: {fileID: 8489312274219886088}
   - component: {fileID: 4026469627388165018}
   - component: {fileID: 2978762036119575208}
@@ -168,12 +168,58 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9122114498680886525}
-  - {fileID: 2505016605353508721}
-  - {fileID: 7407389096406139536}
   - {fileID: 8264644027040570698}
+  - {fileID: 3026235359259307496}
+  - {fileID: 6830245231205269516}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7563792352725659563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 923361385767164133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84907c1ebae92ae4f80705254d551f42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  UITrapIndicator: {fileID: 0}
+  UITexture: {fileID: 0}
+  viewRadius: 0
+  viewAngle: 0
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  myCannon: {fileID: 0}
+  myCannonSupport: {fileID: 0}
+  collidersObjectives: []
+  _damage: 0.5
+  _damagePerSecond: 0.05
+  midPositionDamage: {fileID: 2478594327376472087}
+  endPositionDamage: {fileID: 3318301861937766096}
+  _currentLife: 1
+  ElectricityLineRenderer: {fileID: 0}
+  blueprintPrefab: {fileID: 5309655294764603583, guid: 46dbab5aa8bd6b748b5d69a1b917aff2, type: 3}
+  ParticleLightning: {fileID: 124930543948478284}
+  _doubleDamageBlueprint: {fileID: 0}
+  _doubleDamageUpgrade: {fileID: 0}
+  _dpsIncreaseBlueprint: {fileID: 0}
+  _dpsIncreaseUpgrade: {fileID: 0}
+  _doubleRangeBlueprint: {fileID: 0}
+  _doubleRangeUpgrade: {fileID: 0}
+  _areaOfEffectBlueprint: {fileID: 0}
+  _areaOfEffectUpgrade: {fileID: 0}
+  DoubleDamageActive: 0
+  DPSIncreaseActive: 0
+  DoubleRangeActive: 0
+  AreaOfEffectActive: 0
 --- !u!65 &3861253924358264624
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -330,40 +376,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7563792352725659563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 923361385767164133}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84907c1ebae92ae4f80705254d551f42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  active: 1
-  UITrapIndicator: {fileID: 0}
-  UITexture: {fileID: 0}
-  viewRadius: 0
-  viewAngle: 0
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 4096
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 0
-  myCannon: {fileID: 0}
-  myCannonSupport: {fileID: 0}
-  collidersObjectives: []
-  _damage: 0.5
-  _damagePerSecond: 0.05
-  midPositionDamage: {fileID: 2147549331983206306}
-  endPositionDamage: {fileID: 595942975147660892}
-  _currentLife: 1
-  ElectricityLineRenderer: {fileID: 0}
-  blueprintPrefab: {fileID: 5309655294764603583, guid: 46dbab5aa8bd6b748b5d69a1b917aff2, type: 3}
-  ParticleLightning: {fileID: 124930543948478284}
 --- !u!114 &8489312274219886088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -794,12 +806,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2147549331983206306}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.318, y: 0.61, z: -0.22}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.92099994, y: 0.015295923, z: -0.204}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7959137243294076457}
-  m_RootOrder: 1
+  m_Father: {fileID: 3026235359259307496}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7400660302673459126
 MeshFilter:
@@ -944,6 +956,68 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2478594327376472087
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3026235359259307496}
+  m_Layer: 0
+  m_Name: MidPosPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3026235359259307496
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2478594327376472087}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.397, y: 0.5947041, z: -0.016}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2505016605353508721}
+  m_Father: {fileID: 7959137243294076457}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3318301861937766096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6830245231205269516}
+  m_Layer: 0
+  m_Name: EndPosPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6830245231205269516
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3318301861937766096}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.228, y: 0.5947041, z: 0.021}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7407389096406139536}
+  m_Father: {fileID: 7959137243294076457}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5665969430199291030
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,7 +1048,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 7959137243294076457}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0.014, z: 0}
 --- !u!33 &2316047336001342633
 MeshFilter:

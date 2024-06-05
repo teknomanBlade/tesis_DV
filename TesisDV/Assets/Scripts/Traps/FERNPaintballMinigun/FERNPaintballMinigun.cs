@@ -25,6 +25,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
     [SerializeField] private float _damageAmount;
+    [SerializeField] private float _startDmgAmount;
     [SerializeField] private GameObject trapDestroyPrefab;
     [SerializeField] private GameObject _magazine;
     public delegate void OnReloadDelegate();
@@ -37,14 +38,16 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     private Coroutine ShootCoroutine;
     #region Upgrades
     [Header("Upgrades")]
-    [SerializeField] private GameObject _plus100SPBlueprint;
-    [SerializeField] private GameObject _plus100SPUpgrade;
-    [SerializeField] private GameObject _plus200SPBlueprint;
-    [SerializeField] private GameObject _plus200SPUpgrade;
-    [SerializeField] private GameObject _secondaryShieldsBlueprint;
-    [SerializeField] private GameObject _secondaryShieldsUpgrade;
-    [SerializeField] private GameObject _returnDamageBlueprint;
-    [SerializeField] private GameObject _returnDamageUpgrade;
+    [SerializeField] private GameObject _doubleDamageBlueprint;
+    [SerializeField] private GameObject _doubleDamageUpgrade;
+    public bool PepperPelletsActive;
+    public bool DoubleDamageActive;
+    [SerializeField] private GameObject _pepperPelletsBlueprint;
+    [SerializeField] private GameObject _pepperPelletsUpgrade;
+    [SerializeField] private GameObject _plus50ShotsBlueprint;
+    [SerializeField] private GameObject _plus50ShotsUpgrade;
+    [SerializeField] private GameObject _plus5HPBlueprint;
+    [SerializeField] private GameObject _plus5HPUpgrade;
     public bool _canActivate1aUpgrade { get; private set; }
     public bool _canActivate2aUpgrade { get; private set; }
     public bool _canActivate1bUpgrade { get; private set; }
@@ -57,12 +60,14 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     {
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
         _skillTree.OnUpgrade += CheckForUpgrades;
+        _startDmgAmount = 0.25f;
+        _damageAmount =_startDmgAmount;
+        InitialStock = shotsLeft = shots = 150;
+        _currentLife = _maxLife;
         CheckForUpgrades();
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
         _myTrapBase.SetTrap(this.gameObject);
         _magazine = transform.GetComponentsInChildren<Transform>(true).Where(x => x.name.Equals("FERNMinigunPelletsMagazine")).FirstOrDefault().gameObject;
-        _currentLife = _maxLife;
-        InitialStock = shotsLeft = shots = 150;
         _as = GetComponent<AudioSource>();
         _animator = GetComponent<Animator>();
         PaintballPellet = Resources.Load<PaintballPellet>("PaintballPellet");
@@ -243,34 +248,25 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     {
         if (_currentObjective != null && _canShoot)
         {
-            PaintballPelletsPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.right).SetOwner(this)/*.SetAdditionalDamage(_additionalDamage)*/;
-            EnemyDamageDifferential(_currentObjective.GetComponent<Enemy>());
+            PaintballPelletsPool.GetObject()
+                .SetInitialPos(exitPoint.transform.position)
+                .SetOwnerForward(exitPoint.transform.right).SetOwner(this)
+                .SetAdditionalDamage(DoubleDamageActive, (int)_damageAmount).SetPepperPelletActive(PepperPelletsActive);
+            EnemyDamage(_currentObjective.GetComponent<Enemy>());
             
         }
     }
-    public void EnemyDamageDifferential(Enemy enemy)
+    public void EnemyDamage(Enemy enemy)
     {
         if (enemy == null)
             return;
 
-        if (enemy.name.Contains("GrayMVC"))
+        if (PepperPelletsActive) 
         {
-            _damageAmount = 0.05f;
-            Debug.Log("DAÑO GRAY: " + _damageAmount);
-            enemy.TakeDamage(_damageAmount);
+            enemy.PepperHit();
         }
-        else if (enemy.name.Contains("Melee"))
-        {
-            _damageAmount = 0.25f;
-            Debug.Log("DAÑO MELEE: " + _damageAmount);
-            enemy.TakeDamage(_damageAmount);
-        }
-        else if (enemy.name.Contains("Tank"))
-        {
-            _damageAmount = 0.35f;
-            Debug.Log("DAÑO TANK: " + _damageAmount);
-            enemy.TakeDamage(_damageAmount);
-        }
+        enemy.TakeDamage(_damageAmount);
+        Debug.Log("DAÑO ENEMY: " + _damageAmount);
     }
     void OnDrawGizmos()
     {
@@ -290,49 +286,53 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     {
         if (_skillTree.isFPM1aActivated)
         {
-            _plus100SPBlueprint.SetActive(true);
-            _canActivate1aUpgrade = true;
+            Activate1aUpgrade();
         }
         else if (_skillTree.isFPM1bActivated)
         {
-            _plus200SPBlueprint.SetActive(true);
-            _canActivate1bUpgrade = true;
-        }
+            Activate1bUpgrade();
+        } 
         else if (_skillTree.isFPM2aActivated)
         {
-            _secondaryShieldsBlueprint.SetActive(true);
-            _canActivate2aUpgrade = true;
+            Activate2aUpgrade();
         }
         else if (_skillTree.isFPM2bActivated)
         {
-            _returnDamageBlueprint.SetActive(true);
-            _canActivate2bUpgrade = true;
+            Activate2bUpgrade();
         }
     }
 
     public void Activate1aUpgrade()
     {
-        _plus100SPBlueprint.SetActive(false);
-        _plus100SPUpgrade.SetActive(true);
+        _damageAmount *= 2;
+        _canActivate1aUpgrade = true;
+        _canActivate1bUpgrade = false;
+        DoubleDamageActive = _canActivate1aUpgrade;
         //Aplicar beneficio del Upgrade
     }
     public void Activate1bUpgrade()
     {
-        _plus200SPBlueprint.SetActive(false);
-        _plus200SPUpgrade.SetActive(true);
+        _canActivate1aUpgrade = false;
+        _canActivate1bUpgrade = true;
+        PepperPelletsActive = _canActivate1bUpgrade;
         //Aplicar beneficio del Upgrade
     }
 
     public void Activate2aUpgrade()
     {
-        _secondaryShieldsBlueprint.SetActive(false);
-        _secondaryShieldsUpgrade.SetActive(true);
+        _canActivate1bUpgrade = false;
+        _canActivate1aUpgrade = false;
+        _canActivate2aUpgrade = true;
+        shotsLeft = shots = 200;
         //Aplicar beneficio del Upgrade
     }
     public void Activate2bUpgrade()
     {
-        _returnDamageBlueprint.SetActive(false);
-        _returnDamageUpgrade.SetActive(true);
+        _canActivate1bUpgrade = false;
+        _canActivate1aUpgrade = false;
+        _canActivate2aUpgrade = false;
+        _canActivate2bUpgrade = true;
+        _currentLife = _maxLife = 15f;
         //Aplicar beneficio del Upgrade
     }
 

@@ -35,6 +35,10 @@ public class EMPAttack : MonoBehaviour
 
         if (trap && other.GetComponent<ForceField>())
         {
+            if (other.GetComponent<ForceField>().IsDamageReturn)
+            {
+                _myOwner.TakeDamage(other.GetComponent<ForceField>().DamageReturnAmount);
+            }
             other.GetComponent<ForceField>().TakeDamage(_damageAmount);
         }
     }

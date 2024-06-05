@@ -16,6 +16,7 @@ public abstract class Enemy : MonoBehaviour
     public float _startSpeed;
     [SerializeField] private Transform _catGrabPos;
     public ParticleSystem witGainEffect;
+    
     public Collider[] allTargets; //Borrar esto y probar.
     protected CapsuleCollider _capsuleCollider;
     protected bool isAwake = false;
@@ -87,6 +88,7 @@ public abstract class Enemy : MonoBehaviour
     public event Action<bool> onCatGrab = delegate { };
     public event Action onDeath = delegate { };
     public event Action onHit = delegate { };
+    public event Action onPepperHit = delegate { };
     public event Action<bool> onAttack = delegate { };
     public event Action<bool> onAttackSpecial = delegate { };
     public event Action onDisolve = delegate { };
@@ -483,6 +485,11 @@ public abstract class Enemy : MonoBehaviour
     public void Dissolve()
     {
         onDisolve();
+    }
+
+    public void PepperHit() 
+    {
+        onPepperHit();
     }
 
     public void AwakeGray()

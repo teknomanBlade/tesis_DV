@@ -6,6 +6,8 @@ public class PaintballPellet : Projectile
 {
     private Rigidbody _rb;
     [SerializeField] private float _forceAmount; //Estamos en 35f.
+    private bool _isPepperPelletActive;
+    private bool _isDoubleDamageActive;
     private Vector3 shootDirection;
     private FERNPaintballMinigun _fpm;
     // Start is called before the first frame update
@@ -43,22 +45,24 @@ public class PaintballPellet : Projectile
         return this;
     }
 
-    public PaintballPellet SetAdditionalDamage(int addDamage)
+    public PaintballPellet SetPepperPelletActive(bool pepperPelletActive)
     {
-        _damageAmount += addDamage;
+        _isPepperPelletActive = pepperPelletActive;
+        if (_isPepperPelletActive) 
+        {
+            GetComponent<MeshRenderer>().material.SetFloat("_TransitionTextureVal", 1f);
+        }
         return this;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public PaintballPellet SetAdditionalDamage(bool doubleDamageActive, int addDamage)
     {
-        var gray = other.GetComponent<Enemy>(); //Cambiar a la clase padre de Gray cuando lo armemos.
-
-        if (gray)
+        _isDoubleDamageActive = doubleDamageActive;
+        if (_isDoubleDamageActive) 
         {
-            //_myOwner.GetDoor(other.GetComponent<Door>());
-            ReturnToPool();
-            other.GetComponent<Enemy>().TakeDamage(_damageAmount);
+            _damageAmount += addDamage;
         }
-
+        return this;
     }
+    
 }

@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class ElectricTrap : Trap, IMovable, IInteractable
 {
+    private const float meleeDmg = 1.5f;
+    private const float tankDmg = 4f;
     [SerializeField] private float _damage;
-    [SerializeField] private float _damageBoostCoef;
+    private float _initDamage;
+    private float _damageBoostCoef;
     [SerializeField] private float _damagePerSecond;
-    [SerializeField] private float _dpsBoostCoef;
+    private float _initDPS;
+    private float _dpsBoostCoef;
     [SerializeField] private GameObject midPositionDamage;
     [SerializeField] private GameObject endPositionDamage;
-    //[SerializeField] private float _trapDuration;
     [SerializeField] private float _currentLife;
     public ElectricityLineRenderer ElectricityLineRenderer;
     public GameObject blueprintPrefab;
@@ -28,6 +31,10 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     [SerializeField] private GameObject _doubleRangeUpgrade;
     [SerializeField] private GameObject _areaOfEffectBlueprint;
     [SerializeField] private GameObject _areaOfEffectUpgrade;
+    public bool DoubleDamageActive;
+    public bool DPSIncreaseActive;
+    public bool DoubleRangeActive;
+    public bool AreaOfEffectActive;
     public bool _canActivate1aUpgrade { get; private set; }
     public bool _canActivate2aUpgrade { get; private set; }
     public bool _canActivate1bUpgrade { get; private set; }
@@ -40,6 +47,10 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
         _skillTree.OnUpgrade += CheckForUpgrades;
         CheckForUpgrades();
+        _initDamage = 0.5f;
+        _initDPS = 0.05f;
+        _damageBoostCoef = 2;
+        _dpsBoostCoef = 1.45f;
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
         _myTrapBase.SetTrap(this.gameObject);
         GameVars.Values.IsAllSlotsDisabled();
@@ -52,14 +63,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
 
     private void Update()
     {
-        /* _trapDuration -= Time.deltaTime; La trampa ya no se apaga sola
-
-        if (_trapDuration <=0)
-        {
-            active = false;
-            ParticleLightning.SetActive(false);
-            ElectricRadius.SetActive(false);
-        } */
+        
     }
 
     public void Interact()
@@ -71,43 +75,41 @@ public class ElectricTrap : Trap, IMovable, IInteractable
             ParticleLightning.SetActive(true);
             ElectricityLineRenderer.DisableEnableLightAndLineRenderer(true);
         }
-        /* if(_trapDuration <= 0) La trampa ya no se apaga sola
-        {
-            _trapDuration =10f;
-        } */
+       
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("ENTRA EN COLLIDER...");
+        //Debug.Log("ENTRA EN COLLIDER ENTER...");
         var enemyGray = other.GetComponent<Enemy>();
 
-        if (enemyGray && other.GetComponent<GrayModel>() && active)
-        {
-            Debug.Log("ENTRA EN COLLIDER CON EL ENEMY: " + other.gameObject.name.ToUpper());
-            _damage = 0.5f; 
-            other.GetComponent<Enemy>().TakeDamage(_damage);
-        }
-        if (enemyGray && other.GetComponent<TallGrayModel>() && active)
-        {
-            Debug.Log("ENTRA EN COLLIDER CON EL ENEMY: " + other.gameObject.name.ToUpper());
-            _damage = 1.5f;
-            other.GetComponent<Enemy>().TakeDamage(_damage);
-        }
-        if (enemyGray && other.GetComponent<TankGrayModel>() && active)
-        {
-            Debug.Log("ENTRA EN COLLIDER CON EL ENEMY: " + other.gameObject.name.ToUpper());
-            _damage = 4f;
-            other.GetComponent<Enemy>().TakeDamage(_damage);
-        }
+        if (enemyGray == null) return;
 
+        if ((other.GetComponent<GrayModel>() || other.GetComponent<GrayModelHardcodeado>()) && active)
+        {
+            //Debug.Log("ENTRA EN COLLIDER CON EL ENEMY: " + other.gameObject.name.ToUpper());
+            _damage = (DoubleDamageActive) ? _initDamage * _damageBoostCoef : _initDamage; 
+        }
+        if (other.GetComponent<TallGrayModel>() && active)
+        {
+            //Debug.Log("ENTRA EN COLLIDER CON EL ENEMY: " + other.gameObject.name.ToUpper());
+            _damage = (DoubleDamageActive) ? meleeDmg * _damageBoostCoef : meleeDmg;
+        }
+        if (other.GetComponent<TankGrayModel>() && active)
+        {
+            //Debug.Log("ENTRA EN COLLIDER CON EL ENEMY: " + other.gameObject.name.ToUpper());
+            _damage = (DoubleDamageActive) ? tankDmg : tankDmg * _damageBoostCoef;
+        }
+        //Debug.Log("DAMAGE COLLIDER ENTER: " + _damage);
+        enemyGray.TakeDamage(_damage);
     }
 
     private void OnTriggerStay(Collider other)
     {
+        //Debug.Log("ENTRA EN COLLIDER STAY...");
         var enemyGray = other.GetComponent<Enemy>();
-
-        if(enemyGray && active)
+        _damagePerSecond = (DPSIncreaseActive) ? _initDPS * _dpsBoostCoef : _initDPS;
+        if (enemyGray && active)
         {
             other.GetComponent<Enemy>().TakeDamage(_damagePerSecond);
         }
@@ -142,51 +144,58 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     {
         if (_skillTree.isET1aActivated)
         {
-            _doubleDamageBlueprint.SetActive(true);
-            _canActivate1aUpgrade = true;
+           Activate1aUpgrade();
         }
         else if (_skillTree.isET1bActivated)
         {
-            _dpsIncreaseBlueprint.SetActive(true);
-            _canActivate1bUpgrade = true;
+            Activate1bUpgrade();
         }
         else if (_skillTree.isET2aActivated)
         {
-            _doubleRangeBlueprint.SetActive(true);
-            _canActivate2aUpgrade = true;
+            Activate2aUpgrade();
         }
         else if (_skillTree.isET2bActivated)
         {
-            _areaOfEffectBlueprint.SetActive(true);
-            _canActivate2bUpgrade = true;
+            Activate2bUpgrade();
         }
     }
 
     public void Activate1aUpgrade()
     {
-        _doubleDamageBlueprint.SetActive(false);
-        _doubleDamageUpgrade.SetActive(true);
         //Aplicar beneficio del Upgrade
-        //_damageAmount *= _damageBoostCoef;
+        _canActivate1aUpgrade = true;
+        _canActivate1bUpgrade = false;
+        DoubleDamageActive = _canActivate1aUpgrade;
     }
     public void Activate1bUpgrade()
     {
-        _dpsIncreaseBlueprint.SetActive(false);
-        _dpsIncreaseUpgrade.SetActive(true);
         //Aplicar beneficio del Upgrade
-        //_damageAmount *= _damageBoostCoef;
+        _canActivate1aUpgrade = false;
+        _canActivate1bUpgrade = true;
+        DPSIncreaseActive = _canActivate1bUpgrade;
     }
 
     public void Activate2aUpgrade()
     {
-        _doubleRangeBlueprint.SetActive(false);
-        _doubleRangeUpgrade.SetActive(true);
+        _canActivate1bUpgrade = false;
+        _canActivate1aUpgrade = false;
+        _canActivate2aUpgrade = true;
+        DoubleRangeActive = _canActivate2aUpgrade;
+        midPositionDamage.transform.localScale = new Vector3(2f, 1f, 1f);
+        endPositionDamage.transform.localScale = new Vector3(2f, 1f, 1f);
+        endPositionDamage.transform.localPosition = new Vector3(endPositionDamage.transform.localPosition.x - 2.1f, endPositionDamage.transform.localPosition.y, endPositionDamage.transform.localPosition.z);
         //Aplicar beneficio del Upgrade
     }
     public void Activate2bUpgrade()
     {
-        _areaOfEffectBlueprint.SetActive(false);
-        _areaOfEffectUpgrade.SetActive(true);
+        _canActivate1bUpgrade = false;
+        _canActivate1aUpgrade = false;
+        _canActivate2aUpgrade = false;
+        _canActivate2bUpgrade = true;
+        AreaOfEffectActive = _canActivate2bUpgrade;
+        GetComponent<SphereCollider>().enabled = true;
+        midPositionDamage.SetActive(false);
+        endPositionDamage.SetActive(false);
         //Aplicar beneficio del Upgrade
     }
 

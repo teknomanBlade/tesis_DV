@@ -19,14 +19,18 @@ public class EnemyAttackArea : MonoBehaviour
 
         if (player)
         {
-            other.GetComponent<Player>().Damage(_damageAmount, _myOwner.enemyType);   
+            player.Damage(_damageAmount, _myOwner.enemyType);   
         }
 
         var forceField = other.GetComponent<ForceField>();
 
         if (forceField)
         {
-            other.GetComponent<ForceField>().TakeDamage(_damageAmount);
+            if (forceField.IsDamageReturn) 
+            {
+                _myOwner.TakeDamage(forceField.DamageReturnAmount);
+            }
+            forceField.TakeDamage(_damageAmount);
         }
     }
 }

@@ -1169,10 +1169,15 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 GameVars.Values.ShowNotification("You need a new Battery to replace it!");
                 microwaveFFG.OnMicrowaveBatteryReplaced += OnMicrowaveReplaceBattery;
             }
-            else
+
+            if(_inventory.ContainsID(2, 1))
             {
                 microwaveFFG.BatteryReplaced();
             }
+            
+        }
+        if (lookingAt.gameObject.TryGetComponent(out ElectricTrap electricTrap))
+        {
             
         }
         if (lookingAt.gameObject.TryGetComponent(out FERNPaintballMinigun FERNPaintballMinigun)) 

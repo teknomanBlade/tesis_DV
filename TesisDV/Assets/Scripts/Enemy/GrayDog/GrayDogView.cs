@@ -10,6 +10,8 @@ public class GrayDogView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _hitEffect;
     [SerializeField]
+    private ParticleSystem _pepperEffect;
+    [SerializeField]
     private ParticleSystem _ringWavesEffect;
     [SerializeField]
     private GameObject _hitWave;
@@ -48,7 +50,10 @@ public class GrayDogView : MonoBehaviour
     {
         _myAnimator.SetBool("IsHitted",true);
     }
-
+    public void PepperHitEffect()
+    {
+        _pepperEffect.Play();
+    }
     public void RunningAnimation()
     {
         GameVars.Values.soundManager.PlaySoundOnce(_as, "SFX_AlienDogGallop", 0.25f, true);
