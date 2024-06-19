@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Blackboard : MonoBehaviour
 {
-    private Coroutine OutlineGlowCoroutine;
     private Animator _animator;
     // Start is called before the first frame update
     void Start()
@@ -49,38 +48,5 @@ public class Blackboard : MonoBehaviour
         _animator.SetBool("IsFifthExperiment", true);
         GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
         GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
-    }
-    
-    public void ActiveOutlineGlowEffect(float duration, float maxValue)
-    {
-        if (OutlineGlowCoroutine != null) StopCoroutine(OutlineGlowCoroutine);
-        OutlineGlowCoroutine = StartCoroutine(LerpOutlineGlowInEffect(duration, maxValue));
-    }
-    IEnumerator LerpOutlineGlowOutEffect(float duration, float maxValue) 
-    {
-        float time = maxValue;
-
-        while (time > 0 && time > duration)
-        {
-            time -= Time.deltaTime;
-            var value = Mathf.Clamp(time, duration, maxValue);
-
-            GetComponent<Outline>().OutlineWidth = value;
-            yield return null;
-        }
-    }
-
-    IEnumerator LerpOutlineGlowInEffect(float duration, float maxValue)
-    {
-        float time = 0f;
-
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            var value = Mathf.Lerp(time, maxValue, time/duration);
-            GetComponent<Outline>().OutlineWidth = value;
-            yield return null;
-        }
-        StartCoroutine(LerpOutlineGlowOutEffect(0f,maxValue));
     }
 }

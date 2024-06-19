@@ -101,6 +101,7 @@ public class GameVars : MonoBehaviour
     [Header("Game")]
     private float _fadeDelay = 1.1f;
     private bool _isFaded;
+    public bool HasMagicboard { get; set; }
     public bool HasOpenedLetter { get; set; }
     public bool HasOpenedTrunk { get; set; }
     
@@ -327,7 +328,12 @@ public class GameVars : MonoBehaviour
 
     public string ShowMessageNotificationByAction()
     {
-        return HasOpenedLetter ? " First review the Footlocker at Kevin's Bed..." : " First review the letter in the Desk...";
+        return HasOpenedLetter ? ShowMessageMagicboard() : " First review the letter in the Desk...";
+    }
+
+    public string ShowMessageMagicboard() 
+    {
+        return HasMagicboard ? " First review the Footlocker at Kevin's Bed..." : " Grab the Magicboard to keep a record of new experiments.";
     }
 
     public IEnumerator ShowNotification()

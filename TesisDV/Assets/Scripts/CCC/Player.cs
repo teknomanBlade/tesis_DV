@@ -1366,7 +1366,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         if (inventoryItem.myCraftingID == 0) 
         {
-            _hasMagicBoard = true;
+            GameVars.Values.HasMagicboard = _hasMagicBoard = true;
             GameVars.Values.PlayBackpackItemGrabbedAnim(inventoryItem.itemImage);
             inventoryItem.Interact();
             return;

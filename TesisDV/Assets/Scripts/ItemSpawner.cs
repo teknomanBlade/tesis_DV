@@ -39,7 +39,6 @@ public class ItemSpawner : MonoBehaviour
             case 0:
                 _tutorialRoundItems.SetActive(true);
                 Blackboard.ActiveFirstExperiment();
-                Blackboard.ActiveOutlineGlowEffect(1f,5f);
                 break;
             case 1:
                 _firstRoundItems.SetActive(true);
@@ -53,19 +52,16 @@ public class ItemSpawner : MonoBehaviour
             case 3:
                 _thirdRoundItems.SetActive(true);
                 Blackboard.ActiveThirdExperiment();
-                Blackboard.ActiveOutlineGlowEffect(1f, 5f);
                 _levelDoors[1].IsLockedToGrays = false; //Puerta del baño al patio.
                 _levelDoors[7].IsLockedToGrays = false; //Puerta del baño al living.
                 _levelDoors[8].IsLockedToGrays = false; //Puerta entre el baño y el patio
                 break;
             case 4:
                 _fourthRoundItems.SetActive(true);
-                Blackboard.ActiveOutlineGlowEffect(1f, 5f);
                 Blackboard.ActiveFourthExperiment();
                 break;
             case 5:
                 _fifthRoundItems.SetActive(true);
-                Blackboard.ActiveOutlineGlowEffect(1f, 5f);
                 Blackboard.ActiveFifthExperiment();
                 break;
             case 6:
@@ -79,7 +75,6 @@ public class ItemSpawner : MonoBehaviour
         GameVars.Values.BasementDirectionMarkers.SetActive(true);
         GameVars.Values.LevelManager.WorkbenchLight.SetActive(true);
         Blackboard.ActiveSecondExperiment();
-        Blackboard.ActiveOutlineGlowEffect(1f, 5f);
         _secondRoundItems.SetActive(true);
     }
 
