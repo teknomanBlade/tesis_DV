@@ -30,7 +30,7 @@ public class RoomState : IState
             Vector3 aux = dir;
             dir = new Vector3 (aux.x , aux.y, aux.z);
             _cat.transform.forward = dir;
-            _cat.transform.position += _cat.transform.forward * _cat._runninngSpeed * Time.deltaTime;
+            _cat.transform.position += _cat.transform.forward * _cat._walkingSpeed * Time.deltaTime;
 
             if (dir.magnitude < 0.4f)
             {

@@ -10,9 +10,10 @@ public class CatController : IController
     {
         _m = m;
 
-        _m.onIdle       +=  v.IdleAnim;
-        _m.onWalk       +=  v.WalkAnim;
-        _m.onTaken      +=  v.TakenAnim;
+        _m.onIdle  +=  v.IdleAnim;
+        _m.onWalk  +=  v.WalkAnim;
+        _m.onRun   +=  v.RunningAnim;
+        _m.onTaken +=  v.TakenAnim;
     }
 
     public void OnUpdate()

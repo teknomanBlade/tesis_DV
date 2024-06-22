@@ -8,7 +8,8 @@ using UnityEngine.AI;
 public class Cat : MonoBehaviour
 {
     IController _myController;
-    public float _runninngSpeed;
+    public float _runningSpeed;
+    public float _walkingSpeed;
     private bool _isHeld;
     private bool _isWalking;
     private bool _isRepositioning;
@@ -29,6 +30,7 @@ public class Cat : MonoBehaviour
 
     public event Action onIdle = delegate { };
     public event Action onWalk = delegate { };
+    public event Action onRun = delegate { };
     public event Action onTaken = delegate { };
 
     #endregion Events
@@ -43,7 +45,8 @@ public class Cat : MonoBehaviour
         _navMeshAgent.speed = 0.6f;
 
         _navMeshAgent.enabled = false;
-
+        Path = FindObjectsOfType<Transform>().Where(x => x.name.Equals("CatWaypoints")).First()
+            .GetComponentsInChildren<Transform>().Skip(1).ToList();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _animator = GetComponent<Animator>();
         _animator.SetBool("IsIdle", true);
@@ -51,6 +54,7 @@ public class Cat : MonoBehaviour
         _fsm.AddCatState(CatStatesEnum.IdleState, new IdleState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.RoomState, new RoomState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.WalkingState, new WalkingState(_fsm, this));
+        _fsm.AddCatState(CatStatesEnum.RunningState, new RunningState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.TakenState, new TakenState(_fsm, this));
     }
 
@@ -101,7 +105,7 @@ public class Cat : MonoBehaviour
         //_navMeshAgent.isStopped = false;
         _navMeshAgent.enabled = true;
 
-        _fsm.ChangeCatState(CatStatesEnum.WalkingState);
+        _fsm.ChangeCatState(CatStatesEnum.RunningState);
     }
 
     public void RepositionBetweenWaves()
@@ -144,6 +148,11 @@ public class Cat : MonoBehaviour
     public void EnterTakenState()
     {
         onTaken();
+    }
+
+    public void EnterRunningState()
+    {
+        onRun();
     }
 
     public void SetExitPos(Vector3 exitPos)

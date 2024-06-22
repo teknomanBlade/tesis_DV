@@ -31,4 +31,10 @@ public class CatView : MonoBehaviour
         _myAnimator.SetBool("IsIdle", false);
         _myAnimator.SetBool("IsWalking", false);
     }
+    public void RunningAnim()
+    {
+        _myAnimator.SetBool("IsMad", false);
+        _myAnimator.SetBool("IsIdle", false);
+        _myAnimator.SetBool("IsRunning", true);
+    }
 }

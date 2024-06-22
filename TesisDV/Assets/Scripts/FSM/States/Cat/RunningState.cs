@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WalkingState : IState
+public class RunningState : IState
 {
     private StateMachine _fsm;
     private Cat _cat;
 
-    public WalkingState(StateMachine fsm, Cat p)
+    public RunningState(StateMachine fsm, Cat p)
     {
         _fsm = fsm;
         _cat = p;
@@ -15,20 +15,20 @@ public class WalkingState : IState
 
     public void OnStart()
     {
-        Debug.Log("Entre a WalkingState");
-        _cat.EnterWalkingState();
+        Debug.Log("Entre a RunningState");
+        _cat.EnterRunningState();
     }
 
     public void OnUpdate()
     {
-        if(Vector3.Distance(_cat.transform.position, _cat._startingPosition) > 1f)
+        if (Vector3.Distance(_cat.transform.position, _cat._startingPosition) > 1f)
         {
             Vector3 dest = default(Vector3);
             dest = _cat._startingPosition;
             var dir = dest - _cat.transform.position;
             dir.y = 0f;
 
-            _cat._navMeshAgent.speed = _cat._walkingSpeed;
+            _cat._navMeshAgent.speed = _cat._runningSpeed;
             _cat._navMeshAgent.destination = dest;
         }
         else
