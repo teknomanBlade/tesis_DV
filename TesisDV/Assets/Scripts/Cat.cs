@@ -38,7 +38,6 @@ public class Cat : MonoBehaviour
     {
         _fsm = new StateMachine();
         _myController = new CatController(this, GetComponent<CatView>());
-        //_startingPositionGameObject = GameObject.Find("StartingPosition");
         _startingPosition = _myPos[2];
         _isHeld = false;
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -68,18 +67,6 @@ public class Cat : MonoBehaviour
     void Update()
     {
         _myController.OnUpdate();
-        
-        /* if(_isHeld == false && Vector3.Distance(transform.position, _startingPosition) > 3f)
-        {
-            Vector3 dest = default(Vector3);
-            dest = _startingPosition;
-            var dir = dest - transform.position;
-            dir.y = 0f;
-
-            _navMeshAgent.speed = _runninngSpeed;
-            _navMeshAgent.destination = dest;
-            
-        } */
     }
 
     public void CatIsBeingTaken()
@@ -98,11 +85,6 @@ public class Cat : MonoBehaviour
 
         RepositionBetweenWaves();
 
-        //_animator.SetBool("IsIdle", false);
-        //_animator.SetBool("IsMad", false);
-        //_animator.SetBool("IsWalking", true);
-
-        //_navMeshAgent.isStopped = false;
         _navMeshAgent.enabled = true;
 
         _fsm.ChangeCatState(CatStatesEnum.RunningState);

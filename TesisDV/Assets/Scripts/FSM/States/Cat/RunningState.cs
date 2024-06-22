@@ -39,6 +39,6 @@ public class RunningState : IState
 
     public void OnExit()
     {
-        Debug.Log("Sali de WalkingState");
+        Debug.Log("Sali de RunningState");
     }
 }
