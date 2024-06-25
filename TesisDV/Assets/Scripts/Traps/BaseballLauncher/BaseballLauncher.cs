@@ -401,52 +401,46 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         if(_skillTree.isBL1aActivated)
         {
-            _damageBoostBlueprint.SetActive(true);
-            _canActivate1aUpgrade = true;
+            Activate1aUpgrade();
         }
         else if (_skillTree.isBL1bActivated)
         {
-            _staticBallsBlueprint.SetActive(true);
-            _canActivate1bUpgrade = true;
+            Activate1bUpgrade();
         }
         else if (_skillTree.isBL2aActivated)
         {
-            _doubleLoaderSmallBlueprint.SetActive(true);
-            _canActivate2aUpgrade = true;
+            Activate2aUpgrade();
         }
         else if (_skillTree.isBL2bActivated)
         {
-            _doubleLoaderLargeBlueprint.SetActive(true);
-            _canActivate2bUpgrade = true;
+            Activate2bUpgrade();
         }
     }
 
     public void Activate1aUpgrade()
     {
-        _damageBoostBlueprint.SetActive(false);
-        _damageBoostUpgrade.SetActive(true);
+        _canActivate1aUpgrade = true;
         //Aplicar beneficio del Upgrade
         _damageAmount *= _damageBoostCoef;
     }
     public void Activate1bUpgrade()
     {
-        _staticBallsBlueprint.SetActive(false);
-        _staticBallsUpgrade.SetActive(true);
+        _canActivate1bUpgrade = true;
         //Aplicar beneficio del Upgrade
         _damageAmount *= _damageBoostCoef;
     }
 
     public void Activate2aUpgrade()
     {
-        _doubleLoaderSmallBlueprint.SetActive(false);
-        _doubleLoaderSmallUpgrade.SetActive(true);
+        _canActivate2aUpgrade = true;
         //Aplicar beneficio del Upgrade
+        SetShots(10);
     }
     public void Activate2bUpgrade()
     {
-        _doubleLoaderLargeBlueprint.SetActive(false);
-        _doubleLoaderLargeUpgrade.SetActive(true);
+        _canActivate2bUpgrade = true;
         //Aplicar beneficio del Upgrade
+        SetShots(20);
     }
 
     #endregion

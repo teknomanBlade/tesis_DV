@@ -61,9 +61,7 @@ public class AIManager : MonoBehaviour
 
         if (_enemiesPosition.ContainsKey(enemy))
         {
-            /* Vector3 aux = _enemiesPosition[enemy].transform.position;
-            return new Vector3(aux.x, 0f, aux.z); */
-            return _enemiesPosition[enemy].transform.position;
+            return (_enemiesPosition[enemy] == null) ? Vector3.zero : _enemiesPosition[enemy].transform.position;
         }
         else
         {

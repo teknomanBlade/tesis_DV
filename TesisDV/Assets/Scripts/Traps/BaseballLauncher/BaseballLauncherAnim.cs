@@ -23,7 +23,7 @@ public class BaseballLauncherAnim : MonoBehaviour
         } 
         else if (GameVars.Values.HasLargeContainer) 
         {
-            aux.GetComponent<BaseballLauncher>().SetShots(8);
+            aux.GetComponent<BaseballLauncher>().SetShots(10);
         }
         if (GameVars.Values.currentShotsTrap1 > 0) 
         {
