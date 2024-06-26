@@ -11,6 +11,7 @@ public class GrayDogController : IController
 
         _m.onHit += v.HitAnimation;
         _m.onPepperHit += v.PepperHitEffect;
+        _m.onElectricHit += v.ElectricDebuffAnimation;
         _m.onDeath += v.DeathAnimation;
         _m.onCatGrab += v.CatGrabAnimation;
         _m.onRunning += v.RunningAnimation;

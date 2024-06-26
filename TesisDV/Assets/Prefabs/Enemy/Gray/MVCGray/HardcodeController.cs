@@ -15,6 +15,7 @@ public class HardcodeController : IController
         _m.onStun       +=  v.StunAnimation;
         _m.onHit        +=  v.HitAnimation;
         _m.onPepperHit  += v.PepperHitEffect;
+        _m.onElectricHit += v.ElectricDebuffAnimation;
         _m.onHit        +=  v.InnerEffectAnimation;
         _m.onDeath      +=  v.DeathAnimation;
         _m.onAttack     +=  v.AttackAnimation;

@@ -76,6 +76,10 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public void Awake()
     {
         //active = false; Ahora las trampas empiezan encendidas.
+        _coefMelee = 3f;
+        _coefTank = 5f;
+        _damageBoostCoef = 2f;
+        _staticChargeSlowAmount = 1.2f;
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
         _myTrapBase.SetTrap(this.gameObject);
         GameVars.Values.IsAllSlotsDisabled();
@@ -85,10 +89,6 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _skillTree.OnUpgrade += CheckForUpgrades;
         CheckForUpgrades();
         isFirstTime = true;
-        _coefMelee = 3f;
-        _coefTank = 5f;
-        _damageBoostCoef = 1.5f;
-        _staticChargeSlowAmount = 2.0f;
         myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
         _as = GetComponent<AudioSource>();
@@ -233,7 +233,16 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public void RemoveLastVisualTennisBall()
     {
         var tennisBalls = ballsContainerSmall.transform.GetComponentsInChildren<Transform>().Where(x => x.name.Contains("tennisBall"));
-        Debug.Log("Tennis Balls: " + tennisBalls.Count());
+        //Debug.Log("Tennis Balls: " + tennisBalls.Count());
+        if (tennisBalls.Count() <= 0) return;
+
+        tennisBalls.LastOrDefault().gameObject.SetActive(false);
+    }
+
+    public void RemoveLastVisualTennisBallLarge()
+    {
+        var tennisBalls = ballsContainerLarge.transform.GetComponentsInChildren<Transform>().Where(x => x.name.Contains("tennisBall"));
+        //Debug.Log("Tennis Balls: " + tennisBalls.Count());
         if (tennisBalls.Count() <= 0) return;
 
         tennisBalls.LastOrDefault().gameObject.SetActive(false);
@@ -375,6 +384,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         {
             Debug.Log("ACTIVO SLOW STATIC CHARGE...");
             enemy.SlowDebuff(_staticChargeSlowAmount);
+            enemy.ElectricDebuffHit();
         }
 
         if (enemy.name.Contains("GrayMVC"))
@@ -427,6 +437,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         _canActivate1bUpgrade = true;
         //Aplicar beneficio del Upgrade
+        _damageBoostCoef = 3f;
         _damageAmount *= _damageBoostCoef;
     }
 

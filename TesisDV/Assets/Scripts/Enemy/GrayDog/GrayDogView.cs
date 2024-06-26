@@ -50,6 +50,10 @@ public class GrayDogView : MonoBehaviour
     {
         _myAnimator.SetBool("IsHitted",true);
     }
+    public void ElectricDebuffAnimation()
+    {
+        _myAnimator.SetBool("IsElectricHitted", true);
+    }
     public void PepperHitEffect()
     {
         _pepperEffect.Play();

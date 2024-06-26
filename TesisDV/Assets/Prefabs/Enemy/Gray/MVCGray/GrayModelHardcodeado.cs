@@ -26,7 +26,7 @@ public class GrayModelHardcodeado : Enemy
         _myController = new HardcodeController(this, GetComponent<GrayView>());
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _as = GetComponent<AudioSource>();
-
+        _startSpeed = _movingSpeed;
         AIManager.Instance.SubscribeEnemyForPosition(this);
 
         _player = GameVars.Values.Player;

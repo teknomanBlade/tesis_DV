@@ -13,6 +13,7 @@ public class TallGrayController : IController
         _m.onWalk       +=  v.WalkAnimation;
         _m.onHit        +=  v.HitAnimation;
         _m.onPepperHit += v.PepperHitEffect;
+        _m.onElectricHit += v.ElectricDebuffAnimation;
         //_m.onHit        +=  v.InnerEffectAnimation;
         _m.onDeath      +=  v.DeathAnimation;
         _m.onAttack     +=  v.AttackAnimation;

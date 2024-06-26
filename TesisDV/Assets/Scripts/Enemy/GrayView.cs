@@ -82,7 +82,17 @@ public class GrayView : MonoBehaviour
     {
         _myAnimator.SetBool("IsGrab", value);
     }
+    public void ElectricDebuffAnimation()
+    {
+        StartCoroutine(ElectricDebuffCoroutine());
+    }
 
+    IEnumerator ElectricDebuffCoroutine() 
+    {
+        _myAnimator.SetBool("IsElectricHitted", true);
+        yield return new WaitForSeconds(0.4f);
+        _myAnimator.SetBool("IsElectricHitted", false);
+    }
     public void DissolveAnimation()
     {
         StartCoroutine(PlayShaderDissolve());

@@ -12,6 +12,7 @@ public class TankGrayController : IController
 
         _m.onWalk       +=  v.WalkAnimation;
         _m.onHit        +=  v.HitAnimation;
+        _m.onElectricHit += v.ElectricDebuffAnimation;
         _m.onPepperHit += v.PepperHitEffect;
         //_m.onHit        +=  v.InnerEffectAnimation;
         _m.onDeath      +=  v.DeathAnimation;

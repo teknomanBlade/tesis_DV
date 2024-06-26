@@ -89,6 +89,7 @@ public abstract class Enemy : MonoBehaviour
     public event Action onDeath = delegate { };
     public event Action onHit = delegate { };
     public event Action onPepperHit = delegate { };
+    public event Action onElectricHit = delegate { };
     public event Action<bool> onAttack = delegate { };
     public event Action<bool> onAttackSpecial = delegate { };
     public event Action onDisolve = delegate { };
@@ -491,6 +492,11 @@ public abstract class Enemy : MonoBehaviour
     {
         onPepperHit();
     }
+
+    public void ElectricDebuffHit()
+    {
+        onElectricHit();
+    } 
 
     public void AwakeGray()
     {

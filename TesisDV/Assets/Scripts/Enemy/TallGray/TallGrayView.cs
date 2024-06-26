@@ -56,6 +56,10 @@ public class TallGrayView : MonoBehaviour
     {
         _myAnimator.Play("Hit");
     }
+    public void ElectricDebuffAnimation()
+    {
+        _myAnimator.SetBool("IsElectricHitted", true);
+    }
     public void PepperHitEffect()
     {
         _pepperEffect.Play();

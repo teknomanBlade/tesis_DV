@@ -12,12 +12,12 @@ public class Inventory : MonoBehaviour
     [SerializeField] WeaponSlot[] weaponSlots;
     private int _currentWeaponIndex = 0;
     [SerializeField] private CanvasGroup _myCanvasGroup;   
-    [SerializeField] private int _wittsAmount;    
+    [SerializeField] private float _wittsAmount;    
     private float fadeDelay = 1.1f;
 
     private bool isFaded;
 
-    public delegate void OnWittsAmountChangedDelegate(int witts);
+    public delegate void OnWittsAmountChangedDelegate(float witts);
     public event OnWittsAmountChangedDelegate OnWittsAmountChanged;
     private void Awake()
     {
@@ -35,8 +35,17 @@ public class Inventory : MonoBehaviour
     {
         _wittsAmount += wittsAmount;
         OnWittsAmountChanged(_wittsAmount);
+        //StartCoroutine(InterpolateValuesCoroutine(_wittsAmount, _wittsAmount + wittsAmount, 0.1f));
     }
-
+    /*private IEnumerator InterpolateValuesCoroutine(float startValue, float endValue, float increment)
+    {
+        for (float t = startValue; t <= endValue; t += increment)
+        {
+            float interpolatedValue = Mathf.Lerp(startValue, endValue, t);
+            OnWittsAmountChanged(interpolatedValue);
+            yield return new WaitForSeconds(0.1f); // Espera 0.1 segundos antes de la siguiente iteración
+        }
+    }*/
     public void AddTrapItem(int slotIndex)
     {
         itemSlots[slotIndex].ActivateTrapKey();

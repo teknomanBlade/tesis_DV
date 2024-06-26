@@ -79,7 +79,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         RestWaveTimeText.text = "Rest wave time: " + newVal.ToString("F0");
     }
 
-    private void WittsAmountChanged(int newVal)
+    private void WittsAmountChanged(float newVal)
     {
         WittsAmountText.text = "X " + newVal;
         WittsAmountTextUpdatesPurchase.text = "X " + newVal;
