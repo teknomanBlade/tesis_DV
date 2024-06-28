@@ -299,6 +299,16 @@ public class SkillTree : MonoBehaviour
         FPMUpdate1bWitCostText.text = FPM1bWittCost.ToString();
         FPMUpdate2aWitCostText.text = FPM2aWittCost.ToString();
         FPMUpdate2bWitCostText.text = FPM2bWittCost.ToString();
+        HandleUIBL1bComponents(true, false, 0.2196078f);
+        HandleUIBL2bComponents(true, false, 0.2196078f);
+        HandleUIST1bComponents(true, false, 0.2196078f);
+        HandleUIST2bComponents(true, false, 0.2196078f);
+        HandleUIMT1bComponents(true, false, 0.2196078f);
+        HandleUIMT2bComponents(true, false, 0.2196078f);
+        HandleUIET1bComponents(true, false, 0.2196078f);
+        HandleUIET2bComponents(true, false, 0.2196078f);
+        HandleUIFPM1bComponents(true, false, 0.2196078f);
+        HandleUIFPM2bComponents(true, false, 0.2196078f);
 
         _inventory = GetComponentInChildren<Inventory>();
         _as = GetComponent<AudioSource>();
@@ -385,21 +395,26 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIBL1bComponents()
+    public void HandleUIBL1bComponents(bool enabled, bool interactable, float imageAlpha = 1f)
     {
         UpgradeBL1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("ImgBoughtOption"))
             {
-                x.gameObject.SetActive(true);
+                x.gameObject.SetActive(enabled);
             }
 
             if (x.name.Contains("BtnBuyOption1b"))
             {
-                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
-                x.GetComponent<Button>().interactable = false;
+                //disabledValue = 0.2196078f, enabledValue = 1f
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, imageAlpha);
+                x.GetComponent<Button>().interactable = interactable;
             }
         });
+    }
+    public void EnableUIBL1bComponents()
+    {
+        HandleUIBL1bComponents(false, true);
     }
     public void HandleUIBL2aComponents()
     {
@@ -417,21 +432,25 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIBL2bComponents()
+    public void HandleUIBL2bComponents(bool enabled, bool interactable, float imageAlpha = 1f)
     {
         UpgradeBL2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("ImgBoughtOption"))
             {
-                x.gameObject.SetActive(true);
+                x.gameObject.SetActive(enabled);
             }
 
             if (x.name.Contains("BtnBuyOption2b"))
             {
-                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
-                x.GetComponent<Button>().interactable = false;
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, imageAlpha);
+                x.GetComponent<Button>().interactable = interactable;
             }
         });
+    }
+    public void EnableUIBL2bComponents()
+    {
+        HandleUIBL2bComponents(false, true);
     }
     public void HandleUIST1aComponents()
     {
@@ -449,21 +468,25 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIST1bComponents()
+    public void HandleUIST1bComponents(bool enabled, bool interactable, float imageAlpha = 1f)
     {
         UpgradeST1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("ImgBoughtOption"))
             {
-                x.gameObject.SetActive(true);
+                x.gameObject.SetActive(enabled);
             }
 
             if (x.name.Contains("BtnBuyOption1b"))
             {
-                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
-                x.GetComponent<Button>().interactable = false;
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, imageAlpha);
+                x.GetComponent<Button>().interactable = interactable;
             }
         });
+    }
+    public void EnableUIST1bComponents()
+    {
+        HandleUIST1bComponents(false, true);
     }
     public void HandleUIST2aComponents()
     {
@@ -481,21 +504,25 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIST2bComponents()
+    public void HandleUIST2bComponents(bool enabled, bool interactable, float imageAlpha = 1f)
     {
         UpgradeST2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("ImgBoughtOption"))
             {
-                x.gameObject.SetActive(true);
+                x.gameObject.SetActive(enabled);
             }
 
             if (x.name.Contains("BtnBuyOption2b"))
             {
-                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
-                x.GetComponent<Button>().interactable = false;
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, imageAlpha);
+                x.GetComponent<Button>().interactable = interactable;
             }
         });
+    }
+    public void EnableUIST2bComponents()
+    {
+        HandleUIST2bComponents(false, true);
     }
     public void HandleUIMT1aComponents()
     {
@@ -513,21 +540,25 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIMT1bComponents()
+    public void HandleUIMT1bComponents(bool enabled, bool interactable, float imageAlpha = 1f)
     {
         UpgradeMT1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("ImgBoughtOption"))
             {
-                x.gameObject.SetActive(true);
+                x.gameObject.SetActive(enabled);
             }
 
             if (x.name.Contains("BtnBuyOption1b"))
             {
-                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
-                x.GetComponent<Button>().interactable = false;
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, imageAlpha);
+                x.GetComponent<Button>().interactable = interactable;
             }
         });
+    }
+    public void EnableUIMT1bComponents()
+    {
+        HandleUIMT1bComponents(false, true);
     }
     public void HandleUIMT2aComponents()
     {
@@ -545,22 +576,27 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIMT2bComponents()
+    public void HandleUIMT2bComponents(bool enabled, bool interactable, float imageAlpha = 1f)
     {
         UpgradeMT2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("ImgBoughtOption"))
             {
-                x.gameObject.SetActive(true);
+                x.gameObject.SetActive(enabled);
             }
 
             if (x.name.Contains("BtnBuyOption2b"))
             {
-                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
-                x.GetComponent<Button>().interactable = false;
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, imageAlpha);
+                x.GetComponent<Button>().interactable = interactable;
             }
         });
     }
+    public void EnableUIMT2bComponents()
+    {
+        HandleUIMT2bComponents(false, true);
+    }
+
     public void HandleUIET1aComponents()
     {
         UpgradeET1a.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
@@ -577,21 +613,25 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIET1bComponents()
+    public void HandleUIET1bComponents(bool enabled, bool interactable, float imageAlpha = 1f)
     {
         UpgradeET1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("ImgBoughtOption"))
             {
-                x.gameObject.SetActive(true);
+                x.gameObject.SetActive(enabled);
             }
 
             if (x.name.Contains("BtnBuyOption1b"))
             {
-                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
-                x.GetComponent<Button>().interactable = false;
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, imageAlpha);
+                x.GetComponent<Button>().interactable = interactable;
             }
         });
+    }
+    public void EnableUIET1bComponents() 
+    {
+        HandleUIET1bComponents(false,true);
     }
     public void HandleUIET2aComponents()
     {
@@ -609,13 +649,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIET2bComponents()
+    public void HandleUIET2bComponents(bool enabled, bool interactable, float imageAlpha = 1f)
     {
         UpgradeET2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("ImgBoughtOption"))
             {
-                x.gameObject.SetActive(true);
+                x.gameObject.SetActive(enabled);
             }
 
             if (x.name.Contains("BtnBuyOption2b"))
@@ -624,6 +664,10 @@ public class SkillTree : MonoBehaviour
                 x.GetComponent<Button>().interactable = false;
             }
         });
+    }
+    public void EnableUIET2bComponents()
+    {
+        HandleUIET2bComponents(false, true);
     }
     public void HandleUIFPM1aComponents()
     {
@@ -641,13 +685,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIFPM1bComponents()
+    public void HandleUIFPM1bComponents(bool enabled, bool interactable, float imageAlpha = 1f)
     {
         UpgradeFPM1b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("ImgBoughtOption"))
             {
-                x.gameObject.SetActive(true);
+                x.gameObject.SetActive(enabled);
             }
 
             if (x.name.Contains("BtnBuyOption1b"))
@@ -656,6 +700,10 @@ public class SkillTree : MonoBehaviour
                 x.GetComponent<Button>().interactable = false;
             }
         });
+    }
+    public void EnableUIFPM1bComponents()
+    {
+        HandleUIFPM1bComponents(false, true);
     }
     public void HandleUIFPM2aComponents()
     {
@@ -673,13 +721,13 @@ public class SkillTree : MonoBehaviour
             }
         });
     }
-    public void HandleUIFPM2bComponents()
+    public void HandleUIFPM2bComponents(bool enabled, bool interactable, float imageAlpha = 1f)
     {
         UpgradeFPM2b.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("ImgBoughtOption"))
             {
-                x.gameObject.SetActive(true);
+                x.gameObject.SetActive(enabled);
             }
 
             if (x.name.Contains("BtnBuyOption2b"))
@@ -688,6 +736,10 @@ public class SkillTree : MonoBehaviour
                 x.GetComponent<Button>().interactable = false;
             }
         });
+    }
+    public void EnableUIFPM2bComponents()
+    {
+        HandleUIFPM2bComponents(false, true);
     }
     #endregion
 
@@ -748,7 +800,8 @@ public class SkillTree : MonoBehaviour
         if(!_isBL1aActivated && _inventory.HasEnoughWitts(BL1aWittCost))
         {
             HandleUIBL2aComponents();
-            HandleUIBL2bComponents();
+            HandleUIBL2bComponents(true, false, 0.2196078f);
+            EnableUIBL1bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(BL1aWittCost);
             _isBL1aActivated = true;
@@ -772,7 +825,8 @@ public class SkillTree : MonoBehaviour
         if(!_isBL2aActivated && _inventory.HasEnoughWitts(BL2aWittCost))
         {
             HandleUIBL1aComponents();
-            HandleUIBL1bComponents();
+            HandleUIBL1bComponents(true, false, 0.2196078f);
+            EnableUIBL2bComponents();  
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(BL2aWittCost);
             _isBL2aActivated = true;
@@ -795,7 +849,8 @@ public class SkillTree : MonoBehaviour
         if(!_isFPM1aActivated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM1aWittCost))
         {
             HandleUIFPM2aComponents();
-            HandleUIFPM2bComponents();
+            HandleUIFPM2bComponents(true, false, 0.2196078f);
+            EnableUIFPM1bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(FPM1aWittCost);
             _isFPM1aActivated = true;
@@ -818,7 +873,8 @@ public class SkillTree : MonoBehaviour
         if(!_isFPM2aActivated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM2aWittCost))
         {
             HandleUIFPM1aComponents();
-            HandleUIFPM1bComponents();
+            HandleUIFPM1bComponents(true, false, 0.2196078f);
+            EnableUIFPM2bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(FPM2aWittCost);
             _isFPM2aActivated = true;
@@ -841,7 +897,8 @@ public class SkillTree : MonoBehaviour
         if(!_isET1aActivated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET1aWittCost))
         {
             HandleUIET2aComponents();
-            HandleUIET2bComponents();
+            HandleUIET2bComponents(true, false, 0.2196078f);
+            EnableUIET1bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ET1aWittCost);
             _isET1aActivated = true;
@@ -864,7 +921,8 @@ public class SkillTree : MonoBehaviour
         if(!_isET2aActivated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET2aWittCost))
         {
             HandleUIET1aComponents();
-            HandleUIET1bComponents();
+            HandleUIET1bComponents(true, false, 0.2196078f);
+            EnableUIET2bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ET2aWittCost);
             _isET2aActivated = true;
@@ -887,7 +945,8 @@ public class SkillTree : MonoBehaviour
         if(!_isST1aActivated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST1aWittCost))
         {
             HandleUIST2aComponents();
-            HandleUIST2bComponents();
+            HandleUIST2bComponents(true, false, 0.2196078f);
+            EnableUIST1bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ST1aWittCost);
             _isST1aActivated = true;
@@ -910,7 +969,8 @@ public class SkillTree : MonoBehaviour
         if(!_isST2aActivated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST2aWittCost))
         {
             HandleUIST1aComponents();
-            HandleUIST1bComponents();
+            HandleUIST1bComponents(true, false, 0.2196078f);
+            EnableUIST2bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(ST2aWittCost);
             _isST2aActivated = true;
@@ -933,7 +993,8 @@ public class SkillTree : MonoBehaviour
         if(!_isMT1aActivated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT1aWittCost))
         {
             HandleUIMT2aComponents();
-            HandleUIMT2bComponents();
+            HandleUIMT2bComponents(true, false, 0.2196078f);
+            EnableUIMT1bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(MT1aWittCost);
             _isMT1aActivated = true;
@@ -955,7 +1016,8 @@ public class SkillTree : MonoBehaviour
         if(!_isMT2aActivated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT2aWittCost))
         {
             HandleUIST1aComponents();
-            HandleUIST1bComponents();
+            HandleUIST1bComponents(true, false, 0.2196078f);
+            EnableUIMT2bComponents();
             GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
             _inventory.RemoveWitts(MT2aWittCost);
             _isMT2aActivated = true;

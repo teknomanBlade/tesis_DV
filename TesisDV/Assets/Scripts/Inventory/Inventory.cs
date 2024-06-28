@@ -35,17 +35,8 @@ public class Inventory : MonoBehaviour
     {
         _wittsAmount += wittsAmount;
         OnWittsAmountChanged(_wittsAmount);
-        //StartCoroutine(InterpolateValuesCoroutine(_wittsAmount, _wittsAmount + wittsAmount, 0.1f));
     }
-    /*private IEnumerator InterpolateValuesCoroutine(float startValue, float endValue, float increment)
-    {
-        for (float t = startValue; t <= endValue; t += increment)
-        {
-            float interpolatedValue = Mathf.Lerp(startValue, endValue, t);
-            OnWittsAmountChanged(interpolatedValue);
-            yield return new WaitForSeconds(0.1f); // Espera 0.1 segundos antes de la siguiente iteración
-        }
-    }*/
+    
     public void AddTrapItem(int slotIndex)
     {
         itemSlots[slotIndex].ActivateTrapKey();

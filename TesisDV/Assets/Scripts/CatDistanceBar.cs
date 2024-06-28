@@ -11,6 +11,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     private float _maxDistance;
     private float _dangerThreshold;
     private float _currentDistance = 0;
+    private float _wittsAmount = 0;
     private Image _fillImage;
     public GameObject Fill;
     public Text GraysAmountPerWaveText;
@@ -81,11 +82,23 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
 
     private void WittsAmountChanged(float newVal)
     {
-        WittsAmountText.text = "X " + newVal;
-        WittsAmountTextUpdatesPurchase.text = "X " + newVal;
+        StartCoroutine(LerpWittsValue(newVal, 1f));
         //Aplicar animación.
     }
+    IEnumerator LerpWittsValue(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _wittsAmount;
 
+        while (time < duration)
+        {
+            _wittsAmount = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+            WittsAmountText.text = "X " + _wittsAmount.ToString("F0");
+            WittsAmountTextUpdatesPurchase.text = "X " + _wittsAmount.ToString("F0");
+            yield return null;
+        }
+    }
     private void GrayAmountChanged(int newVal)
     {
         GraysAmountPerWaveText.text = "X " + newVal;
