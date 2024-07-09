@@ -146,15 +146,15 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         {
            Activate1aUpgrade();
         }
-        else if (_skillTree.isET1bActivated)
+        if (_skillTree.isET1bActivated)
         {
             Activate1bUpgrade();
         }
-        else if (_skillTree.isET2aActivated)
+        if (_skillTree.isET2aActivated)
         {
             Activate2aUpgrade();
         }
-        else if (_skillTree.isET2bActivated)
+        if (_skillTree.isET2bActivated)
         {
             Activate2bUpgrade();
         }

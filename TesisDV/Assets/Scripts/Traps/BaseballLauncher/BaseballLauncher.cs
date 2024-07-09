@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
 
 public class BaseballLauncher : Trap, IMovable, IInteractable
 {
@@ -21,6 +20,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public GameObject exitPoint;
     //public GameObject ballsState1, ballsState2, ballsState3;
     public GameObject ballsContainerSmall, ballsContainerLarge;
+    public GameObject ballsContainerUpgradeSmall, ballsContainerUpgradeLarge;
     [SerializeField] private GameObject trapDestroyPrefab;
     public int shots;
     public int shotsLeft;
@@ -66,6 +66,9 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     [SerializeField] private GameObject _doubleLoaderSmallUpgrade;
     [SerializeField] private GameObject _doubleLoaderLargeBlueprint;
     [SerializeField] private GameObject _doubleLoaderLargeUpgrade;
+    public bool StaticBallsUpgradeEnabled;
+    public bool DoubleLoaderSmallUpgradeEnabled;
+    public bool DoubleLoaderLargeUpgradeEnabled;
     public bool _canActivate1aUpgrade {get; private set;}
     public bool _canActivate2aUpgrade {get; private set;}
     public bool _canActivate1bUpgrade { get; private set; }
@@ -96,19 +99,55 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         Baseball = Resources.Load<Baseball>("tennisBallaux");
         InitialStock = 20;
         BaseballPool = new PoolObject<Baseball>(BaseballFactory, ActivateBaseball, DeactivateBaseball, InitialStock, true);
-        ActiveDeactivateBallStates(true, false);
         StartTrap();
         SetUIIndicator("UI_BaseballLauncher_Indicator");
     }
 
-    public void SetShots(int shots) 
+    public void SetShots(int s) 
     {
-        shotsLeft = this.shots = shots;
+        shotsLeft = shots = s;
     }
+    public int GetShotsByContainer() 
+    {
+        int shots = 0;
 
+        if (ballsContainerSmall.activeSelf)
+        {
+            shots = 5;
+        }
+        else if (ballsContainerLarge.activeSelf)
+        {
+            shots = 10;
+        }
+        else if (ballsContainerUpgradeSmall.activeSelf) 
+        {
+            shots = 10;
+        }
+        else if (ballsContainerUpgradeLarge.activeSelf)
+        {
+            shots = 20;
+        }
+
+        return shots;
+    }
     private void StartTrap()
     {
         active = true;
+        HasTennisBallContainerSmall = GameVars.Values.HasSmallContainer;
+        HasTennisBallContainerLarge = GameVars.Values.HasLargeContainer;    
+        _staticBallsUpgrade.SetActive(StaticBallsUpgradeEnabled);
+        if (DoubleLoaderSmallUpgradeEnabled || DoubleLoaderLargeUpgradeEnabled)
+        {
+            ActiveDeactivateBallStates(false, false);
+        }
+        else 
+        {
+            ActiveDeactivateBallStates(HasTennisBallContainerSmall, HasTennisBallContainerLarge);
+        }
+        
+        ballsContainerUpgradeSmall.SetActive(DoubleLoaderSmallUpgradeEnabled);
+        ballsContainerUpgradeLarge.SetActive(DoubleLoaderLargeUpgradeEnabled);
+        SetShots(GetShotsByContainer());
         SearchingForObjectives();
         _animator.SetBool("HasNoBalls", false);
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
@@ -129,8 +168,6 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         {
             Debug.Log("Active la torreta");
 
-            //if (isFirstTime) { isFirstTime = false; _animator.SetBool("HasNoBalls", false); }
-
             StartTrap();
         }
     }
@@ -150,12 +187,6 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             //Debug.Log("ENTRA EN ACTIVA?");
             FieldOfView();
         }
-        
-        /* 
-        if (shotsLeft == 0) Se chequea al instanciar una pelota.
-        {
-            Inactive();
-        } */
     }
     public void Reload()
     {
@@ -206,7 +237,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         }
         else if(ballsContainerLarge.activeSelf) 
         {
-            RemoveLastVisualTennisBall();
+            RemoveLastVisualTennisBallLarge();
         }
         
         FireBaseball();
@@ -369,7 +400,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         if(_currentObjective != null && _canShoot)
         {
-            //BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetAdditionalDamage(_additionalDamage).SetOwner(this);
+            BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetOwner(this);
             var enemy = _currentObjective.GetComponent<Enemy>();
             EnemyDamageDifferential(enemy);
         }
@@ -413,15 +444,15 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         {
             Activate1aUpgrade();
         }
-        else if (_skillTree.isBL1bActivated)
+        if (_skillTree.isBL1bActivated)
         {
             Activate1bUpgrade();
         }
-        else if (_skillTree.isBL2aActivated)
+        if (_skillTree.isBL2aActivated)
         {
             Activate2aUpgrade();
         }
-        else if (_skillTree.isBL2bActivated)
+        if (_skillTree.isBL2bActivated)
         {
             Activate2bUpgrade();
         }
@@ -436,21 +467,29 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public void Activate1bUpgrade()
     {
         _canActivate1bUpgrade = true;
+        _canActivate1aUpgrade = false;
+        StaticBallsUpgradeEnabled = _canActivate1bUpgrade;
         //Aplicar beneficio del Upgrade
         _damageBoostCoef = 3f;
-        _damageAmount *= _damageBoostCoef;
+        _damageAmount = _damageBoostCoef;
     }
 
     public void Activate2aUpgrade()
     {
         _canActivate2aUpgrade = true;
-        //Aplicar beneficio del Upgrade
+        _canActivate1bUpgrade = false;
+        _canActivate1aUpgrade = false;
+        DoubleLoaderSmallUpgradeEnabled = _canActivate2aUpgrade;
         SetShots(10);
     }
     public void Activate2bUpgrade()
     {
         _canActivate2bUpgrade = true;
-        //Aplicar beneficio del Upgrade
+        _canActivate2aUpgrade = false;
+        _canActivate1bUpgrade = false;
+        _canActivate1aUpgrade = false;
+        DoubleLoaderLargeUpgradeEnabled = _canActivate2bUpgrade;
+        DoubleLoaderSmallUpgradeEnabled = _canActivate2aUpgrade;
         SetShots(20);
     }
 

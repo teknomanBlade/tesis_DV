@@ -208,6 +208,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             if (Input.GetKeyDown(KeyCode.T))
             {
                 FindObjectsOfType<Door>().ToList().ForEach(x => { x.IsLocked = false; });
+                FindObjectOfType<FootLocker>().IsBlocked = false;
             }
             if (Input.GetKeyDown(KeyCode.R))
             {

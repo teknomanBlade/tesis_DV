@@ -69,15 +69,15 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         {
             Activate1aUpgrade();
         }
-        else if (_skillTree.isMT1bActivated)
+        if (_skillTree.isMT1bActivated)
         {
             Activate1bUpgrade();
         }
-        else if (_skillTree.isMT2aActivated)
+        if (_skillTree.isMT2aActivated)
         {
             Activate2aUpgrade();
         }
-        else if (_skillTree.isMT2bActivated)
+        if (_skillTree.isMT2bActivated)
         {
             Activate2bUpgrade();
         }

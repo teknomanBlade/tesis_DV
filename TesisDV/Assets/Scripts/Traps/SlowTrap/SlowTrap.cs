@@ -124,25 +124,30 @@ public class SlowTrap : MonoBehaviour
             Debug.Log("UPGRADE 1A BOUGHT");
             Activate1aUpgrade();
         }
-        else if (_skillTree.isST1bActivated)
+        if (_skillTree.isST1bActivated)
         {
             Debug.Log("UPGRADE 1B BOUGHT");
             Activate1bUpgrade();
         }
-        else if (_skillTree.isST2aActivated)
+        if (_skillTree.isST2aActivated)
         {
             Debug.Log("UPGRADE 2A BOUGHT");
             ChangeColorToStainAndBubbles();
             Activate2aUpgrade();
 
         }
-        else if (_skillTree.isST2bActivated)
+        if (_skillTree.isST2bActivated)
         {
             Debug.Log("UPGRADE 2B BOUGHT");
             ChangeColorToStainAndBubbles();
             Activate2bUpgrade();
         }
     }
+
+    /*public bool IsBothUpgradesActive() 
+    {
+        return (_canActivate1aUpgrade && _canActivate1bUpgrade);
+    }*/
 
     public void ChangeColorToStainAndBubbles() 
     {

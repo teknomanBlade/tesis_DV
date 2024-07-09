@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
 
 public class FERNPaintballMinigun : Trap, IMovable, IInteractable
 {
@@ -288,15 +287,15 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
         {
             Activate1aUpgrade();
         }
-        else if (_skillTree.isFPM1bActivated)
+        if (_skillTree.isFPM1bActivated)
         {
             Activate1bUpgrade();
         } 
-        else if (_skillTree.isFPM2aActivated)
+        if (_skillTree.isFPM2aActivated)
         {
             Activate2aUpgrade();
         }
-        else if (_skillTree.isFPM2bActivated)
+        if (_skillTree.isFPM2bActivated)
         {
             Activate2bUpgrade();
         }

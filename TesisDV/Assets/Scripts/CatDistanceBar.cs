@@ -94,8 +94,8 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         {
             _wittsAmount = Mathf.Lerp(startValue, endValue, time / duration);
             time += Time.deltaTime;
-            WittsAmountText.text = "X " + _wittsAmount.ToString("F0");
-            WittsAmountTextUpdatesPurchase.text = "X " + _wittsAmount.ToString("F0");
+            WittsAmountText.text = "X " + Math.Round(_wittsAmount,2).ToString("F0");
+            WittsAmountTextUpdatesPurchase.text = "X " + Math.Round(_wittsAmount,2).ToString("F0");
             yield return null;
         }
     }
