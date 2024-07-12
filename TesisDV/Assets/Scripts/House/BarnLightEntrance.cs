@@ -16,6 +16,14 @@ public class BarnLightEntrance : MonoBehaviour
         {
             lightModel.GetComponent<MeshRenderer>().material.SetFloat("_EmissionLightBarn", 1f);
         }
+        if (gameObject.name.Equals("CeilingLightBasement"))
+        {
+            lightModel.GetComponent<MeshRenderer>().material.SetFloat("_EmissionLightBarn", 1f);
+        }
+        if (gameObject.name.Equals("CeilingLightKitchen"))
+        {
+            lightModel.GetComponent<MeshRenderer>().material.SetFloat("_EmissionLightBarn", 1f);
+        }
     }
 
     // Update is called once per frame

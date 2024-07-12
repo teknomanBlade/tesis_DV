@@ -8,17 +8,23 @@ using System.Linq;
 public class Door : Item
 {
     protected Animator _anim;
+    [SerializeField]
+    protected Animator _animParent;
+    [SerializeField] protected BoxCollider _collider;
     private float _valueToChange;
     private NavMeshObstacle _navMeshObstacle;
     protected bool IsOpened { get; set; }
     public bool IsLocked;
     public bool IsLockedToGrays;
+    public bool IsEnemyInteracting;
     public bool IsFront = false;
     public DoorTrigger[] doorTriggers;
     // Start is called before the first frame update
     void Awake()
     {
         _anim = GetComponent<Animator>();
+        _animParent = transform.parent.GetComponent<Animator>();
+        _collider = GetComponent<BoxCollider>();
         doorTriggers = GetComponentsInChildren<DoorTrigger>();
         itemType = ItemType.Interactable;
         //_navMeshObstacle = GetComponent<NavMeshObstacle>();
@@ -64,6 +70,13 @@ public class Door : Item
     {
         StopAllCoroutines();
         doorTriggers.Select(x => x).ToList().ForEach(x => x.gameObject.SetActive(false));
+
+        if (IsEnemyInteracting) 
+        {
+            _animParent.SetBool("IsDropped", true);
+            _collider.enabled = false;
+        }
+
         if (IsLocked)
         {
             if (transform.tag.Equals("Tutorial"))
@@ -76,7 +89,7 @@ public class Door : Item
             return;
         }
 
-        if (!IsOpened)
+        if (!IsEnemyInteracting && !IsOpened)
         {
             IsOpened = true;
             GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
@@ -92,7 +105,10 @@ public class Door : Item
         }
 
     }
-
+    public void EnemyInteractionCheck(bool enabled) 
+    {
+        IsEnemyInteracting = enabled;
+    }
     private void SetBlockedFalse()
     {
         _anim.SetBool("IsBlocked", false);

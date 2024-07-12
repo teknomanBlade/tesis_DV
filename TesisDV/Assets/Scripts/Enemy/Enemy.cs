@@ -464,6 +464,7 @@ public abstract class Enemy : MonoBehaviour
     private void OpenDoor(Door door)
     {
         door.IsLocked = false;
+        door.EnemyInteractionCheck(true);
         door.Interact();
 
         //Refeencia a View donde hace un play de la animacion de abrir la puerta.
