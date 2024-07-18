@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AIManager : MonoBehaviour
@@ -43,13 +44,10 @@ public class AIManager : MonoBehaviour
                 var temp = enemy.Value;
                 if(temp != null)
                 {
-                    if (currentTarget != null) 
-                    {
-                        temp.transform.SetParent(currentTarget.transform);
-                        temp.transform.localPosition = new Vector3((step + 1) * enemy.Key.protectDistance, 0, (step + 1) * enemy.Key.protectDistance);
-                        temp.transform.RotateAround(currentTarget.transform.position, Vector3.up, rotAngleSum + rotAngle);
-                        rotAngleSum += rotAngle;
-                    }
+                    temp.transform.SetParent(currentTarget.transform);
+                    temp.transform.localPosition = new Vector3((step + 1) * enemy.Key.protectDistance, 0, (step + 1) * enemy.Key.protectDistance);
+                    temp.transform.RotateAround(currentTarget.transform.position, Vector3.up, rotAngleSum + rotAngle);
+                    rotAngleSum += rotAngle;
                 }
             }
         }
@@ -57,11 +55,9 @@ public class AIManager : MonoBehaviour
 
     public Vector3 RequestPosition(Enemy enemy)
     {
-        if (enemy == null) return Vector3.zero;
-
         if (_enemiesPosition.ContainsKey(enemy))
         {
-            return (_enemiesPosition[enemy] == null) ? Vector3.zero : _enemiesPosition[enemy].transform.position;
+            return _enemiesPosition[enemy].transform.position;
         }
         else
         {
@@ -73,12 +69,19 @@ public class AIManager : MonoBehaviour
 
     public void RemoveEnemyFromList(Enemy enemy, bool hasCat)
     {
-        _enemiesPosition.Remove(enemy);
+        var m = markers.Where(x => x.name.Contains(enemy.name)).FirstOrDefault();
+        if (m)
+        {
+            markers.Remove(m);
+            currentTarget = null;
+        }
         enemyList.Remove(enemy);
-        if(hasCat)
+        _enemiesPosition.Remove(enemy);
+
+        if (hasCat)
         {
             _isTargetSet = false;
-            currentTarget = null;
+            currentTarget = null;  
 
             foreach(GameObject marker in markers)
             {
@@ -103,7 +106,7 @@ public class AIManager : MonoBehaviour
         }
         if (!_enemiesPosition.ContainsKey(enemy))
         {
-            GameObject aux = new GameObject("marker");
+            GameObject aux = new GameObject("marker_" + enemy.name);
             _enemiesPosition.Add(enemy, aux);
             markers.Add(aux);
         }

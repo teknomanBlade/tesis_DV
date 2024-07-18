@@ -43,6 +43,7 @@ public class GrayDogView : MonoBehaviour
 
     public void DeathAnimation()
     {
+        GameVars.Values.soundManager.StopSound(_as);
         _myAnimator.SetBool("IsDead", true);
     }
 
@@ -60,7 +61,7 @@ public class GrayDogView : MonoBehaviour
     }
     public void RunningAnimation()
     {
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "SFX_AlienDogGallop", 0.25f, true);
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_AlienDogGallop", 0.25f, true, 1f);
         _myAnimator.SetBool("IsRunning", true);
     }
 

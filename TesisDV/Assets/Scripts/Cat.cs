@@ -53,8 +53,8 @@ public class Cat : MonoBehaviour
         _fsm.AddCatState(CatStatesEnum.IdleState, new IdleState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.RoomState, new RoomState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.WalkingState, new WalkingState(_fsm, this));
-        _fsm.AddCatState(CatStatesEnum.RunningState, new RunningState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.TakenState, new TakenState(_fsm, this));
+        _fsm.AddCatState(CatStatesEnum.RunningState, new RunningState(_fsm, this));
     }
 
     void Start()
@@ -73,7 +73,6 @@ public class Cat : MonoBehaviour
     {
         _isHeld = true;
         _isRepositioning = false;
-        //_animator.SetBool("IsMad", true);
         _navMeshAgent.enabled = false;
         _fsm.ChangeCatState(CatStatesEnum.TakenState);
     }

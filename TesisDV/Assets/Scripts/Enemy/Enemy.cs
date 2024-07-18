@@ -121,6 +121,7 @@ public abstract class Enemy : MonoBehaviour
             AIManager.Instance.RemoveEnemyFromList(this, hasObjective);
             if (hasObjective)
             {
+                Debug.Log("LLEGA A DROP CAT: " + gameObject.name);
                 DropCat();
             }
 
@@ -139,64 +140,6 @@ public abstract class Enemy : MonoBehaviour
             //Desabilitar colliders y lo que haga falta.
         }
     }
-
-    /* private void CalculatePath(Vector3 targetPosition)
-    {
-        _navMeshAgent.ResetPath();
-        NavMeshPath path = new NavMeshPath();
-        if (NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, path))
-        {
-            _navMeshAgent.SetPath(path);
-
-            for (int i = 0; i > _navMeshAgent.path.corners.Length; i++)
-            {
-                _waypoints[i] = _navMeshAgent.path.corners[i];
-            }
-            pathIsCreated = true;
-            DrawLineRenderer(path.corners);  
-        }
-    } */
-
-    /* public void ResetPathAndSetObjective(Vector3 targetPosition)
-    {
-        _navMeshAgent.ResetPath();
-        CalculatePath(targetPosition);  
-        //CalculatePath(currentObjective.transform.position);
-        _currentWaypoint = 0;
-        pathIsCreated = false;
-    } */
-
-    /* public void Move() No creo que sea necesario el move, el movimiento se ve dentro de los estados.
-    {
-        if (pathIsCreated) //Probar sin bool. No funciona, entra a Move cuando el waypoint todavia no tiene valor asignado.
-        {
-            onWalk(true); //Esta llamada de evento no funciona por el NavMeshAgent.
-            Vector3 dir = _waypoints[_currentWaypoint] - transform.position;
-            transform.forward = dir;
-            transform.position += transform.forward * _movingSpeed * Time.deltaTime;
-            Debug.Log(dir.magnitude);
-            if (dir.magnitude < 0.5f)
-            {
-                //_currentWaypoint++; Lo sumamos despu�s de verificar.
-                if (_currentWaypoint + 1 > _waypoints.Length) //-1
-                {
-                    //canCreatePath = true; probar con ResetAndSet directo.
-                    //ResetPathAndSetObjective(); Se resetea en los states ahora.
-                    //Debug.Log("Reseted");
-                    
-                        
-                    
-                    //_currentWaypoint = 0; Reseteamos el current waypoint en la funcion de arriba ^_^                   
-                }
-                else
-                {
-                    _currentWaypoint++;
-                }
-
-            }
-            
-        }
-    } */
 
     public void DetectTraps()
     {
@@ -544,6 +487,11 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    public Enemy SetName(string name)
+    {
+        gameObject.name += name;
+        return this;
+    }
     public Enemy SetExitUFO(Vector3 exitPosition)
     {
         Vector3 aux = exitPosition;
@@ -588,7 +536,6 @@ public abstract class Enemy : MonoBehaviour
     {
         
     }
-
     public void SetPath(List<Node> nodos) //esto no hace falta, es para testear.
     {
         Path = null;

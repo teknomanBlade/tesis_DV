@@ -68,13 +68,13 @@ public class SoundManager : MonoBehaviour
     {
         if (SoundLibrary.TryGetValue(clipName, out clip))
         {
-            _sound.clip = clip;
-            _sound.volume = volume;
-            _sound.loop = loop;
-            _sound.minDistance = 2f;
-            _sound.maxDistance = 400f;
-            _sound.spatialBlend = spatialBlend;
-            _sound.Play();
+            sound.clip = clip;
+            sound.volume = volume;
+            sound.loop = loop;
+            sound.minDistance = 2f;
+            sound.maxDistance = 400f;
+            sound.spatialBlend = spatialBlend;
+            sound.Play();
         }
     }
 

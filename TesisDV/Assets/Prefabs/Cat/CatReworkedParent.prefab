@@ -1760,7 +1760,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e34294480474fb41966a48d586f356c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _runninngSpeed: 3
+  _runningSpeed: 0
+  _walkingSpeed: 0
   _navMeshAgent: {fileID: 0}
   _myPos:
   - {x: -14.35, y: 0, z: 11.627}
@@ -2761,10 +2762,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 476092765558587630}
     m_Modifications:
-    - target: {fileID: 5161088613509560851, guid: 51133ab1ea5b5c849bb6674189f240ce, type: 3}
-      propertyPath: _myOwner
-      value: 
-      objectReference: {fileID: 5400569553477540198}
     - target: {fileID: 8094669890154341127, guid: 51133ab1ea5b5c849bb6674189f240ce, type: 3}
       propertyPath: m_Name
       value: CatNewModel

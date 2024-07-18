@@ -13,6 +13,7 @@ public class GameVars : MonoBehaviour
 
     public bool HasSmallContainer;
     public bool HasLargeContainer;
+    public int enemyCount = 0;
     public SoundManager soundManager { get; private set; }
     public CraftingScreen craftingContainer { get; private set; }
     public LevelManager LevelManager { get; set; }
