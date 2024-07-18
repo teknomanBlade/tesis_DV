@@ -42,13 +42,10 @@ public class AIManager : MonoBehaviour
             foreach (var enemy in _enemiesPosition)
             {
                 var temp = enemy.Value;
-                if(temp != null)
-                {
-                    temp.transform.SetParent(currentTarget.transform);
-                    temp.transform.localPosition = new Vector3((step + 1) * enemy.Key.protectDistance, 0, (step + 1) * enemy.Key.protectDistance);
-                    temp.transform.RotateAround(currentTarget.transform.position, Vector3.up, rotAngleSum + rotAngle);
-                    rotAngleSum += rotAngle;
-                }
+                temp.transform.SetParent(enemy.Key.transform);
+                temp.transform.localPosition = new Vector3((step + 1) * enemy.Key.protectDistance, 0, (step + 1) * enemy.Key.protectDistance);
+                temp.transform.RotateAround(enemy.Key.transform.position, Vector3.up, rotAngleSum + rotAngle);
+                rotAngleSum += rotAngle;
             }
         }
     }
@@ -100,6 +97,8 @@ public class AIManager : MonoBehaviour
 
     public void SubscribeEnemyForPosition(Enemy enemy)
     {
+        if (enemy.gameObject.CompareTag("Tutorial")) return;
+
         if (!enemyList.Contains(enemy))
         {
             enemyList.Add(enemy);

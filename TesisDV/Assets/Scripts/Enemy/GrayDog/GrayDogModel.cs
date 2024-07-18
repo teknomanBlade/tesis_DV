@@ -19,7 +19,7 @@ public class GrayDogModel : Enemy
         _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.GrayDogCatState));
         _fsm.AddState(EnemyStatesEnum.GrayDogCatState, new GrayDogCatState(_fsm, this, _pf));
         _fsm.AddState(EnemyStatesEnum.GrayDogEscapeState, new GrayDogEscapeState(_fsm, this, _pf));
-        _fsm.AddState(EnemyStatesEnum.ProtectState, new ProtectState(_fsm, this, _pf));
+        _fsm.AddState(EnemyStatesEnum.GrayDogProtectState, new GrayDogProtectState(_fsm, this, _pf));
     }
     // Start is called before the first frame update
     void Start()
