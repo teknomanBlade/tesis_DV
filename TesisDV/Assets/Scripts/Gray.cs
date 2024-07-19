@@ -580,7 +580,7 @@ public class Gray : MonoBehaviour, IHittableObserver, IDoorGrayInteractObservabl
     {
         hasObjective = true;
         _anim.SetBool("IsGrab", true);
-        GameVars.Values.TakeCat(_exitPos);
+        //GameVars.Values.TakeCat(_exitPos);
         //_lm.CheckForObjective();
     }
 

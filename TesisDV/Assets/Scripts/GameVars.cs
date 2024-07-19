@@ -112,6 +112,7 @@ public class GameVars : MonoBehaviour
     public int currentShotsTrap2; //NailFiringMachine
     public List<List<Node>> levelRoutes;
     public GameObject BasementDirectionMarkers;
+    public string EnemyType;
     #region Events
     public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
     public event OnCapturedCatChangeDelegate OnCapturedCatChange;
@@ -373,7 +374,10 @@ public class GameVars : MonoBehaviour
     {
         return (cat != null) ? cat.GetDistance() : 0f;
     }
-
+    public void SetEnemyType(string enemyType) 
+    {
+        EnemyType = enemyType;
+    }
     public void TakeCat(Vector3 exitPos)
     {
         _isCatCaptured = true;

@@ -32,7 +32,7 @@ public class GrayDogCatState : IState
 
         if (_enemy._lm.enemyHasObjective)
         {
-            _fsm.ChangeState(EnemyStatesEnum.ProtectState);
+            _fsm.ChangeState(EnemyStatesEnum.GrayDogProtectState);
         }
 
         GetThetaStar();
@@ -44,13 +44,14 @@ public class GrayDogCatState : IState
         if (Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 3f)//1f) Lo cambiamos hasta que el tallGray tenga la escala bien puesta.
         {
             _enemy.GrabCat();
+            GameVars.Values.EnemyType = _enemy.enemyType.ToString();
             GameVars.Values.ShowNotification("The cat has been captured! You must prevent the grays getting to the ship!");
 
             _fsm.ChangeState(EnemyStatesEnum.GrayDogEscapeState);
         }
         else if (_enemy._lm.enemyHasObjective)
         {
-            _fsm.ChangeState(EnemyStatesEnum.ProtectState);
+            _fsm.ChangeState(EnemyStatesEnum.GrayDogProtectState);
         }
         
         RaycastHit hit;

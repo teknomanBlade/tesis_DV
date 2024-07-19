@@ -41,10 +41,12 @@ public class AIManager : MonoBehaviour
             int step = 0;
             foreach (var enemy in _enemiesPosition)
             {
+                if (currentTarget == null) return;
+
                 var temp = enemy.Value;
-                temp.transform.SetParent(enemy.Key.transform);
+                temp.transform.SetParent(currentTarget.transform);
                 temp.transform.localPosition = new Vector3((step + 1) * enemy.Key.protectDistance, 0, (step + 1) * enemy.Key.protectDistance);
-                temp.transform.RotateAround(enemy.Key.transform.position, Vector3.up, rotAngleSum + rotAngle);
+                temp.transform.RotateAround(currentTarget.transform.position, Vector3.up, rotAngleSum + rotAngle);
                 rotAngleSum += rotAngle;
             }
         }
@@ -54,7 +56,7 @@ public class AIManager : MonoBehaviour
     {
         if (_enemiesPosition.ContainsKey(enemy))
         {
-            return _enemiesPosition[enemy].transform.position;
+            return (_enemiesPosition[enemy] == null) ? Vector3.zero : _enemiesPosition[enemy].transform.position;
         }
         else
         {
@@ -66,14 +68,13 @@ public class AIManager : MonoBehaviour
 
     public void RemoveEnemyFromList(Enemy enemy, bool hasCat)
     {
-        var m = markers.Where(x => x.name.Contains(enemy.name)).FirstOrDefault();
-        if (m)
-        {
-            markers.Remove(m);
-            currentTarget = null;
-        }
         enemyList.Remove(enemy);
         _enemiesPosition.Remove(enemy);
+        if (enemyList.Count <= 0)
+        {
+            markers.Clear();
+            currentTarget = null;
+        }
 
         if (hasCat)
         {
@@ -87,6 +88,7 @@ public class AIManager : MonoBehaviour
                 marker.transform.SetParent(parent.transform);
             } 
         }
+        
     }
 
     public void SetNewTarget(GameObject newTarget)

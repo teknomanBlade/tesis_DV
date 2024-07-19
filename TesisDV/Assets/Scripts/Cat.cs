@@ -85,7 +85,6 @@ public class Cat : MonoBehaviour
         RepositionBetweenWaves();
 
         _navMeshAgent.enabled = true;
-
         _fsm.ChangeCatState(CatStatesEnum.RunningState);
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RunningState : IState
 {
@@ -16,11 +17,13 @@ public class RunningState : IState
     public void OnStart()
     {
         Debug.Log("Entre a RunningState");
+        _cat._navMeshAgent.enabled = true;
         _cat.EnterRunningState();
     }
 
     public void OnUpdate()
     {
+        Debug.Log("Estoy en RunningState");
         if (Vector3.Distance(_cat.transform.position, _cat._startingPosition) > 1f)
         {
             Vector3 dest = default(Vector3);

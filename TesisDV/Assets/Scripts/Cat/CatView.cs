@@ -19,7 +19,7 @@ public class CatView : MonoBehaviour
         _myAnimator.SetBool("IsRunning", false);
         _myAnimator.SetBool("IsMad", false);
     }
-
+     
     public void WalkAnim()
     {
         _myAnimator.SetBool("IsWalking", true);
@@ -28,6 +28,8 @@ public class CatView : MonoBehaviour
     {
         _myAnimator.SetBool("IsMad", true);
         _myAnimator.SetBool("IsWalking", false);
+        _myAnimator.SetBool("IsRunning", false);
+        _myAnimator.SetBool("IsIdle", true);
     }
     public void RunningAnim()
     {

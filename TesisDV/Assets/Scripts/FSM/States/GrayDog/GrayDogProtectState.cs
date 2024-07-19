@@ -68,18 +68,8 @@ public class GrayDogProtectState : IState
                 _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
             }
         }
-        else if (!Physics.Raycast(_enemy.transform.position, targetDir, out hit, targetDir.magnitude, _enemy.obstacleMask))
-        {
-            if (_enemy._target != null && (Vector3.Distance(_enemy.transform.position, _enemy._target.transform.position) > 0.5f))
-            {
-                Vector3 aux = targetDir;
-                targetDir = new Vector3(aux.x, 0f, aux.z);
-                _enemy.transform.forward = targetDir;
-                _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
-            }
-        }
         else if (myPath != null)
-        {
+        { 
             if (myPath.Count >= 1)
             {
                 Vector3 dir = myPath[_currentPathWaypoint].transform.position - _enemy.transform.position;
