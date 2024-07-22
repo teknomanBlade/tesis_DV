@@ -345,7 +345,8 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     public void BecomeMovable()
     {
-        GameVars.Values.currentShotsTrap1 = shotsLeft;
+        GameVars.Values.BulletsRemainingTraps.Add(this, shotsLeft);
+        Debug.Log("SHOTS LEFT" + gameObject.name + " : " + shotsLeft);
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
         aux.GetComponent<StaticBlueprint>().SpendMaterials(false);
         aux.GetComponent<StaticBlueprint>().CanBeCancelled(false);

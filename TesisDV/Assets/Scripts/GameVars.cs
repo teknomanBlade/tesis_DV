@@ -73,7 +73,7 @@ public class GameVars : MonoBehaviour
     public Sprite imageBaseballTrap;
     public CraftingScreen craftingScreen;
 
-    public Text notifications;
+    public RectTransform notifications;
     public Image[] playerLives;
 
     public Animator playerLivesAnim { get; private set; }
@@ -113,6 +113,11 @@ public class GameVars : MonoBehaviour
     public List<List<Node>> levelRoutes;
     public GameObject BasementDirectionMarkers;
     public string EnemyType;
+    public Dictionary<Trap, int> BulletsRemainingTraps;
+
+    public int InitialStock { get; private set; }
+    public BaseballLauncher BaseballLauncherPrefab;
+    public PoolObject<BaseballLauncher> BaseballLauncherPool { get; set; }
     #region Events
     public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
     public event OnCapturedCatChangeDelegate OnCapturedCatChange;
@@ -176,13 +181,33 @@ public class GameVars : MonoBehaviour
         TrapHotBar = FindObjectOfType<TrapHotBar>();
         backpack = FindObjectsOfType<GameObject>().Where(x => x.name.Equals("Backpack")).First();
         itemGrabbedImage = FindObjectsOfType<Image>(true).Where(x => x.name.Equals("ItemGrabbed")).First();
-        notifications = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("NotificationsText")).First();
+        notifications = FindObjectsOfType<RectTransform>(true).Where(x => x.gameObject.name.Equals("NotificationsBkg")).First();
         playerLives = FindObjectsOfType<Image>().Where(x => x.gameObject.name.Contains("Life")).OrderBy(x => x.name).ToArray();
         soundManager = FindObjectOfType<SoundManager>();
         craftingContainer = FindObjectOfType<CraftingScreen>();
         soundManager.SetAudioClips(audioClips);
         LevelManager = GetComponent<LevelManager>();
         WaveManager = GetComponent<WaveManager>();
+        BulletsRemainingTraps = new Dictionary<Trap, int>();
+        InitialStock = 5;
+        //BaseballLauncherPrefab = Resources.Load<BaseballLauncher>("BaseballLauncher");
+        BaseballLauncherPool = new PoolObject<BaseballLauncher>(BaseballLauncherFactory, ActivateBaseballLauncher, DeactivateBaseballLauncher, InitialStock, true);
+    }
+
+    private void DeactivateBaseballLauncher(BaseballLauncher o)
+    {
+        o.gameObject.SetActive(false);
+        o.transform.localPosition = new Vector3(0f, 0f, 0f);
+    }
+
+    private void ActivateBaseballLauncher(BaseballLauncher o)
+    {
+        o.gameObject.SetActive(true);
+    }
+
+    private BaseballLauncher BaseballLauncherFactory()
+    {
+        return Instantiate(BaseballLauncherPrefab);
     }
     #region TrapHotBar
 
@@ -324,7 +349,7 @@ public class GameVars : MonoBehaviour
     #region Notifications
     public void ShowNotification(string text)
     {
-        notifications.text = text;
+        notifications.GetComponentInChildren<Text>().text = text;
         StartCoroutine(ShowNotification());
     }
 
@@ -347,7 +372,7 @@ public class GameVars : MonoBehaviour
 
     public void ShowNotificationDefinedTime(string text, float time, Action action)
     {
-        notifications.text = text;
+        notifications.GetComponentInChildren<Text>().text = text;
         StartCoroutine(ShowNotificationDefinedTime(time, action));
     }
 
