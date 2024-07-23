@@ -32,6 +32,10 @@ public class LightsEmissionHandler : MonoBehaviour
         {
             GetComponent<MeshRenderer>().material.SetFloat("_EmissionLightLiving", 1f);
         }
+        if (gameObject.name.Equals("WallLightLiving_2"))
+        {
+            GetComponent<MeshRenderer>().material.SetFloat("_EmissionLightLiving", 1f);
+        }
         if (gameObject.name.Equals("Lamp"))
         {
             GetComponent<MeshRenderer>().material.SetFloat("_EmissionLightLiving", 1f);
