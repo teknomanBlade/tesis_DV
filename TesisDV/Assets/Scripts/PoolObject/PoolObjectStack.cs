@@ -1,21 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class PoolObject<T>
+public class PoolObjectStack<T>
 {
     public delegate T FactoryMethod();
     public delegate void InitFinitMethod(T o);
-    private List<T> _objects;
+    private Stack<T> _objects;
     private FactoryMethod _factoryMethod;
     private InitFinitMethod _activateMethod;
     private InitFinitMethod _desactivateMethod;
     private bool _isDynamic;
 
-    public PoolObject(FactoryMethod fM, InitFinitMethod activateMethod, InitFinitMethod desactivateMethod, int initialStock = 0, bool isDynamic = true)
+    public PoolObjectStack(FactoryMethod fM, InitFinitMethod activateMethod, InitFinitMethod desactivateMethod, int initialStock = 0, bool isDynamic = true)
     {
-        _objects = new List<T>();
+        _objects = new Stack<T>();
         _factoryMethod = fM;
         _activateMethod = activateMethod;
         _desactivateMethod = desactivateMethod;
@@ -26,7 +25,7 @@ public class PoolObject<T>
         {
             var o = _factoryMethod();
             _desactivateMethod(o);
-            _objects.Add(o);
+            _objects.Push(o);
         }
     }
 
@@ -34,8 +33,7 @@ public class PoolObject<T>
     {
         if (_objects.Count > 0)
         {
-            var o = _objects[0];
-            _objects.RemoveAt(0);
+            var o = _objects.Pop();
             _activateMethod(o);
             return o;
         }
@@ -52,6 +50,6 @@ public class PoolObject<T>
     public void ReturnObject(T o)
     {
         _desactivateMethod(o);
-        _objects.Add(o);
+        _objects.Push(o);
     }
 }

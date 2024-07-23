@@ -24,6 +24,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     [SerializeField] private GameObject trapDestroyPrefab;
     public int shots;
     public int shotsLeft;
+    public int shotsRemaining;
     [SerializeField] private float _damageAmount;
     [SerializeField] private float _coefMelee;
     [SerializeField] private float _coefTank;
@@ -36,6 +37,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     }
     public bool HasTennisBallContainerSmall { get; set; }
     public bool HasTennisBallContainerLarge { get; set; }
+    public bool IsMoving;
     public float interval;
     Vector3 auxVector;
     private float _searchSpeed = 2.5f;
@@ -76,6 +78,11 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     private SkillTree _skillTree;
 
     #endregion
+    private void Start()
+    {
+        _myTrapBase = transform.parent.GetComponent<TrapBase>();
+        _myTrapBase.SetTrap(this.gameObject);
+    }
     public void Awake()
     {
         //active = false; Ahora las trampas empiezan encendidas.
@@ -83,8 +90,6 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _coefTank = 5f;
         _damageBoostCoef = 2f;
         _staticChargeSlowAmount = 1.2f;
-        _myTrapBase = transform.parent.GetComponent<TrapBase>();
-        _myTrapBase.SetTrap(this.gameObject);
         GameVars.Values.IsAllSlotsDisabled();
         _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
@@ -106,6 +111,26 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public void SetShots(int s) 
     {
         shotsLeft = shots = s;
+    }
+    public BaseballLauncher InitializeTrap() 
+    {
+        StartTrap();
+        return this;
+    }
+    public BaseballLauncher SetInitPos(Vector3 pos) 
+    {
+        this.transform.position = pos;
+        return this;
+    }
+    public BaseballLauncher SetInitRot(Quaternion rot)
+    {
+        this.transform.rotation = rot;
+        return this;
+    }
+    public BaseballLauncher SetParent(Transform parent)
+    {
+        this.transform.parent = parent;
+        return this;
     }
     public int GetShotsByContainer() 
     {
@@ -133,6 +158,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     private void StartTrap()
     {
         active = true;
+        
         HasTennisBallContainerSmall = GameVars.Values.HasSmallContainer;
         HasTennisBallContainerLarge = GameVars.Values.HasLargeContainer;    
         _staticBallsUpgrade.SetActive(StaticBallsUpgradeEnabled);
@@ -147,12 +173,20 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         
         ballsContainerUpgradeSmall.SetActive(DoubleLoaderSmallUpgradeEnabled);
         ballsContainerUpgradeLarge.SetActive(DoubleLoaderLargeUpgradeEnabled);
-        SetShots(GetShotsByContainer());
+        if (IsMoving)
+        {
+            SetShots(shotsRemaining);
+        }
+        else
+        {
+            SetShots(GetShotsByContainer());
+        }
         SearchingForObjectives();
         _animator.SetBool("HasNoBalls", false);
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
         if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
         ShootCoroutine = StartCoroutine("ActiveCoroutine");
+        IsMoving = false;
     }
 
     public void Interact()
@@ -345,13 +379,13 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     public void BecomeMovable()
     {
-        GameVars.Values.BulletsRemainingTraps.Add(this, shotsLeft);
-        Debug.Log("SHOTS LEFT" + gameObject.name + " : " + shotsLeft);
+        IsMoving = true;
+        shotsRemaining = shotsLeft;
+        GameVars.Values.BaseballLauncherPool.ReturnObject(this);
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
         aux.GetComponent<StaticBlueprint>().SpendMaterials(false);
         aux.GetComponent<StaticBlueprint>().CanBeCancelled(false);
         _myTrapBase.ResetBase();
-        Destroy(gameObject);
     }
 
     public void DestroyThisTrap()
@@ -385,6 +419,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     private void DeactivateBaseball(Baseball o)
     {
         o.gameObject.SetActive(false);
+        o.transform.parent = transform;
         o.transform.localPosition = new Vector3(0f, 0f, 0f);
     }
 

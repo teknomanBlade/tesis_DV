@@ -14,6 +14,7 @@ public class GameVars : MonoBehaviour
     public bool HasSmallContainer;
     public bool HasLargeContainer;
     public int enemyCount = 0;
+    
     public SoundManager soundManager { get; private set; }
     public CraftingScreen craftingContainer { get; private set; }
     public LevelManager LevelManager { get; set; }
@@ -113,11 +114,10 @@ public class GameVars : MonoBehaviour
     public List<List<Node>> levelRoutes;
     public GameObject BasementDirectionMarkers;
     public string EnemyType;
-    public Dictionary<Trap, int> BulletsRemainingTraps;
-
+    public int BaseballLauncherCount = 0;
     public int InitialStock { get; private set; }
     public BaseballLauncher BaseballLauncherPrefab;
-    public PoolObject<BaseballLauncher> BaseballLauncherPool { get; set; }
+    public PoolObjectStack<BaseballLauncher> BaseballLauncherPool { get; set; }
     #region Events
     public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
     public event OnCapturedCatChangeDelegate OnCapturedCatChange;
@@ -188,21 +188,27 @@ public class GameVars : MonoBehaviour
         soundManager.SetAudioClips(audioClips);
         LevelManager = GetComponent<LevelManager>();
         WaveManager = GetComponent<WaveManager>();
-        BulletsRemainingTraps = new Dictionary<Trap, int>();
         InitialStock = 5;
-        //BaseballLauncherPrefab = Resources.Load<BaseballLauncher>("BaseballLauncher");
-        BaseballLauncherPool = new PoolObject<BaseballLauncher>(BaseballLauncherFactory, ActivateBaseballLauncher, DeactivateBaseballLauncher, InitialStock, true);
+        BaseballLauncherPool = new PoolObjectStack<BaseballLauncher>(BaseballLauncherFactory, ActivateBaseballLauncher, DeactivateBaseballLauncher, InitialStock, true);
     }
 
     private void DeactivateBaseballLauncher(BaseballLauncher o)
     {
         o.gameObject.SetActive(false);
-        o.transform.localPosition = new Vector3(0f, 0f, 0f);
+        if (!o.gameObject.name.Contains("_")) 
+        { 
+            BaseballLauncherCount++;
+            o.gameObject.name = o.gameObject.name.Replace("(Clone)", "");
+            o.gameObject.name += "_" + BaseballLauncherCount;
+        }
+        o.transform.position = Vector3.zero;
+        o.transform.localPosition = Vector3.zero;
     }
 
     private void ActivateBaseballLauncher(BaseballLauncher o)
     {
         o.gameObject.SetActive(true);
+        o.InitializeTrap();
     }
 
     private BaseballLauncher BaseballLauncherFactory()
@@ -217,6 +223,7 @@ public class GameVars : MonoBehaviour
     }
 
     #endregion
+
     #region Player
 
     public Player GetPlayer()
