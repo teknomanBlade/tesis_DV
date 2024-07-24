@@ -57,13 +57,15 @@ public class PlayerState : IState
                 GetThetaStar();
                 _needsPathfinding = false;
             }
-            if(myPath.Count >= 1)
+            if(myPath != null && myPath.Count >= 1 && _currentPathWaypoint < myPath.Count)
             {
+                //Debug.Log("GRAY TALL PATH COUNT: " + myPath.Count);
+                //Debug.Log("CURRENT PATH WAYPOINT: " + _currentPathWaypoint);
                 Vector3 dir = myPath[_currentPathWaypoint].transform.position - _enemy.transform.position;
 
                 Vector3 aux = dir;
                 dir = new Vector3 (aux.x , aux.y, aux.z);
-                Debug.Log(aux.y);
+                //Debug.Log(aux.y);
                 _enemy.transform.forward = dir;
                 _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
 
