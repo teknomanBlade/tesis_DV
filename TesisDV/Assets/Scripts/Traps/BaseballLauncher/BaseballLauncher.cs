@@ -198,7 +198,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             return;
         }
 
-        if (!active)
+        if (!active && !IsEmpty)
         {
             Debug.Log("Active la torreta");
 
