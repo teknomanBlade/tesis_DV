@@ -43,6 +43,7 @@ public class GrayView : MonoBehaviour
     }
     public void WalkAnimation(bool value)
     {
+        PlaySoundTelepathVoices();
         _myAnimator.SetBool("IsWalking", value);
     }
 
@@ -108,6 +109,10 @@ public class GrayView : MonoBehaviour
     public void Dead()
     {
         Destroy(gameObject);
+    }
+    public void PlaySoundTelepathVoices()
+    {
+        GameVars.Values.soundManager.PlaySound(_as, "VoiceWhispering", 0.35f, true, 1f);
     }
     public void PlaySoundEMP()
     {

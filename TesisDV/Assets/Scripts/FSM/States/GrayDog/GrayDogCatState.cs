@@ -30,10 +30,10 @@ public class GrayDogCatState : IState
         _currentPathWaypoint = 0;
         //Estos if en el start deberían hacer que no carguemos un Path sin necesidad.
 
-        if (_enemy._lm.enemyHasObjective)
+        /*if (_enemy._lm.enemyHasObjective)
         {
             _fsm.ChangeState(EnemyStatesEnum.GrayDogProtectState);
-        }
+        }*/
 
         GetThetaStar();
         Debug.Log("Entre a GrayDogCatState");
@@ -49,10 +49,10 @@ public class GrayDogCatState : IState
 
             _fsm.ChangeState(EnemyStatesEnum.GrayDogEscapeState);
         }
-        else if (_enemy._lm.enemyHasObjective)
+        /*else if (_enemy._lm.enemyHasObjective)
         {
             _fsm.ChangeState(EnemyStatesEnum.GrayDogProtectState);
-        }
+        }*/
         
         RaycastHit hit;
         Vector3 catDir = _enemy._cat.transform.position - _enemy.transform.position;

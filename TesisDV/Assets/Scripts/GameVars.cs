@@ -72,6 +72,7 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairMovingTrap;
     public Sprite crosshairRightClickIcon;
     public Sprite imageBaseballTrap;
+    public Sprite switchTennisBallContainer;
     public CraftingScreen craftingScreen;
 
     public RectTransform notifications;
@@ -176,6 +177,7 @@ public class GameVars : MonoBehaviour
         crosshairMovingTrap = Resources.Load<Sprite>("MovingTrapIcon");
         crosshairRightClickIcon = Resources.Load<Sprite>("RightClickMouseIcon");
         crosshairWorkbenchCrafting = Resources.Load<Sprite>("WorkbenchCraftIcon");
+        switchTennisBallContainer = Resources.Load<Sprite>("SwitchTennisBallsContainer");
         craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
         audioClips = Resources.LoadAll<AudioClip>("Sounds").ToList();
         TrapHotBar = FindObjectOfType<TrapHotBar>();

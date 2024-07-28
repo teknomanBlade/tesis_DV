@@ -41,9 +41,9 @@ public class AIManager : MonoBehaviour
             int step = 0;
             foreach (var enemy in _enemiesPosition)
             {
-                if (currentTarget == null) return;
-
                 var temp = enemy.Value;
+                if (currentTarget == null || temp == null) return;
+                
                 temp.transform.SetParent(currentTarget.transform);
                 temp.transform.localPosition = new Vector3((step + 1) * enemy.Key.protectDistance, 0, (step + 1) * enemy.Key.protectDistance);
                 temp.transform.RotateAround(currentTarget.transform.position, Vector3.up, rotAngleSum + rotAngle);

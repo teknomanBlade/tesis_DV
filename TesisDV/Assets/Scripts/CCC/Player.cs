@@ -1055,6 +1055,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             {
                 crosshair.sprite = GameVars.Values.crosshairReloadTrap1;
             }
+            else if (baseballLauncher.HasTennisBallContainerLarge) 
+            {
+                crosshair.sprite = GameVars.Values.switchTennisBallContainer;
+                baseballLauncher.OnSwitchLargeContainer += OnSwitchLargeContainer;
+            }
             else
             {
                 crosshair.sprite = GameVars.Values.crosshairActivation;
@@ -1111,6 +1116,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         ChangeCrosshairSize(20f);
     }
 
+    
+
     private void ChangeCrosshairSize(float num)
     {
         crosshair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, num);
@@ -1158,6 +1165,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 GameVars.Values.ShowNotification("You need a Tennis Ball Container to reload!");
                 auxBL.OnReload += OnBaseballMachineReload;
             }
+            if (_inventory.ContainsID(15, 1)) 
+            {
+                auxBL.SwitchLargeContainer();
+            }
+
             if (auxBL._canActivate1aUpgrade && _inventory.ContainsID(2,1))
             {
                 auxBL.Activate1aUpgrade();
@@ -1257,7 +1269,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             }
         }
     }
-
+    private void OnSwitchLargeContainer()
+    {
+        if (_inventory.ContainsID(15, 1))
+            _inventory.RemoveItemID(15, 1);
+    }
     private void OnFERNPaintballMinigunReload()
     {
         if (_inventory.ContainsID(7, 1)) 
@@ -1288,6 +1304,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
         //lookingIMovable.BecomeMovable();
     }
+    #region SFX Handle
     public IEnumerator PlayStunnedBirdsSound(float timer)
     {
         isAttacking = true;
@@ -1362,6 +1379,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         GameVars.Values.soundManager.PlaySoundAtPoint("GrabSound", transform.position, 0.18f);
     }
+    #endregion
 
     public void InteractWithInventoryItem(InventoryItem inventoryItem)
     {

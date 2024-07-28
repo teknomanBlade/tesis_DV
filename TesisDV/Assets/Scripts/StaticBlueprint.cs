@@ -28,6 +28,7 @@ public class StaticBlueprint : MonoBehaviour
     private Renderer[] _myChildrenRenderers;
     public LayerMask LayerMaskWall;
     public LayerMask TrapBaseMaskWall;
+    public int ClickCounter;
     int layerMask;
     private GameObject _parent;  
 
@@ -50,6 +51,13 @@ public class StaticBlueprint : MonoBehaviour
     {
         if (Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
+            ClickCounter++;
+            //Debug.Log("CLICK COUNTER BEFORE RETURN: " + ClickCounter);
+
+            if (ClickCounter > 1) return;
+
+            //Debug.Log("CLICK COUNTER AFTER RETURN: " + ClickCounter);
+
             _player.SwitchIsCrafting();
             //secondAuxVector = new Vector3(transform.position.x, 1f, transform.position.z);
             //finalPosition = secondAuxVector;
@@ -87,21 +95,24 @@ public class StaticBlueprint : MonoBehaviour
         if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, TrapBaseMaskWall))
         {
             _trapBase = hit.transform.GetComponent<TrapBase>();
-            //if(_trapBase._isAvailable)
-            //{
-                canBuild = true;
-                _trapBases.ForEach(x => x.SetNormalIntensity());
-                //_trapBase?.SetNormalIntensity();
-                transform.position = hit.transform.position;
-                SetOriginalMaterial();
-                return;
-            //}
+            canBuild = true;
+            _trapBases.ForEach(x => 
+            { 
+                if(x.gameObject.name.Equals(_trapBase?.gameObject.name))
+                    x.SetNormalIntensity(); 
+            });
+            transform.position = hit.transform.position;
+            SetOriginalMaterial();
+            return;
         }
         else
         {
             canBuild = false;
-            _trapBases.ForEach(x => x.SetHighIntensity());
-            //_trapBase?.SetHighIntensity();
+            _trapBases.ForEach(x =>
+            {
+                if (x.gameObject.name.Equals(_trapBase?.gameObject.name))
+                    x.SetHighIntensity();
+            });
             ChangeMaterial();
         }
 

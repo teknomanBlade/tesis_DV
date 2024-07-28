@@ -4,35 +4,42 @@ using UnityEngine;
 
 public class TrapBase : MonoBehaviour
 {
-    public bool _isAvailable = true;
+    public bool _isAvailable;
     public GameObject ArrowIndicator;
     private GameObject _myTrap;
     private MeshRenderer _meshRenderer;
     private Animator _anim;
     void Awake()
     {
-        //ArrowIndicator.SetActive(false);
+        _isAvailable = true;
         _meshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
         _anim = transform.GetChild(0).GetComponent<Animator>();
     }
 
     void Update()
     {
-        
+        if (transform.GetComponentInChildren<Trap>() != null)
+        {
+            //Debug.Log("HAS TRAP IN CHILDREN?" + (transform.GetComponentInChildren<Trap>() != null));
+            ArrowIndicator.SetActive(false);
+        }
+        else 
+        {
+            //Debug.Log("HAS TRAP IN CHILDREN?" + (transform.GetComponentInChildren<Trap>() != null));
+            ArrowIndicator.SetActive(true);
+        }
     }
 
     public void SetHighIntensity()
     {
-        if(_isAvailable)
-            ArrowIndicator.SetActive(true);
+        //ArrowIndicator.SetActive(!_isAvailable);
 
         _anim.SetBool("IsBlueprintOver",true);
     }
 
     public void SetNormalIntensity()
     {
-        if (!_isAvailable)
-            ArrowIndicator.SetActive(false);
+        //ArrowIndicator.SetActive(_isAvailable);
 
         _anim.SetBool("IsBlueprintOver", false);
     }
@@ -50,15 +57,15 @@ public class TrapBase : MonoBehaviour
     {
         _myTrap = myTrap;
         _meshRenderer.enabled = false;
-        ArrowIndicator.SetActive(false);
+        //ArrowIndicator.SetActive(false);
         if (gameObject.tag.Equals("Tutorial"))
             GameVars.Values.ShowNotification("Press 'Enter' to begin tutorial. You can also start every wave as long you've been prepared.");
     }
 
     public void ResetBase()
     {
-        _isAvailable = false;
-        ArrowIndicator.SetActive(true);
+        _isAvailable = true;
+        //ArrowIndicator.SetActive(true);
         _meshRenderer.enabled = true;
         _myTrap = null;
     }
