@@ -7,6 +7,8 @@ using System.Linq;
 
 public abstract class Trap : MonoBehaviour
 {
+    public delegate void OnCollidersObjectivesZeroDelegate();
+    public event OnCollidersObjectivesZeroDelegate OnCollidersObjectivesZero;
     public bool active;
     protected bool _canShoot = false;
     protected Animator _animator;
@@ -27,6 +29,16 @@ public abstract class Trap : MonoBehaviour
     protected float _currentObjectiveDistance = 1000;
     protected Collider _currentObjective = null;
     public Collider[] collidersObjectives;
+    public Collider[] CollidersObjectives 
+    { 
+        get { return collidersObjectives; }
+        set 
+        { 
+            collidersObjectives = value;
+            if(collidersObjectives.Length <= 0)
+                OnCollidersObjectivesZero?.Invoke();
+        }
+    }
     protected Collider[] collidersObjectivesDisabled;
     protected const float MAX_CURRENT_OBJETIVE_DISTANCE = 1000;
 
@@ -36,7 +48,7 @@ public abstract class Trap : MonoBehaviour
     {
         Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
-        collidersObjectives = allTargets.Where(x => x.GetComponent<Enemy>().isActiveAndEnabled).ToArray();
+        CollidersObjectives = allTargets.Where(x => x.GetComponent<Enemy>().isActiveAndEnabled).ToArray();
 
         collidersObjectivesDisabled = allTargets.Where(x => !x.GetComponent<Enemy>().isActiveAndEnabled).ToArray();
 

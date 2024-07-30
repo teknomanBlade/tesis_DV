@@ -364,7 +364,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         _animator.enabled = true;
         _animator.SetBool("IsDetectingTarget", true);
-
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_TurretDetection", 0.35f, true,1f);
     }
 
     private void EndSearchingForObjective()

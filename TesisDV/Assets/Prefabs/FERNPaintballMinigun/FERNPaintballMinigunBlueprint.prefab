@@ -104,6 +104,10 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6114094888940979234, guid: 74d3d8069396a5c4684daf81de1a6c73, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.329
+      objectReference: {fileID: 0}
     - target: {fileID: 8444095429881524504, guid: 74d3d8069396a5c4684daf81de1a6c73, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -161,8 +165,16 @@ PrefabInstance:
       value: 0.8866106
       objectReference: {fileID: 0}
     - target: {fileID: 8444095429975726023, guid: 74d3d8069396a5c4684daf81de1a6c73, type: 3}
+      propertyPath: m_Size.y
+      value: 1.3293877
+      objectReference: {fileID: 0}
+    - target: {fileID: 8444095429975726023, guid: 74d3d8069396a5c4684daf81de1a6c73, type: 3}
       propertyPath: m_Center.x
       value: -0.045223773
+      objectReference: {fileID: 0}
+    - target: {fileID: 8444095429975726023, guid: 74d3d8069396a5c4684daf81de1a6c73, type: 3}
+      propertyPath: m_Center.y
+      value: 0.67449284
       objectReference: {fileID: 0}
     - target: {fileID: 8444095429975726023, guid: 74d3d8069396a5c4684daf81de1a6c73, type: 3}
       propertyPath: m_IsTrigger
@@ -188,6 +200,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 0be4739deea2b8c4e9e5b8026f6cec91, type: 2}
+    - target: {fileID: 8444095431499093898, guid: 74d3d8069396a5c4684daf81de1a6c73, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.26
+      objectReference: {fileID: 0}
     - target: {fileID: 9099918875025137982, guid: 74d3d8069396a5c4684daf81de1a6c73, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -225,10 +241,11 @@ MonoBehaviour:
   trapAnimPrefab: {fileID: 9003164146685217082, guid: ac7f1bb5d94dc66488777140b0dbabf7, type: 3}
   particles: {fileID: 3984549846058083597, guid: 88689427b9f8a1c4ca13887e9bb12cd2, type: 3}
   customPivot: {fileID: 0}
-  newMaterial: {fileID: 2100000, guid: 0be4739deea2b8c4e9e5b8026f6cec91, type: 2}
+  newMaterial: {fileID: 2100000, guid: 04d9b8823b798c944ac1ae3fed55dc18, type: 2}
   LayerMaskWall:
     serializedVersion: 2
     m_Bits: 67584
   TrapBaseMaskWall:
     serializedVersion: 2
     m_Bits: 2097152
+  ClickCounter: 0

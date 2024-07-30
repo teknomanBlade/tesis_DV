@@ -12,11 +12,22 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     private bool _isDestroyed;
     public int shots;
     public int shotsLeft;
+    public int ShotsLeft 
+    {
+        get { return shotsLeft; }
+        set 
+        { 
+            shotsLeft = value;
+        }
+    }
+    public int shotsRemaining;
     public float interval;
+    public bool IsMoving;
     public bool IsEmpty
     {
         get
         {
+            if (shotsLeft == 0) { _magazine.SetActive(false); }
             return shotsLeft == 0;
         }
     }
@@ -29,7 +40,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     [SerializeField] private GameObject _magazine;
     public delegate void OnReloadDelegate();
     public event OnReloadDelegate OnReload;
-    
+    [SerializeField] private Inventory _inventory;
     public PoolObject<PaintballPellet> PaintballPelletsPool { get; set; }
     public PaintballPellet PaintballPellet;
     public int InitialStock { get; private set; }
@@ -52,20 +63,26 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     public bool _canActivate1bUpgrade { get; private set; }
     public bool _canActivate2bUpgrade { get; private set; }
     private SkillTree _skillTree;
+    private bool _isDisabledSFX;
 
     #endregion
+    void Start() 
+    {
+        _myTrapBase = transform.parent.GetComponent<TrapBase>();
+        _myTrapBase.SetTrap(this.gameObject);
+    }
     // Start is called before the first frame update
     void Awake()
     {
+        OnCollidersObjectivesZero += OnCollidersObjectivesEmpty;
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
         _skillTree.OnUpgrade += CheckForUpgrades;
         _startDmgAmount = 0.25f;
         _damageAmount =_startDmgAmount;
-        InitialStock = shotsLeft = shots = 150;
+        InitialStock = 150;
+        SetShots(150);
         _currentLife = _maxLife;
         CheckForUpgrades();
-        _myTrapBase = transform.parent.GetComponent<TrapBase>();
-        _myTrapBase.SetTrap(this.gameObject);
         _magazine = transform.GetComponentsInChildren<Transform>(true).Where(x => x.name.Equals("FERNMinigunPelletsMagazine")).FirstOrDefault().gameObject;
         _as = GetComponent<AudioSource>();
         _animator = GetComponent<Animator>();
@@ -76,9 +93,19 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
         SetUIIndicator("UI_FERNPaintballMinigun_Indicator");
     }
 
+    private void OnCollidersObjectivesEmpty()
+    {
+        SearchingForObjectives();
+    }
+
+    public void SetInventory(Inventory inventory) 
+    {
+        _inventory = inventory;
+    }
     private void PaintballPelletDeactivate(PaintballPellet pp)
     {
         pp.gameObject.SetActive(false);
+        pp.transform.parent = transform;
         pp.transform.localPosition = new Vector3(0f, 0f, 0f);
         //pp.transform.SetParent(transform);
     }
@@ -92,13 +119,42 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     {
         return Instantiate(PaintballPellet);
     }
+    public void SetShots(int s)
+    {
+        ShotsLeft = shots = s;
+    }
+    public FERNPaintballMinigun SetShotsRemainingZero()
+    {
+        if (!IsMoving)
+            shotsRemaining = 0;
 
+        return this;
+    }
+    public FERNPaintballMinigun InitializeTrap()
+    {
+        StartTrap();
+        return this;
+    }
+    public FERNPaintballMinigun SetInitPos(Vector3 pos)
+    {
+        this.transform.position = pos;
+        return this;
+    }
+    public FERNPaintballMinigun SetInitRot(Quaternion rot)
+    {
+        this.transform.rotation = rot;
+        return this;
+    }
+    public FERNPaintballMinigun SetParent(Transform parent)
+    {
+        this.transform.parent = parent;
+        return this;
+    }
     // Update is called once per frame
     void Update()
     {
         if (active)
         {
-            //Debug.Log("ENTRA EN ACTIVA?");
             FieldOfView();
         }
     }
@@ -113,31 +169,32 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     private void StartTrap()
     {
         active = true;
-        _magazine.SetActive(true);
+        if (shotsLeft > 0) { _magazine.SetActive(true); }
         SearchingForObjectives();
         _animator.SetBool("HasNoPellets", false);
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
         if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
         ShootCoroutine = StartCoroutine(ActiveCoroutine());
+        IsMoving = false;
     }
     private void SearchingForObjectives()
     {
         _animator.enabled = true;
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_PaintballMinigunDetection", 0.35f, true, 1f);
     }
 
     public void BecomeMovable()
     {
-        //GameVars.Values.currentShotsTrap1 = shotsLeft;
+        IsMoving = true;
+        shotsRemaining = shotsLeft;
+        GameVars.Values.FERNPaintballMinigunPool.ReturnObject(this);
+        transform.parent = null;
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
         aux.GetComponent<StaticBlueprint>().SpendMaterials(false);
         aux.GetComponent<StaticBlueprint>().CanBeCancelled(false);
         _myTrapBase.ResetBase();
-        Destroy(gameObject);
     }
-    public void HasPaintballMagazine(bool magOnInventory)
-    {
-        HasPaintballPelletMagazine = magOnInventory;
-    }
+   
     public void Interact()
     {
         if (HasPaintballPelletMagazine && IsEmpty)
@@ -176,6 +233,13 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
             //DestroyThisTrap();
         }
     }
+    public override void Inactive()
+    {
+        if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
+        _animator.enabled = true;
+        _animator.SetBool("HasNoPellets", true);
+        active = false;
+    }
     public void DestroyThisTrap()
     {
         Quaternion finalRotation = transform.rotation;
@@ -200,7 +264,8 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     }
     public void Reload()
     {
-        shotsLeft = shots;
+        SetShots(shots);
+        if (shotsLeft > 0) { _magazine.SetActive(true); }
         active = true;
         StartCoroutine("ActiveCoroutine");
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
@@ -232,14 +297,10 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
         if (!_canShoot || (_currentObjective != null && _currentObjective.GetComponent<Enemy>().isDead))
             return;
 
-        if (shotsLeft == 0)
-        {
-            Inactive();
-        }
         GameVars.Values.soundManager.PlaySoundOnce("PelletFire", 0.7f, false);
         //ShootEffect.Play();
-        shotsLeft--;
-        shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
+        ShotsLeft--;
+        ShotsLeft = Mathf.Clamp(ShotsLeft, 0, shots);
         FirePaintballPellet();
     }
 
@@ -336,4 +397,12 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     }
 
     #endregion
+    IEnumerator PlayShutdownSound()
+    {
+        _isDisabledSFX = false;
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "TurretShutDown", 0.16f, false);
+        yield return new WaitForSeconds(1f);
+        GameVars.Values.soundManager.StopSound();
+        _isDisabledSFX = true;
+    }
 }

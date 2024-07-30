@@ -13,8 +13,7 @@ public class PaintballPellet : Projectile
     // Start is called before the first frame update
     protected override void Start()
     {
-        base.Start();
-        Invoke("ReturnToPool", 5f);
+        Invoke(nameof(ReturnToPool), 5f);
         _rb = GetComponent<Rigidbody>();
         _rb.AddForce(_forceAmount * shootDirection, ForceMode.Impulse);
     }
@@ -64,5 +63,15 @@ public class PaintballPellet : Projectile
         }
         return this;
     }
-    
+    private void OnCollisionEnter(Collision collision)
+    {
+        var gray = collision.gameObject.GetComponent<Enemy>(); //Cambiar a la clase padre de Gray cuando lo armemos.
+
+        if (gray)
+        {
+            Debug.Log("VUELVE PELLET AL POOL?");
+            ReturnToPool();
+            //other.GetComponent<Enemy>().TakeDamage(_damageAmount);
+        }
+    }
 }

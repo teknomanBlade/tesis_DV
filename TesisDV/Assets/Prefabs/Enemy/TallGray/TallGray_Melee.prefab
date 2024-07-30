@@ -12152,12 +12152,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9171576087201974361}
+  - component: {fileID: 5700644261775503027}
+  - component: {fileID: -3214199489047620312}
   - component: {fileID: 3001604136918176291}
   - component: {fileID: 8704686938908094390}
   - component: {fileID: 8704686938908094389}
   - component: {fileID: 8704686938908094384}
-  - component: {fileID: -3214199489047620312}
-  - component: {fileID: 5700644261775503027}
   m_Layer: 12
   m_Name: TallGray_Melee
   m_TagString: Untagged
@@ -12188,6 +12188,77 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5700644261775503027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362106399002743523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 015ebb3cf30bd05468c5553c1fc4ec61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myAnimator: {fileID: 3001604136918176291}
+  dissolveMaterial: {fileID: 0}
+  sphereEffectMaterial: {fileID: 0}
+  _hitEffect: {fileID: 0}
+  _deathEffect: {fileID: 0}
+  _pepperEffect: {fileID: 6962235357271764845}
+  _hitWave: {fileID: 0}
+--- !u!114 &-3214199489047620312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362106399002743523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7eaafa2c636cae41977462946f47290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hp: 10
+  _myWittsValue: 100
+  _movingSpeed: 2
+  _startSpeed: 0
+  _catGrabPos: {fileID: 453900518992729467}
+  witGainEffect: {fileID: 4580537072530106202}
+  allTargets: []
+  isDead: 0
+  enemyType: 1
+  pursueThreshold: 4
+  disengageThreshold: 4.5
+  attackThreshold: 2.5
+  attackDisengageThreshold: 3.5
+  _trapViewRadius: 5
+  attackTrapThreshold: 2.3
+  _player: {fileID: 0}
+  _cat: {fileID: 0}
+  hasObjective: 0
+  isSpecialAttacking: 0
+  isAttacking: 0
+  isStunned: 0
+  isForceFieldRejected: 0
+  _exitPos: {x: 0, y: 0, z: 0}
+  trapPos: {x: 0, y: 0, z: 0}
+  _waypoints: []
+  foundTrapInPath: 0
+  _trapMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  _currentTrapObjective: {fileID: 0}
+  _lm: {fileID: 0}
+  lineRenderer: {fileID: 1063702095537008266}
+  Path: []
+  PathHard: []
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 62981056
+  protectDistance: 3
+  _target: {fileID: 0}
+  _circlePos: {x: 0, y: 0, z: 0}
 --- !u!95 &3001604136918176291
 Animator:
   serializedVersion: 3
@@ -12293,7 +12364,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -12333,77 +12404,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &-3214199489047620312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8362106399002743523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7eaafa2c636cae41977462946f47290, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hp: 10
-  _myWittsValue: 100
-  _movingSpeed: 2
-  _startSpeed: 0
-  _catGrabPos: {fileID: 453900518992729467}
-  witGainEffect: {fileID: 4580537072530106202}
-  allTargets: []
-  isDead: 0
-  enemyType: 1
-  pursueThreshold: 4
-  disengageThreshold: 4.5
-  attackThreshold: 2.5
-  attackDisengageThreshold: 3.5
-  _trapViewRadius: 5
-  attackTrapThreshold: 2.3
-  _player: {fileID: 0}
-  _cat: {fileID: 0}
-  hasObjective: 0
-  isSpecialAttacking: 0
-  isAttacking: 0
-  isStunned: 0
-  isForceFieldRejected: 0
-  _exitPos: {x: 0, y: 0, z: 0}
-  trapPos: {x: 0, y: 0, z: 0}
-  _waypoints: []
-  foundTrapInPath: 0
-  _trapMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  _currentTrapObjective: {fileID: 0}
-  _lm: {fileID: 0}
-  lineRenderer: {fileID: 1063702095537008266}
-  Path: []
-  PathHard: []
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 62981056
-  protectDistance: 3
-  _target: {fileID: 0}
-  _circlePos: {x: 0, y: 0, z: 0}
---- !u!114 &5700644261775503027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8362106399002743523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 015ebb3cf30bd05468c5553c1fc4ec61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _myAnimator: {fileID: 3001604136918176291}
-  dissolveMaterial: {fileID: 0}
-  sphereEffectMaterial: {fileID: 0}
-  _hitEffect: {fileID: 0}
-  _deathEffect: {fileID: 0}
-  _pepperEffect: {fileID: 6962235357271764845}
-  _hitWave: {fileID: 0}
 --- !u!1 &8419035482558205754
 GameObject:
   m_ObjectHideFlags: 0

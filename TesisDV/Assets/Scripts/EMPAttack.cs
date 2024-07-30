@@ -21,6 +21,13 @@ public class EMPAttack : MonoBehaviour
             
         }
         else*/
+
+        if (trap && other.GetComponent<FERNPaintballMinigun>())
+        {
+            trap.Inactive();
+            //_myOwner.RevertSpecialAttackBool();
+        }
+
         if (trap && other.GetComponent<ElectricTrap>())
         {
             trap.Inactive();

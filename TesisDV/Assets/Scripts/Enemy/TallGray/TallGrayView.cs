@@ -22,12 +22,13 @@ public class TallGrayView : MonoBehaviour
     private ParticleSystem _pepperEffect;
     [SerializeField]
     private GameObject _hitWave;
-
+    private AudioSource _as;
     void Start()
     {
         //_myMaterial = GetComponent<Renderer>().material;
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
+        _as = GetComponent<AudioSource>();
     }
 
     public void EndSpawnAnim()
@@ -37,6 +38,7 @@ public class TallGrayView : MonoBehaviour
 
     public void WalkAnimation(bool value)
     {
+        PlaySoundCrackles();
         _myAnimator.SetBool("IsWalking", value);
     }
 
@@ -85,8 +87,11 @@ public class TallGrayView : MonoBehaviour
     {
         Destroy(gameObject);
     }
-    
-#region Shaders
+    public void PlaySoundCrackles()
+    {
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_TallGray_Walking", 0.35f, true, 1f);
+    }
+    #region Shaders
     public void SwitchDissolveMaterial(Material material)       
     {
         var materials = skinned.sharedMaterials.ToList();

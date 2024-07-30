@@ -11,9 +11,7 @@ public class Baseball : Projectile
 
     protected override void Start()
     {
-        base.Start();
-        //_damageAmount = 1;
-        Invoke("ReturnToPool",5f);
+        Invoke(nameof(ReturnToPool), 5f);
         _rb = GetComponent<Rigidbody>();
         _rb.AddForce(_forceAmount * shootDirection, ForceMode.Impulse);
     }
@@ -53,9 +51,8 @@ public class Baseball : Projectile
         {
             //_myOwner.GetDoor(other.GetComponent<Door>());
             ReturnToPool();
-            other.GetComponent<Enemy>().TakeDamage(_damageAmount);
+            //other.GetComponent<Enemy>().TakeDamage(_damageAmount);
         }
-        
     }
     /* protected override void OnContactEffect(Collider collider)
     {

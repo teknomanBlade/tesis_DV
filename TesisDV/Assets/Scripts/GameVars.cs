@@ -73,6 +73,7 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairRightClickIcon;
     public Sprite imageBaseballTrap;
     public Sprite switchTennisBallContainer;
+    public Sprite reloadingMinigunIcon;
     public CraftingScreen craftingScreen;
 
     public RectTransform notifications;
@@ -116,9 +117,12 @@ public class GameVars : MonoBehaviour
     public GameObject BasementDirectionMarkers;
     public string EnemyType;
     public int BaseballLauncherCount = 0;
+    public int FERNPaintballMinigunCount = 0;
     public int InitialStock { get; private set; }
     public BaseballLauncher BaseballLauncherPrefab;
+    public FERNPaintballMinigun FERNPaintballMinigunPrefab;
     public PoolObjectStack<BaseballLauncher> BaseballLauncherPool { get; set; }
+    public PoolObjectStack<FERNPaintballMinigun> FERNPaintballMinigunPool { get; set; }
     #region Events
     public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
     public event OnCapturedCatChangeDelegate OnCapturedCatChange;
@@ -178,6 +182,7 @@ public class GameVars : MonoBehaviour
         crosshairRightClickIcon = Resources.Load<Sprite>("RightClickMouseIcon");
         crosshairWorkbenchCrafting = Resources.Load<Sprite>("WorkbenchCraftIcon");
         switchTennisBallContainer = Resources.Load<Sprite>("SwitchTennisBallsContainer");
+        reloadingMinigunIcon = Resources.Load<Sprite>("ReloadingMinigunIcon");
         craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
         audioClips = Resources.LoadAll<AudioClip>("Sounds").ToList();
         TrapHotBar = FindObjectOfType<TrapHotBar>();
@@ -192,6 +197,31 @@ public class GameVars : MonoBehaviour
         WaveManager = GetComponent<WaveManager>();
         InitialStock = 5;
         BaseballLauncherPool = new PoolObjectStack<BaseballLauncher>(BaseballLauncherFactory, ActivateBaseballLauncher, DeactivateBaseballLauncher, InitialStock, true);
+        FERNPaintballMinigunPool = new PoolObjectStack<FERNPaintballMinigun>(FERNPaintballMinigunFactory, ActivateFERNPaintballMinigun, DeactivateFERNPaintballMinigun, InitialStock, true);
+    }
+
+    private void DeactivateFERNPaintballMinigun(FERNPaintballMinigun o)
+    {
+        o.gameObject.SetActive(false);
+        if (!o.gameObject.name.Contains("_"))
+        {
+            FERNPaintballMinigunCount++;
+            o.gameObject.name = o.gameObject.name.Replace("(Clone)", "");
+            o.gameObject.name += "_" + FERNPaintballMinigunCount;
+        }
+        o.transform.position = Vector3.zero;
+        o.transform.localPosition = Vector3.zero;
+    }
+
+    private void ActivateFERNPaintballMinigun(FERNPaintballMinigun o)
+    {
+        o.gameObject.SetActive(true);
+        o.InitializeTrap();
+    }
+
+    private FERNPaintballMinigun FERNPaintballMinigunFactory()
+    {
+        return Instantiate(FERNPaintballMinigunPrefab);
     }
 
     private void DeactivateBaseballLauncher(BaseballLauncher o)

@@ -16,8 +16,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     #region Events
     public delegate void OnNewRacketGrabbedDelegate();
     public event OnNewRacketGrabbedDelegate OnNewRacketGrabbed;
-    public delegate void OnMagazineInInventoryDelegate(bool HasMagazineOnInventory);
-    public event OnMagazineInInventoryDelegate OnMagazineInInventory;
     #endregion
 
     #region Components
@@ -1075,9 +1073,19 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         
         if (lookingAt.gameObject.TryGetComponent<FERNPaintballMinigun>(out FERNPaintballMinigun FERNPaintballMinigun))
         {
-            crosshair.sprite = GameVars.Values.crosshairActivation;
-            //interactKey.SetActive(true);
-            movingTrapButton.SetActive(true);
+            FERNPaintballMinigun.HasPaintballPelletMagazine = _inventory.ContainsID(7, 1);
+            if (FERNPaintballMinigun.IsEmpty)
+            {
+                crosshair.sprite = GameVars.Values.reloadingMinigunIcon;
+                FERNPaintballMinigun.OnReload += OnFERNPaintballMinigunReload;
+            }
+            else 
+            {
+                crosshair.sprite = GameVars.Values.crosshairActivation;
+                FERNPaintballMinigun.SetInventory(_inventory);
+                movingTrapButton.SetActive(true);
+            }
+
             ChangeCrosshairSize(40f);
             return;
         }
@@ -1195,12 +1203,15 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
         if (lookingAt.gameObject.TryGetComponent(out FERNPaintballMinigun FERNPaintballMinigun)) 
         {
-            if (FERNPaintballMinigun.IsEmpty)
+            
+            if (FERNPaintballMinigun.IsEmpty && !_inventory.ContainsID(7, 1))
             {
                 GameVars.Values.ShowNotification("You need a Paintball Pellet Magazine to reload!");
-                FERNPaintballMinigun.OnReload += OnFERNPaintballMinigunReload;
-                OnMagazineInInventory += FERNPaintballMinigun.HasPaintballMagazine;
-                OnMagazineInInventory(_inventory.ContainsID(7, 1));
+            }
+
+            if (_inventory.ContainsID(7,1)) 
+            {
+                _inventory.RemoveItemID(7,1);
             }
         }
         if (lookingAt.gameObject.TryGetComponent(out StationaryItem stationaryItem))
