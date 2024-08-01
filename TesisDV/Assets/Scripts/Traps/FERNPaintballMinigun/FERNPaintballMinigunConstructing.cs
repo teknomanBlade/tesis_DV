@@ -16,11 +16,6 @@ public class FERNPaintballMinigunConstructing : MonoBehaviour
 
     public void FinishAnim()
     {
-        /*GameObject aux = Instantiate(trapPrefab, transform.position, transform.rotation, parent.transform);
-       
-        if (GameVars.Values.currentShotsTrap2 > 0)
-            aux.GetComponent<FERNPaintballMinigun>().shotsLeft = GameVars.Values.currentShotsTrap2;*/
-        
         var aux = GameVars.Values.FERNPaintballMinigunPool.GetObject()
            .SetInitPos(transform.position)
            .SetInitRot(transform.rotation)

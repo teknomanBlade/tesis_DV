@@ -169,9 +169,8 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     private void StartTrap()
     {
         active = true;
-        if (shotsLeft > 0) { _magazine.SetActive(true); }
         SearchingForObjectives();
-        _animator.SetBool("HasNoPellets", false);
+        if (shotsLeft > 0) { _magazine.SetActive(true); }
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
         if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
         ShootCoroutine = StartCoroutine(ActiveCoroutine());
@@ -180,7 +179,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     private void SearchingForObjectives()
     {
         _animator.enabled = true;
-        GameVars.Values.soundManager.PlaySound(_as, "SFX_PaintballMinigunDetection", 0.35f, true, 1f);
+        _animator.SetBool("HasNoPellets", !active);
     }
 
     public void BecomeMovable()
@@ -236,9 +235,9 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     public override void Inactive()
     {
         if (!_isDisabledSFX) StartCoroutine(PlayShutdownSound());
-        _animator.enabled = true;
-        _animator.SetBool("HasNoPellets", true);
         active = false;
+        _animator.enabled = true;
+        _animator.SetBool("HasNoPellets", !active);
     }
     public void DestroyThisTrap()
     {
@@ -397,6 +396,10 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     }
 
     #endregion
+    public void PlaySoundDetection() 
+    {
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_PaintballMinigunDetection", 0.35f, true, 1f);
+    }
     IEnumerator PlayShutdownSound()
     {
         _isDisabledSFX = false;
