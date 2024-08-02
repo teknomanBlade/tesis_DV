@@ -80,8 +80,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         GameVars.Values.SlowTrap.RestoreBuildAmount();
         GameVars.Values.ElectricTrap.RestoreBuildAmount();
         GameVars.Values.FERNPaintballMinigun.RestoreBuildAmount();
-
-        GameVars.Values.soundManager.PlaySound("MusicPreWave",0.14f,true);
+        
         WorkbenchLight.SetActive(false);
     }
 

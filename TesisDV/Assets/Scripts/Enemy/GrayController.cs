@@ -16,6 +16,7 @@ public class GrayController : IController
         _m.onHit        +=  v.HitAnimation;
         _m.onElectricHit += v.ElectricDebuffAnimation;
         _m.onPepperHit += v.PepperHitEffect;
+        _m.onPaintballHit += v.PaintballHit;
         _m.onHit        +=  v.InnerEffectAnimation;
         _m.onDeath      +=  v.DeathAnimation;
         _m.onAttack     +=  v.AttackAnimation;

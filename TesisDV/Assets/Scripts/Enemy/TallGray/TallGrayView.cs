@@ -66,6 +66,10 @@ public class TallGrayView : MonoBehaviour
     {
         _pepperEffect.Play();
     }
+    public void PaintballHit()
+    {
+        _myAnimator.SetBool("IsPaintballHitted", true);
+    }
     public void CatGrabAnimation(bool value)
     {
         _myAnimator.SetBool("IsGrab", value);

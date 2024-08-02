@@ -89,6 +89,7 @@ public abstract class Enemy : MonoBehaviour
     public event Action onDeath = delegate { };
     public event Action onHit = delegate { };
     public event Action onPepperHit = delegate { };
+    public event Action onPaintballHit = delegate { };
     public event Action onElectricHit = delegate { };
     public event Action<bool> onAttack = delegate { };
     public event Action<bool> onAttackSpecial = delegate { };
@@ -345,7 +346,8 @@ public abstract class Enemy : MonoBehaviour
 
     public void EscapeWithCat()
     {
-        _lm.objective.transform.position = _catGrabPos.transform.position;
+        if(_lm.objective != null)
+            _lm.objective.transform.position = _catGrabPos.transform.position;
     }
 
     public void DropCat()
@@ -440,7 +442,11 @@ public abstract class Enemy : MonoBehaviour
     public void ElectricDebuffHit()
     {
         onElectricHit();
-    } 
+    }
+    public void PaintballHit()
+    {
+        onPaintballHit();
+    }
 
     public void AwakeGray()
     {

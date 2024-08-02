@@ -320,9 +320,13 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
         if (enemy == null)
             return;
 
-        if (PepperPelletsActive) 
+        if (PepperPelletsActive)
         {
             enemy.PepperHit();
+        }
+        else 
+        {
+            enemy.PaintballHit();
         }
         enemy.TakeDamage(_damageAmount);
         Debug.Log("DAÑO ENEMY: " + _damageAmount);

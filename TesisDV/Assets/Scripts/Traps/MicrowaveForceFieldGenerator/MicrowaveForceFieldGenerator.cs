@@ -34,6 +34,7 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     [SerializeField] private GameObject _returnDamageBlueprint;
     [SerializeField] private GameObject _returnDamageUpgrade;
     public bool ReturnDamageActive;
+    public bool SecondaryShieldActive;
     public bool _canActivate1aUpgrade { get; private set; }
     public bool _canActivate2aUpgrade { get; private set; }
     public bool _canActivate1bUpgrade { get; private set; }
@@ -58,7 +59,7 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         _as = GetComponent<AudioSource>();
         //_animForceField.SetBool("IsForceFieldOn", true);
         GameVars.Values.IsAllSlotsDisabled();
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "EMRingWavesSFX", 0.15f, true);
+        GameVars.Values.soundManager.PlaySound(_as, "EMRingWavesSFX", 0.15f, true,1f);
         SetUIIndicator("UI_MicrowaveForceFieldGenerator_Indicator");
     }
 
@@ -105,7 +106,8 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         _canActivate1bUpgrade = false;
         _canActivate1aUpgrade = false;
         _canActivate2aUpgrade = true;
-        SecondaryForceField.SetActive(_canActivate2aUpgrade);
+        SecondaryShieldActive = _canActivate2aUpgrade;
+        SecondaryForceField.SetActive(SecondaryShieldActive);
         //Aplicar beneficio del Upgrade
     }
     public void Activate2bUpgrade()
@@ -153,10 +155,14 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     public void BatteryReplaced()
     {
         EMPFriedEffect.SetActive(false);
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "EMRingWavesSFX", 0.15f, true);
+        GameVars.Values.soundManager.PlaySound(_as, "EMRingWavesSFX", 0.15f, true, 1f);
         ForceField.SetActive(true);
         OnForceFieldShieldPoints?.Invoke(20f);
-        OnSecondaryForceFieldShieldPoints?.Invoke(20f);
+        if (SecondaryShieldActive)
+        {
+            SecondaryForceField.SetActive(true);
+            OnSecondaryForceFieldShieldPoints?.Invoke(20f);
+        }
         particleRipples.SetActive(true);
         IsBatteryFried = false;
         OnMicrowaveBatteryReplaced?.Invoke();

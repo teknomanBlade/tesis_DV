@@ -59,7 +59,7 @@ public class SlowTrap : MonoBehaviour
     
     public void ActiveInitSound() 
     {
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "TarLiquidSFX", 0.15f, true);
+        GameVars.Values.soundManager.PlaySound(_as, "TarLiquidSFX", 0.15f, true,1f);
     }
     void OnTriggerEnter(Collider other)
     {

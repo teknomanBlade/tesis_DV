@@ -59,9 +59,14 @@ public class GrayDogView : MonoBehaviour
     {
         _pepperEffect.Play();
     }
+    public void PaintballHit()
+    {
+        _myAnimator.SetBool("IsPaintballHitted", true);
+    }
     public void RunningAnimation()
     {
         GameVars.Values.soundManager.PlaySound(_as, "SFX_AlienDogGallop", 0.25f, true, 1f);
+        
         _myAnimator.SetBool("IsRunning", true);
     }
 

@@ -87,7 +87,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     [SerializeField] private List<Transform> _waypoints;
     [SerializeField] private Vector3 _startingPosHard;
-
+    [SerializeField] private AudioSource _as;
     void Awake()
     {
         TimeWaves = _timeBetweenWaves;
@@ -97,6 +97,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     void Start()
     {
         parent = GameObject.Find("MainGame");
+        _as = GetComponent<AudioSource>();
+        GameVars.Values.soundManager.PlaySound(_as,"MusicPreWave", 0.1f, true,0f);
         //OnRoundStartEnd(_inRound);
         //Debug.Log(_inRound);
         OnRoundEnd(_currentRound);
@@ -175,7 +177,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
         DisableUFOLR(); 
         SpawnWave();
-        GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
+        GameVars.Values.soundManager.PlaySound(_as,"MusicWaves", 0.12f, true,0f);
         //_inRound = true;
         //OnRoundStartEnd?.Invoke(_inRound);
         TimeWaves = _timeBetweenWaves;

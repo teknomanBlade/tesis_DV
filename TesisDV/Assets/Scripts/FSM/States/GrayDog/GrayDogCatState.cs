@@ -41,7 +41,9 @@ public class GrayDogCatState : IState
 
     public void OnUpdate()
     {
-        if (_enemy._cat != null && Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 3f)//1f) Lo cambiamos hasta que el tallGray tenga la escala bien puesta.
+        if (_enemy._cat == null) return;
+
+        if (Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 3f)//1f) Lo cambiamos hasta que el tallGray tenga la escala bien puesta.
         {
             _enemy.GrabCat();
             GameVars.Values.EnemyType = _enemy.enemyType.ToString();

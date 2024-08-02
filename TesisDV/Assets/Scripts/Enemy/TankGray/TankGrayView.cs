@@ -22,10 +22,10 @@ public class TankGrayView : MonoBehaviour
     private ParticleSystem _pepperEffect;
     [SerializeField]
     private GameObject _hitWave;
-
+    private AudioSource _as;
     void Start()
     {
-        //_myMaterial = GetComponent<Renderer>().material;
+        _as = GetComponent<AudioSource>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
     }
@@ -37,6 +37,7 @@ public class TankGrayView : MonoBehaviour
 
     public void WalkAnimation(bool value)
     {
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_GrayTank_Walk", 0.85f, true, 1f);
         _myAnimator.SetBool("IsWalking", value);
     }
 
@@ -63,6 +64,10 @@ public class TankGrayView : MonoBehaviour
     public void PepperHitEffect()
     {
         _pepperEffect.Play();
+    }
+    public void PaintballHit()
+    {
+        _myAnimator.SetBool("IsPaintballHitted", true);
     }
     public void CatGrabAnimation(bool value)
     {

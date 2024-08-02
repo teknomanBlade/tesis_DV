@@ -57,7 +57,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         active = true; // Ahora las trampas empiezan encendidas.   
         _as = GetComponent<AudioSource>();
         ElectricityLineRenderer = GetComponent<ElectricityLineRenderer>();
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "ElectricTrapSFX", 0.25f, true);
+        GameVars.Values.soundManager.PlaySound(_as, "ElectricTrapSFX", 0.25f, true, 1f);
         SetUIIndicator("UI_ElectricTrap_Indicator");
     }
 
@@ -71,7 +71,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         if (!active)
         {
             active = true;
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "ElectricTrapSFX", 0.25f, true);
+            GameVars.Values.soundManager.PlaySound(_as, "ElectricTrapSFX", 0.25f, true, 1f);
             ParticleLightning.SetActive(true);
             ElectricityLineRenderer.DisableEnableLightAndLineRenderer(true);
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,6 +95,10 @@ public class GrayView : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         _myAnimator.SetBool("IsElectricHitted", false);
     }
+    public void PaintballHit()
+    {
+        _myAnimator.SetBool("IsPaintballHitted", true);
+    }
     public void DissolveAnimation()
     {
         StartCoroutine(PlayShaderDissolve());
@@ -153,8 +158,10 @@ public class GrayView : MonoBehaviour
         Dead();
     }
 
-#endregion
+    
 
-    
-    
+    #endregion
+
+
+
 }
