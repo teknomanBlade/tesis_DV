@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,13 @@ public class TallGrayView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _pepperEffect;
     [SerializeField]
+    private ParticleSystem _poisonEffect;
+    [SerializeField]
     private GameObject _hitWave;
     private AudioSource _as;
     void Start()
     {
-        //_myMaterial = GetComponent<Renderer>().material;
+        _poisonEffect.Stop();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
         _as = GetComponent<AudioSource>();
@@ -86,7 +89,10 @@ public class TallGrayView : MonoBehaviour
         _hitWave.SetActive(!_hitWave.activeSelf);
         _hitWave.GetComponent<Animator>().SetBool("IsHit", true);
     }
-
+    public void PoisonHit()
+    {
+        _poisonEffect.Play();
+    }
     public void Dead()
     {
         Destroy(gameObject);
@@ -130,8 +136,10 @@ public class TallGrayView : MonoBehaviour
         Dead();
     }
 
-#endregion
+    internal void PoisonHitStop()
+    {
+        _poisonEffect.Stop();
+    }
 
-    
-    
+    #endregion
 }

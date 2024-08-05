@@ -23,11 +23,13 @@ public class GrayView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _pepperEffect;
     [SerializeField]
+    private ParticleSystem _poisonEffect;
+    [SerializeField]
     private GameObject _hitWave;
 
     void Start()
     {
-        //_myMaterial = GetComponent<Renderer>().material;
+        _poisonEffect.Stop();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
         _as = GetComponent<AudioSource>();
@@ -99,6 +101,16 @@ public class GrayView : MonoBehaviour
     {
         _myAnimator.SetBool("IsPaintballHitted", true);
     }
+    internal void PoisonHit()
+    {
+        _poisonEffect.Play();
+    }
+
+    public void PoisonHitStop() 
+    {
+        _poisonEffect.Stop();
+    }
+
     public void DissolveAnimation()
     {
         StartCoroutine(PlayShaderDissolve());
@@ -157,9 +169,6 @@ public class GrayView : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         Dead();
     }
-
-    
-
     #endregion
 
 

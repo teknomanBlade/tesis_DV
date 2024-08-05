@@ -18,6 +18,7 @@ public class TallGrayModel : Enemy
         _pf = new Pathfinding();
         HP = 10f;
         _startSpeed = _movingSpeed;
+        PoisonHitted = false;
         GameVars.Values.WaveManager.EnhanceEnemyStatsPerWave(this);
         _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.PlayerState));
         _fsm.AddState(EnemyStatesEnum.PlayerState, new PlayerState(_fsm, this, _pf));

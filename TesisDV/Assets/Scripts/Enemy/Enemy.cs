@@ -63,6 +63,13 @@ public abstract class Enemy : MonoBehaviour
     public StateMachine _fsm;
     public LevelManager _lm;
     private bool canBeHit = true;
+    [SerializeField]
+    private bool _poisonHitted;
+    public bool PoisonHitted
+    {
+        get { return _poisonHitted; }
+        set { _poisonHitted = value; }
+    }
     [SerializeField] protected LineRenderer lineRenderer;
 
     #region Pathfinding
@@ -88,6 +95,8 @@ public abstract class Enemy : MonoBehaviour
     public event Action<bool> onCatGrab = delegate { };
     public event Action onDeath = delegate { };
     public event Action onHit = delegate { };
+    public event Action onPoisonHit = delegate { };
+    public event Action onPoisonHitStop = delegate { };
     public event Action onPepperHit = delegate { };
     public event Action onPaintballHit = delegate { };
     public event Action onElectricHit = delegate { };
@@ -112,9 +121,15 @@ public abstract class Enemy : MonoBehaviour
         {
             if (canBeHit)
             {
-                onHit();
+                if (PoisonHitted)
+                {
+                    onPoisonHit();
+                }
+                else 
+                {
+                    onHit();
+                }
             }
-
         }
         else
         {
@@ -465,8 +480,14 @@ public abstract class Enemy : MonoBehaviour
 
     public void SlowDown(float slowAmount)
     {
-        //_navMeshAgent.speed -= slowAmount; //Se va el navmesh
+        Invoke(nameof(ChangePoisonState), 4f);
         _movingSpeed -= slowAmount;
+    }
+
+    public void ChangePoisonState() 
+    {
+        PoisonHitted = false;
+        onPoisonHitStop();
     }
 
     public void SlowDebuff(float slowAmount) 

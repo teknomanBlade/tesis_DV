@@ -105,11 +105,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5529201381889959271}
+  - component: {fileID: 8743121779481527506}
   - component: {fileID: 387412670029883746}
   - component: {fileID: 8358821369440049629}
   - component: {fileID: 4858620004115943793}
   - component: {fileID: 6087161076260193707}
-  - component: {fileID: 8743121779481527506}
   - component: {fileID: 4646322674632208843}
   m_Layer: 10
   m_Name: SlowTrap
@@ -135,6 +135,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8743121779481527506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2450129766235944469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b557111028a450a49ad3960f9b187cd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slowAmount: 0.8
+  _slowAmountPlayer: 3
+  _slow20BoostCoefMultiplier: 0
+  _slow30BoostCoefMultiplier: 0
+  _doesDamage: 0
+  TenPercentDamage: 0
+  TwentyPercentDamage: 0
+  _plus20SlowBlueprint: {fileID: 0}
+  _plus20SlowUpgrade: {fileID: 0}
+  _plus30SlowBlueprint: {fileID: 0}
+  _plus30SlowUpgrade: {fileID: 0}
+  _minus10PercentPoisonDamageBlueprint: {fileID: 0}
+  _minus10PercentPoisonDamageUpgrade: {fileID: 0}
+  _minus20PercentPoisonDamageBlueprint: {fileID: 0}
+  _minus20PercentPoisonDamageUpgrade: {fileID: 0}
+  _tarStain: {fileID: 947582598802298165}
+  _bubblesParticles: {fileID: 2572021686152496688}
 --- !u!33 &387412670029883746
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -216,33 +245,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8743121779481527506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2450129766235944469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b557111028a450a49ad3960f9b187cd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _slowAmount: 0.8
-  _slowAmountPlayer: 3
-  _slow20BoostCoefMultiplier: 0
-  _slow30BoostCoefMultiplier: 0
-  _doesDamage: 0
-  _plus20SlowBlueprint: {fileID: 0}
-  _plus20SlowUpgrade: {fileID: 0}
-  _plus30SlowBlueprint: {fileID: 0}
-  _plus30SlowUpgrade: {fileID: 0}
-  _minus10PercentPoisonDamageBlueprint: {fileID: 0}
-  _minus10PercentPoisonDamageUpgrade: {fileID: 0}
-  _minus20PercentPoisonDamageBlueprint: {fileID: 0}
-  _minus20PercentPoisonDamageUpgrade: {fileID: 0}
-  _tarStain: {fileID: 947582598802298165}
-  _bubblesParticles: {fileID: 2572021686152496688}
 --- !u!82 &4646322674632208843
 AudioSource:
   m_ObjectHideFlags: 0

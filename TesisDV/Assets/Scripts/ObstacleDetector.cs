@@ -24,7 +24,6 @@ public class ObstacleDetector : MonoBehaviour
             //_myOwner.GetDoor(other.GetComponent<Door>());
             _myOwner.GetDoor(other.GetComponent<Door>());
         }
-
         else if (forceField && other.GetComponent<ForceField>() && !_myOwner.hasObjective)
         {
             _myOwner._fsm.ChangeState(EnemyStatesEnum.AttackTrapState);

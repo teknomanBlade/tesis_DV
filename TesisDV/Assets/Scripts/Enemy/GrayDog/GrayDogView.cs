@@ -12,6 +12,8 @@ public class GrayDogView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _pepperEffect;
     [SerializeField]
+    private ParticleSystem _poisonEffect;
+    [SerializeField]
     private ParticleSystem _ringWavesEffect;
     [SerializeField]
     private GameObject _hitWave;
@@ -22,6 +24,7 @@ public class GrayDogView : MonoBehaviour
         _as = GetComponent<AudioSource>();
         _myAnimator = GetComponent<Animator>();
         _myAnimator.SetBool("IsSpawning", true);
+        _poisonEffect.Stop();
         _ringWavesEffect.Stop();
     }
 
@@ -74,5 +77,15 @@ public class GrayDogView : MonoBehaviour
     {
         _ringWavesEffect.Play();
         _myAnimator.SetBool("IsCatGrabbed", value);
+    }
+
+    public void PoisonHit()
+    {
+        _poisonEffect.Play();
+    }
+
+    internal void PoisonHitStop()
+    {
+        _poisonEffect.Stop();
     }
 }

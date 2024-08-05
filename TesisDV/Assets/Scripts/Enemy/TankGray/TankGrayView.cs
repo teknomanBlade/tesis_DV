@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,13 @@ public class TankGrayView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _pepperEffect;
     [SerializeField]
+    private ParticleSystem _poisonEffect;
+    [SerializeField]
     private GameObject _hitWave;
     private AudioSource _as;
     void Start()
     {
+        _poisonEffect.Stop();
         _as = GetComponent<AudioSource>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
@@ -68,6 +72,10 @@ public class TankGrayView : MonoBehaviour
     public void PaintballHit()
     {
         _myAnimator.SetBool("IsPaintballHitted", true);
+    }
+    public void PoisonHit()
+    {
+        _poisonEffect.Play();
     }
     public void CatGrabAnimation(bool value)
     {
@@ -126,8 +134,15 @@ public class TankGrayView : MonoBehaviour
         Dead();
     }
 
-#endregion
+    internal void PoisonHitStop()
+    {
+        _poisonEffect.Stop();
+    }
 
-    
-    
+
+
+    #endregion
+
+
+
 }

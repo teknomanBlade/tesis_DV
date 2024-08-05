@@ -13,6 +13,8 @@ public class SlowTrap : MonoBehaviour
     private ParticleSystem _bubblesParticleSystem;
     #region Upgrades
     [Header("Upgrades")]
+    public float TenPercentDamage;
+    public float TwentyPercentDamage;
     [SerializeField] private GameObject _plus20SlowBlueprint;
     [SerializeField] private GameObject _plus20SlowUpgrade;
     [SerializeField] private GameObject _plus30SlowBlueprint;
@@ -67,6 +69,8 @@ public class SlowTrap : MonoBehaviour
 
         if (enemy)
         {
+            TenPercentDamage = enemy.HP * 0.01f;
+            TwentyPercentDamage = enemy.HP * 0.02f;
             if (_canActivate1aUpgrade)
             {
                 var new20PercentSlow = _slowAmount * _slow20BoostCoefMultiplier;
@@ -91,29 +95,26 @@ public class SlowTrap : MonoBehaviour
         {
             if (_canActivate2aUpgrade) 
             {
-                var tenPercentDamage = enemy.HP * 0.1f;
-                enemy.TakeDamage(tenPercentDamage);
+                enemy.PoisonHitted = true;
+                Debug.Log("10 PERCENT DAMAGE: " + TenPercentDamage);
+                enemy.TakeDamage(TenPercentDamage);
             }
             else if (_canActivate2bUpgrade) 
             {
-                var twentyPercentDamage = enemy.HP * 0.2f;
-                enemy.TakeDamage(twentyPercentDamage);
+                enemy.PoisonHitted = true;
+                Debug.Log("20 PERCENT DAMAGE: " + TwentyPercentDamage);
+                enemy.TakeDamage(TwentyPercentDamage);
             }
         }
     }
     void OnTriggerExit(Collider other)
     {
         var enemy = other.GetComponent<Enemy>(); //Despues hacer uno de estos para cada enemigo por ahora para ver cuanto sacale 
-        //var player = other.GetComponent<Player>();
 
         if (enemy)
         {
-            other.GetComponent<Enemy>().SlowDown(-_slowAmount);
+            enemy.SlowDown(-_slowAmount);
         }
-        //else if (player && other.GetComponent<Player>())
-        //{
-            //other.GetComponent<Player>().SlowDown(-_slowAmountPlayer);
-        //}
     }
 
     #region Upgrade Voids

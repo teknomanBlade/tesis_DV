@@ -17,6 +17,7 @@ public class TankGrayModel : Enemy
         _pf = new Pathfinding();
         HP = 18f;
         _startSpeed = _movingSpeed;
+        PoisonHitted = false;
         GameVars.Values.WaveManager.EnhanceEnemyStatsPerWave(this);
         _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.CatState));
         _fsm.AddState(EnemyStatesEnum.CatState, new CatState(_fsm, this, _pf));
