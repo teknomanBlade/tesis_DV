@@ -149,7 +149,7 @@ public class GoapMiniTest : MonoBehaviour
 
     private void OnCantPlan() {
         //TODO: debuggeamos para ver por qué no pudo planear y encontrar como hacer para que no pase nunca mas
-        Debug.Log("Cagaste pa");
+        Debug.Log("No funciona");
     }
 
 }

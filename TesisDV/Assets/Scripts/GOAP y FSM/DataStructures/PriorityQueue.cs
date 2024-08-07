@@ -1,41 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections;
+using Unity;
+using UnityEngine;
 using System.Linq;
 
-public class PriorityQueue<T> {
-
+public class PriorityQueue<T>
+{
     private List<WeightedNode<T>> _queue = new List<WeightedNode<T>>();
 
-    /// <summary>
-    /// Adds an element to the Queue 
-    /// </summary>
-    /// <param name="element"></param>
-    public void Enqueue(WeightedNode<T> element) {
+    public void Enqueue(WeightedNode<T> element)
+    {
         _queue.Add(element);
+        _queue = _queue.OrderBy(n => n.Weight).ToList(); // Ordena la cola para garantizar que el nodo con menor peso esté al frente
     }
 
-    /// <summary>
-    /// Returns the element with minimum value in the Queue
-    /// </summary>
-    /// <returns></returns>
-    public WeightedNode<T> Dequeue() {
-        var min       = default(WeightedNode<T>);
-        var minWeight = float.MaxValue;
-
-        foreach (var element in _queue.Where(n => !(n.Weight >= minWeight))) {
-            min       = element;
-            minWeight = element.Weight;
-        }
-
-        var newQueue = _queue.Where(n => n != min).ToList();
-
-        _queue = newQueue;
-
+    public WeightedNode<T> Dequeue()
+    {
+        if (IsEmpty) throw new InvalidOperationException("Queue is empty");
+        var min = _queue.First();
+        _queue.RemoveAt(0);
         return min;
     }
 
-    /// <summary>
-    /// Returns true if the Queue does not contain any elements
-    /// </summary>
-    public bool IsEmpty => _queue.Count == 0;
+    public bool IsEmpty => !_queue.Any();
 }
-    
