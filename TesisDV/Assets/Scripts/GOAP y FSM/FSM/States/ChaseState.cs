@@ -88,7 +88,8 @@ public class ChaseState : MonoBaseState
         }
         else
         {
-            transform.forward = dir;
+            Vector3 dirAux = new Vector3(dir.x, 0, dir.z);
+            transform.forward = dirAux;
             transform.position += transform.forward * movingSpeed * Time.deltaTime;
             canCreatePath = true;
             _currentWaypoint = 0;
