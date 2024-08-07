@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.AI;
+using UnityEditor;
 
 public class EnemyHealth : MonoBehaviour, IHittableObserver, IGridEntity
 {
+    public bool _hasCat = false;
     public int hp = 3;
     public bool dead = false;
-    private NavMeshAgent _navMeshAgent;
     private SpatialGrid _sg;
     private LevelManager _lm;
     public Vector3 Position
@@ -22,7 +23,6 @@ public class EnemyHealth : MonoBehaviour, IHittableObserver, IGridEntity
 
     void Awake()
     {
-        _navMeshAgent = GetComponent<NavMeshAgent>();
         _sg = GameObject.Find("Grid").GetComponent<SpatialGrid>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _lm.enemiesInScene.Add(this);
@@ -66,12 +66,5 @@ public class EnemyHealth : MonoBehaviour, IHittableObserver, IGridEntity
         _lm.RemoveGray(this);
         _sg.Remove(this);
         Destroy(this.gameObject);
-    }
-
-    public Vector3 GetVelocity()
-    {
-        return _navMeshAgent.velocity;
-    }
-
-    
+    }  
 }

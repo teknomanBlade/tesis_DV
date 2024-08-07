@@ -217,7 +217,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     {
         //playing = false;
         YouLose.SetActive(true);
-        Debug.Log("Loser");
+        // Debug.Log("Loser");
         //SceneManager.LoadScene("MainFloor_Upgrade");
     }
 

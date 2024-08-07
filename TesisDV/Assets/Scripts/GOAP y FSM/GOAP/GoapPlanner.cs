@@ -36,9 +36,11 @@ public class GoapPlanner {
         var fsm = new FiniteStateMachine(prevState, startCoroutine);
 
         foreach (var action in plan.Skip(1)){
-            if (prevState == action.linkedState) continue;
+            // if (prevState == action.linkedState) continue;
             fsm.AddTransition("On" + action.linkedState.Name, prevState, action.linkedState);
+            Debug.Log("Añado " + action.linkedState.Name);
             fsm.AddTransition("On" + prevState.Name, action.linkedState, prevState);
+             Debug.Log("Añado previa" + action.linkedState.Name);
             prevState = action.linkedState;
         }
 

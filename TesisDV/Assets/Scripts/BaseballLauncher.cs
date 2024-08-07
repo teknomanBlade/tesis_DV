@@ -190,10 +190,10 @@ public class BaseballLauncher : Item, IMovable
         //{
         if (_currentObjectiveDistance < viewRadius && _currentObjective != null)
         {
-            Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<EnemyHealth>().GetVelocity() * _futureTime * Time.deltaTime);
+            // Vector3 futurePos = _currentObjective.transform.position + (_currentObjective.GetComponent<EnemyHealth>().GetVelocity() * _futureTime * Time.deltaTime);
             //Vector3 dir = item.transform.position - transform.position;
 
-            Vector3 dir = futurePos - transform.position;
+            Vector3 dir = _currentObjective.transform.position - transform.position;
             _currentObjectiveDistance = Vector3.Distance(transform.position, _currentObjective.transform.position);
 
             //if (Vector3.Angle(transform.forward, dir.normalized) < viewAngle / 2)

@@ -82,16 +82,16 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     {
         if (!_inRound)
         {
-            TimeWaves -= Time.deltaTime;
-            if (TimeWaves <= 0)
-            {
-                DespawnUFOIndicators();
-                SpawnWave();
-                GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
-                _inRound = true;
-                OnRoundStartEnd?.Invoke(_inRound);
-                TimeWaves = _timeBetweenWaves;
-            }
+            // TimeWaves -= Time.deltaTime;
+            // if (TimeWaves <= 0)
+            // {
+            //     DespawnUFOIndicators();
+            //     SpawnWave();
+            //     GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
+            //     _inRound = true;
+            //     OnRoundStartEnd?.Invoke(_inRound);
+            //     TimeWaves = _timeBetweenWaves;
+            // }
         }
     }
 

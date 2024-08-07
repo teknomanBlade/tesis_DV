@@ -49,7 +49,7 @@ public class Cat : MonoBehaviour
         if (/*_isHeld &&*/
             Input.GetKeyDown(KeyCode.Z))
         {
-            Debug.Log("GATO GRITA");
+            // Debug.Log("GATO GRITA");
             CatScreeming();
         }
         //else

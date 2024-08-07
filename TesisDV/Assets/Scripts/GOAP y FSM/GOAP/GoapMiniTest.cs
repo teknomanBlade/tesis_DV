@@ -19,76 +19,76 @@ public class GoapMiniTest : MonoBehaviour
         PlanAndExecute();
     }
 
-    private void OnlyPlan() {
-        var actions = new List<GOAPAction>{
-                                              new GOAPAction("ChaseCat")
-                                                 .Pre("isStuned", false)
-                                                 .Pre("isPlayerInSight", false)
-                                                 .Pre("hasCat", false)
-                                                 .Effect("hasCat", true)
-                                                 .Effect("isPlayerInSight", true)
-                                                 ,
+   //  private void OnlyPlan() {
+   //      var actions = new List<GOAPAction>{
+   //                                            new GOAPAction("ChaseCat")
+   //                                               .Pre("isStuned", false)
+   //                                               .Pre("isPlayerInSight", false)
+   //                                               .Pre("hasCat", false)
+   //                                               .Effect("hasCat", true)
+   //                                               .Effect("isPlayerInSight", true)
+   //                                               ,
 
-                                              new GOAPAction("OpenDoor")
-                                                 .Pre("isStuned", false)
-                                                 .Pre("foundDoorInPath", true)
-                                                 .Effect("foundDoorInPath",    false)
-                                                 ,
+   //                                            new GOAPAction("OpenDoor")
+   //                                               .Pre("isStuned", false)
+   //                                               .Pre("foundDoorInPath", true)
+   //                                               .Effect("foundDoorInPath",    false)
+   //                                               ,
 
-                                              new GOAPAction("BreakTrap")
-                                                 .Pre("isStuned", false)
-                                                 .Pre("foundTrapInPath",   true)
-                                                 .Effect("foundTrapInPath", false)
-                                                 ,
+   //                                            new GOAPAction("BreakTrap")
+   //                                               .Pre("isStuned", false)
+   //                                               .Pre("foundTrapInPath",   true)
+   //                                               .Effect("foundTrapInPath", false)
+   //                                               ,
 
-                                              new GOAPAction("ChaseState")
-                                                 .Pre("isStuned", false)
-                                                 .Pre("isPlayerInSight", true)
-                                                 .Effect("isPlayerNear",    true)
-                                                 ,
+   //                                            new GOAPAction("ChaseState")
+   //                                               .Pre("isStuned", false)
+   //                                               .Pre("isPlayerInSight", true)
+   //                                               .Effect("isPlayerNear",    true)
+   //                                               ,
 
-                                              new GOAPAction("Attack")
+   //                                            new GOAPAction("Attack")
 
-                                                 .Pre("isPlayerNear",   true)
-                                                 .Effect("isPlayerAlive", false)
-                                                 ,
+   //                                               .Pre("isPlayerNear",   true)
+   //                                               .Effect("isPlayerAlive", false)
+   //                                               ,
 
-                                              new GOAPAction("FleeingState")
+   //                                            new GOAPAction("FleeingState")
 
-                                                 .Pre("hasCat", true)
+   //                                               .Pre("hasCat", true)
 
-                                                 .Effect("alienIsGone", true)
-                                                 ,
+   //                                               .Effect("alienIsGone", true)
+   //                                               ,
 
-                                              new GOAPAction("StunState")
-                                                 .Pre("isStuned", true)
-                                                 .Effect("isStuned", false)
-                                                 ,
+   //                                            new GOAPAction("StunState")
+   //                                               .Pre("isStuned", true)
+   //                                               .Effect("isStuned", false)
+   //                                               ,
 
-                                              new GOAPAction("DieState")
-                                                 .Pre("isAlive", false)
+   //                                            new GOAPAction("DieState")
+   //                                               .Pre("isAlive", false)
                                                  
-                                          };
-        var from = new GOAPState();
-        from.values["isPlayerInSight"] = false;
-        from.values["isPlayerAlive"]   = true;
-        from.values["isPlayerNear"]    = false;
-        from.values["hasCat"]          = false;
-        from.values["foundDoorInPath"] = false;
-        from.values["foundTrapInPath"] = false;
-        from.values["alienIsGone"]     = false;
-        from.values["isStuned"]        = false;
-        from.values["isAlive"]         = true;
+   //                                        };
+   //      var from = new GOAPState();
+   //      from.values["isPlayerInSight"] = false;
+   //      from.values["isPlayerAlive"]   = true;
+   //      from.values["isPlayerNear"]    = false;
+   //      from.values["hasCat"]          = false;
+   //      from.values["foundDoorInPath"] = false;
+   //      from.values["foundTrapInPath"] = false;
+   //      from.values["alienIsGone"]     = false;
+   //      from.values["isStuned"]        = false;
+   //      from.values["isAlive"]         = true;
 
-        var to = new GOAPState();
-        to.values["alienIsGone"]       = true;
+   //      var to = new GOAPState();
+   //      to.values["alienIsGone"]       = true;
 
-        var planner = new GoapPlanner();
-        //planner.OnPlanCompleted += OnPlanCompleted;
-        //planner.OnCantPlan      += OnCantPlan;
+   //      var planner = new GoapPlanner();
+   //      //planner.OnPlanCompleted += OnPlanCompleted;
+   //      //planner.OnCantPlan      += OnCantPlan;
 
-        planner.Run(from, to, actions, StartCoroutine);
-    }
+   //      planner.Run(from, to, actions, StartCoroutine);
+   //  }
     //IA2-P3
     private void PlanAndExecute() {
         var actions = new List<GOAPAction>{
@@ -148,7 +148,6 @@ public class GoapMiniTest : MonoBehaviour
     }
 
     private void OnCantPlan() {
-        //TODO: debuggeamos para ver por qué no pudo planear y encontrar como hacer para que no pase nunca mas
         Debug.Log("No funciona");
     }
 
