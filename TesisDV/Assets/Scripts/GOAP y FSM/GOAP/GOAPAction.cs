@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FSM;
 using UnityEngine;
 
 public class GOAPAction {
 
-    public Dictionary<string, bool> preconditions { get; private set; }
-    public Dictionary<string, bool> effects       { get; private set; }
+    public Dictionary<string, object> preconditions { get; private set; }
+    public Dictionary<string, object> effects       { get; private set; }
     public string                   name          { get; private set; }
     public float                    cost          { get; private set; }
     public IState                   linkedState   { get; private set; }
@@ -14,8 +15,8 @@ public class GOAPAction {
     public GOAPAction(string name) {
         this.name     = name;
         cost          = 1f;
-        preconditions = new Dictionary<string, bool>();
-        effects       = new Dictionary<string, bool>();
+        preconditions = new Dictionary<string, object>();
+        effects       = new Dictionary<string, object>();
     }
 
     public GOAPAction Cost(float cost) {
@@ -29,13 +30,29 @@ public class GOAPAction {
         return this;
     }
 
-    public GOAPAction Pre(string s, bool value) {
-        preconditions[s] = value;
+    public GOAPAction Pre(string key, object value)
+    {
+        if (value is string || value is float || value is bool || value is int)
+        {
+            preconditions[key] = value;
+        }
+        else
+        {
+            throw new ArgumentException("Invalid type. Only string, float, bool, and int are allowed.");
+        }
         return this;
     }
 
-    public GOAPAction Effect(string s, bool value) {
-        effects[s] = value;
+    public GOAPAction Effect(string key, object value)
+    {
+        if (value is string || value is float || value is bool || value is int)
+        {
+            effects[key] = value;
+        }
+        else
+        {
+            throw new ArgumentException("Invalid type. Only string, float, bool, and int are allowed.");
+        }
         return this;
     }
 

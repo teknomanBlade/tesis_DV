@@ -3,103 +3,42 @@ using System.Collections.Generic;
 using FSM;
 using UnityEngine;
 
-public class GoapMiniTest : MonoBehaviour 
+public class GoapMiniTest : MonoBehaviour
 {
-    public ChaseState       chaseState;
-    public AttackState      attackState;
-    public ChaseCatState    chaseCatState;
-    public FleeingState     fleeingState;
-    public EscapeState      escapeState;
+    public ChaseState chaseState;
+    public AttackState attackState;
+    public ChaseCatState chaseCatState;
+    public FleeingState fleeingState;
+    public EscapeState escapeState;
+    public BreakObjectState breakObjectState;
+
 
     private FiniteStateMachine _fsm;
-    
-    
-    void Start() {
+
+
+    void Start()
+    {
         //OnlyPlan();
         PlanAndExecute();
     }
 
-   //  private void OnlyPlan() {
-   //      var actions = new List<GOAPAction>{
-   //                                            new GOAPAction("ChaseCat")
-   //                                               .Pre("isStuned", false)
-   //                                               .Pre("isPlayerInSight", false)
-   //                                               .Pre("hasCat", false)
-   //                                               .Effect("hasCat", true)
-   //                                               .Effect("isPlayerInSight", true)
-   //                                               ,
-
-   //                                            new GOAPAction("OpenDoor")
-   //                                               .Pre("isStuned", false)
-   //                                               .Pre("foundDoorInPath", true)
-   //                                               .Effect("foundDoorInPath",    false)
-   //                                               ,
-
-   //                                            new GOAPAction("BreakTrap")
-   //                                               .Pre("isStuned", false)
-   //                                               .Pre("foundTrapInPath",   true)
-   //                                               .Effect("foundTrapInPath", false)
-   //                                               ,
-
-   //                                            new GOAPAction("ChaseState")
-   //                                               .Pre("isStuned", false)
-   //                                               .Pre("isPlayerInSight", true)
-   //                                               .Effect("isPlayerNear",    true)
-   //                                               ,
-
-   //                                            new GOAPAction("Attack")
-
-   //                                               .Pre("isPlayerNear",   true)
-   //                                               .Effect("isPlayerAlive", false)
-   //                                               ,
-
-   //                                            new GOAPAction("FleeingState")
-
-   //                                               .Pre("hasCat", true)
-
-   //                                               .Effect("alienIsGone", true)
-   //                                               ,
-
-   //                                            new GOAPAction("StunState")
-   //                                               .Pre("isStuned", true)
-   //                                               .Effect("isStuned", false)
-   //                                               ,
-
-   //                                            new GOAPAction("DieState")
-   //                                               .Pre("isAlive", false)
-                                                 
-   //                                        };
-   //      var from = new GOAPState();
-   //      from.values["isPlayerInSight"] = false;
-   //      from.values["isPlayerAlive"]   = true;
-   //      from.values["isPlayerNear"]    = false;
-   //      from.values["hasCat"]          = false;
-   //      from.values["foundDoorInPath"] = false;
-   //      from.values["foundTrapInPath"] = false;
-   //      from.values["alienIsGone"]     = false;
-   //      from.values["isStuned"]        = false;
-   //      from.values["isAlive"]         = true;
-
-   //      var to = new GOAPState();
-   //      to.values["alienIsGone"]       = true;
-
-   //      var planner = new GoapPlanner();
-   //      //planner.OnPlanCompleted += OnPlanCompleted;
-   //      //planner.OnCantPlan      += OnCantPlan;
-
-   //      planner.Run(from, to, actions, StartCoroutine);
-   //  }
     //IA2-P3
-    private void PlanAndExecute() {
+    private void PlanAndExecute()
+    {
         var actions = new List<GOAPAction>{
                                               new GOAPAction("Escape")
-                                                 .Pre("isAlienGoingToDie", true)
+                                                 .Pre("isAlienGoingToDie", 2)
                                                  .Effect("isPlayerNear", true)
-                                                 .LinkedState(escapeState),  
+                                                 .LinkedState(escapeState),
 
                                               new GOAPAction("ChaseCat")
                                                  .Effect("hasCat", true)
                                                  .LinkedState(chaseCatState),
+
+                                              //new GOAPAction("BreakObject")
+                                              //   .Pre("isObjectBlocking", "HouseDoorBlack")
+                                              //   .Effect("catIsGone", true)
+                                              //   .LinkedState(breakObjectState),
 
                                               new GOAPAction("Chase")
                                                  .Pre("catIsGone", true)
@@ -107,7 +46,7 @@ public class GoapMiniTest : MonoBehaviour
                                                  .LinkedState(chaseState),
 
                                               new GOAPAction("Attack")
-                                                 .Pre("isPlayerNear",   true)
+                                                 .Pre("isPlayerNear",   4.5f)
                                                  .Effect("isPlayerAlive", false)
                                                  .Effect("alienWins", true)
                                                  .LinkedState(attackState),
@@ -117,37 +56,39 @@ public class GoapMiniTest : MonoBehaviour
                                                  .Pre("hasCat", true)
                                                  .Effect("catIsGone", true)
                                                  .LinkedState(fleeingState),
-                                              
+
                                           };
-        
+
         var from = new GOAPState();
-        from.values["isPlayerInSight"]    = false;
-        from.values["isPlayerAlive"]      = true;
-        from.values["isPlayerNear"]       = false;
-        from.values["hasCat"]             = false;
-        from.values["catIsGone"]          = false;
-        from.values["alienIsGone"]        = false;
-        from.values["alienWins"]          = false;
-        from.values["isAlienGoingToDie"]  = false;
+        from.values["isPlayerInSight"] = false;
+        from.values["isPlayerAlive"] = true;
+        from.values["isPlayerNear"] = 4.5f;
+        from.values["hasCat"] = false;
+        from.values["catIsGone"] = false;
+        from.values["alienIsGone"] = false;
+        from.values["alienWins"] = false;
+        from.values["isAlienGoingToDie"] = 2f;
 
         var to = new GOAPState();
         //to.values["isPlayerAlive"]     = false;
-        to.values["alienWins"]         = true;
+        to.values["alienWins"] = true;
 
         var planner = new GoapPlanner();
         planner.OnPlanCompleted += OnPlanCompleted;
-        planner.OnCantPlan      += OnCantPlan;
+        planner.OnCantPlan += OnCantPlan;
 
         planner.Run(from, to, actions, StartCoroutine);
     }
 
 
-    private void OnPlanCompleted(IEnumerable<GOAPAction> plan) {
+    private void OnPlanCompleted(IEnumerable<GOAPAction> plan)
+    {
         _fsm = GoapPlanner.ConfigureFSM(plan, StartCoroutine);
         _fsm.Active = true;
     }
 
-    private void OnCantPlan() {
+    private void OnCantPlan()
+    {
         Debug.Log("No funciona");
     }
 
