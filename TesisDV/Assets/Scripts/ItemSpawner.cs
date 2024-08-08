@@ -62,6 +62,7 @@ public class ItemSpawner : MonoBehaviour
                 break;
             case 5:
                 _fifthRoundItems.SetActive(true);
+                FindObjectsOfType<WardrobeDoor>().ToList().ForEach(x => x.IsLocked = false);
                 Blackboard.ActiveFifthExperiment();
                 break;
             case 6:
