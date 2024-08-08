@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour, IInRoundObservable
 {
+   
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
     private List<IInRoundObserver> inRoundObservers = new List<IInRoundObserver>();
     [SerializeField]
@@ -83,13 +85,14 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         
         WorkbenchLight.SetActive(false);
     }
-
+   
     private void Update()
     {
         //Debug.Log(allDoorsAreClosed);
         //For testing
-        if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
 
+        //if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
+        
         //No checkear en update. 
         //canSpawn = !enemyHasObjective;
         AmountEnemiesInScene = enemiesInScene.Count;

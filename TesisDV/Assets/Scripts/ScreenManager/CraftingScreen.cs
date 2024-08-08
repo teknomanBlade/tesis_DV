@@ -9,6 +9,7 @@ public class CraftingScreen : MonoBehaviour, IScreen
     Button[] _buttons;
     public GameObject InventoryAndTrapDescriptions;
     public GameObject TrapProgressionSystem;
+    public Text TxtPressTabToHide;
     public GameObject MainUI;
     public GameObject MainUITitle;
     public Scrollbar ScrollBarVertical;
@@ -74,6 +75,8 @@ public class CraftingScreen : MonoBehaviour, IScreen
         //Cursor.lockState = CursorLockMode.Confined;
         TrapProgressionSystem.SetActive(false);
         InventoryAndTrapDescriptions.SetActive(true);
+        TxtPressTabToHide.color = Color.black;
+        TxtPressTabToHide.gameObject.GetComponent<UnityEngine.UI.Outline>().effectColor = Color.black;
         //BTNPage1.interactable = false;
         //BTNPage2.interactable = true;
     }
@@ -89,6 +92,8 @@ public class CraftingScreen : MonoBehaviour, IScreen
         IsWorkbenchScreenOpened = true;
         TrapProgressionSystem.SetActive(true);
         InventoryAndTrapDescriptions.SetActive(false);
+        TxtPressTabToHide.color = Color.white;
+        TxtPressTabToHide.gameObject.GetComponent<UnityEngine.UI.Outline>().effectColor = Color.white;
         //BTNPage1.interactable = true;
         //BTNPage2.interactable = false;
     }

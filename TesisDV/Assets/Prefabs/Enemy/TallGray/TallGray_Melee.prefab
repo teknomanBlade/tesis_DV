@@ -17012,6 +17012,7 @@ MonoBehaviour:
   _deathEffect: {fileID: 0}
   _pepperEffect: {fileID: 6962235357271764845}
   _poisonEffect: {fileID: 2933116756504539070}
+  _witGainEffect: {fileID: 4580537072530106202}
   _hitWave: {fileID: 0}
 --- !u!114 &-3214199489047620312
 MonoBehaviour:
@@ -17025,12 +17026,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7eaafa2c636cae41977462946f47290, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hp: 10
+  _hp: 8
   _myWittsValue: 100
   _movingSpeed: 2
   _startSpeed: 0
   _catGrabPos: {fileID: 453900518992729467}
-  witGainEffect: {fileID: 4580537072530106202}
   allTargets: []
   isDead: 0
   enemyType: 1
@@ -17056,6 +17056,7 @@ MonoBehaviour:
     m_Bits: 1024
   _currentTrapObjective: {fileID: 0}
   _lm: {fileID: 0}
+  _poisonHitted: 0
   lineRenderer: {fileID: 1063702095537008266}
   Path: []
   PathHard: []

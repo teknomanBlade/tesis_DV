@@ -123,6 +123,7 @@ public class GameVars : MonoBehaviour
     public FERNPaintballMinigun FERNPaintballMinigunPrefab;
     public PoolObjectStack<BaseballLauncher> BaseballLauncherPool { get; set; }
     public PoolObjectStack<FERNPaintballMinigun> FERNPaintballMinigunPool { get; set; }
+    public bool PassedTutorial;
     #region Events
     public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
     public event OnCapturedCatChangeDelegate OnCapturedCatChange;
@@ -132,14 +133,14 @@ public class GameVars : MonoBehaviour
     {
         if (_gameVars == null) _gameVars = this;
         else Destroy(this);
-
+        
         SetKeys();
         LoadResources();
-
+        PassedTutorial = false;
         SceneManager.sceneLoaded += FindPlayer;
         SceneManager.sceneLoaded += FindCat;
     }
-
+    
     private void SetKeys()
     {
         jumpKey = KeyCode.Space;
@@ -444,6 +445,8 @@ public class GameVars : MonoBehaviour
     }
     public void TakeCat(Vector3 exitPos)
     {
+        if (cat == null) return;
+
         _isCatCaptured = true;
         CatDistanceBar.PlayFadeIn();
         OnCapturedCatChange(_isCatCaptured);

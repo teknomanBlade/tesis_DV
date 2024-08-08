@@ -123,7 +123,7 @@ public class CatState : IState
     public void GetThetaStar()
     {
         myPath = new List<Node>();
-
+        if (_enemy._cat == null) return;
         //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
         startingPoint = PathfindingManager.Instance.GetClosestNode(_enemy.transform.position);
         //Debug.Log("Start at " + startingPoint);

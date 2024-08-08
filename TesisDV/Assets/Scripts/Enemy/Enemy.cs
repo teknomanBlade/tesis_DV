@@ -9,14 +9,13 @@ public enum EnemyType { Common, Melee, Tank, Dog }
 public abstract class Enemy : MonoBehaviour
 {
     public Coroutine SlowDebuffCoroutine;
+    public Coroutine SlowDebuffFadeCoroutine;
     [SerializeField] private float _hp;
     public float HP { get { return _hp; } set { _hp = value; } }
     [SerializeField] private int _myWittsValue;
     public float _movingSpeed;
     public float _startSpeed;
     [SerializeField] private Transform _catGrabPos;
-    public ParticleSystem witGainEffect;
-    
     public Collider[] allTargets; //Borrar esto y probar.
     protected CapsuleCollider _capsuleCollider;
     protected bool isAwake = false;
@@ -145,7 +144,7 @@ public abstract class Enemy : MonoBehaviour
             if (gameObject.tag.Equals("Tutorial"))
                 GameVars.Values.ShowNotification("You gain the Wit resource by knocking down Enemies. As you can see at the right upper corner.");
 
-            SendWitts();
+            //SendWitts();
             _capsuleCollider.enabled = false;
             GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
@@ -435,13 +434,8 @@ public abstract class Enemy : MonoBehaviour
 
     public void SendWitts()
     {
-        ActivateWitGainEffect();
+        //onWitGainEffect();
         GameVars.Values.Inventory.ReceiveWitts(_myWittsValue);
-    }
-
-    public void ActivateWitGainEffect()
-    {
-        witGainEffect.Play();
     }
 
     public void Dissolve()
@@ -488,6 +482,17 @@ public abstract class Enemy : MonoBehaviour
     {
         PoisonHitted = false;
         onPoisonHitStop();
+    }
+
+    public void SlowDebuffFade()
+    {
+        SlowDebuffFadeCoroutine = StartCoroutine(SlowDebuffFadeActive());
+    }
+
+    IEnumerator SlowDebuffFadeActive()
+    {
+        yield return new WaitForSeconds(6f);
+        _movingSpeed = _startSpeed;
     }
 
     public void SlowDebuff(float slowAmount) 

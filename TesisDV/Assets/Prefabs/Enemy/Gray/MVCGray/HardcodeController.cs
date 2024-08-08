@@ -18,6 +18,7 @@ public class HardcodeController : IController
         _m.onElectricHit += v.ElectricDebuffAnimation;
         _m.onHit        +=  v.InnerEffectAnimation;
         _m.onDeath      +=  v.DeathAnimation;
+        v.onWitGainEffect += _m.SendWitts;
         _m.onAttack     +=  v.AttackAnimation;
         _m.onAttackSpecial  +=  v.EMPSkillAnimation;
         _m.onCatGrab    +=  v.CatGrabAnimation;

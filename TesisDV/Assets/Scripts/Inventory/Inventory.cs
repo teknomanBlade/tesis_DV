@@ -342,7 +342,7 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            Debug.Log("soy un cornudo");
+            //Debug.Log("soy un cornudo");
             return 0;
             
         }

@@ -203,7 +203,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     MoveTrap();
                 }
             }
-            if (Input.GetKeyDown(KeyCode.T))
+            /*if (Input.GetKeyDown(KeyCode.T))
             {
                 FindObjectsOfType<Door>().ToList().ForEach(x => { x.IsLocked = false; });
                 FindObjectOfType<FootLocker>().IsBlocked = false;
@@ -211,7 +211,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             if (Input.GetKeyDown(KeyCode.R))
             {
                 GameVars.Values.Inventory.ReceiveWitts(100);
-            }
+            }*/
             if (Input.GetKeyDown(KeyCode.Return) && _canStartNextWave)
             {
                 _canStartNextWave = false;
@@ -363,16 +363,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 _rb.isKinematic = true;
             }
 
-            if (Input.GetKeyDown(GameVars.Values.dropKey))
+            /*if (Input.GetKeyDown(GameVars.Values.dropKey))
             {
-                //_inventory.DropItem();
-                //ElectricTrap = FindObjectOfType<ElectricTrap>();
-                //ElectricTrap?.Inactive();
-                //microwaveFFG = FindObjectOfType<MicrowaveForceFieldGenerator>();
-                //microwaveFFG?.Inactive();
                 Damage(2, EnemyType.Tank);
                 ActiveTankHitFistDamageEffect();
-            } 
+            }*/
         }
         
     }

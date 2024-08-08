@@ -11,7 +11,7 @@ public class SkillTree : MonoBehaviour
     private AudioSource _as;
     [Range(0, 1)]
     public float soundVolume;
-
+    public string PurchaseSound;
     #region Upgrades UI Components
     public GameObject UnlockSTTrap;
     public GameObject UnlockMTTrap;
@@ -801,7 +801,7 @@ public class SkillTree : MonoBehaviour
             HandleUIMTUnlockComponents();
             EnableUIMT1aComponents();
             EnableUIMT2aComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as,"CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as,PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(MicrowaveTrapWittCost);
             _isMicrowaveTrapUnlocked = true;
             GameVars.Values.HasBoughtMicrowaveTrap = _isMicrowaveTrapUnlocked;
@@ -815,7 +815,7 @@ public class SkillTree : MonoBehaviour
             HandleUISTUnlockComponents();
             EnableUIST1aComponents();
             EnableUIST2aComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(SlowTrapWittCost);
             _isSlowTrapUnlocked = true;
             GameVars.Values.HasBoughtSlowingTrap = _isSlowTrapUnlocked;
@@ -829,7 +829,7 @@ public class SkillTree : MonoBehaviour
             HandleUIETUnlockComponents();
             EnableUIET1aComponents();
             EnableUIET2aComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(ElectricTrapWittCost);
             _isElectricTrapUnlocked = true;
             GameVars.Values.HasBoughtElectricTrap = _isElectricTrapUnlocked;
@@ -843,7 +843,7 @@ public class SkillTree : MonoBehaviour
             HandleUIFPMUnlockComponents();
             EnableUIFPM1aComponents();
             EnableUIFPM2aComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(PaintballMinigunTrapWittCost);
             _isPaintballMinigunTrapUnlocked = true;
             GameVars.Values.HasBoughtPaintballMinigunTrap = _isPaintballMinigunTrapUnlocked;
@@ -860,7 +860,7 @@ public class SkillTree : MonoBehaviour
             HandleUIBL2bComponents(true, false, 0.2196078f);
             HandleUIBL1aComponents(false,false, 0.2196078f);
             EnableUIBL1bComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(BL1aWittCost);
             _isBL1aActivated = true;
             OnUpgrade?.Invoke();
@@ -872,7 +872,7 @@ public class SkillTree : MonoBehaviour
         if (!_isBL1bActivated && _inventory.HasEnoughWitts(BL1bWittCost))
         {
             HandleUIBL1bComponents(false, false, 0.2196078f);
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(BL1bWittCost);
             _isBL1bActivated = true;
             OnUpgrade?.Invoke();
@@ -887,7 +887,7 @@ public class SkillTree : MonoBehaviour
             HandleUIBL1bComponents(true, false, 0.2196078f);
             HandleUIBL2aComponents(false, false, 0.2196078f);
             EnableUIBL2bComponents();  
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(BL2aWittCost);
             _isBL2aActivated = true;
             OnUpgrade?.Invoke();
@@ -898,7 +898,7 @@ public class SkillTree : MonoBehaviour
         if (!_isBL2bActivated && _inventory.HasEnoughWitts(BL2bWittCost))
         {
             HandleUIBL2bComponents(false,false, 0.2196078f);
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(BL2bWittCost);
             _isBL2bActivated = true;
             OnUpgrade?.Invoke();
@@ -913,7 +913,7 @@ public class SkillTree : MonoBehaviour
             HandleUIFPM2aComponents(true, false, 0.2196078f);
             HandleUIFPM2bComponents(true, false, 0.2196078f);
             EnableUIFPM1bComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(FPM1aWittCost);
             _isFPM1aActivated = true;
             OnUpgrade?.Invoke();
@@ -924,7 +924,7 @@ public class SkillTree : MonoBehaviour
         if (!_isFPM1bActivated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM1bWittCost))
         {
             HandleUIFPM1bComponents(false, false, 0.2196078f);
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(FPM1bWittCost);
             _isFPM1bActivated = true;
             OnUpgrade?.Invoke();
@@ -940,7 +940,7 @@ public class SkillTree : MonoBehaviour
             HandleUIFPM1bComponents(true, false, 0.2196078f);
             HandleUIFPM2aComponents(false, false, 0.2196078f);
             EnableUIFPM2bComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(FPM2aWittCost);
             _isFPM2aActivated = true;
             OnUpgrade?.Invoke();
@@ -951,7 +951,7 @@ public class SkillTree : MonoBehaviour
         if (!_isFPM2bActivated && _isPaintballMinigunTrapUnlocked && _inventory.HasEnoughWitts(FPM2bWittCost))
         {
             HandleUIFPM2bComponents(false, false, 0.2196078f);
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(FPM2bWittCost);
             _isFPM2bActivated = true;
             OnUpgrade?.Invoke();
@@ -966,7 +966,7 @@ public class SkillTree : MonoBehaviour
             HandleUIET2aComponents(true, false, 0.2196078f);
             HandleUIET2bComponents(true, false, 0.2196078f);
             EnableUIET1bComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(ET1aWittCost);
             _isET1aActivated = true;
             OnUpgrade?.Invoke();
@@ -977,7 +977,7 @@ public class SkillTree : MonoBehaviour
         if (!_isET1bActivated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET1bWittCost))
         {
             HandleUIET1bComponents(false, false, 0.2196078f);
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(ET1bWittCost);
             _isET1bActivated = true;
             OnUpgrade?.Invoke();
@@ -992,7 +992,7 @@ public class SkillTree : MonoBehaviour
             HandleUIET1bComponents(true, false, 0.2196078f);
             HandleUIET2aComponents(false, false, 0.2196078f);
             EnableUIET2bComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(ET2aWittCost);
             _isET2aActivated = true;
             OnUpgrade?.Invoke();
@@ -1003,7 +1003,7 @@ public class SkillTree : MonoBehaviour
         if (!_isET2bActivated && _isElectricTrapUnlocked && _inventory.HasEnoughWitts(ET2bWittCost))
         {
             HandleUIET2bComponents(false, false, 0.2196078f);
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(ET2bWittCost);
             _isET2bActivated = true;
             OnUpgrade?.Invoke();
@@ -1018,7 +1018,7 @@ public class SkillTree : MonoBehaviour
             HandleUIST2bComponents(true, false, 0.2196078f);
             HandleUIST1aComponents(false, false, 0.2196078f);
             EnableUIST1bComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(ST1aWittCost);
             _isST1aActivated = true;
             OnUpgrade?.Invoke();
@@ -1029,7 +1029,7 @@ public class SkillTree : MonoBehaviour
         if (!_isST1bActivated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST1bWittCost))
         {
             HandleUIST1bComponents(false, false, 0.2196078f);
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(ST1bWittCost);
             _isST1bActivated = true;
             OnUpgrade?.Invoke();
@@ -1044,7 +1044,7 @@ public class SkillTree : MonoBehaviour
             HandleUIST1bComponents(true, false, 0.2196078f);
             HandleUIST2aComponents(false, false, 0.2196078f);
             EnableUIST2bComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(ST2aWittCost);
             _isST2aActivated = true;
             OnUpgrade?.Invoke();
@@ -1055,7 +1055,7 @@ public class SkillTree : MonoBehaviour
         if (!_isST2bActivated && _isSlowTrapUnlocked && _inventory.HasEnoughWitts(ST2bWittCost))
         {
             HandleUIST2bComponents(false, false, 0.2196078f);
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(ST2bWittCost);
             _isST2bActivated = true;
             OnUpgrade?.Invoke();
@@ -1070,7 +1070,7 @@ public class SkillTree : MonoBehaviour
             HandleUIMT2bComponents(true, false, 0.2196078f);
             HandleUIMT1aComponents(false, false, 0.2196078f);
             EnableUIMT1bComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(MT1aWittCost);
             _isMT1aActivated = true;
             OnUpgrade?.Invoke();
@@ -1081,7 +1081,7 @@ public class SkillTree : MonoBehaviour
         if (!_isMT1bActivated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT1bWittCost))
         {
             HandleUIMT1bComponents(false, false, 0.2196078f);
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(MT1bWittCost);
             _isMT1bActivated = true;
             OnUpgrade?.Invoke();
@@ -1095,7 +1095,7 @@ public class SkillTree : MonoBehaviour
             HandleUIMT1bComponents(true, false, 0.2196078f);
             HandleUIMT2aComponents(false, false, 0.2196078f);
             EnableUIMT2bComponents();
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(MT2aWittCost);
             _isMT2aActivated = true;
             OnUpgrade?.Invoke();
@@ -1106,7 +1106,7 @@ public class SkillTree : MonoBehaviour
         if (!_isMT2bActivated && _isMicrowaveTrapUnlocked && _inventory.HasEnoughWitts(MT2bWittCost))
         {
             HandleUIMT2bComponents(false, false, 0.2196078f);
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "CoinSFX", soundVolume, false);
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
             _inventory.RemoveWitts(MT2bWittCost);
             _isMT2bActivated = true;
             OnUpgrade?.Invoke();

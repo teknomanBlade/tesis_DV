@@ -73,13 +73,18 @@ public class Door : Item
 
         if (IsEnemyInteracting) 
         {
+            if (transform.CompareTag("Tutorial") && IsEnemyInteracting)
+            {
+                GameVars.Values.PassedTutorial = IsEnemyInteracting;
+                Debug.Log("PASSED TUTORIAL ENEMY INTERACTING = " + IsEnemyInteracting);
+            }
             _animParent.SetBool("IsDropped", true);
             _collider.enabled = false;
         }
 
         if (IsLocked)
         {
-            if (transform.tag.Equals("Tutorial"))
+            if (transform.CompareTag("Tutorial"))
             {
                 GameVars.Values.ShowNotification("You can't go out now." + GameVars.Values.ShowMessageNotificationByAction());
             }
@@ -92,6 +97,11 @@ public class Door : Item
         if (!IsEnemyInteracting && !IsOpened)
         {
             IsOpened = true;
+            if (transform.CompareTag("Tutorial") && IsOpened)
+            {
+                GameVars.Values.PassedTutorial = IsOpened;
+                Debug.Log("PASSED TUTORIAL PLAYER = " + IsOpened);
+            }
             GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
             //_navMeshObstacle.enabled = false;
             StartCoroutine(LerpDoorAnim(1f, 2f));

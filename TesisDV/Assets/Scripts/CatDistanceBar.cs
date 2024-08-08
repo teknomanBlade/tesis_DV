@@ -20,6 +20,9 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     public Animator GraysAmountPerWaveTextAnim { get; private set; }
     public Text RoundText;
     public Text RestWaveTimeText;
+    public Coroutine ReminderMessageCoroutine;
+    public GameObject TxtWaveReminder;
+    public Animator TxtWaveReminderAnim;
     public Animator _animCatDistanceBar;
     public Animator RestWaveTimeAnim { get; private set; }
     public Animator RoundTextAnim { get; private set; }
@@ -41,9 +44,8 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         GameVars.Values.WaveManager.OnTimeWaveChange += TimeWaveChanged;
         GameVars.Values.WaveManager.OnRoundStartEnd += RoundStartEnd;
         GameVars.Values.LevelManager.OnGrayAmountChange += GrayAmountChanged;
-
+        TxtWaveReminderAnim = TxtWaveReminder.gameObject.GetComponent<Animator>();
         GameVars.Values.Inventory.OnWittsAmountChanged += WittsAmountChanged;
-        
         _fillImage = Fill.GetComponent<Image>();
         _maxDistance = GameVars.Values.GetCatDistance();
         _dangerThreshold = _maxDistance * 0.20f;
@@ -52,9 +54,23 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         _mySlider.minValue = 1;
         _currentDistance = _maxDistance;
         _mySlider.value = _currentDistance;
-        
+        ReminderMessageCoroutine = StartCoroutine(ShowReminderOfWaveBringerKey());
     }
+    
 
+    IEnumerator ShowReminderOfWaveBringerKey()
+    {
+        while (true) 
+        {
+            yield return new WaitForSeconds(120);
+            if (GameVars.Values.PassedTutorial)
+            {
+                TxtWaveReminder.GetComponentInChildren<Text>().text = "Remember that you can Press 'Enter' to send a wave.";
+                TxtWaveReminderAnim.SetBool("IsWaveReminder", true);
+            }
+        }
+    }
+    
     public void PlayFadeIn()
     {
         _animCatDistanceBar.SetBool("IsFadeIn", true);

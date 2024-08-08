@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class GrayView : MonoBehaviour
 {
+    public event Action onWitGainEffect = delegate { };
     private float _valueToChange;
     Material _myMaterial;
     private AudioSource _as;
@@ -25,11 +26,14 @@ public class GrayView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _poisonEffect;
     [SerializeField]
+    private ParticleSystem _witGainEffect;
+    [SerializeField]
     private GameObject _hitWave;
 
     void Start()
     {
         _poisonEffect.Stop();
+        _witGainEffect.gameObject.SetActive(false);
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
         _as = GetComponent<AudioSource>();
@@ -110,7 +114,12 @@ public class GrayView : MonoBehaviour
     {
         _poisonEffect.Stop();
     }
-
+    public void ActivateWitGainEffect()
+    {
+        onWitGainEffect();
+        _witGainEffect.gameObject.SetActive(true);
+        _witGainEffect.Play();
+    }
     public void DissolveAnimation()
     {
         StartCoroutine(PlayShaderDissolve());
@@ -126,6 +135,11 @@ public class GrayView : MonoBehaviour
     public void Dead()
     {
         Destroy(gameObject);
+    }
+    public void PlaySoundCoinWitGain() 
+    {
+        ActivateWitGainEffect();
+        GameVars.Values.soundManager.PlaySound(_as, "CoinSFX", 0.45f, false, 1f);
     }
     public void PlaySoundTelepathVoices()
     {

@@ -37,6 +37,7 @@ public class SlowTrap : MonoBehaviour
 
     void Awake()
     {
+        _slowAmount = 2.5f;
         _tarStainMR = _tarStain.GetComponent<MeshRenderer>();
         _bubblesParticleSystem = _bubblesParticles.GetComponent<ParticleSystem>();
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
@@ -73,17 +74,27 @@ public class SlowTrap : MonoBehaviour
             TwentyPercentDamage = enemy.HP * 0.02f;
             if (_canActivate1aUpgrade)
             {
-                var new20PercentSlow = _slowAmount * _slow20BoostCoefMultiplier;
+                if (enemy.enemyType == EnemyType.Dog)
+                    Debug.Log("SLOW DOWN GRAY DOG 1A? " + enemy.name);
+
+                var new20PercentSlow = enemy._movingSpeed / _slow20BoostCoefMultiplier;
                 other.GetComponent<Enemy>().SlowDown(new20PercentSlow);
             }
             else if (_canActivate1bUpgrade)
             {
-                var new30PercentSlow = _slowAmount * _slow30BoostCoefMultiplier;
+                if (enemy.enemyType == EnemyType.Dog)
+                    Debug.Log("SLOW DOWN GRAY DOG 1B? " + enemy.name);
+
+                var new30PercentSlow = enemy._movingSpeed / _slow30BoostCoefMultiplier;
                 other.GetComponent<Enemy>().SlowDown(new30PercentSlow);
             }
             else 
             {
-                other.GetComponent<Enemy>().SlowDown(_slowAmount);
+                if(enemy.enemyType == EnemyType.Dog)
+                    Debug.Log("SLOW DOWN GRAY DOG? " + enemy.name);
+
+                var basicSlow = enemy._movingSpeed / _slowAmount;
+                other.GetComponent<Enemy>().SlowDown(basicSlow);
             }
         }
     }
@@ -113,7 +124,7 @@ public class SlowTrap : MonoBehaviour
 
         if (enemy)
         {
-            enemy.SlowDown(-_slowAmount);
+            enemy.SlowDebuffFade();
         }
     }
 
@@ -160,11 +171,13 @@ public class SlowTrap : MonoBehaviour
     public void Activate1aUpgrade()
     {
         _canActivate1aUpgrade = true;
+        _slow20BoostCoefMultiplier = 2f;
     }
     public void Activate1bUpgrade()
     {
         _canActivate1bUpgrade = true;
         _canActivate1aUpgrade = false;
+        _slow30BoostCoefMultiplier = 1.5f;
     }
 
     public void Activate2aUpgrade()

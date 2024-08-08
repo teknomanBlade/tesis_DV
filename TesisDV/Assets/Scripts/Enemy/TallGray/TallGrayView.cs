@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class TallGrayView : MonoBehaviour
 {
+    public event Action onWitGainEffect = delegate { };
     private float _valueToChange;
     Material _myMaterial;
     [SerializeField] Animator _myAnimator;
@@ -24,11 +25,14 @@ public class TallGrayView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _poisonEffect;
     [SerializeField]
+    private ParticleSystem _witGainEffect;
+    [SerializeField]
     private GameObject _hitWave;
     private AudioSource _as;
     void Start()
     {
         _poisonEffect.Stop();
+        _witGainEffect.gameObject.SetActive(false);
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
         _as = GetComponent<AudioSource>();
@@ -93,6 +97,12 @@ public class TallGrayView : MonoBehaviour
     {
         _poisonEffect.Play();
     }
+    public void ActivateWitGainEffect()
+    {
+        onWitGainEffect();
+        _witGainEffect.gameObject.SetActive(true);
+        _witGainEffect.Play();
+    }
     public void Dead()
     {
         Destroy(gameObject);
@@ -100,6 +110,11 @@ public class TallGrayView : MonoBehaviour
     public void PlaySoundCrackles()
     {
         GameVars.Values.soundManager.PlaySound(_as, "SFX_TallGray_Walking", 0.35f, true, 1f);
+    }
+    public void PlaySoundCoinWitGain()
+    {
+        ActivateWitGainEffect();
+        GameVars.Values.soundManager.PlaySound(_as, "CoinSFX", 0.45f, false, 1f);
     }
     #region Shaders
     public void SwitchDissolveMaterial(Material material)       

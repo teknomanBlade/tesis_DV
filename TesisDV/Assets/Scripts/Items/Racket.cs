@@ -45,7 +45,7 @@ public class Racket : Melee
 
     public override void MeleeAttack()
     {
-        if(!IsAttacking)
+        if(gameObject.activeSelf && !IsAttacking)
             StartCoroutine(Attack("IsAttacking","RacketSwing"));
     }
     

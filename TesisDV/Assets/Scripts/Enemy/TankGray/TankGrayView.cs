@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class TankGrayView : MonoBehaviour
 {
+    public event Action onWitGainEffect = delegate { };
     private float _valueToChange;
     Material _myMaterial;
     [SerializeField] Animator _myAnimator;
@@ -24,11 +25,14 @@ public class TankGrayView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _poisonEffect;
     [SerializeField]
+    private ParticleSystem _witGainEffect;
+    [SerializeField]
     private GameObject _hitWave;
     private AudioSource _as;
     void Start()
     {
         _poisonEffect.Stop();
+        _witGainEffect.gameObject.SetActive(false);
         _as = GetComponent<AudioSource>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
@@ -76,6 +80,17 @@ public class TankGrayView : MonoBehaviour
     public void PoisonHit()
     {
         _poisonEffect.Play();
+    }
+    public void ActivateWitGainEffect()
+    {
+        onWitGainEffect();
+        _witGainEffect.gameObject.SetActive(true);
+        _witGainEffect.Play();
+    }
+    public void PlaySoundCoinWitGain()
+    {
+        ActivateWitGainEffect();
+        GameVars.Values.soundManager.PlaySound(_as, "CoinSFX", 0.45f, false, 1f);
     }
     public void CatGrabAnimation(bool value)
     {

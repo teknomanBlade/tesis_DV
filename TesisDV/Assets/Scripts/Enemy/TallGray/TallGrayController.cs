@@ -15,6 +15,7 @@ public class TallGrayController : IController
         _m.onPepperHit += v.PepperHitEffect;
         _m.onPaintballHit += v.PaintballHit;
         _m.onPoisonHit += v.PoisonHit;
+        v.onWitGainEffect += _m.SendWitts;
         _m.onPoisonHitStop += v.PoisonHitStop;
         _m.onElectricHit += v.ElectricDebuffAnimation;
         _m.onDeath      +=  v.DeathAnimation;

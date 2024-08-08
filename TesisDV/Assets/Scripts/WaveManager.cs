@@ -135,25 +135,107 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     {
         if (e.enemyType == EnemyType.Common)
         {
-            e.HP += CurrentRound;
+            e.HP = GrayCommonHPByRoundInterval(CurrentRound);
             Debug.Log("COMMON GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
         }
         else if (e.enemyType == EnemyType.Melee)
         {
-            e.HP += CurrentRound;
+            e.HP = GrayMeleeHPByRoundInterval(CurrentRound);
             Debug.Log("MELEE GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
         }
         else if (e.enemyType == EnemyType.Dog)
         {
-            e.HP += CurrentRound;
-            Debug.Log("GRAY DOG NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
+            e.HP = GrayDogHPByRoundInterval(CurrentRound);
         }
         else if (e.enemyType == EnemyType.Tank && CurrentRound == 7)
         {
-            e.HP += CurrentRound;
+            e.HP = GrayTankHPByRoundInterval(CurrentRound);
             Debug.Log("TANK GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
         }
     }
+    public float GrayCommonHPByRoundInterval(int CurrentRound)
+    {
+        var hpResult = 0f;
+        if (CurrentRound > 0 && CurrentRound <= 3)
+        {
+            hpResult = 3f;
+            Debug.Log("GRAY COMMON NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 3 && CurrentRound <= 5)
+        {
+            hpResult = 6f;
+            Debug.Log("GRAY COMMON NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 5 && CurrentRound <= 7)
+        {
+            hpResult = 9f;
+            Debug.Log("GRAY COMMON NEW LIFE SECOND ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+
+        return hpResult;
+    }
+
+    public float GrayMeleeHPByRoundInterval(int CurrentRound)
+    {
+        var hpResult = 0f;
+        if (CurrentRound > 0 && CurrentRound <= 3)
+        {
+            hpResult = 8f;
+            Debug.Log("GRAY MELEE NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 3 && CurrentRound <= 5)
+        {
+            hpResult = 12f;
+            Debug.Log("GRAY MELEE NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 5 && CurrentRound <= 7)
+        {
+            hpResult = 16f;
+            Debug.Log("GRAY MELEE NEW LIFE SECOND ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+
+        return hpResult;
+    }
+
+    public float GrayDogHPByRoundInterval(int CurrentRound) 
+    {
+        var hpResult = 0f;
+        if (CurrentRound > 0 && CurrentRound <= 3)
+        {
+            hpResult = 1.5f;
+            Debug.Log("GRAY DOG NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 3 && CurrentRound <= 5)
+        {
+            hpResult = 2f;
+            Debug.Log("GRAY DOG NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 5 && CurrentRound <= 7) 
+        {
+            hpResult = 2.5f;
+            Debug.Log("GRAY DOG NEW LIFE SECOND ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+
+        return hpResult;
+    }
+
+    public float GrayTankHPByRoundInterval(int CurrentRound)
+    {
+        var hpResult = 0f;
+        if (CurrentRound == 6)
+        {
+            hpResult = 20f;
+            Debug.Log("GRAY DOG NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound == 7)
+        {
+            hpResult = 24f;
+            Debug.Log("GRAY DOG NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+
+        return hpResult;
+    }
+
 
     IEnumerator WaitBetweenWaves()
     {

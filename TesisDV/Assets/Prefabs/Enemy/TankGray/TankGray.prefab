@@ -11896,7 +11896,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -16398,7 +16398,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e5b563799af86484b8c3251643c5bb7a, type: 2}
+  - {fileID: 2100000, guid: 2e343de688ad9c246a9acf94055f9bc2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -16422,7 +16422,7 @@ ParticleSystemRenderer:
   m_RenderMode: 3
   m_SortMode: 0
   m_MinParticleSize: 0.15
-  m_MaxParticleSize: 0.15
+  m_MaxParticleSize: 0.3
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: -2
@@ -16483,11 +16483,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6944421456125257253}
+  - component: {fileID: 7716333951907493655}
+  - component: {fileID: 8534249964390417893}
   - component: {fileID: 5944484234880173333}
   - component: {fileID: 7481943496464466371}
   - component: {fileID: 7481943496464466370}
-  - component: {fileID: 8534249964390417893}
-  - component: {fileID: 7716333951907493655}
   - component: {fileID: 2581315643489470259}
   m_Layer: 12
   m_Name: TankGray
@@ -16520,6 +16520,79 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 89.999916, z: 0}
+--- !u!114 &7716333951907493655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7715891197830642847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77b3a64d0d369194287d86115e8a082a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myAnimator: {fileID: 7481943496464466371}
+  dissolveMaterial: {fileID: 0}
+  sphereEffectMaterial: {fileID: 0}
+  _hitEffect: {fileID: 0}
+  _deathEffect: {fileID: 0}
+  _pepperEffect: {fileID: 5204713658736981176}
+  _poisonEffect: {fileID: 1675516770353208260}
+  _witGainEffect: {fileID: 2174654547166754380}
+  _hitWave: {fileID: 0}
+--- !u!114 &8534249964390417893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7715891197830642847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2a3d80c69a9aa24daf8866ec81e65a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hp: 16
+  _myWittsValue: 200
+  _movingSpeed: 1.5
+  _startSpeed: 0
+  _catGrabPos: {fileID: 6374553699638576737}
+  allTargets: []
+  isDead: 0
+  enemyType: 2
+  pursueThreshold: 4
+  disengageThreshold: 4.5
+  attackThreshold: 3
+  attackDisengageThreshold: 4
+  _trapViewRadius: 5
+  attackTrapThreshold: 2.3
+  _player: {fileID: 0}
+  _cat: {fileID: 0}
+  hasObjective: 0
+  isSpecialAttacking: 0
+  isAttacking: 0
+  isStunned: 0
+  isForceFieldRejected: 0
+  _exitPos: {x: 0, y: 0, z: 0}
+  trapPos: {x: 0, y: 0, z: 0}
+  _waypoints: []
+  foundTrapInPath: 0
+  _trapMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  _currentTrapObjective: {fileID: 0}
+  _lm: {fileID: 0}
+  _poisonHitted: 0
+  lineRenderer: {fileID: 1642921043075257876}
+  Path: []
+  PathHard: []
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 62981057
+  protectDistance: 6
+  _target: {fileID: 0}
+  _circlePos: {x: 0, y: 0, z: 0}
 --- !u!54 &5944484234880173333
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16651,78 +16724,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8534249964390417893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7715891197830642847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2a3d80c69a9aa24daf8866ec81e65a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hp: 18
-  _myWittsValue: 200
-  _movingSpeed: 1.35
-  _startSpeed: 0
-  _catGrabPos: {fileID: 6374553699638576737}
-  witGainEffect: {fileID: 2174654547166754380}
-  allTargets: []
-  isDead: 0
-  enemyType: 2
-  pursueThreshold: 4
-  disengageThreshold: 4.5
-  attackThreshold: 3
-  attackDisengageThreshold: 4
-  _trapViewRadius: 5
-  attackTrapThreshold: 2.3
-  _player: {fileID: 0}
-  _cat: {fileID: 0}
-  hasObjective: 0
-  isSpecialAttacking: 0
-  isAttacking: 0
-  isStunned: 0
-  isForceFieldRejected: 0
-  _exitPos: {x: 0, y: 0, z: 0}
-  trapPos: {x: 0, y: 0, z: 0}
-  _waypoints: []
-  foundTrapInPath: 0
-  _trapMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  _currentTrapObjective: {fileID: 0}
-  _lm: {fileID: 0}
-  lineRenderer: {fileID: 1642921043075257876}
-  Path: []
-  PathHard: []
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 62981057
-  protectDistance: 6
-  _target: {fileID: 0}
-  _circlePos: {x: 0, y: 0, z: 0}
---- !u!114 &7716333951907493655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7715891197830642847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77b3a64d0d369194287d86115e8a082a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _myAnimator: {fileID: 7481943496464466371}
-  dissolveMaterial: {fileID: 0}
-  sphereEffectMaterial: {fileID: 0}
-  _hitEffect: {fileID: 0}
-  _deathEffect: {fileID: 0}
-  _pepperEffect: {fileID: 5204713658736981176}
-  _poisonEffect: {fileID: 1675516770353208260}
-  _hitWave: {fileID: 0}
 --- !u!136 &2581315643489470259
 CapsuleCollider:
   m_ObjectHideFlags: 0

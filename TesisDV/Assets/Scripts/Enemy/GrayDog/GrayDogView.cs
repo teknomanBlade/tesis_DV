@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class GrayDogView : MonoBehaviour
 {
+    public event Action onWitGainEffect = delegate { };
     [SerializeField] Animator _myAnimator;
     [SerializeField]
     private ParticleSystem _hitEffect;
@@ -16,6 +17,8 @@ public class GrayDogView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _ringWavesEffect;
     [SerializeField]
+    private ParticleSystem _witGainEffect;
+    [SerializeField]
     private GameObject _hitWave;
     private AudioSource _as;
     // Start is called before the first frame update
@@ -24,6 +27,7 @@ public class GrayDogView : MonoBehaviour
         _as = GetComponent<AudioSource>();
         _myAnimator = GetComponent<Animator>();
         _myAnimator.SetBool("IsSpawning", true);
+        _witGainEffect.gameObject.SetActive(false);
         _poisonEffect.Stop();
         _ringWavesEffect.Stop();
     }
@@ -66,13 +70,23 @@ public class GrayDogView : MonoBehaviour
     {
         _myAnimator.SetBool("IsPaintballHitted", true);
     }
+    public void ActivateWitGainEffect()
+    {
+        onWitGainEffect();
+        _witGainEffect.gameObject.SetActive(true);
+        _witGainEffect.Play();
+    }
     public void RunningAnimation()
     {
         GameVars.Values.soundManager.PlaySound(_as, "SFX_AlienDogGallop", 0.25f, true, 1f);
         
         _myAnimator.SetBool("IsRunning", true);
     }
-
+    public void PlaySoundCoinWitGain()
+    {
+        ActivateWitGainEffect();
+        GameVars.Values.soundManager.PlaySound(_as, "CoinSFX", 0.45f, false, 1f);
+    }
     public void CatGrabAnimation(bool value)
     {
         _ringWavesEffect.Play();

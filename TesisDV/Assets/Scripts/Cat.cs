@@ -73,7 +73,9 @@ public class Cat : MonoBehaviour
     {
         _isHeld = true;
         _isRepositioning = false;
-        _navMeshAgent.enabled = false;
+        if(_navMeshAgent != null)
+            _navMeshAgent.enabled = false;
+        
         _fsm.ChangeCatState(CatStatesEnum.TakenState);
     }
 
