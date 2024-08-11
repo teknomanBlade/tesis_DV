@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 2268077262265624176}
   - component: {fileID: 2912729251268053349}
   - component: {fileID: 951048309373641366}
-  m_Layer: 19
+  m_Layer: 17
   m_Name: MiniMapIndicatorActive
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -521,13 +521,16 @@ MonoBehaviour:
   _currentLife: 10
   shots: 0
   shotsLeft: 0
+  shotsRemaining: 0
   interval: 0.08
+  IsMoving: 0
   blueprintPrefab: {fileID: 1028325257220824693, guid: e2ee18c3a65c845479bf8c644778fc27, type: 3}
   exitPoint: {fileID: 0}
   _damageAmount: 0
   _startDmgAmount: 1
   trapDestroyPrefab: {fileID: 0}
   _magazine: {fileID: 0}
+  _inventory: {fileID: 0}
   PaintballPellet: {fileID: 0}
   _doubleDamageBlueprint: {fileID: 0}
   _doubleDamageUpgrade: {fileID: 0}

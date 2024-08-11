@@ -70,6 +70,7 @@ MonoBehaviour:
   myCannonSupport: {fileID: 8190567066106638660}
   collidersObjectives: []
   _currentLife: 3
+  _inventory: {fileID: 0}
   HitTurret: {fileID: 4808819858614014439}
   ShootEffect: {fileID: 1563815400455616865}
   projectilePrefab: {fileID: 5947256333315532305, guid: d4d7ccdffb6703f459dcf281fed8dd68, type: 3}
@@ -82,9 +83,15 @@ MonoBehaviour:
   trapDestroyPrefab: {fileID: 4781164415668618757, guid: 5ca33918d921f8746a458bb0b041a4b8, type: 3}
   shots: 0
   shotsLeft: 4
+  shotsRemaining: 0
   _damageAmount: 1
   _coefMelee: 0
   _coefTank: 0
+  HasTennisBallContainerSmall: 0
+  HasTennisBallContainerLarge: 0
+  IsContainerLarge: 0
+  IsContainerSmall: 0
+  IsMoving: 0
   interval: 0.5
   _myItems:
   - {fileID: 3347486647281790323, guid: f34fc2fba773253438b72b7339ead9bc, type: 3}
@@ -6018,7 +6025,7 @@ GameObject:
   - component: {fileID: 4275650779293570340}
   - component: {fileID: 4250697317358763547}
   - component: {fileID: 7660077897279126363}
-  m_Layer: 19
+  m_Layer: 17
   m_Name: MiniMapIndicatorActive
   m_TagString: Untagged
   m_Icon: {fileID: 0}

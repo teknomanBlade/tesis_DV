@@ -91,7 +91,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         //Debug.Log(allDoorsAreClosed);
         //For testing
 
-        //if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
+        if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
         
         //No checkear en update. 
         //canSpawn = !enemyHasObjective;
