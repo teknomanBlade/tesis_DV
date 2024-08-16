@@ -57,7 +57,6 @@ public class TrapBase : MonoBehaviour
     {
         _myTrap = myTrap;
         _meshRenderer.enabled = false;
-        //ArrowIndicator.SetActive(false);
         if (gameObject.tag.Equals("Tutorial"))
             GameVars.Values.ShowNotification("Press 'Enter' to begin tutorial. You can also start every wave as long you've been prepared.");
     }

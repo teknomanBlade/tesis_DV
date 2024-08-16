@@ -523,6 +523,40 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             UnstunnedPlayerCoroutine = StartCoroutine(LerpUnstunnedEffect(1f));
         }
     }
+    public void ActiveFadeOutEffect(string buttonEffect)
+    {
+        if (volume.profile.TryGetSettings(out postProcessFadeInOutScenes))
+        {
+            if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
+            FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(1f, buttonEffect));
+        }
+    }
+    IEnumerator LerpFadeOutEffect(float duration, string buttonEffect)
+    {
+        float time = 0.98f;
+
+        while (time > 0 && time < duration)
+        {
+            time -= Time.deltaTime;
+
+            postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
+            yield return null;
+        }
+        if (time < 0f)
+        {
+            if (buttonEffect.Equals("BackToMainMenu"))
+            {
+                Debug.Log("MAIN MENU");
+                SceneManager.LoadScene(0);
+            }
+            else
+            {
+                Debug.Log("RESTART");
+                SceneManager.LoadScene(1);
+            }
+
+        }
+    }
     IEnumerator LerpElectricWaveDamageEffect(float duration)
     {
         float time = 0f;

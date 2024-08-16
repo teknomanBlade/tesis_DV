@@ -73,7 +73,7 @@ public class ItemSpawner : MonoBehaviour
     
     public void ActivateSecondWaveItems()
     {
-        GameVars.Values.BasementDirectionMarkers.SetActive(true);
+        GameVars.Values.Cat.CatIsGoingToBasement();
         GameVars.Values.LevelManager.WorkbenchLight.GetComponentInParent<LightsEmissionHandler>().EnableBasementLightEmission();
         GameVars.Values.LevelManager.WorkbenchLight.SetActive(true);
         Blackboard.ActiveSecondExperiment();

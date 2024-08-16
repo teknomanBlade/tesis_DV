@@ -6,14 +6,17 @@ using UnityEngine;
 public class CatView : MonoBehaviour
 {
     [SerializeField] Animator _myAnimator;
+    public bool IsPlayedOnce;
 
     void Start()
     {
         _myAnimator = GetComponent<Animator>();
+        IsPlayedOnce = true;
     }
 
     public void IdleAnim()
     {
+        IsPlayedOnce = true;
         _myAnimator.SetBool("IsIdle", true);
         _myAnimator.SetBool("IsWalking", false);
         _myAnimator.SetBool("IsRunning", false);
@@ -22,7 +25,11 @@ public class CatView : MonoBehaviour
      
     public void WalkAnim()
     {
+        if(IsPlayedOnce)
+            GameVars.Values.soundManager.PlaySoundAtPoint("SFX_CatMeowingToBasement", transform.position, 0.2f);
+        
         _myAnimator.SetBool("IsWalking", true);
+        IsPlayedOnce = false;
     }
     public void TakenAnim()
     {

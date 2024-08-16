@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SoundManager : MonoBehaviour
 {
@@ -85,6 +86,14 @@ public class SoundManager : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(clip, position, volume);
         }
+    }
+    public float GetClipLength(string clipName) 
+    {
+        if (SoundLibrary.TryGetValue(clipName, out clip))
+        {
+            return clip.length;
+        }
+        return 0f;
     }
 
     public void StopSound(AudioSource audioSource)

@@ -116,105 +116,18 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
             Invoke("WinGame", 3f);
         } */
     }
-
-    /* public bool EnemiesSpawning()
-    {
-        foreach (UFO ufo in allUfos)
-        {
-            if (ufo.spawning) return true;
-        }
-        return false;
-    } */
-
-    /* public void SpawnWave()
-    {
-        if (!canSpawn) return;
-        foreach(UFO ufo in allUfos)
-        {
-            if (!ufo.spawning)
-            {
-                ufo.BeginSpawn();
-            }
-            if (enemiesToSpawn <= 0) return;
-        }
-    } */
-
-    /* public void EnemySpawned()
-    {
-        enemiesToSpawn--;
-    } */
-
-    /* public void EnemyCameBack()
-    {
-        enemiesToSpawn++;
-    } */
-
-    /* public void StartRound()
-    {
-        GameVars.Values.soundManager.PlaySound("MusicWaves", 0.16f, true);
-        inRound = true;
-        lastWaveEnemies = lastWaveEnemies + 2;
-        enemiesToSpawn = lastWaveEnemies;
-    } */
-
-    /* public void EndRound()
-    {
-        inRound = false;
-        currentRound++;
-        TriggerRoundChange("RoundChanged");
-        Invoke("StartRound", 5f);
-    } */
-
     public void WinGame()
     {
-        //Debug.Log("You Win!");
-        //YouWin.SetActive(true);
-        //SceneManager.LoadScene("MainFloor_Upgrade");
-
-        /*var screenWin = Instantiate(Resources.Load<YouWinScreen>("YouWinCanvas"));
-        screenWin.OnBackToMainMenuEvent += _player.ActiveFadeOutEffect;
-        screenWin.OnRestartEvent += _player.ActiveFadeOutRestartEffect;
-        ScreenManager.Instance.Push(screenWin);*/
         _player.ActiveFadeOutYouWinEffect();
         _player.SwitchKinematics();
     } 
 
     public void LoseGame()
     {
-        //playing = false;
-
-
-        //YouLose.SetActive(true);
-        //Debug.Log("Loser");
-
-
-        //SceneManager.LoadScene("MainFloor_Upgrade");
-
-        /*var screenLose = Instantiate(Resources.Load<YouLoseScreen>("YouLoseCanvas"));
-        screenLose.OnBackToMainMenuEvent += _player.ActiveFadeOutEffect;
-        screenLose.OnRestartEvent += _player.ActiveFadeOutRestartEffect;
-        ScreenManager.Instance.Push(screenLose);*/
         _player.ActiveFadeOutYouLoseEffect();
         _player.SwitchKinematics();
         
     }
-
-/*     public UFO GetNearestUFO(Vector3 pos)
-    {
-        float currentDistance = 99999;
-        UFO nearestUFO = AllUFOs[0];
-
-        foreach (UFO ufo in AllUFOs)
-        {
-            if(Vector3.Distance(pos, ufo.transform.position) < currentDistance)
-            {
-                currentDistance = Vector3.Distance(pos, ufo.transform.position);
-                nearestUFO = ufo;
-            }    
-        }
-
-        return nearestUFO;    
-    } */
 
     public void RemoveUFO(UFO ufo)
     {

@@ -392,7 +392,10 @@ public class GameVars : MonoBehaviour
         notifications.GetComponentInChildren<Text>().text = text;
         StartCoroutine(ShowNotification());
     }
-
+    public string ShowMessageTutorialReminder() 
+    {
+        return PassedTutorial ? " First review the Footlocker at Kevin's Bed..." : "You have to press 'Enter' to conclude Tutorial before starting the waves. ";
+    }
     public string ShowMessageNotificationByAction()
     {
         return HasOpenedLetter ? ShowMessageMagicboard() : " First review the letter in the Desk...";
@@ -400,7 +403,7 @@ public class GameVars : MonoBehaviour
 
     public string ShowMessageMagicboard() 
     {
-        return HasMagicboard ? " First review the Footlocker at Kevin's Bed..." : " Grab the Magicboard to keep a record of new experiments.";
+        return HasMagicboard ? ShowMessageTutorialReminder() : " Grab the Magicboard to keep a record of new experiments.";
     }
 
     public IEnumerator ShowNotification()

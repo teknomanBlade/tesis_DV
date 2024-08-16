@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,10 +22,12 @@ public class Cat : MonoBehaviour
     private Animator _animator;
     [SerializeField] private List<Vector3> _myPos = new List<Vector3>();
     public List<Transform> Path = new List<Transform>();
+    public List<Transform> PathToBasement = new List<Transform>();
 
     public StateMachine _fsm { get; private set; }
 
     public bool canMove;
+    public bool IsGoingBack;
 
     #region Events
 
@@ -32,6 +35,7 @@ public class Cat : MonoBehaviour
     public event Action onWalk = delegate { };
     public event Action onRun = delegate { };
     public event Action onTaken = delegate { };
+    public event Action onMeowing = delegate { };
 
     #endregion Events
     void Awake()
@@ -42,19 +46,21 @@ public class Cat : MonoBehaviour
         _isHeld = false;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.speed = 0.6f;
-
+        PathToBasement = FindObjectsOfType<Transform>().Where(x => x.name.Equals("CatWaypointsToBasement")).First()
+            .GetComponentsInChildren<Transform>().Skip(1).ToList();
         _navMeshAgent.enabled = false;
         Path = FindObjectsOfType<Transform>().Where(x => x.name.Equals("CatWaypoints")).First()
             .GetComponentsInChildren<Transform>().Skip(1).ToList();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _animator = GetComponent<Animator>();
         _animator.SetBool("IsIdle", true);
-
+        IsGoingBack = false;
         _fsm.AddCatState(CatStatesEnum.IdleState, new IdleState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.RoomState, new RoomState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.WalkingState, new WalkingState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.TakenState, new TakenState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.RunningState, new RunningState(_fsm, this));
+        _fsm.AddCatState(CatStatesEnum.BasementState, new BasementState(_fsm, this));
     }
 
     void Start()
@@ -67,6 +73,15 @@ public class Cat : MonoBehaviour
     void Update()
     {
         _myController.OnUpdate();
+    }
+
+    public void CatIsGoingToBasement() 
+    {
+        _isHeld = false;
+        _isRepositioning = true;
+
+        _navMeshAgent.enabled = false;
+        _fsm.ChangeCatState(CatStatesEnum.BasementState);
     }
 
     public void CatIsBeingTaken()

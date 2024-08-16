@@ -31,7 +31,8 @@ public enum CatStatesEnum
     WalkingState,
     TakenState,
     RoomState,
-    RunningState
+    RunningState,
+    BasementState
 }
 
 public class StateMachine
