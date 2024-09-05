@@ -85,6 +85,7 @@
     <Compile Include="Assets\Scripts\Cat.cs" />
     <Compile Include="Assets\Scripts\Items\Racket.cs" />
     <Compile Include="Assets\Scripts\ScreenManager\YouLoseScreen.cs" />
+    <Compile Include="Assets\Scripts\UI\PauseMenu\PauseManager.cs" />
     <Compile Include="Assets\Scripts\AIManager.cs" />
     <Compile Include="Assets\Scripts\CatObstacleDetector.cs" />
     <Compile Include="Assets\Scripts\Traps\BaseballLauncher\BaseballLauncherAnim.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IInventoryItem.cs" />
     <Compile Include="Assets\Scripts\FSM\StateMachine.cs" />
     <Compile Include="Assets\Prefabs\Enemy\Gray\MVCGray\HardcodeAttackState.cs" />
+    <Compile Include="Assets\Scripts\UI\PauseMenu\RestartEventsHandler.cs" />
     <Compile Include="Assets\Scripts\Items\BaseballBat.cs" />
     <Compile Include="Assets\Scripts\OutLineItem.cs" />
     <Compile Include="Assets\Scripts\TrapSlot.cs" />
@@ -193,6 +195,7 @@
     <Compile Include="Assets\Scripts\CraftingRecipe.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\RoomState.cs" />
     <Compile Include="Assets\Scripts\MeshRotator\MeshRotator.cs" />
+    <Compile Include="Assets\Scripts\FSM\States\Cat\KitchenState.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IMovable.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IHittableObservable.cs" />
     <Compile Include="Assets\PickColor.cs" />
@@ -231,18 +234,19 @@
     <Compile Include="Assets\Scripts\House\DoorTrigger.cs" />
     <Compile Include="Assets\Scripts\House\Drawer.cs" />
     <Compile Include="Assets\Scripts\Traps\BaseballLauncher\BaseballLauncher.cs" />
+    <Compile Include="Assets\Scripts\FSM\States\Cat\ShedState.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\UI\ArrowUIIndicator.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IPlayerDamageObservable.cs" />
     <Compile Include="Assets\Scripts\UFO.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Gray\CatState.cs" />
+    <Compile Include="Assets\Scripts\FSM\States\Cat\LivingState.cs" />
     <Compile Include="Assets\Scripts\SkillTree.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Traps\NailFiringMachine\NailFiringMachine.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\AttackForceFieldState.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\TakenState.cs" />
-    <Compile Include="Assets\Scripts\UI\PauseMenu\PauseManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />

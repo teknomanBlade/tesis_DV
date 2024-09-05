@@ -1,53 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class RoomState : IState
+public class ShedState : IState
 {
     private StateMachine _fsm;
     private Cat _cat;
     private int _currentPathWaypoint;
+    private List<Transform> _pathToShed;
 
-    public RoomState(StateMachine fsm, Cat p)
+    public ShedState(StateMachine fsm, Cat p)
     {
         _fsm = fsm;
         _cat = p;
     }
 
+    public void OnExit()
+    {
+        Debug.Log("Salí de ShedState");
+    }
+
     public void OnStart()
     {
-        Debug.Log("EntrÃ© a RoomState");
+        Debug.Log("Entré a ShedState");
+        _pathToShed = _cat.PathToShed;
     }
 
     public void OnUpdate()
     {
-        if(_cat.canMove)
+        if (_cat.canMove)
         {
             _cat.EnterWalkingState();
-            Vector3 dir = _cat.Path[_currentPathWaypoint].transform.position - _cat.transform.position;
+
+            Vector3 dir = _pathToShed[_currentPathWaypoint].transform.position - _cat.transform.position;
 
             Vector3 aux = dir;
-            dir = new Vector3 (aux.x , aux.y, aux.z);
+            dir = new Vector3(aux.x, aux.y, aux.z);
             _cat.transform.forward = dir;
             _cat.transform.position += _cat.transform.forward * _cat._walkingSpeed * Time.deltaTime;
 
             if (dir.magnitude < 0.4f)
             {
                 _currentPathWaypoint++;
-                //if (_currentPathWaypoint > _cat.Path.Count - 1)
-                //{
-                if(Vector3.Distance(_cat.transform.position, _cat.StartingPosition) < 1f)
+                var last = _pathToShed.LastOrDefault();
+                if (Vector3.Distance(_cat.transform.position, last.transform.position) < 1f)
                 {
                     _cat._navMeshAgent.enabled = true;
+                    _cat.IsGoingBack = false;
                     _fsm.ChangeCatState(CatStatesEnum.IdleState);
                 }
-                //}
             }
         }
     }
-
-    public void OnExit()
-    {
-        Debug.Log("Sali de RoomState");
-    }
+    
 }

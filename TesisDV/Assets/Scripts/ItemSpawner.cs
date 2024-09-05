@@ -58,6 +58,7 @@ public class ItemSpawner : MonoBehaviour
                 break;
             case 4:
                 _fourthRoundItems.SetActive(true);
+                GameVars.Values.Cat.CatIsGoingToShed();
                 Blackboard.ActiveFourthExperiment();
                 break;
             case 5:
@@ -66,6 +67,7 @@ public class ItemSpawner : MonoBehaviour
                 Blackboard.ActiveFifthExperiment();
                 break;
             case 6:
+                GameVars.Values.Cat.CatIsGoingToKitchen();
                 _sixthRoundItems.SetActive(true);
                 break;
         }
@@ -79,5 +81,4 @@ public class ItemSpawner : MonoBehaviour
         Blackboard.ActiveSecondExperiment();
         _secondRoundItems.SetActive(true);
     }
-
 }

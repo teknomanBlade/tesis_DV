@@ -44,10 +44,11 @@ public class BasementState : IState
                 if (Vector3.Distance(_cat.transform.position, last.transform.position) < 1f)
                 {
                     _cat._navMeshAgent.enabled = true;
-                    _cat.IsGoingBack = true;
+                    _cat.GoingBackToLiving();
                     _fsm.ChangeCatState(CatStatesEnum.IdleState);
                 }
             }
         }
     }
+    
 }

@@ -32,7 +32,10 @@ public enum CatStatesEnum
     TakenState,
     RoomState,
     RunningState,
-    BasementState
+    BasementState,
+    LivingState,
+    ShedState,
+    KitchenState
 }
 
 public class StateMachine

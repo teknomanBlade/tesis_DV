@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,7 +13,7 @@ public class Cat : MonoBehaviour
     private bool _isHeld;
     private bool _isWalking;
     private bool _isRepositioning;
-    public Vector3 _startingPosition { get; private set; }
+    public Vector3 StartingPosition;
     //[SerializeField] private GameObject _startingPositionGameObject;
     public NavMeshAgent _navMeshAgent;
     private LevelManager _lm;
@@ -23,11 +22,15 @@ public class Cat : MonoBehaviour
     [SerializeField] private List<Vector3> _myPos = new List<Vector3>();
     public List<Transform> Path = new List<Transform>();
     public List<Transform> PathToBasement = new List<Transform>();
+    public List<Transform> PathToShed = new List<Transform>();
+    public List<Transform> PathToKitchen = new List<Transform>();
 
     public StateMachine _fsm { get; private set; }
 
     public bool canMove;
     public bool IsGoingBack;
+    public bool IsInShed;
+    public bool IsInKitchen;
 
     #region Events
 
@@ -42,11 +45,16 @@ public class Cat : MonoBehaviour
     {
         _fsm = new StateMachine();
         _myController = new CatController(this, GetComponent<CatView>());
-        _startingPosition = _myPos[2];
+        
+        StartingPosition = _myPos[2];
         _isHeld = false;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.speed = 0.6f;
         PathToBasement = FindObjectsOfType<Transform>().Where(x => x.name.Equals("CatWaypointsToBasement")).First()
+            .GetComponentsInChildren<Transform>().Skip(1).ToList();
+        PathToShed = FindObjectsOfType<Transform>().Where(x => x.name.Equals("CatWaypointsToShed")).First()
+            .GetComponentsInChildren<Transform>().Skip(1).ToList();
+        PathToKitchen = FindObjectsOfType<Transform>().Where(x => x.name.Equals("CatWaypointsToKitchen")).First()
             .GetComponentsInChildren<Transform>().Skip(1).ToList();
         _navMeshAgent.enabled = false;
         Path = FindObjectsOfType<Transform>().Where(x => x.name.Equals("CatWaypoints")).First()
@@ -61,20 +69,42 @@ public class Cat : MonoBehaviour
         _fsm.AddCatState(CatStatesEnum.TakenState, new TakenState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.RunningState, new RunningState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.BasementState, new BasementState(_fsm, this));
+        _fsm.AddCatState(CatStatesEnum.LivingState, new LivingState(_fsm, this));
+        _fsm.AddCatState(CatStatesEnum.ShedState, new ShedState(_fsm, this));
+        _fsm.AddCatState(CatStatesEnum.KitchenState, new KitchenState(_fsm, this));
     }
 
     void Start()
     {
         SetStartingPosition();
-
+        LoadLastPathPositions();
         _fsm.ChangeCatState(CatStatesEnum.RoomState);
-    }
+    } 
 
     void Update()
     {
         _myController.OnUpdate();
     }
+    public void LoadLastPathPositions() 
+    {
+        _myPos.Clear();
+        _myPos.Add(Path.Last().position);
+        _myPos.Add(PathToShed.Last().position);
+        _myPos.Add(PathToKitchen.Last().position);
+    }
+    public void GoingBackToLiving() 
+    {
+        Invoke(nameof(CatIsGoingBackToLiving),8f);
+    }
 
+    public void CatIsGoingBackToLiving()
+    {
+        _isHeld = false;
+        _isRepositioning = true;
+
+        _navMeshAgent.enabled = false;
+        _fsm.ChangeCatState(CatStatesEnum.LivingState);
+    }
     public void CatIsGoingToBasement() 
     {
         _isHeld = false;
@@ -82,6 +112,25 @@ public class Cat : MonoBehaviour
 
         _navMeshAgent.enabled = false;
         _fsm.ChangeCatState(CatStatesEnum.BasementState);
+    }
+
+    public void CatIsGoingToShed()
+    {
+        _isHeld = false;
+        _isRepositioning = true;
+        IsInShed = true;
+        _navMeshAgent.enabled = false;
+        _fsm.ChangeCatState(CatStatesEnum.ShedState);
+    }
+
+    public void CatIsGoingToKitchen()
+    {
+        _isHeld = false;
+        _isRepositioning = true;
+        IsInShed = false;
+        IsInKitchen = true;
+        _navMeshAgent.enabled = false;
+        _fsm.ChangeCatState(CatStatesEnum.KitchenState);
     }
 
     public void CatIsBeingTaken()
@@ -107,8 +156,20 @@ public class Cat : MonoBehaviour
 
     public void RepositionBetweenWaves()
     {
-        //Vector3 newPos = _myPos[Random.Range(0, 3)];
-        Vector3 newPos = _myPos[2];
+        if (IsInShed)
+        {
+            GetMidValue();
+        }
+        else if (IsInKitchen)
+        {
+            StartingPosition = _myPos.Last();
+        }
+        else 
+        {
+            StartingPosition = _myPos.First();
+        }
+
+        /*Vector3 newPos = _myPos[2];
         if (newPos != _startingPosition)
         {
             _startingPosition = newPos;
@@ -117,8 +178,15 @@ public class Cat : MonoBehaviour
         {
             //_startingPosition = _myPos[Random.Range(0, 3)];
             _startingPosition = _myPos[2];
-        }
+        }*/
 
+    }
+
+    public void GetMidValue() 
+    {
+        var mid = _myPos.Count / 2;
+        Debug.Log("MID VALUE: " + mid);
+        StartingPosition = _myPos.ElementAt(mid);
     }
 
     public void SetStartingPosition()
@@ -128,7 +196,7 @@ public class Cat : MonoBehaviour
             //transform.position = _myPos[Random.Range(0, 3)];
             //transform.position = _myPos[2];
             //_startingPositionGameObject.transform.position = transform.position;
-            _startingPosition = _myPos[2];
+            StartingPosition = _myPos[2];
         }
     }
 
@@ -179,7 +247,7 @@ public class Cat : MonoBehaviour
 
     public Vector3 GetStartingPosition()
     {
-        return _startingPosition;
+        return StartingPosition;
     }
 
     /* private void OnTriggerEnter(Collider other)
