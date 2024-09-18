@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour, IRoundChangeObservable
@@ -8,10 +9,25 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
 
     private Coroutine _currentCoroutine;
+    [SerializeField]
     private GameObject parent;  
+    public GameObject MainGameParent 
+    {
+        get { return parent; }
+        set { parent = value; }
+    }
     [SerializeField]
     private UFO _myUFO;
     [SerializeField] private Enemy _myEnemy;
+    public int InitialStock { get; private set; }
+    public GrayModel GrayCommonPrefab;
+    public TallGrayModel TallGrayPrefab;
+    public TankGrayModel TankGrayPrefab;
+    public GrayDogModel GrayDogPrefab;
+    public PoolObject<GrayModel> GrayCommonPool { get; set; }
+    public PoolObject<TallGrayModel> TallGrayPool { get; set; }
+    public PoolObject<TankGrayModel> TankGrayPool { get; set; }
+    public PoolObject<GrayDogModel> GrayDogPool { get; set; }
 
     [Header("Wave Details")]
     [SerializeField]
@@ -82,21 +98,194 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public event OnRoundStartEndDelegate OnRoundStartEnd;
     public delegate void OnRoundEndDelegate(int round);
     public event OnRoundEndDelegate OnRoundEnd;
-
-
-
     [SerializeField] private List<Transform> _waypoints;
     [SerializeField] private Vector3 _startingPosHard;
     [SerializeField] private AudioSource _as;
     void Awake()
     {
+        MainGameParent = GameObject.Find("MainGame");
         TimeWaves = _timeBetweenWaves;
-        //_currentCoroutine = StartCoroutine("WaitFirstDelay");
+        InitialStock = 5;
+        GrayCommonPool = new PoolObject<GrayModel>(GrayCommonFactory, ActivateGrayCommon, DeactivateGrayCommon, InitialStock, true);
+        TallGrayPool = new PoolObject<TallGrayModel>(TallGrayFactory, ActivateTallGray, DeactivateTallGray, InitialStock, true);
+        TankGrayPool = new PoolObject<TankGrayModel>(TankGrayFactory, ActivateTankGray, DeactivateTankGray, InitialStock, true);
+        GrayDogPool = new PoolObject<GrayDogModel>(GrayDogFactory, ActivateGrayDog, DeactivateGrayDog, InitialStock, true);
+        LoadEnemiesInWaves();
+    }
+    public void LoadEnemiesInWaves() 
+    {
+        ClearAllEnemiesLists();
+        //Wave 1
+        _graysUFO1.Add(GetEnemiesTypeForWave(2, EnemyType.Common).FirstOrDefault());
+        _graysUFO2.Add(GetEnemiesTypeForWave(2, EnemyType.Common).LastOrDefault());
+        //Wave 2
+        _graysUFO12.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO22.AddRange(GetEnemiesTypeForWave(3, EnemyType.Common));
+        //Wave 3
+        _graysUFO13.AddRange(GetEnemiesTypeForWave(2, EnemyType.Dog));
+        _graysUFO23.AddRange(GetEnemiesTypeForWave(4, EnemyType.Common));
+        //Wave 4
+        _graysUFO14.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
+        _graysUFO14.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO14.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
+        _graysUFO24.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
+        _graysUFO24.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO24.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
+        //Wave 5
+        _graysUFO15.AddRange(GetEnemiesTypeForWave(3, EnemyType.Melee));
+        _graysUFO25.AddRange(GetEnemiesTypeForWave(2, EnemyType.Common));
+        _graysUFO25.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        //Wave 6
+        _graysUFO16.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
+        _graysUFO16.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO16.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
+        _graysUFO16.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
+        _graysUFO26.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
+        _graysUFO26.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO26.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
+        _graysUFO26.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
+    }
+    public void ClearAllEnemiesLists() 
+    {
+        _graysUFO1.Clear();
+        _graysUFO12.Clear();
+        _graysUFO13.Clear();
+        _graysUFO14.Clear();
+        _graysUFO15.Clear();
+        _graysUFO16.Clear();
+        _graysUFO2.Clear();
+        _graysUFO22.Clear();
+        _graysUFO23.Clear();
+        _graysUFO24.Clear();
+        _graysUFO25.Clear();
+        _graysUFO26.Clear();
+    }
+    private List<Enemy> GetEnemiesTypeForWave(int amount, EnemyType type)
+    {
+        var enemiesList = new List<Enemy>();
+        if (type == EnemyType.Common)
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                enemiesList.Add(GrayCommonPool.GetObjectDisabled());
+            }
+        }
+        else if (type == EnemyType.Melee) 
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                enemiesList.Add(TallGrayPool.GetObjectDisabled());
+            }
+        }
+        else if (type == EnemyType.Tank)
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                enemiesList.Add(TankGrayPool.GetObjectDisabled());
+            }
+        }
+        else if (type == EnemyType.Dog)
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                enemiesList.Add(GrayDogPool.GetObjectDisabled());
+            }
+        }
+        return enemiesList;
+    }
+    public int GetAmountEnemiesByWave() 
+    {
+        var amount = 0;
+        if (CurrentRound == 2) 
+        {
+            amount = _graysUFO1.Union(_graysUFO2).ToList().Count;
+        }
+        if (CurrentRound == 3)
+        {
+            amount = _graysUFO12.Union(_graysUFO22).ToList().Count;
+        }
+        if (CurrentRound == 4)
+        {
+            amount = _graysUFO13.Union(_graysUFO23).ToList().Count;
+        }
+        if (CurrentRound == 5)
+        {
+            amount = _graysUFO14.Union(_graysUFO24).ToList().Count;
+        }
+        if (CurrentRound == 6)
+        {
+            amount = _graysUFO15.Union(_graysUFO25).ToList().Count;
+        }
+        if (CurrentRound == 7)
+        {
+            amount = _graysUFO16.Union(_graysUFO26).ToList().Count;
+        }
+
+        return amount;
+    }
+    private GrayDogModel GrayDogFactory()
+    {
+        return Instantiate(GrayDogPrefab);
+    }
+    private void DeactivateGrayDog(GrayDogModel o)
+    {
+        o.gameObject.transform.parent = MainGameParent.transform;
+        o.gameObject.SetActive(false);
     }
 
+    private void ActivateGrayDog(GrayDogModel o)
+    {
+        o.gameObject.SetActive(true);
+        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
+    }
+    private TankGrayModel TankGrayFactory()
+    {
+        return Instantiate(TankGrayPrefab);
+    }
+    private void DeactivateTankGray(TankGrayModel o)
+    {
+        o.gameObject.transform.parent = MainGameParent.transform;
+        o.gameObject.SetActive(false);
+    }
+
+    private void ActivateTankGray(TankGrayModel o)
+    {
+        o.gameObject.SetActive(true);
+        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
+    }
+    private TallGrayModel TallGrayFactory()
+    {
+        return Instantiate(TallGrayPrefab);
+    }
+    private void DeactivateTallGray(TallGrayModel o)
+    {
+        o.gameObject.transform.parent = MainGameParent.transform;
+        o.gameObject.SetActive(false);
+    }
+
+    private void ActivateTallGray(TallGrayModel o)
+    {
+        o.gameObject.SetActive(true);
+        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
+    }
+    private GrayModel GrayCommonFactory()
+    {
+        return Instantiate(GrayCommonPrefab);
+    }
+    private void DeactivateGrayCommon(GrayModel o)
+    {
+        o.gameObject.transform.parent = MainGameParent.transform;
+        o.gameObject.SetActive(false);
+    }
+
+    private void ActivateGrayCommon(GrayModel o)
+    {
+        o.gameObject.SetActive(true);
+        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
+    }
     void Start()
     {
-        parent = GameObject.Find("MainGame");
+        
         _as = GetComponent<AudioSource>();
         GameVars.Values.soundManager.PlaySound(_as,"MusicPreWave", 0.1f, true,0f);
         //OnRoundStartEnd(_inRound);
@@ -278,8 +467,14 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             }
             if(_currentRound == 2)
             {
-                Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos1).SetGraysToSpawn(_graysUFO1).SetName("a");//.SetRotation(new Vector3(-90f, 0f, 0f));
-                Instantiate(_myUFO, parent.transform).SetSpawnPos(_startingPos).SetFinalPos(_finalPos2).SetGraysToSpawn(_graysUFO2).SetName("b");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                Instantiate(_myUFO, parent.transform)
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos1)
+                    .SetGraysToSpawn(_graysUFO1).SetName("a");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                Instantiate(_myUFO, parent.transform)
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos2)
+                    .SetGraysToSpawn(_graysUFO2).SetName("b");//.SetRotation(new Vector3(-90f, 0f, 0f));
             }
             else if(_currentRound == 3)
             {

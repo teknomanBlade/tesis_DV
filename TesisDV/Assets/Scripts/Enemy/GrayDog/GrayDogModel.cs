@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class GrayDogModel : Enemy
 {
@@ -17,7 +16,8 @@ public class GrayDogModel : Enemy
         HP = 1.5f;
         _startSpeed = _movingSpeed;
         PoisonHitted = false;
-        GameVars.Values.WaveManager.EnhanceEnemyStatsPerWave(this);
+        SetStatsEnhanced();
+        //GameVars.Values.WaveManager.EnhanceEnemyStatsPerWave(this);
         _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.GrayDogCatState));
         _fsm.AddState(EnemyStatesEnum.GrayDogCatState, new GrayDogCatState(_fsm, this, _pf));
         _fsm.AddState(EnemyStatesEnum.GrayDogEscapeState, new GrayDogEscapeState(_fsm, this, _pf));

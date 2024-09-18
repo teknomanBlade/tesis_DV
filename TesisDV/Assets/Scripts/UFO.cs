@@ -170,7 +170,9 @@ public class UFO : MonoBehaviour, IInRoundObserver
             {
                 //CAMBIO PARA MVC
                 //La referencia cambia a GrayModel
-                currentGray = Instantiate(EnemiesToSpawn[_graysSpawned], transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
+                //currentGray = Instantiate(EnemiesToSpawn[_graysSpawned], transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
+                currentGray = EnemiesToSpawn[_graysSpawned].SetExitUFO(transform.position);
+                currentGray.gameObject.SetActive(true);
                 GameVars.Values.enemyCount++;
                 AssignCountToEnemyByPairImpair(GameVars.Values.enemyCount, currentGray);
                 //_lm.EnemySpawned();

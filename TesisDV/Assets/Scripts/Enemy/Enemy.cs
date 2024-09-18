@@ -103,6 +103,7 @@ public abstract class Enemy : MonoBehaviour
     public event Action<bool> onAttackSpecial = delegate { };
     public event Action onDisolve = delegate { };
     public event Action onEndSpawn = delegate { };
+    public event Action<Enemy> onStatsEnhanced = delegate { };
 
     #endregion Events
 
@@ -585,7 +586,11 @@ public abstract class Enemy : MonoBehaviour
         transform.position = newPos;
         return this;
     }
-
+    public Enemy SetStatsEnhanced() 
+    {
+        onStatsEnhanced(this);
+        return this;
+    }
     public int GetCurrentWaypoint()
     {
         return _currentWaypoint;

@@ -21,7 +21,7 @@ public class GameVars : MonoBehaviour
     public WaveManager WaveManager { get; set; }
     public CatDistanceBar CatDistanceBar;
     [SerializeField] private Player player;
-    public Player Player
+    public Player Player 
     {
         get { return player; }
     }
@@ -203,6 +203,7 @@ public class GameVars : MonoBehaviour
 
     private void DeactivateFERNPaintballMinigun(FERNPaintballMinigun o)
     {
+        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
         o.gameObject.SetActive(false);
         if (!o.gameObject.name.Contains("_"))
         {
@@ -227,6 +228,7 @@ public class GameVars : MonoBehaviour
 
     private void DeactivateBaseballLauncher(BaseballLauncher o)
     {
+        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
         o.gameObject.SetActive(false);
         if (!o.gameObject.name.Contains("_")) 
         { 

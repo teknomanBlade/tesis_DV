@@ -188,6 +188,20 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     Interact();
                 }
             }
+            if (Input.GetKey(GameVars.Values.useKey))
+            {
+                if (lookingAt != null)
+                {
+                    MovingObject(true);
+                }
+            }
+            if (Input.GetKeyUp(GameVars.Values.useKey)) 
+            {
+                if (lookingAt != null)
+                {
+                    MovingObject(false);
+                }
+            }
             if (Input.GetKeyDown(GameVars.Values.hideShowMiniMapKey))
             {
                 _miniMapDisplay.SetActive(!_miniMapDisplay.activeSelf);
@@ -370,6 +384,16 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             }*/
         }
         
+    }
+
+    private void MovingObject(bool isMoving)
+    {
+        if (lookingAt.gameObject.TryGetComponent(out MovableObjects movableObject))
+        {
+            Debug.Log("Moviendo... ");
+            movableObject.IsMoving = isMoving;
+            movableObject.OwnerPlayer = this;
+        }
     }
 
     private void FixedUpdate()
@@ -1226,10 +1250,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             }
             
         }
-        if (lookingAt.gameObject.TryGetComponent(out ElectricTrap electricTrap))
-        {
-            
-        }
+        
         if (lookingAt.gameObject.TryGetComponent(out FERNPaintballMinigun FERNPaintballMinigun)) 
         {
             

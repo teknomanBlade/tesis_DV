@@ -48,6 +48,24 @@ public class PoolObject<T>
 
         return default(T);
     }
+    public T GetObjectDisabled()
+    {
+        if (_objects.Count > 0)
+        {
+            var o = _objects[0];
+            _objects.RemoveAt(0);
+            _desactivateMethod(o);
+            return o;
+        }
+        else if (_isDynamic)
+        {
+            var ob = _factoryMethod();
+            _desactivateMethod(ob);
+            return ob;
+        }
+
+        return default(T);
+    }
 
     public void ReturnObject(T o)
     {

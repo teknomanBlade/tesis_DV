@@ -28,20 +28,19 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     public event OnGrayAmountChangeDelegate OnGrayAmountChange;
 
     public delegate void LevelDelegate();
-    //public CraftingRecipe craftingRecipe;
     public bool playing = true;
+    public bool inRound;
     public bool InRound {
         get
         {
             if (enemiesInScene.Count == 0)
             {
-                //_cat.SetPositionBetweenWaves();
                 TriggerHitInRound("EndRound");
-                
             }
-            
+            inRound = enemiesInScene.Count > 0;
             return enemiesInScene.Count > 0;
         }
+
     }
 
     private int _amountEnemiesInScene = 0;
@@ -56,15 +55,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         }
     }
     public Player _player;
-    //public int currentRound = 0;
-    //public int finalRound = 5;
-
     public bool canSpawn = true;
-    /* public int lastWaveEnemies = 0;
-    public int enemiesAlive = 0;
-    public int enemiesToSpawn = 0; */
-
-
     //CAMBIOS PARA MVC
     //Esta lista antes era de Gray, ahora se cambió a GrayModel (Sus referencias también).
     public List<Enemy> enemiesInScene = new List<Enemy>();
@@ -88,33 +79,8 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
    
     private void Update()
     {
-        //Debug.Log(allDoorsAreClosed);
-        //For testing
-
+        AmountEnemiesInScene = GameVars.Values.WaveManager.GetAmountEnemiesByWave();
         if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
-        
-        //No checkear en update. 
-        //canSpawn = !enemyHasObjective;
-        AmountEnemiesInScene = enemiesInScene.Count;
-        //No se checkea en update.
-        //if (_player.isDead) LoseGame();
-
-        /* if (playing)
-        {
-            if (inRound && enemiesInScene.Count <= 0 && enemiesToSpawn <= 0 && !EnemiesSpawning()) EndRound();
-
-            if (inRound && enemiesToSpawn > 0)
-            {
-                SpawnWave();
-            }
-        } */
-
-        //CHECKEAR EN CAMBIO DE RONDA.
-        /* if (currentRound > finalRound)
-        {
-            playing = false;
-            Invoke("WinGame", 3f);
-        } */
     }
     public void WinGame()
     {
@@ -154,13 +120,6 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     public void CheckForObjective()
     {
-        /* if (enemiesInScene.Count <= 0)
-        {
-            enemyHasObjective = false;
-            canSpawn = !enemyHasObjective;
-            return;
-        } */
-
         foreach (Enemy gray in enemiesInScene)
         {
             if (gray.hasObjective) 
@@ -180,7 +139,12 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     private void KillAllEnemiesInScene()
     {
-        if (enemiesInScene.Count != 0) enemiesInScene[0].TakeDamage(999);
+        if (enemiesInScene.Count != 0) 
+        {
+            if (!enemiesInScene[0].gameObject.CompareTag("Tutorial"))
+                AmountEnemiesInScene--;
+            enemiesInScene[0].TakeDamage(999);
+        }
     }
 
     public void ChangeDoorsStatus()
