@@ -12,6 +12,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     private float _dangerThreshold;
     private float _currentDistance = 0;
     private float _wittsAmount = 0;
+    private float _graysAmount = 0;
     private Image _fillImage;
     public GameObject Fill;
     public Text GraysAmountPerWaveText;
@@ -43,7 +44,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         GameVars.Values.WaveManager.OnRoundChanged += RoundChanged;
         GameVars.Values.WaveManager.OnTimeWaveChange += TimeWaveChanged;
         GameVars.Values.WaveManager.OnRoundStartEnd += RoundStartEnd;
-        GameVars.Values.LevelManager.OnGrayAmountChange += GrayAmountChanged;
+        GameVars.Values.WaveManager.OnGrayAmountChange += GrayAmountChanged;
         TxtWaveReminderAnim = TxtWaveReminder.gameObject.GetComponent<Animator>();
         GameVars.Values.Inventory.OnWittsAmountChanged += WittsAmountChanged;
         _fillImage = Fill.GetComponent<Image>();
@@ -93,7 +94,7 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
 
     private void TimeWaveChanged(float newVal)
     {
-        RestWaveTimeText.text = "Rest wave time: " + newVal.ToString("F0");
+        RestWaveTimeText.text = "The grays are coming... ";
     }
 
     private void WittsAmountChanged(float newVal)
@@ -117,8 +118,21 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     }
     private void GrayAmountChanged(int newVal)
     {
-        GraysAmountPerWaveText.text = "X " + newVal;
+        StartCoroutine(LerpGrayAmountValue(newVal, 1f));
         StartCoroutine(ShowAnimGrayAmountChanged());
+    }
+    IEnumerator LerpGrayAmountValue(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _graysAmount;
+
+        while (time < duration)
+        {
+            _graysAmount = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+            GraysAmountPerWaveText.text = "X " + Math.Round(_graysAmount, 2).ToString("F0");
+            yield return null;
+        }
     }
 
     IEnumerator LerpColor(float endValue, float duration)

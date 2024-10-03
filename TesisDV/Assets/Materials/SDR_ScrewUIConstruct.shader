@@ -122,7 +122,7 @@ Shader "SDR_ScrewUIConstruct"
 }
 /*ASEBEGIN
 Version=17800
-456;443;1195;432;2823.788;1216.328;3.229092;True;False
+293;245;1195;518;1919.803;642.704;1.670264;True;False
 Node;AmplifyShaderEditor.Vector2Node;7;-1434.625,-312.8318;Inherit;False;Property;_Anchor;Anchor;1;0;Create;True;0;0;False;0;0,0;0.5,0.5;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
 Node;AmplifyShaderEditor.SimpleTimeNode;8;-1440.886,-130.1738;Inherit;False;1;0;FLOAT;4;False;1;FLOAT;0
 Node;AmplifyShaderEditor.TextureCoordinatesNode;5;-1507.782,-558.9138;Inherit;False;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
@@ -136,4 +136,4 @@ WireConnection;2;1;3;0
 WireConnection;0;2;2;0
 WireConnection;0;9;2;4
 ASEEND*/
-//CHKSM=9700B1792E532E6D97A4A48BCAAAE0B839081CE3
+//CHKSM=0D6E10F3E92F7160F91FDDA3CE83A6CE623E4BA4

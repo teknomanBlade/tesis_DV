@@ -24,9 +24,6 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     public GameObject objective;
     public bool allDoorsAreClosed;
 
-    public delegate void OnGrayAmountChangeDelegate(int newVal);
-    public event OnGrayAmountChangeDelegate OnGrayAmountChange;
-
     public delegate void LevelDelegate();
     public bool playing = true;
     public bool inRound;
@@ -51,7 +48,6 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         {
             if (_amountEnemiesInScene == value) return;
             _amountEnemiesInScene = value;
-            OnGrayAmountChange?.Invoke(_amountEnemiesInScene);
         }
     }
     public Player _player;
@@ -67,19 +63,23 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         _panelMain = GameObject.Find("Panel");
         allDoorsAreClosed = true;
         _cat = objective.GetComponent<Cat>();
-
         GameVars.Values.BaseballLauncher.RestoreBuildAmount();
         GameVars.Values.MicrowaveForceFieldGenerator.RestoreBuildAmount();
         GameVars.Values.SlowTrap.RestoreBuildAmount();
         GameVars.Values.ElectricTrap.RestoreBuildAmount();
         GameVars.Values.FERNPaintballMinigun.RestoreBuildAmount();
-        
+        GameVars.Values.WaveManager.OnGrayAmountChange += GrayAmountChange;
         WorkbenchLight.SetActive(false);
     }
-   
-    private void Update()
+
+    private void GrayAmountChange(int newVal)
     {
-        AmountEnemiesInScene = GameVars.Values.WaveManager.GetAmountEnemiesByWave();
+        AmountEnemiesInScene = newVal;
+    }
+
+    private void Update() 
+    {
+        //AmountEnemiesInScene = GameVars.Values.WaveManager.GetAmountEnemiesByWave();
         if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
     }
     public void WinGame()
@@ -143,6 +143,7 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         {
             if (!enemiesInScene[0].gameObject.CompareTag("Tutorial"))
                 AmountEnemiesInScene--;
+
             enemiesInScene[0].TakeDamage(999);
         }
     }

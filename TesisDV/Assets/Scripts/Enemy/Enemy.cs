@@ -266,7 +266,6 @@ public abstract class Enemy : MonoBehaviour
         Debug.Log("STUNEA AL GRIS");
         if (!isStunned)
         {
-            //_navMeshAgent.speed = 0; //Se va el navmesh
             onStun(isStunned);
             onWalk(!isStunned);
             isStunned = true;

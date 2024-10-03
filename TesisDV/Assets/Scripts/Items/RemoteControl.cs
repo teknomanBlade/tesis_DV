@@ -33,18 +33,19 @@ public class RemoteControl : Remote
     }
     public override void ActivatableAction()
     {
+        if (_TVTrap == null) return;
+
         StartCoroutine(TurnOnOff("IsTurnOnOff","TurnOffOnTV"));
-        //anim.SetBool("IsTurnOnOff", true);
         if (IsAtRange)
         {
             Debug.Log("TURN ON TV: " + _TVTrap.IsTurnOn);
             if (_TVTrap.IsTurnOn)
             {
-                _TVTrap?.TurnOff();
+                _TVTrap.TurnOff();
             }
             else
             {
-                _TVTrap?.TurnOn();
+                _TVTrap.TurnOn();
             }
         }
         //Invoke("SetIdle", 0.5f);

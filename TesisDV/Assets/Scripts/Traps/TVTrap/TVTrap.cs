@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TVTrap : Item, IMovable
+public class TVTrap : Item
 {
     public Animator anim;
     public bool IsTurnOn;
@@ -116,16 +116,9 @@ public class TVTrap : Item, IMovable
             if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 Debug.Log("3");
-                collision.gameObject.GetComponent<GrayModel>().Stun(3f);
+                collision.gameObject.GetComponent<Enemy>().Stun(3f);
                 _canStun = false;
             }
         }
-    }
-
-    public void BecomeMovable()
-    {
-        Debug.Log("2");
-        //GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
-        //Destroy(gameObject);
     }
 }

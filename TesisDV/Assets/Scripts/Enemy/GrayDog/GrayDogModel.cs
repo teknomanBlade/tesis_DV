@@ -57,8 +57,8 @@ public class GrayDogModel : Enemy
         onRunning();
     }
     
-    public void Destroy() //Se llama desde la animacion.
+    public void BackToPool() //Se llama desde la animacion.
     {
-        Destroy(gameObject);
+        GameVars.Values.WaveManager.GrayDogPool.ReturnObject(this);
     }
 }

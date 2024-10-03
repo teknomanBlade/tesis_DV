@@ -70,6 +70,7 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairWorkbenchCrafting;
     public Sprite crosshairLockDoor;
     public Sprite crosshairMovingTrap;
+    public Sprite crosshairMovingObject;
     public Sprite crosshairRightClickIcon;
     public Sprite imageBaseballTrap;
     public Sprite switchTennisBallContainer;
@@ -180,6 +181,7 @@ public class GameVars : MonoBehaviour
         imageBaseballTrap = Resources.Load<Sprite>("SpriteBaseballLauncher");
         crosshairLockDoor = Resources.Load<Sprite>("LockDoorIcon");
         crosshairMovingTrap = Resources.Load<Sprite>("MovingTrapIcon");
+        crosshairMovingObject = Resources.Load<Sprite>("MoveObject");
         crosshairRightClickIcon = Resources.Load<Sprite>("RightClickMouseIcon");
         crosshairWorkbenchCrafting = Resources.Load<Sprite>("WorkbenchCraftIcon");
         switchTennisBallContainer = Resources.Load<Sprite>("SwitchTennisBallsContainer");
@@ -458,5 +460,5 @@ public class GameVars : MonoBehaviour
         cat.CatIsBeingTaken();
         cat.SetExitPos(exitPos);
     }
-    #endregion
+    #endregion 
 }

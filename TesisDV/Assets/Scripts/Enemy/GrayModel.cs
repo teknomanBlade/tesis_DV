@@ -60,4 +60,9 @@ public class GrayModel : Enemy
             _myController.OnUpdate();
         }
     }
+
+    public void BackToPool()
+    {
+        GameVars.Values.WaveManager.GrayCommonPool.ReturnObject(this);
+    }
 }

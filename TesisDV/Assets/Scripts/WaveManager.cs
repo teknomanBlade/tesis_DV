@@ -7,7 +7,7 @@ using UnityEngine;
 public class WaveManager : MonoBehaviour, IRoundChangeObservable
 {
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
-
+   
     private Coroutine _currentCoroutine;
     [SerializeField]
     private GameObject parent;  
@@ -45,12 +45,19 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     /* [SerializeField]
     private float _firstWaveDelay; */
     [SerializeField] private float _timeBetweenWaves;
-
+    [SerializeField]
     private bool _inRound;
     public bool InRound
     {
-        get { return _inRound;  }
-        set { _inRound = value; }
+        get 
+        {
+            return _inRound;  
+        }
+        set 
+        {
+            
+            _inRound = value; 
+        }
     }
     [SerializeField] private float _timeWaves = 0;
     public float TimeWaves
@@ -98,6 +105,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public event OnRoundStartEndDelegate OnRoundStartEnd;
     public delegate void OnRoundEndDelegate(int round);
     public event OnRoundEndDelegate OnRoundEnd;
+    public delegate void OnGrayAmountChangeDelegate(int newVal);
+    public event OnGrayAmountChangeDelegate OnGrayAmountChange;
     [SerializeField] private List<Transform> _waypoints;
     [SerializeField] private Vector3 _startingPosHard;
     [SerializeField] private AudioSource _as;
@@ -196,27 +205,27 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public int GetAmountEnemiesByWave() 
     {
         var amount = 0;
-        if (CurrentRound == 2) 
+        if (CurrentRound == 1) 
         {
             amount = _graysUFO1.Union(_graysUFO2).ToList().Count;
         }
-        if (CurrentRound == 3)
+        if (CurrentRound == 2)
         {
             amount = _graysUFO12.Union(_graysUFO22).ToList().Count;
         }
-        if (CurrentRound == 4)
+        if (CurrentRound == 3)
         {
             amount = _graysUFO13.Union(_graysUFO23).ToList().Count;
         }
-        if (CurrentRound == 5)
+        if (CurrentRound == 4)
         {
             amount = _graysUFO14.Union(_graysUFO24).ToList().Count;
         }
-        if (CurrentRound == 6)
+        if (CurrentRound == 5)
         {
             amount = _graysUFO15.Union(_graysUFO25).ToList().Count;
         }
-        if (CurrentRound == 7)
+        if (CurrentRound == 6)
         {
             amount = _graysUFO16.Union(_graysUFO26).ToList().Count;
         }
@@ -288,8 +297,6 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         
         _as = GetComponent<AudioSource>();
         GameVars.Values.soundManager.PlaySound(_as,"MusicPreWave", 0.1f, true,0f);
-        //OnRoundStartEnd(_inRound);
-        //Debug.Log(_inRound);
         OnRoundEnd(_currentRound);
         InstantiateUFOIndicators();
     }
@@ -306,15 +313,6 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             }
         }  
     }
-
-    /*  IEnumerator WaitFirstDelay()
-     {
-         DespawnUFOIndicators();
-         yield return new WaitForSeconds(_firstWaveDelay);
-         SpawnWave();
-
-     } */
-
     public void EnhanceEnemyStatsPerWave(Enemy e)
     {
         AugumentStatsPerType(e, CurrentRound);
@@ -428,7 +426,6 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     IEnumerator WaitBetweenWaves()
     {
-        //DespawnUFOIndicators();
         yield return new WaitForSeconds(_timeBetweenWaves);
         SpawnWave();
     }
@@ -438,7 +435,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         TimeWaves = _timeBetweenWaves;
         _inRound = true;
         OnRoundStartEnd(_inRound);
-        //SendUFOS();
+        OnGrayAmountChange(GetAmountEnemiesByWave());
     }
 
     private void SendUFOS()
@@ -449,18 +446,14 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         DisableUFOLR(); 
         SpawnWave();
         GameVars.Values.soundManager.PlaySound(_as,"MusicWaves", 0.12f, true,0f);
-        //_inRound = true;
-        //OnRoundStartEnd?.Invoke(_inRound);
         TimeWaves = _timeBetweenWaves;
     }
 
     private void SpawnWave()
     {
-        //InstantiateUFOIndicators(); Ahora los indicadores aparecen entre rondas.
         if (_currentRound < _totalRounds)
         {
             CurrentRound++;
-            //TriggerRoundChange("RoundChanged");
             if(_currentRound == 1)
             {
                 Instantiate(_myEnemy, parent.transform).SetSpawnPos(_startingPosHard).SetPathHard(_waypoints);//.SetRotation(new Vector3(-90f, 0f, 0f));
@@ -533,10 +526,6 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             }
             
         }
-        /* else
-        {
-            GameVars.Values.LevelManager.WinGame(); Chequear si ganaste aca hace que tengas que esperar todo el tiempo InBetweenRounds.
-        } */
     }
 
     //Hacer por evento en lugar de void publico.
@@ -551,8 +540,6 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         OnRoundStartEnd?.Invoke(_inRound);
         OnRoundEnd(_currentRound);
         RestartUFOIndicators();
-        //if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
-        //_currentCoroutine = StartCoroutine("WaitBetweenWaves");
     }
 
     private void RestartUFOIndicators()

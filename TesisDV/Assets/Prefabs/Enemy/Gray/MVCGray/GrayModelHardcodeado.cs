@@ -59,9 +59,9 @@ public class GrayModelHardcodeado : Enemy
             GameVars.Values.Cat.CanMove();
         }
     }
- 
-    /* public void SetObjective(GameObject targetPosition) No se usa, se usa directamente ResetPathAndSetObjective()
+
+    public void BackToPool() 
     {
-        currentObjective = targetPosition;
-    } */
+        Destroy(gameObject);
+    }
 }

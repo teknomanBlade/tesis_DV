@@ -4,28 +4,22 @@ using UnityEngine;
 
 public class ArrowUIIndicator : MonoBehaviour
 {
-    public GameObject ArrowObjectAffordance;
-    public GameObject ContainerIndicator;
-
-    // Start is called before the first frame update
     void Awake()
     {
-        if (this.name.Equals("ArrowBasementIndicator"))
-        {
-            ArrowObjectAffordance.SetActive(true);
-            ContainerIndicator.SetActive(false);
-        }
-        else 
-        {
-            ArrowObjectAffordance.SetActive(false);
-            ContainerIndicator.SetActive(true);
-        }
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        Vector3 rotacionActual = Vector3.zero;
+
+        // Aplicar clamp en el eje X
+        rotacionActual.x = Mathf.Clamp(rotacionActual.x, 0f, 0f);
+        rotacionActual.y = Mathf.Clamp(rotacionActual.y, 0f, 0f);
+        rotacionActual.z = GameVars.Values.Player.transform.eulerAngles.y;
+        // Asignar la rotación ajustada
+        transform.localEulerAngles = rotacionActual;
+        transform.localRotation = Quaternion.Euler(transform.localEulerAngles);
     }
 }

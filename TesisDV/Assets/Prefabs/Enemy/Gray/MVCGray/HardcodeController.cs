@@ -22,7 +22,7 @@ public class HardcodeController : IController
         _m.onAttack     +=  v.AttackAnimation;
         _m.onAttackSpecial  +=  v.EMPSkillAnimation;
         _m.onCatGrab    +=  v.CatGrabAnimation;
-        _m.onDisolve    +=  v.DissolveAnimation;
+        //_m.onDisolve    +=  v.DissolveAnimation;
         _m.onEndSpawn   +=  v.EndSpawnAnim;
     }
 

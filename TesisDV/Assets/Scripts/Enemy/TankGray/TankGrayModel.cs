@@ -61,8 +61,8 @@ public class TankGrayModel : Enemy
         }
     }
 
-    public void Destroy() //Se llama desde la animacion.
+    public void BackToPool() //Se llama desde la animacion.
     {
-        Destroy(gameObject);
+        GameVars.Values.WaveManager.TankGrayPool.ReturnObject(this);
     }
 }

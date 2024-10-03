@@ -16,6 +16,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     #region Events
     public delegate void OnNewRacketGrabbedDelegate();
     public event OnNewRacketGrabbedDelegate OnNewRacketGrabbed;
+    public delegate void OnPlayerInteractDelegate(Transform player);
+    public event OnPlayerInteractDelegate OnPlayerInteract;
     #endregion
 
     #region Components
@@ -127,6 +129,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private bool _canBuildElectricTrap = false;
     private bool _canBuildPaintballMinigunTrap = false;
     public MicrowaveForceFieldGenerator microwaveFFG;
+    public StationaryItem StationaryItem;
     //public ElectricTrap ElectricTrap;
 
     private void Awake()
@@ -186,12 +189,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 if (lookingAt != null)
                 {
                     Interact();
-                }
-            }
-            if (Input.GetKey(GameVars.Values.useKey))
-            {
-                if (lookingAt != null)
-                {
                     MovingObject(true);
                 }
             }
@@ -232,19 +229,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 _canMoveTraps = false;
                 GameVars.Values.WaveManager.StartRound();
             }
-
-
-            //if (Input.GetKeyDown(GameVars.Values.inventoryKey))  Dejo el c�digo del screenmanager para usarlo en las pantallas de win y loose, donde si queremos que el PJ no se pueda seguir controlando.
-            //{
-                //var screencrafting = instantiate(gamevars.values.craftingscreen);
-                //screenmanager.instance.push(screencrafting);
-                
-            //}
-            //else if (Input.GetKeyUp(GameVars.Values.inventoryKey))
-            //{
-                //screenmanager.instance.pop();
-                
-            //}
 
             if(Input.GetKeyDown(GameVars.Values.inventoryKey) && _craftingScreen.activeInHierarchy)
             {
@@ -388,6 +372,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void MovingObject(bool isMoving)
     {
+        if(lookingAt == null) return;
+
         if (lookingAt.gameObject.TryGetComponent(out MovableObjects movableObject))
         {
             Debug.Log("Moviendo... ");
@@ -1055,10 +1041,19 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (lookingAt.gameObject.TryGetComponent<StationaryItem>(out StationaryItem stationaryItem))
         {
             crosshair.sprite = GameVars.Values.crosshairAddOnBattery;
+            StationaryItem = stationaryItem;
+            OnPlayerInteract += stationaryItem.OnPlayerInteract;
+            OnPlayerInteract(transform);
+            stationaryItem.IndicatorLookAtPlayer();
             interactKey.SetActive(true);
             stationaryItem.ShowBlueprint();
             ChangeCrosshairSize(40f);
             return;
+        }
+        else 
+        {
+            if(StationaryItem != null)
+                StationaryItem.IsLookedAt = false;
         }
 
         if (lookingAt.gameObject.TryGetComponent<FootLocker>(out FootLocker fl))
@@ -1151,6 +1146,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(40f);
             return;
         }
+        if (lookingAt.gameObject.TryGetComponent(out MovableObjects movableObjects))
+        {
+            crosshair.sprite = GameVars.Values.crosshairMovingObject;
+            ChangeCrosshairSize(40f);
+            return;
+        }
 
         if (lookingAt.gameObject.TryGetComponent<MicrowaveForceFieldGenerator>(out MicrowaveForceFieldGenerator microwaveFFG))
         {
@@ -1171,7 +1172,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             
             return;
         }
-
 
         crosshair.sprite = GameVars.Values.crosshair;
         ChangeCrosshairSize(20f);
@@ -1270,6 +1270,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             {
                 _inventory.RemoveItemID(2, 1);
                 stationaryItem.ActiveBatteryComponent();
+                lookingAt = null;
+                StationaryItem = null;
+                return;
             }
             else
             {
