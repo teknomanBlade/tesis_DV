@@ -128,6 +128,9 @@ public class GameVars : MonoBehaviour
     #region Events
     public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
     public event OnCapturedCatChangeDelegate OnCapturedCatChange;
+    public delegate void OnCapturedCatPositionDelegate(Vector3 catPos);
+    public event OnCapturedCatPositionDelegate OnCapturedCatPosition;
+    
     #endregion
 
     private void Awake()
@@ -459,6 +462,7 @@ public class GameVars : MonoBehaviour
         OnCapturedCatChange(_isCatCaptured);
         cat.CatIsBeingTaken();
         cat.SetExitPos(exitPos);
+        OnCapturedCatPosition(cat.transform.position);
     }
     #endregion 
 }

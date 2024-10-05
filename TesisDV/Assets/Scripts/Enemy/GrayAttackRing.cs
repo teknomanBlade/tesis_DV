@@ -6,6 +6,8 @@ public class GrayAttackRing : MonoBehaviour
 {
     public Enemy _myOwner;
     public int _damageAmount;
+    public delegate void OnAttackPlayerPositionDelegate(Vector3 attackPos, bool attacked);
+    public event OnAttackPlayerPositionDelegate OnAttackPlayerPosition;
 
     private void Awake()
     {
@@ -29,7 +31,9 @@ public class GrayAttackRing : MonoBehaviour
         if (player)
         {
             //Debug.Log("ENTRA EN TRIGGER DAMAGE?");
-            other.GetComponent<Player>().Damage(_damageAmount, _myOwner.enemyType);
+            OnAttackPlayerPosition += player.OnAttackPlayerPosition;
+            OnAttackPlayerPosition(_myOwner.transform.position, true);
+            player.Damage(_damageAmount, _myOwner);
             GetComponent<BoxCollider>().enabled = false;
         }
     }

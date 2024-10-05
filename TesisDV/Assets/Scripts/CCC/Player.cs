@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using TMPro;
+using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
@@ -18,10 +19,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public event OnNewRacketGrabbedDelegate OnNewRacketGrabbed;
     public delegate void OnPlayerInteractDelegate(Transform player);
     public event OnPlayerInteractDelegate OnPlayerInteract;
+    
     #endregion
 
     #region Components
     private Rigidbody _rb;
+    [SerializeField]
     private PlayerCamera _cam;
     public PlayerCamera Cam {
         get { return _cam; }
@@ -55,6 +58,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private CraftingScreen _craftingScreenScript;
     [SerializeField] private GameObject _miniMapDisplay;
     private LevelManager _lm;
+    public GameObject arrowUp, arrowDown, arrowLeft, arrowRight;
     #endregion
 
     #region Movement
@@ -141,7 +145,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         volume = _cam.Camera.GetComponent<PostProcessVolume>();
 
         GameVars.Values.WaveManager.OnRoundEnd += CanStartNextWave;
-
+        GameVars.Values.OnCapturedCatPosition += OnCapturedCatPosition;
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
         _skillTree.OnUpgrade += CheckForUnlocks;
 
@@ -162,6 +166,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         ActiveFadeInEffect(1f);    
     }
 
+    
     private void Start()
     {
 
@@ -248,20 +253,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 }
             }
 
-            //if (!IsCrafting) //Va al TrapHotBar.
-            //{
-
-            //    contextualMenuAnim.SetBool("HasTraps", GameVars.Values.BaseballLauncher.CanCraft(_inventory));
-            //    if (GameVars.Values.BaseballLauncher.HasBaseballTrapItems(_inventory))
-            //    {
-            //        contextualMenuScript.ActivatePanelTrap1();
-            //    }
-
-            //    if (GameVars.Values.BaseballLauncher.HasTVTrapItems(_inventory))
-            //    {
-            //        contextualMenuScript.ActivatePanelTrap2();
-            //    }
-            //}
             if (!_craftingScreenScript.IsWorkbenchScreenOpened)
             {
                 if (Input.GetKeyDown(GameVars.Values.primaryFire))
@@ -541,6 +532,108 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(1f, buttonEffect));
         }
     }
+    public void ActiveUIArrowFade(bool attacked, string arrowName) 
+    {
+        StartCoroutine(LerpArrowUIFade(1f, attacked, arrowName));
+    }
+    IEnumerator LerpArrowUIFade(float duration, bool attacked, string arrowName)
+    {
+        float time = 0.98f;
+
+        while (time > 0 && time < duration)
+        {
+            time -= Time.deltaTime;
+            if (arrowName.Equals("Up")) 
+            {
+                arrowDown.SetActive(false);
+                arrowLeft.SetActive(false);
+                arrowRight.SetActive(false);
+                arrowUp.SetActive(true);
+                arrowUp.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", Mathf.Clamp01(time / duration));
+                
+                if(attacked)
+                    arrowUp.GetComponent<Image>().material.SetFloat("_TransitionColorVal", Mathf.Clamp01(time / duration));
+            }
+            else if (arrowName.Equals("Down"))
+            {
+                arrowUp.SetActive(false);
+                arrowLeft.SetActive(false);
+                arrowRight.SetActive(false);
+                arrowDown.SetActive(true);
+                arrowDown.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", Mathf.Clamp01(time / duration));
+
+                if (attacked)
+                    arrowDown.GetComponent<Image>().material.SetFloat("_TransitionColorVal", Mathf.Clamp01(time / duration));
+            }
+            else if (arrowName.Equals("Left"))
+            {
+                arrowDown.SetActive(false);
+                arrowLeft.SetActive(false);
+                arrowRight.SetActive(false);
+                arrowLeft.SetActive(true);
+                arrowLeft.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", Mathf.Clamp01(time / duration));
+
+                if (attacked)
+                    arrowLeft.GetComponent<Image>().material.SetFloat("_TransitionColorVal", Mathf.Clamp01(time / duration));
+            }
+            else if (arrowName.Equals("Right"))
+            {
+                arrowDown.SetActive(false);
+                arrowLeft.SetActive(false);
+                arrowUp.SetActive(false);
+                arrowRight.SetActive(true);
+                arrowRight.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", Mathf.Clamp01(time / duration));
+
+                if (attacked)
+                    arrowRight.GetComponent<Image>().material.SetFloat("_TransitionColorVal", Mathf.Clamp01(time / duration));
+            }
+            yield return null;
+        }
+
+        if (time <= 0f)
+        {
+            StartCoroutine(LerpArrowUIFadeOut(1f, attacked));
+        }
+    }
+    IEnumerator LerpArrowUIFadeOut(float duration, bool attacked) 
+    {
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            if (arrowUp.activeSelf)
+            {
+                arrowUp.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", Mathf.Clamp01(time / duration));
+                
+                if(attacked)
+                    arrowUp.GetComponent<Image>().material.SetFloat("_TransitionColorVal", Mathf.Clamp01(time / duration));
+            }
+            else if (arrowDown.activeSelf)
+            {
+                arrowDown.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", Mathf.Clamp01(time / duration));
+
+                if (attacked)
+                    arrowDown.GetComponent<Image>().material.SetFloat("_TransitionColorVal", Mathf.Clamp01(time / duration));
+            }
+            else if (arrowLeft.activeSelf)
+            {
+                arrowLeft.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", Mathf.Clamp01(time / duration));
+
+                if (attacked)
+                    arrowLeft.GetComponent<Image>().material.SetFloat("_TransitionColorVal", Mathf.Clamp01(time / duration));
+            }
+            else if (arrowRight.activeSelf)
+            {
+                arrowRight.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", Mathf.Clamp01(time / duration));
+
+                if (attacked)
+                    arrowRight.GetComponent<Image>().material.SetFloat("_TransitionColorVal", Mathf.Clamp01(time / duration));
+            }
+            yield return null;
+        }
+    }
     IEnumerator LerpFadeOutEffect(float duration, string buttonEffect)
     {
         float time = 0.98f;
@@ -703,10 +796,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             SceneManager.LoadScene(1);
         }
     }
-    public void Damage(int damageAmount, EnemyType type)
+    public void Damage(int damageAmount, Enemy enemy)
     {
         _cam.CameraShakeDamage(1f, 0.8f);
-        SelectDamagePostProcessEffectByType(type);
+        SelectDamagePostProcessEffectByType(enemy.enemyType);
         StartCoroutine(PlayDamageSound(3.4f));
         hp -= damageAmount;
         GameVars.Values.ShowLivesRemaining(damageAmount, hp, maxHp);
@@ -1601,7 +1694,45 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             _weaponGORacket.SetActive(true);
         }
     }
+    private void OnCapturedCatPosition(Vector3 catPos)
+    {
+        ActiveArrowUI(catPos,false);
+    }
+    internal void OnAttackPlayerPosition(Vector3 attackPos, bool attacked)
+    {
+        //Debug.Log("EL PLAYER ES ATACADO Y TE MUESTRO SU POSICION PAPU: " + attackPos);
+        ActiveArrowUI(attackPos, attacked);
+    }
+    private void ActiveArrowUI(Vector3 pos, bool attacked) 
+    {
+        Vector3 screenPosition = Cam.gameObject.GetComponentInChildren<Camera>().WorldToScreenPoint(pos);
 
+        Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+        Vector2 direction = (screenPosition - (Vector3)screenCenter).normalized;
+        Debug.Log("Dirección: " + direction);
+        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+        {
+            if (direction.x > 0)
+            {
+                ActiveUIArrowFade(attacked, "Right");
+            }
+            else
+            {
+                ActiveUIArrowFade(attacked, "Left");
+            }
+        }
+        else
+        {
+            if (direction.y > 0)
+            {
+                ActiveUIArrowFade(attacked, "Up");
+            }
+            else
+            {
+                ActiveUIArrowFade(attacked, "Down");
+            }
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         var enemy = other.gameObject.GetComponent<Enemy>();
@@ -1611,4 +1742,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             _weapon.OnHitEffect();
         }
     }
+
+    
 }

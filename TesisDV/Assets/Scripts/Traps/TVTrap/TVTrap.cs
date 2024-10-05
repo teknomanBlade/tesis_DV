@@ -109,16 +109,15 @@ public class TVTrap : Item
 
     void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("1");
         if(_canStun)
         {
-            Debug.Log("2");
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            var enemy = collision.gameObject.GetComponent<Enemy>();
+            if (enemy)
             {
-                Debug.Log("3");
-                collision.gameObject.GetComponent<Enemy>().Stun(3f);
+                Debug.Log("STUNEO AL GRIS? - CHECK ONTRIGGERENTER?");
+                enemy.Stun(3f, _canStun);
                 _canStun = false;
-            }
+            } 
         }
     }
 }

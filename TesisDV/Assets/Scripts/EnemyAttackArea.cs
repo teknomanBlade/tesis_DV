@@ -7,7 +7,8 @@ public class EnemyAttackArea : MonoBehaviour
     [SerializeField]
     private Enemy _myOwner;
     [SerializeField] private int _damageAmount;
-
+    public delegate void OnAttackPlayerPositionDelegate(Vector3 attackPos, bool attacked);
+    public event OnAttackPlayerPositionDelegate OnAttackPlayerPosition;
     void Start()
     {
         _myOwner = transform.parent.GetComponent<Enemy>();
@@ -19,7 +20,9 @@ public class EnemyAttackArea : MonoBehaviour
 
         if (player)
         {
-            player.Damage(_damageAmount, _myOwner.enemyType);   
+            OnAttackPlayerPosition += player.OnAttackPlayerPosition;
+            OnAttackPlayerPosition(_myOwner.transform.position, true);
+            player.Damage(_damageAmount, _myOwner);   
         }
 
         var forceField = other.GetComponent<ForceField>();

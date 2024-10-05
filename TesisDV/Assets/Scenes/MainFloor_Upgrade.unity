@@ -6139,6 +6139,11 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.19087858, y: 0.39670616, z: 0.012700105}
   m_Center: {x: -0.000000026077053, y: 0.0000008493663, z: -0.0000000018626793}
+--- !u!1 &252642584 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5781696067886300251, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
+  m_PrefabInstance: {fileID: 3740518843455911664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &258120558
 GameObject:
   m_ObjectHideFlags: 0
@@ -10457,6 +10462,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 470958397}
   m_Mesh: {fileID: 7326297618363195619, guid: 86c4a16065252814c9899cccf96edb12, type: 3}
+--- !u!1 &472857660 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4539225030462331165, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
+  m_PrefabInstance: {fileID: 3740518843455911664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &474220765
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25983,6 +25993,11 @@ Transform:
   m_Father: {fileID: 1449270901}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1347273276 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6916229607003119909, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
+  m_PrefabInstance: {fileID: 3740518843455911664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1353448262
 GameObject:
   m_ObjectHideFlags: 0
@@ -27472,6 +27487,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3788153143826357888, guid: a36cf15f5d57e674889c8b7138c2a37d, type: 3}
   m_PrefabInstance: {fileID: 1411189950}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1413258136 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5497131678098906213, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
+  m_PrefabInstance: {fileID: 3740518843455911664}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1413831045
 PrefabInstance:
@@ -50589,6 +50609,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4539225030462331165, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5335312997355647919, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -50616,6 +50640,10 @@ PrefabInstance:
     - target: {fileID: 5403457194326468388, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5497131678098906213, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5632443700023228750, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
       propertyPath: m_AnchorMax.x
@@ -50652,6 +50680,10 @@ PrefabInstance:
     - target: {fileID: 5697724539592492964, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781696067886300251, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5940694527828218179, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
       propertyPath: m_AnchorMax.x
@@ -50740,6 +50772,10 @@ PrefabInstance:
     - target: {fileID: 6907239043722275776, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6916229607003119909, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7004538374519130035, guid: fbf4eb6946f832049b0f9426adc0c41c, type: 3}
       propertyPath: m_IsActive
@@ -51362,6 +51398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47e2b9790c83e847abf92fb8d6b3b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cam: {fileID: 0}
   volume: {fileID: 0}
   postProcessDamage: {fileID: 0}
   postProcessFadeInOutScenes: {fileID: 0}
@@ -51375,6 +51412,10 @@ MonoBehaviour:
   _weapon: {fileID: 0}
   _remoteControl: {fileID: 0}
   _miniMapDisplay: {fileID: 0}
+  arrowUp: {fileID: 1413258136}
+  arrowDown: {fileID: 472857660}
+  arrowLeft: {fileID: 252642584}
+  arrowRight: {fileID: 1347273276}
   speed: 5
   preventCheck: 0
   isCrouchingSound: 0
