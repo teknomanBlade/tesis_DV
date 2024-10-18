@@ -15,6 +15,7 @@ public class ProtectState : IState
     private int _currentPathWaypoint = 0;
     private Node startingPoint;
     private Node endingPoint;
+    private Vector3 targetDir;
     public ProtectState(StateMachine fsm, Enemy p, Pathfinding pf)
     {
         _fsm = fsm;
@@ -31,7 +32,7 @@ public class ProtectState : IState
         //var dir = _enemy._target.transform.position - _enemy.transform.position;  Probar estos dos despues
         //_enemy.transform.forward = dir;                                           Probar estos dos despues
 
-        GetThetaStar();
+        //GetThetaStar();
         Debug.Log("Entre a Protect");
         //_enemy.ResetPathAndSetObjective(_enemy._target.transform.position);
     }
@@ -41,7 +42,7 @@ public class ProtectState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.CatState);
         }
-        if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold) //Agregar Raycast para ver al player
+        if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold && _enemy._player.isAlive) //Agregar Raycast para ver al player
         {
             _fsm.ChangeState(EnemyStatesEnum.ChaseState);
         }
@@ -54,24 +55,35 @@ public class ProtectState : IState
         {
             _enemy._circlePos = AIManager.Instance.RequestPosition(_enemy);
         }
-        
 
         RaycastHit hit;
         Vector3 protectDir = _enemy._circlePos - _enemy.transform.position;
-        Vector3 targetDir = _enemy._target.transform.position - _enemy.transform.position;
-        /* if(Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.1f && Physics.Raycast(_enemy.transform.position, dir, out hit, dir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
+        if(_enemy._target != null) 
         {
-            //_enemy.ResetPathAndSetObjective(_enemy._circlePos); //Se va el navmesh
-            
-            _enemy.transform.forward = dir;
-            _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
+            targetDir = _enemy._target.transform.position - _enemy.transform.position;
         }
-        else 
-        {
-            
-        } */
 
-        if(myPath != null && Physics.Raycast(_enemy.transform.position, targetDir, out hit, targetDir.magnitude, GameVars.Values.GetWallLayerMask()))
+        if(!Physics.Raycast(_enemy.transform.position, protectDir, out hit, protectDir.magnitude, _enemy.obstacleMask)) //Usamos obstacle mask ahora.
+        {
+            if ((Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.5f))
+            {
+                Vector3 aux = protectDir;
+                protectDir = new Vector3(aux.x, 0f, aux.z);
+                _enemy.transform.forward = protectDir;
+                _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
+            }
+        }
+        else if (!Physics.Raycast(_enemy.transform.position, targetDir, out hit, targetDir.magnitude, _enemy.obstacleMask))
+        {
+            if (_enemy._target != null && (Vector3.Distance(_enemy.transform.position, _enemy._target.transform.position) > 0.5f))
+            {
+                Vector3 aux = targetDir;
+                targetDir = new Vector3(aux.x, 0f, aux.z);
+                _enemy.transform.forward = targetDir;
+                _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
+            }
+        }
+        else if (myPath != null)
         {
             if(myPath.Count >= 1)
             {
@@ -80,7 +92,7 @@ public class ProtectState : IState
                 _enemy.transform.forward = dir;
                 _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
 
-                if (dir.magnitude < 0.1f)
+                if (dir.magnitude < 0.4f)
                 {
                     _currentPathWaypoint++;
                     if (_currentPathWaypoint > myPath.Count - 1)
@@ -92,22 +104,17 @@ public class ProtectState : IState
                 }
             }
         }
-        else if((Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.2f))
+        else
         {
-
-            Vector3 aux = protectDir;
+            GetThetaStar();
+        }
+        /* else if((Vector3.Distance(_enemy.transform.position, _enemy._circlePos) > 0.2f))
+        {
+             Vector3 aux = protectDir;
             protectDir = new Vector3(aux.x, 0f, aux.z);
             _enemy.transform.forward = protectDir;
-            _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
-        }
-
-        //if (distanceToTarget > _enemy.protectDistance)
-        //{
-            //_enemy.ResetPathAndSetObjective(_enemy._target.transform.position);
-        //} 
-
-        
-        
+            _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime; 
+        } */
     }
     public void OnExit()
     {
@@ -118,18 +125,11 @@ public class ProtectState : IState
     {
         myPath = new List<Node>();
 
-        //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
-        startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
-        //Debug.Log("Start at " + startingPoint);
+        startingPoint = PathfindingManager.Instance.GetClosestNode(_enemy.transform.position);
 
         _currentWaypoint = _enemy.GetCurrentWaypoint();
         
-        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._player.transform);
-        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._cat.transform.position);
-        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._target.transform.position);
-        //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
-        //Debug.Log("End at " + endingPoint);
-        //}
+        endingPoint = PathfindingManager.Instance.GetClosestNode(_enemy._target.transform.position);
 
         //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
         myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);

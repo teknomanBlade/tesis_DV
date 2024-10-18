@@ -11,13 +11,20 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     private float _maxDistance;
     private float _dangerThreshold;
     private float _currentDistance = 0;
+    private float _wittsAmount = 0;
+    private float _graysAmount = 0;
     private Image _fillImage;
     public GameObject Fill;
     public Text GraysAmountPerWaveText;
     public Text WittsAmountText;
+    public Text WittsAmountTextUpdatesPurchase;
     public Animator GraysAmountPerWaveTextAnim { get; private set; }
     public Text RoundText;
     public Text RestWaveTimeText;
+    public Coroutine ReminderMessageCoroutine;
+    public GameObject TxtWaveReminder;
+    public Animator TxtWaveReminderAnim;
+    public Animator _animCatDistanceBar;
     public Animator RestWaveTimeAnim { get; private set; }
     public Animator RoundTextAnim { get; private set; }
     public float _valueToChange { get; private set; }
@@ -25,22 +32,21 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
     void Start()
     {
         _mySlider = GetComponent<Slider>();
-        RoundText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRound")).FirstOrDefault();
+        //RoundText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRound")).FirstOrDefault();
         RoundTextAnim = RoundText.GetComponent<Animator>();
         RoundTextAnim.SetBool("IsNewRound", false);
-        GraysAmountPerWaveText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtGrayAmountPerWave")).FirstOrDefault();
+        //GraysAmountPerWaveText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtGrayAmountPerWave")).FirstOrDefault();
         GraysAmountPerWaveTextAnim = GraysAmountPerWaveText.GetComponentInChildren<Image>().gameObject.GetComponent<Animator>();
-        RestWaveTimeText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRestWaveTime")).FirstOrDefault();
+        //RestWaveTimeText = GetComponentsInChildren<Text>().Where(x => x.gameObject.name.Equals("TxtRestWaveTime")).FirstOrDefault();
         RestWaveTimeAnim = RestWaveTimeText.gameObject.GetComponent<Animator>();
-
+        _animCatDistanceBar = GetComponent<Animator>();
         GameVars.Values.WaveManager.AddObserver(this);
         GameVars.Values.WaveManager.OnRoundChanged += RoundChanged;
         GameVars.Values.WaveManager.OnTimeWaveChange += TimeWaveChanged;
         GameVars.Values.WaveManager.OnRoundStartEnd += RoundStartEnd;
-        GameVars.Values.LevelManager.OnGrayAmountChange += GrayAmountChanged;
-
+        GameVars.Values.WaveManager.OnGrayAmountChange += GrayAmountChanged;
+        TxtWaveReminderAnim = TxtWaveReminder.gameObject.GetComponent<Animator>();
         GameVars.Values.Inventory.OnWittsAmountChanged += WittsAmountChanged;
-        
         _fillImage = Fill.GetComponent<Image>();
         _maxDistance = GameVars.Values.GetCatDistance();
         _dangerThreshold = _maxDistance * 0.20f;
@@ -49,7 +55,30 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
         _mySlider.minValue = 1;
         _currentDistance = _maxDistance;
         _mySlider.value = _currentDistance;
-        
+        ReminderMessageCoroutine = StartCoroutine(ShowReminderOfWaveBringerKey());
+    }
+    
+
+    IEnumerator ShowReminderOfWaveBringerKey()
+    {
+        while (true) 
+        {
+            yield return new WaitForSeconds(120);
+            if (GameVars.Values.PassedTutorial)
+            {
+                TxtWaveReminder.GetComponentInChildren<Text>().text = "Remember that you can Press 'Enter' to send a wave.";
+                TxtWaveReminderAnim.SetBool("IsWaveReminder", true);
+            }
+        }
+    }
+    
+    public void PlayFadeIn()
+    {
+        _animCatDistanceBar.SetBool("IsFadeIn", true);
+    }
+    public void PlayFadeOut()
+    {
+        _animCatDistanceBar.SetBool("IsFadeIn", false);
     }
 
     private void RoundChanged(int newVal)
@@ -65,19 +94,45 @@ public class CatDistanceBar : MonoBehaviour, IRoundChangeObserver
 
     private void TimeWaveChanged(float newVal)
     {
-        RestWaveTimeText.text = "Rest wave time: " + newVal.ToString("F0");
+        RestWaveTimeText.text = "The grays are coming... ";
     }
 
-    private void WittsAmountChanged(int newVal)
+    private void WittsAmountChanged(float newVal)
     {
-        WittsAmountText.text = "X " + newVal;
+        StartCoroutine(LerpWittsValue(newVal, 1f));
         //Aplicar animación.
     }
+    IEnumerator LerpWittsValue(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _wittsAmount;
 
+        while (time < duration)
+        {
+            _wittsAmount = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+            WittsAmountText.text = "X " + Math.Round(_wittsAmount,2).ToString("F0");
+            WittsAmountTextUpdatesPurchase.text = "X " + Math.Round(_wittsAmount,2).ToString("F0");
+            yield return null;
+        }
+    }
     private void GrayAmountChanged(int newVal)
     {
-        GraysAmountPerWaveText.text = "X " + newVal;
+        StartCoroutine(LerpGrayAmountValue(newVal, 1f));
         StartCoroutine(ShowAnimGrayAmountChanged());
+    }
+    IEnumerator LerpGrayAmountValue(float endValue, float duration)
+    {
+        float time = 0;
+        float startValue = _graysAmount;
+
+        while (time < duration)
+        {
+            _graysAmount = Mathf.Lerp(startValue, endValue, time / duration);
+            time += Time.deltaTime;
+            GraysAmountPerWaveText.text = "X " + Math.Round(_graysAmount, 2).ToString("F0");
+            yield return null;
+        }
     }
 
     IEnumerator LerpColor(float endValue, float duration)

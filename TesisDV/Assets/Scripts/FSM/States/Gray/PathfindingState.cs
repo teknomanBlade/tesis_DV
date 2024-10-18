@@ -76,7 +76,7 @@ public class PathfindingState : IState
     {
         myPath = new List<Node>();
 
-        startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
+        PathfindingManager.Instance.GetStartNode(_enemy.transform);
         Debug.Log("Start at " + startingPoint);
         
         /* if(_enemy.alarmPosition != null)

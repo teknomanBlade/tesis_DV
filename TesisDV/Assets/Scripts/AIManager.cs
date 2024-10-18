@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AIManager : MonoBehaviour
@@ -41,13 +42,12 @@ public class AIManager : MonoBehaviour
             foreach (var enemy in _enemiesPosition)
             {
                 var temp = enemy.Value;
-                //if(temp != null)
-                //{
-                    temp.transform.SetParent(currentTarget.transform);
-                    temp.transform.localPosition = new Vector3((step + 1) * enemy.Key.protectDistance, 0, (step + 1)*enemy.Key.protectDistance);
-                    temp.transform.RotateAround(currentTarget.transform.position, Vector3.up, rotAngleSum + rotAngle);
-                    rotAngleSum += rotAngle;
-                //}
+                if (currentTarget == null || temp == null) return;
+                
+                temp.transform.SetParent(currentTarget.transform);
+                temp.transform.localPosition = new Vector3((step + 1) * enemy.Key.protectDistance, 0, (step + 1) * enemy.Key.protectDistance);
+                temp.transform.RotateAround(currentTarget.transform.position, Vector3.up, rotAngleSum + rotAngle);
+                rotAngleSum += rotAngle;
             }
         }
     }
@@ -56,9 +56,7 @@ public class AIManager : MonoBehaviour
     {
         if (_enemiesPosition.ContainsKey(enemy))
         {
-            /* Vector3 aux = _enemiesPosition[enemy].transform.position;
-            return new Vector3(aux.x, 0f, aux.z); */
-            return _enemiesPosition[enemy].transform.position;
+            return (_enemiesPosition[enemy] == null) ? Vector3.zero : _enemiesPosition[enemy].transform.position;
         }
         else
         {
@@ -70,18 +68,27 @@ public class AIManager : MonoBehaviour
 
     public void RemoveEnemyFromList(Enemy enemy, bool hasCat)
     {
-        _enemiesPosition.Remove(enemy);
         enemyList.Remove(enemy);
-        if(hasCat)
+        _enemiesPosition.Remove(enemy);
+        if (enemyList.Count <= 0)
+        {
+            markers.Clear();
+            currentTarget = null;
+        }
+
+        if (hasCat)
         {
             _isTargetSet = false;
-            currentTarget = null;
+            currentTarget = null;  
 
             foreach(GameObject marker in markers)
             {
+                if (parent != null) return;
+
                 marker.transform.SetParent(parent.transform);
             } 
         }
+        
     }
 
     public void SetNewTarget(GameObject newTarget)
@@ -92,13 +99,15 @@ public class AIManager : MonoBehaviour
 
     public void SubscribeEnemyForPosition(Enemy enemy)
     {
+        if (enemy.gameObject.CompareTag("Tutorial")) return;
+
         if (!enemyList.Contains(enemy))
         {
             enemyList.Add(enemy);
         }
         if (!_enemiesPosition.ContainsKey(enemy))
         {
-            GameObject aux = new GameObject("marker");
+            GameObject aux = new GameObject("marker_" + enemy.name);
             _enemiesPosition.Add(enemy, aux);
             markers.Add(aux);
         }

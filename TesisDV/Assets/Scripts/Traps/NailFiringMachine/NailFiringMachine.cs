@@ -15,11 +15,19 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     public int InitialStock { get; private set; }
     public float interval;
     public GameObject spawnPoint;
-    public int shots = 30;
+    public int shots;
     public int shotsLeft;
     private Coroutine ShootCoroutine; 
+    [SerializeField] private int _damageAmount;
+
+    public ParticleSystem HitTurret;
+    public ParticleSystem ShootEffect;
+
     void Awake()
     {
+        _myTrapBase = transform.parent.GetComponent<TrapBase>();
+        _myTrapBase.SetTrap(this.gameObject);
+        GameVars.Values.IsAllSlotsDisabled();
         active = true; // Ahora las trampas empiezan encendidas.
         _animator = GetComponent<Animator>();
         shotsLeft = shots;
@@ -90,9 +98,9 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     {
         if(_canShoot)
         {
-            NailsPool.GetObject().SetInitialPos(spawnPoint.transform.position).SetOwner(this);
+            //NailsPool.GetObject().SetInitialPos(spawnPoint.transform.position).SetOwner(this);
+            _currentObjective.GetComponent<Enemy>().TakeDamage(_damageAmount);
         }
-        
     }
 
     private void DeactivateNail(Nail o)
@@ -115,6 +123,9 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
     {
         GameVars.Values.currentShotsTrap2 = shotsLeft;
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
+        aux.GetComponent<StaticBlueprint>().SpendMaterials(false);
+        aux.GetComponent<StaticBlueprint>().CanBeCancelled(false);
+        _myTrapBase.ResetBase();
         Destroy(gameObject);
     }
 

@@ -7,9 +7,13 @@ using System.Linq;
 
 public abstract class Trap : MonoBehaviour
 {
+    public delegate void OnCollidersObjectivesZeroDelegate();
+    public event OnCollidersObjectivesZeroDelegate OnCollidersObjectivesZero;
     public bool active;
     protected bool _canShoot = false;
     protected Animator _animator;
+    [SerializeField] protected GameObject UITrapIndicator;
+    [SerializeField] protected Texture UITexture;
 
     [SerializeField] protected float viewRadius;
     [SerializeField] protected float viewAngle;
@@ -25,17 +29,28 @@ public abstract class Trap : MonoBehaviour
     protected float _currentObjectiveDistance = 1000;
     protected Collider _currentObjective = null;
     public Collider[] collidersObjectives;
+    public Collider[] CollidersObjectives 
+    { 
+        get { return collidersObjectives; }
+        set 
+        { 
+            collidersObjectives = value;
+            if(collidersObjectives.Length <= 0)
+                OnCollidersObjectivesZero?.Invoke();
+        }
+    }
     protected Collider[] collidersObjectivesDisabled;
     protected const float MAX_CURRENT_OBJETIVE_DISTANCE = 1000;
 
+    protected TrapBase _myTrapBase;
 
     public void FieldOfView()
     {
         Collider[] allTargets = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
-        collidersObjectives = allTargets.Where(x => x.GetComponent<Enemy>().isActiveAndEnabled == true).ToArray();
+        CollidersObjectives = allTargets.Where(x => x.GetComponent<Enemy>().isActiveAndEnabled).ToArray();
 
-        collidersObjectivesDisabled = allTargets.Where(x => x.GetComponent<Enemy>().isActiveAndEnabled == false).ToArray();
+        collidersObjectivesDisabled = allTargets.Where(x => !x.GetComponent<Enemy>().isActiveAndEnabled).ToArray();
 
         if (allTargets.Length == 0 || _currentObjective == null)
         {
@@ -70,18 +85,19 @@ public abstract class Trap : MonoBehaviour
             //Vector3 dir = futurePos - transform.position; Esto hasta arreglar el velocity
             Vector3 dir = _currentObjective.transform.position - transform.position;
             _currentObjectiveDistance = Vector3.Distance(transform.position, _currentObjective.transform.position);
-            if (Physics.Raycast(transform.position, dir, out RaycastHit hit, dir.magnitude, obstacleMask) == false)
+            if (!Physics.Raycast(transform.position, dir, out RaycastHit hit, dir.magnitude, obstacleMask))
             {
                 _canShoot = true;
-                Debug.Log("true");
-
+                //Debug.Log("true");
+                
 
                 Quaternion lookRotation = Quaternion.LookRotation(dir);
                 Vector3 rotation = lookRotation.eulerAngles;
 
-                myCannonSupport.rotation = Quaternion.Lerp(myCannonSupport.rotation, Quaternion.Euler(0f, rotation.y, 0f), _shootSpeed * Time.deltaTime);
+                myCannonSupport.rotation = Quaternion.Slerp(myCannonSupport.rotation, Quaternion.Euler(0f, rotation.y, 0f), _shootSpeed * Time.deltaTime);
 
-                myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y, rotation.z), _shootSpeed * Time.deltaTime);
+                //myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y, rotation.z), _shootSpeed * Time.deltaTime);
+                ShootAnimation(rotation);
                 Debug.DrawLine(transform.position, _currentObjective.transform.position, Color.red);
                 return;
             }
@@ -96,7 +112,16 @@ public abstract class Trap : MonoBehaviour
             laser.gameObject.SetActive(false);
         } */
     }
-
+    protected void SetUIIndicator(string UIIndicatorName) 
+    {
+        UITexture = Resources.Load<Texture>(UIIndicatorName);
+        UITrapIndicator = transform.GetComponentsInChildren<Transform>().FirstOrDefault(x => x.name.Equals("MiniMapIndicatorActive")).gameObject;
+        UITrapIndicator.GetComponent<MeshRenderer>().material.SetTexture("_Placeholder", UITexture);
+    }
+    public virtual void ShootAnimation(Vector3 rotation) 
+    {
+        
+    }
     public virtual void Inactive()
     {
 

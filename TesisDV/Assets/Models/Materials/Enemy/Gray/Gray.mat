@@ -52,7 +52,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: 2ec3aff22090c1248aa82b65522cb127, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8c0b1c2d89e0a0f41aad64e165622aad, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture1:
@@ -67,8 +67,28 @@ Material:
         m_Texture: {fileID: 2800000, guid: 243c20c979705e94aa8614abcaf274d3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _PaintStains:
+        m_Texture: {fileID: 2800000, guid: 5a8bfc23625d65c45b463e06bdf2b9fb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 2800000, guid: 6ca7a5b065354ad48af28c53394113bb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SuitTexture:
+        m_Texture: {fileID: 2800000, guid: e065f6f3d761b3b45940dc52835e50e8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 7aaae848e87195540815503e0ac9df72, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 2800000, guid: 243c20c979705e94aa8614abcaf274d3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _tex3coord:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -76,19 +96,27 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _AmountReflection: 1
     - _BumpScale: 1
     - _Cutoff: 0.75
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EdgeThickness: 0.3
+    - _ElectricityEffect: 0
     - _FallOff1: 2.26
+    - _FirstPosition: 0.09
+    - _FirstPosition1: 0.09
     - _Float0: 0
     - _GlossMapScale: 0.347
     - _Glossiness: 3.02
     - _Glossiness1: 2
     - _GlossyReflections: 1
+    - _LerpAmount: 0.12935431
+    - _LerpStains: 0
     - _LowerLimit: 2
+    - _Max1: 6
     - _Metallic: 0
+    - _Min1: 0.57
     - _Mode: 0
     - _NoiseScrollspeed: 1
     - _OcclusionStrength: 1
@@ -99,6 +127,12 @@ Material:
     - _RimAmount: 1
     - _RimAmount1: 0.823
     - _ScaleDissolveGray: 1
+    - _SecondPosition: 0.02
+    - _SecondPosition1: 0.02
+    - _SecondPositionIntensity: 0.11
+    - _SecondPositionIntensity1: 0.11
+    - _ShadowIntensity: 0.08
+    - _ShadowIntensity1: 0.08
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

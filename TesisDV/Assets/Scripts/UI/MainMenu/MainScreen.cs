@@ -9,8 +9,7 @@ public class MainScreen : MonoBehaviour
     public GameObject controls;
     public GameObject credits;
     public GameObject houseStructure;
-    public GameObject loadingSprite;
-    
+    public int scene;
     public GameObject Cam { get; private set; }
 
     //public PostProcessVolume volume;
@@ -65,8 +64,7 @@ public class MainScreen : MonoBehaviour
             //postProcessFadeInOutScenes._Intensity.value = Mathf.Clamp01(time / duration);
             yield return null;
         }
-        if(loadingSprite != null)
-            loadingSprite.SetActive(!loadingSprite.activeSelf);
+            
     }
     IEnumerator LerpFadeOutEffect(float duration)
     {
@@ -82,9 +80,8 @@ public class MainScreen : MonoBehaviour
 
         if (time < 0f)
         {
-            
             Debug.Log("LLEGO AL FINAL??");
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(4);
         }
     }
     public void BtnPlay()
@@ -92,7 +89,7 @@ public class MainScreen : MonoBehaviour
         _as.Stop();
         ActiveFadeOutEffect(1f);
     }
-
+    
     public void BtnControls()
     {
         Debug.Log("CLICK CONTROLS?");

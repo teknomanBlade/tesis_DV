@@ -2,19 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ForceField : MonoBehaviour
+public class ForceField : Trap
 {
-    public float Health;
-    // Start is called before the first frame update
+    [SerializeField] private float _health;
+    [SerializeField] private float _initHealth;
+    public bool IsDamageReturn;
+    private float _damageReturnAmount;
+    public float DamageReturnAmount { get{ return _damageReturnAmount; } set { _damageReturnAmount = value; } }
+    public float Health { get { return _health; } set { _health = value; } }
+    [SerializeField] private MicrowaveForceFieldGenerator _myOwner;
     void Awake()
     {
-        Health = 100f;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _initHealth = 20f;
+        _myOwner = transform.parent.GetComponent<MicrowaveForceFieldGenerator>();
+        active = true;
     }
 
     public void TakeDamage(float damageAmount)
@@ -22,23 +23,18 @@ public class ForceField : MonoBehaviour
         Health -= damageAmount;
         if (Health <= 0f)
         {
+            active = false;
+            _myOwner.Inactive();
             gameObject.SetActive(false);
         }
     }
-
-    private void OnTriggerEnter(Collider other)
+    public void SetShieldPoints(float shieldPoints) 
     {
-        var gray = other.gameObject.GetComponent<GrayModel>();
-        if (gray != null)
-        {
-            gray._movingSpeed = 0f;
-            gray.ForceFieldRejection();
-        }
-        var grayMelee = other.gameObject.GetComponent<TallGrayModel>();
-        if (grayMelee != null)
-        {
-            grayMelee._movingSpeed = 0f;
-            grayMelee._fsm.ChangeState(EnemyStatesEnum.AttackTrapState);
-        }
+        Health += shieldPoints;
+    }
+    public void DamageReturned() 
+    {
+        DamageReturnAmount = 1.5f;
+        IsDamageReturn = true;
     }
 }

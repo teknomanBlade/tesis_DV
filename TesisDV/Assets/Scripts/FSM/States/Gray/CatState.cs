@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CatState : IState
@@ -30,7 +31,7 @@ public class CatState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.ProtectState);
         }
-        else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold) //Agregar Raycast para ver al player
+        else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold && _enemy._player.isAlive) //Agregar Raycast para ver al player
         {
             _fsm.ChangeState(EnemyStatesEnum.ChaseState);
         }
@@ -50,7 +51,7 @@ public class CatState : IState
     {
         _enemy.DetectTraps();
 
-        if(Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 1f) 
+        if(Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 3f)//1f) Lo cambiamos hasta que el tallGray tenga la escala bien puesta.
         {
             _enemy.GrabCat();
             GameVars.Values.ShowNotification("The cat has been captured! You must prevent the grays getting to the ship!");
@@ -61,7 +62,7 @@ public class CatState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.ProtectState);
         }
-        else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold) //Agregar Raycast para ver al player
+        else if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.pursueThreshold && _enemy._player.isAlive) //Agregar Raycast para ver al player
         {
             _fsm.ChangeState(EnemyStatesEnum.ChaseState);
         }
@@ -76,16 +77,20 @@ public class CatState : IState
         RaycastHit hit;
         Vector3 catDir = _enemy._cat.transform.position - _enemy.transform.position;
         Vector3 moveDir;
-        if(myPath != null && Physics.Raycast(_enemy.transform.position, catDir, out hit, catDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
+        //Usamos obstacle mask ahora.
+        //Esto Physics.Raycast() == true es una redundancia logica. Si pones solo el Physics.Raycast ya se toma como true por que eso devuelve.
+        if(Physics.Raycast(_enemy.transform.position, catDir, out hit, catDir.magnitude, _enemy.obstacleMask) || Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) >= 5)
         {
-            if(myPath.Count >= 1)
+            if(myPath != null && myPath.Count >= 1)
             {
                 Vector3 dir = myPath[_currentPathWaypoint].transform.position - _enemy.transform.position;
 
+                Vector3 aux = dir;
+                dir = new Vector3 (aux.x , aux.y , aux.z);
                 _enemy.transform.forward = dir;
                 _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
 
-                if (dir.magnitude < 0.1f)
+                if (dir.magnitude < 0.4f)
                 {
                     _currentPathWaypoint++;
                     if (_currentPathWaypoint > myPath.Count - 1)
@@ -96,11 +101,15 @@ public class CatState : IState
                     }
                 }
             }
+            else
+            {
+                GetThetaStar();
+            }
         }
         else
         {
             Vector3 aux = catDir;
-            catDir = new Vector3(aux.x, 0f, aux.z);
+            catDir = new Vector3(aux.x, aux.y, aux.z);
             _enemy.transform.forward = catDir;
             _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
         }
@@ -115,16 +124,16 @@ public class CatState : IState
     public void GetThetaStar()
     {
         myPath = new List<Node>();
-
+        if (_enemy._cat == null) return;
         //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
-        startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
+        startingPoint = PathfindingManager.Instance.GetClosestNode(_enemy.transform.position);
         //Debug.Log("Start at " + startingPoint);
 
         _currentWaypoint = _enemy.GetCurrentWaypoint();
         
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._player.transform);
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._cat.transform.position);
-        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._cat.transform.position);
+        endingPoint = PathfindingManager.Instance.GetClosestNode(_enemy._cat.transform.position);
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
         //Debug.Log("End at " + endingPoint);
         //}

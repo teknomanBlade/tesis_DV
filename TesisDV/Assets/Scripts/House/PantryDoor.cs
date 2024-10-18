@@ -11,6 +11,7 @@ public class PantryDoor : Item
     {
         IsOpened = true;
         _anim = GetComponent<Animator>();
+        itemType = ItemType.Interactable;
     }
 
     // Update is called once per frame

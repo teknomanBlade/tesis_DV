@@ -19,6 +19,45 @@ MonoBehaviour:
   _Intensity:
     overrideState: 1
     value: 1
+--- !u!114 &-8271937153360209957
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a992b9fd3d0cdc488838a57736ec3e3, type: 3}
+  m_Name: StunnedPlayerPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  _Intensity:
+    overrideState: 1
+    value: 0
+  _MinX:
+    overrideState: 1
+    value: 0.3
+  _MaxX:
+    overrideState: 1
+    value: 0.6
+  _DistortionNormalMap:
+    overrideState: 1
+    value: {fileID: 2800000, guid: e98c6a1c109e03849af833a46af5e805, type: 3}
+    defaultState: 1
+  _BirdsTexture:
+    overrideState: 1
+    value: {fileID: 2800000, guid: 42dd0f3a91fe7bc44b6dd490cf56b914, type: 3}
+    defaultState: 1
+  _Tiling:
+    overrideState: 1
+    value: {x: 0.7, y: 0.7, z: 0, w: 0}
+  _Offset:
+    overrideState: 1
+    value: {x: 0.15, y: 0.15, z: 0, w: 0}
 --- !u!114 &-7738506496544460641
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -63,6 +102,98 @@ MonoBehaviour:
   opacity:
     overrideState: 0
     value: 1
+--- !u!114 &-7125649060655290666
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 322150bbd903a23468fdc00972d19a72, type: 3}
+  m_Name: ElectricWaveDamagePlayerPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  _MinX1:
+    overrideState: 1
+    value: 0.32
+  _ElectricDamageIntensity:
+    overrideState: 1
+    value: 0
+  _MaxX1:
+    overrideState: 1
+    value: 1.2
+  _TimeScale:
+    overrideState: 1
+    value: 4
+  _Tiling:
+    overrideState: 1
+    value: 1.5
+  _Offset:
+    overrideState: 1
+    value: 2
+  _ElectricRaysTexture:
+    overrideState: 1
+    value: {fileID: 2800000, guid: 283a7f737a1a2394599309c328a10d42, type: 3}
+    defaultState: 1
+--- !u!114 &-7112218425273629477
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e7272e9ab74264e9a5451f2f4c40f6, type: 3}
+  m_Name: TankHitFistDamagePlayerPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  _MinX:
+    overrideState: 1
+    value: 0.45
+  _TextureFistsRightUpperLeftDown:
+    overrideState: 1
+    value: {fileID: 2800000, guid: 86702c58d6f3b054797df31aa276b11e, type: 3}
+    defaultState: 1
+  _Intensity:
+    overrideState: 1
+    value: 0
+  _MaxX:
+    overrideState: 1
+    value: 0.56
+  _TilingTex1:
+    overrideState: 1
+    value: {x: 1, y: 6.5, z: 0, w: 0}
+  _TilingTex2:
+    overrideState: 1
+    value: {x: 1, y: 6.5, z: 0, w: 0}
+  _TextureFistsLeftUpperRightDown:
+    overrideState: 1
+    value: {fileID: 2800000, guid: 9bc149d3a4266534b842edd41ee712dc, type: 3}
+    defaultState: 1
+  _Rows:
+    overrideState: 1
+    value: 6.54
+  _Columns:
+    overrideState: 1
+    value: 1
+  _SubtractValue:
+    overrideState: 1
+    value: 1
+  _Value:
+    overrideState: 1
+    value: 15
+  _TimeScale:
+    overrideState: 1
+    value: 6
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,6 +210,9 @@ MonoBehaviour:
   - {fileID: 3367993628471389551}
   - {fileID: -8371041300080731982}
   - {fileID: -7738506496544460641}
+  - {fileID: -8271937153360209957}
+  - {fileID: -7125649060655290666}
+  - {fileID: -7112218425273629477}
 --- !u!114 &3367993628471389551
 MonoBehaviour:
   m_ObjectHideFlags: 3

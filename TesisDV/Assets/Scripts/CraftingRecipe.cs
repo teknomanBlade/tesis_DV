@@ -29,24 +29,21 @@ using UnityEngine;
         {
             return inventory.ContainsID(5, 1) && inventory.ContainsID(2, 1) && inventory.ContainsID(8, 1);
         }
+        public bool HasSlowTrapItems(Inventory inventory)
+        {
+            return inventory.ContainsID(4, 1);
+        }
         public bool HasMicrowaveForceFieldGeneratorItems(Inventory inventory)
         {
             return inventory.ContainsID(2, 1) && inventory.ContainsID(12, 1);
         }
-
-        public bool HasSlowTrapItems(Inventory inventory)
-        {
-        return inventory.ContainsID(4, 1) && inventory.ContainsID(13,1);
-        }
-
-        public bool HasNailFiringMachineItems(Inventory inventory)
-        {
-            return inventory.ContainsID(2, 1) && inventory.ContainsID(7, 1);
-        }
-
         public bool HasElectricTrapItems(Inventory inventory)
         {
             return inventory.ContainsID(2, 1) && inventory.ContainsID(9, 1) && inventory.ContainsID(10, 1);
+        }
+        public bool HasFERNPaintballMinigunItems(Inventory inventory)
+        {
+            return inventory.ContainsID(2, 1) && inventory.ContainsID(7, 1) && inventory.ContainsID(16, 1);
         }
 
         public bool CanCraft(Inventory inventory)
@@ -78,6 +75,18 @@ using UnityEngine;
                             //GameObject aux = Instantiate(itemAmount.trapPrefab, _player.GetPrefabPlacement(), Quaternion.identity);
                             _player.SwitchIsCrafting();
                             GameObject aux = Instantiate(itemAmount.trapPrefab, GameVars.Values.GetPlayerPrefabPlacement(), Quaternion.identity);
+
+                            if(aux.GetComponent<StaticBlueprint>())
+                            {
+                                aux.GetComponent<StaticBlueprint>().SpendMaterials(true);
+                                aux.GetComponent<StaticBlueprint>().CanBeCancelled(true);
+                            }
+                            else
+                            {
+                                aux.GetComponent<Blueprint>().SpendMaterials(true);
+                                aux.GetComponent<Blueprint>().CanBeCancelled(true);
+                            }
+                            
                             aux.transform.eulerAngles = new Vector3(aux.transform.eulerAngles.x, GameVars.Values.GetPlayerCameraRotation(), aux.transform.eulerAngles.z);
                         }
                         buildAmount++;

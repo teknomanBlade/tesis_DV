@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PoolObject<T>
 {
     public delegate T FactoryMethod();
     public delegate void InitFinitMethod(T o);
-
     private List<T> _objects;
     private FactoryMethod _factoryMethod;
     private InitFinitMethod _activateMethod;
@@ -43,6 +43,24 @@ public class PoolObject<T>
         {
             var ob = _factoryMethod();
             _activateMethod(ob);
+            return ob;
+        }
+
+        return default(T);
+    }
+    public T GetObjectDisabled()
+    {
+        if (_objects.Count > 0)
+        {
+            var o = _objects[0];
+            _objects.RemoveAt(0);
+            _desactivateMethod(o);
+            return o;
+        }
+        else if (_isDynamic)
+        {
+            var ob = _factoryMethod();
+            _desactivateMethod(ob);
             return ob;
         }
 

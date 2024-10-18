@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +6,7 @@ using UnityEngine;
 
 public class TallGrayView : MonoBehaviour
 {
+    public event Action onWitGainEffect = delegate { };
     private float _valueToChange;
     Material _myMaterial;
     [SerializeField] Animator _myAnimator;
@@ -19,13 +21,21 @@ public class TallGrayView : MonoBehaviour
     [SerializeField]
     private ParticleSystem _deathEffect;
     [SerializeField]
+    private ParticleSystem _pepperEffect;
+    [SerializeField]
+    private ParticleSystem _poisonEffect;
+    [SerializeField]
+    private ParticleSystem _witGainEffect;
+    [SerializeField]
     private GameObject _hitWave;
-
+    private AudioSource _as;
     void Start()
     {
-        //_myMaterial = GetComponent<Renderer>().material;
+        _poisonEffect.Stop();
+        _witGainEffect.gameObject.SetActive(false);
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
+        _as = GetComponent<AudioSource>();
     }
 
     public void EndSpawnAnim()
@@ -35,6 +45,7 @@ public class TallGrayView : MonoBehaviour
 
     public void WalkAnimation(bool value)
     {
+        PlaySoundCrackles();
         _myAnimator.SetBool("IsWalking", value);
     }
 
@@ -54,7 +65,18 @@ public class TallGrayView : MonoBehaviour
     {
         _myAnimator.Play("Hit");
     }
-
+    public void ElectricDebuffAnimation()
+    {
+        _myAnimator.SetBool("IsElectricHitted", true);
+    }
+    public void PepperHitEffect()
+    {
+        _pepperEffect.Play();
+    }
+    public void PaintballHit()
+    {
+        _myAnimator.SetBool("IsPaintballHitted", true);
+    }
     public void CatGrabAnimation(bool value)
     {
         _myAnimator.SetBool("IsGrab", value);
@@ -71,13 +93,30 @@ public class TallGrayView : MonoBehaviour
         _hitWave.SetActive(!_hitWave.activeSelf);
         _hitWave.GetComponent<Animator>().SetBool("IsHit", true);
     }
-
+    public void PoisonHit()
+    {
+        _poisonEffect.Play();
+    }
+    public void ActivateWitGainEffect()
+    {
+        onWitGainEffect();
+        _witGainEffect.gameObject.SetActive(true);
+        _witGainEffect.Play();
+    }
     public void Dead()
     {
         Destroy(gameObject);
     }
-    
-#region Shaders
+    public void PlaySoundCrackles()
+    {
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_TallGray_Walking", 0.35f, true, 1f);
+    }
+    public void PlaySoundCoinWitGain()
+    {
+        ActivateWitGainEffect();
+        GameVars.Values.soundManager.PlaySound(_as, "CoinSFX", 0.45f, false, 1f);
+    }
+    #region Shaders
     public void SwitchDissolveMaterial(Material material)       
     {
         var materials = skinned.sharedMaterials.ToList();
@@ -112,8 +151,10 @@ public class TallGrayView : MonoBehaviour
         Dead();
     }
 
-#endregion
+    internal void PoisonHitStop()
+    {
+        _poisonEffect.Stop();
+    }
 
-    
-    
+    #endregion
 }

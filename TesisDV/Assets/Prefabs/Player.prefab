@@ -56,16 +56,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47e2b9790c83e847abf92fb8d6b3b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  volume: {fileID: 0}
+  postProcessDamage: {fileID: 0}
+  postProcessFadeInOutScenes: {fileID: 0}
   _inventory: {fileID: 0}
+  _weaponGORacket: {fileID: 0}
+  _weaponGOBaseballBat: {fileID: 0}
+  _weaponGORemoteControl: {fileID: 0}
+  _weapon: {fileID: 0}
+  _remoteControl: {fileID: 0}
+  _miniMapDisplay: {fileID: 0}
+  speed: 5
   preventCheck: 0
+  isCrouchingSound: 0
   isGrounded: 1
   isCrouching: 0
+  isWalking: 0
+  isRunning: 0
+  isDamaged: 0
+  isAttacking: 0
+  canMoveCamera: 1
   crosshair: {fileID: 0}
-  lookingAt: {fileID: 0}
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 54592448
   lookingFor: {fileID: 0}
   lookingPlacement: {x: 0, y: 0, z: 0}
   timer: 0
+  isDead: 0
+  _isAlive: 0
+  hp: 0
+  maxHp: 4
+  HasContextualMenu: 0
+  IsCrafting: 0
   gizmoScale: 0.45
+  itemMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!23 &5996942980142100167
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -184,6 +211,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf542a856d5106b4d9b19597a58d3f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _camera: {fileID: 0}
+  _stunDuration: 0
+  _stunXAmplitude: 0
+  _stunYAmplitude: 0
+  _stunXFrequency: 0
+  _stunYFrequency: 0
 --- !u!20 &5996942981481422979
 Camera:
   m_ObjectHideFlags: 0

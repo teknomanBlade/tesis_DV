@@ -6,20 +6,23 @@ public class BaseballLauncherAnim : MonoBehaviour
 {
     public GameObject trapPrefab;
     Animator myAnimator;
-    private GameObject parent; 
+    public GameObject parent; 
     void Start()
     {
         myAnimator = GetComponent<Animator>();
-        parent = GameObject.Find("MainGame");
+        //parent = GameObject.Find("MainGame");
+        parent = transform.parent.gameObject;
     }
 
     public void FinishAnim()
     {
-        GameObject aux = Instantiate(trapPrefab, transform.position, transform.rotation, parent.transform);
-        if(GameVars.Values.currentShotsTrap1 > 0)
-            aux.GetComponent<BaseballLauncher>().shotsLeft = GameVars.Values.currentShotsTrap1;
+        var baseballTrap = GameVars.Values.BaseballLauncherPool.GetObject()
+            .SetInitPos(transform.position)
+            .SetInitRot(transform.rotation)
+            .SetParent(parent.transform)
+            .SetShotsRemainingZero();
 
-        Destroy(aux.GetComponent<InventoryItem>());
+        Destroy(baseballTrap.gameObject.GetComponent<InventoryItem>());
         Destroy(gameObject);
     }
 }

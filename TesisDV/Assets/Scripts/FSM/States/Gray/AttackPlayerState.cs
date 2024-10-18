@@ -26,14 +26,14 @@ public class AttackPlayerState : IState
     {
         //_enemy.ResetPathAndSetObjective(_enemy._player.transform.position); //Se va el navmesh
 
-        if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.attackThreshold)
+        if(Vector3.Distance(_enemy._player.transform.position, _enemy.transform.position) < _enemy.attackThreshold && _enemy._player.isAlive)
         {
             _enemy.AttackPlayer();
         }
         else
         {
             _enemy.RevertAttackBool();
-            _fsm.ChangeState(EnemyStatesEnum.ChaseState);
+            _fsm.ChangeState(EnemyStatesEnum.CatState);
         }
     }
 

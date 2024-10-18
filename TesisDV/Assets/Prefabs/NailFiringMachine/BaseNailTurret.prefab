@@ -349,7 +349,7 @@ Transform:
   m_GameObject: {fileID: 8527683028964595949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5674626, y: 0.23429, z: 1.3603}
+  m_LocalScale: {x: 1, y: 0.23429, z: 1}
   m_Children:
   - {fileID: 8527683030187067574}
   - {fileID: 3706665785273453831}
@@ -457,7 +457,7 @@ MonoBehaviour:
     m_Bits: 4096
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 65536
+    m_Bits: 4259840
   myCannon: {fileID: 3706665785273453831}
   myCannonSupport: {fileID: 8527683030187067574}
   collidersObjectives: []
@@ -470,6 +470,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 1958736446158144519}
   shots: 15
   shotsLeft: 0
+  _damageAmount: 3
 --- !u!1 &8527683030187067561
 GameObject:
   m_ObjectHideFlags: 0

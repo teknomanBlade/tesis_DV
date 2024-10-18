@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2795999551099263166}
   - component: {fileID: 2795999551099263165}
   - component: {fileID: 2795999551099263164}
-  - component: {fileID: 5248615946588540989}
+  - component: {fileID: 4578790190775306202}
   m_Layer: 10
   m_Name: BaseNailTurretBlueprint
   m_TagString: Untagged
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2795999551099263163}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5674626, y: 0.23429, z: 1.3603}
+  m_LocalScale: {x: 1, y: 0.23429, z: 1}
   m_Children:
   - {fileID: 2795999552292702432}
   - {fileID: 7198353828875472209}
@@ -98,7 +98,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.1481104, y: 11.7750635, z: 1}
   m_Center: {x: 0.074054845, y: 5.387525, z: 0}
---- !u!114 &5248615946588540989
+--- !u!114 &4578790190775306202
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2795999551099263163}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 576e82fd62f0ac145b1bd2bb11239ce3, type: 3}
+  m_Script: {fileID: 11500000, guid: d9cd1cee673ed5a47bb35d4679184ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   craftingRecipe: {fileID: 11400000, guid: 28ee8768235ee3347870e7bb732800d2, type: 2}
@@ -117,7 +117,10 @@ MonoBehaviour:
   newMaterial: {fileID: 2100000, guid: 04d9b8823b798c944ac1ae3fed55dc18, type: 2}
   LayerMaskWall:
     serializedVersion: 2
-    m_Bits: 65536
+    m_Bits: 67584
+  TrapBaseMaskWall:
+    serializedVersion: 2
+    m_Bits: 2097152
 --- !u!1 &2795999552292702463
 GameObject:
   m_ObjectHideFlags: 0

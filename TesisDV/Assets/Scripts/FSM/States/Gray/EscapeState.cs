@@ -25,25 +25,29 @@ public class EscapeState : IState
     {
         _currentPathWaypoint = 0;
         
-        GetThetaStar();
         Debug.Log("Entre a Escape");
         
-        //_enemy.SetObjective(_enemy.currentExitUFO);
-        //_enemy.ResetPathAndSetObjective(_enemy._exitPos);
         var dir = _enemy._exitPos - _enemy.transform.position;
         _enemy.transform.forward = dir;
-        //_enemy.ResetPathAndSetObjective(_enemy._exitPos);
+
+        GetThetaStar();
     }
     public void OnUpdate()
     {
-        //_enemy.ResetPathAndSetObjective(_enemy._exitPos);
-        //_enemy.Move();
+        if (Vector3.Distance(_enemy.transform.position, _enemy._exitPos) < 1.5f)
+        {
+            _enemy.GoBackToShip();
+        }
+        else if (!_enemy._lm.enemyHasObjective)
+        {
+            _fsm.ChangeState(EnemyStatesEnum.CatState);
+        }
 
-        if (_enemy.hasObjective) _enemy.EscapeWithCat(); //En teoría que esto sea un if ahora no tiene sentido porque siempre va a ser true, despues lo saco y pruebo.
+        _enemy.EscapeWithCat();
 
         RaycastHit hit;
-        Vector3 escapeDir = _enemy._exitPos - _enemy.transform.position;
-        if(myPath != null  && Physics.Raycast(_enemy.transform.position, escapeDir, out hit, escapeDir.magnitude, GameVars.Values.GetWallLayerMask()) == true)
+        Vector3 escapeDir = _enemy._exitPos - _enemy.transform.position;                                            //usamos obstacle mask ahora.
+        if(myPath != null  && Physics.Raycast(_enemy.transform.position, escapeDir, out hit, escapeDir.magnitude, _enemy.obstacleMask) == true)
         {
             if(myPath.Count >= 1)
             {
@@ -52,7 +56,7 @@ public class EscapeState : IState
                 _enemy.transform.forward = dir;
                 _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
 
-                if (dir.magnitude < 0.1f)
+                if (dir.magnitude < 0.4f)
                 {
                     _currentPathWaypoint++;
                     if (_currentPathWaypoint > myPath.Count - 1)
@@ -69,15 +73,6 @@ public class EscapeState : IState
             _enemy.transform.forward = escapeDir;
             _enemy.transform.position += _enemy.transform.forward * _enemy._movingSpeed * Time.deltaTime;
         }
-
-        if (Vector3.Distance(_enemy.transform.position, _enemy._exitPos) < 1.5f)
-        {
-            _enemy.GoBackToShip();
-        }
-        else if (!_enemy._lm.enemyHasObjective)
-        {
-            _fsm.ChangeState(EnemyStatesEnum.CatState);
-        }
     }
     public void OnExit()
     {
@@ -89,13 +84,13 @@ public class EscapeState : IState
         myPath = new List<Node>();
 
         //startingPoint = _enemy._pfManager.GetStartNode(_enemy.transform);
-        startingPoint = _enemy._pfManager.GetClosestNode(_enemy.transform.position);
+        startingPoint = PathfindingManager.Instance.GetClosestNode(_enemy.transform.position);
         //Debug.Log("Start at " + startingPoint);
 
         _currentWaypoint = _enemy.GetCurrentWaypoint();
         
         //endingPoint = _enemy._pfManager.GetEndNode(_enemy._exitPos); //el nodo final es personalizado de cada estado.
-        endingPoint = _enemy._pfManager.GetClosestNode(_enemy._exitPos);
+        endingPoint = PathfindingManager.Instance.GetClosestNode(_enemy._exitPos);
         //Debug.Log("End at " + endingPoint);
         //}
 

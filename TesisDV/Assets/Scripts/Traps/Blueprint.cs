@@ -8,6 +8,8 @@ public class Blueprint : MonoBehaviour
     RaycastHit hit;
     Vector3 movePoint;
     private bool canBuild;
+    private bool _canBeCancelled;
+    private bool _spendMaterials;
     Vector3 auxVector;
     Vector3 secondAuxVector;
     public CraftingRecipe craftingRecipe;
@@ -45,8 +47,8 @@ public class Blueprint : MonoBehaviour
 
         if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, LayerMaskWall))
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log("Blue print Hit " + hit.collider.gameObject.layer + " " + hit.collider.gameObject.name);
+            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            //Debug.Log("Blue print Hit " + hit.collider.gameObject.layer + " " + hit.collider.gameObject.name);
             canBuild = false;
             transform.position = hit.point;
             ChangeMaterial();
@@ -86,7 +88,7 @@ public class Blueprint : MonoBehaviour
             Destroy(gameObject); */
         }
 
-        if (Input.GetKeyDown(GameVars.Values.secondaryFire))
+        if (Input.GetKeyDown(GameVars.Values.secondaryFire) && _canBeCancelled)
         {
             _player.SwitchIsCrafting();
             Destroy(gameObject);
@@ -106,22 +108,34 @@ public class Blueprint : MonoBehaviour
 
     private IEnumerator BuildTrap()
     {
-        var particlesInstantiated = Instantiate(particles, transform.position, transform.rotation);
-        //myRenderer.enabled = false; //Probar despues de arreglar posicionamiento.
+        _canBeCancelled = false;
+        if (!trapAnimPrefab.name.Equals("SlowTrap")) 
+        {
+            var particlesInstantiated = Instantiate(particles, transform.position, transform.rotation);
+            GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
+        }
+        else
+        {
+            GameVars.Values.soundManager.PlaySoundAtPoint("SFX_TarPouringLiquid", transform.position, 0.9f);
+        }
 
-        //Renderer[] rs = GetComponentsInChildren<Renderer>();
         foreach (Renderer r in _myChildrenRenderers)
             r.enabled = false;
 
         //Canbuild provisional.
         canBuild = false;
-        GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
+       
         yield return new WaitForSeconds(2f);
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, parent.transform);
         //Destroy(aux.GetComponent<InventoryItem>());
-        craftingRecipe.RemoveItemsAndWitts();
+
+        if(_spendMaterials)
+        {
+            craftingRecipe.RemoveItemsAndWitts(); 
+        }
+
         craftingRecipe.RestoreBuildAmount();
-        Destroy(particlesInstantiated);
+        //Destroy(particlesInstantiated);
         Destroy(gameObject);
 
     }
@@ -154,5 +168,17 @@ public class Blueprint : MonoBehaviour
     {
         canBuild = true;
         SetOriginalMaterial();
+    }
+
+    public Blueprint SpendMaterials(bool value)
+    {
+        _spendMaterials = value;
+        return this;
+    }
+
+    public Blueprint CanBeCancelled(bool value)
+    {
+        _canBeCancelled = value;
+        return this;
     }
 }

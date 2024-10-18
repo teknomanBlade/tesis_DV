@@ -11,13 +11,17 @@ public class GameVars : MonoBehaviour
     private static GameVars _gameVars;
     public static GameVars Values { get { return _gameVars; } }
 
+    public bool HasSmallContainer;
+    public bool HasLargeContainer;
+    public int enemyCount = 0;
+    
     public SoundManager soundManager { get; private set; }
     public CraftingScreen craftingContainer { get; private set; }
     public LevelManager LevelManager { get; set; }
     public WaveManager WaveManager { get; set; }
-    
+    public CatDistanceBar CatDistanceBar;
     [SerializeField] private Player player;
-    public Player Player
+    public Player Player 
     {
         get { return player; }
     }
@@ -33,7 +37,7 @@ public class GameVars : MonoBehaviour
     {
         get { return inventory; }
     }
-
+    [SerializeField] private TrapHotBar TrapHotBar;
     [SerializeField] private bool _isCatCaptured;
     public bool IsCatCaptured { get { return _isCatCaptured; } }
 
@@ -63,34 +67,64 @@ public class GameVars : MonoBehaviour
     public Sprite crosshairHandGrab;
     public Sprite crosshairHandHold;
     public Sprite crosshairAddOnBattery;
+    public Sprite crosshairWorkbenchCrafting;
+    public Sprite crosshairLockDoor;
+    public Sprite crosshairMovingTrap;
+    public Sprite crosshairMovingObject;
+    public Sprite crosshairRightClickIcon;
     public Sprite imageBaseballTrap;
+    public Sprite switchTennisBallContainer;
+    public Sprite reloadingMinigunIcon;
     public CraftingScreen craftingScreen;
 
-    public Text notifications;
-    public Text playerLives;
+    public RectTransform notifications;
+    public Image[] playerLives;
 
     public Animator playerLivesAnim { get; private set; }
 
     //public YouWinScreen youWinScreen;
     //public YouLoseScreen youLoseScreen;
     public List<AudioClip> audioClips;
-
+    public GameObject backpack;
+    public Image itemGrabbedImage;
     [Header("Crafting Recipes")]
     public CraftingRecipe BaseballLauncher;
     public CraftingRecipe MicrowaveForceFieldGenerator;
     public CraftingRecipe SlowTrap;
-    public CraftingRecipe NailFiringMachine;
+    public CraftingRecipe FERNPaintballMinigun;
     public CraftingRecipe ElectricTrap;
+    public bool HasBoughtMicrowaveTrap { get; set; }
+    public bool HasBoughtSlowingTrap { get; set; }
+    public bool HasBoughtPaintballMinigunTrap { get; set; }
+    public bool HasBoughtElectricTrap { get; set; }
+    public bool HasElectricTrapAppearedHotBar { get; set; }
+    public bool HasMicrowaveTrapAppearedHotBar { get; set; }
+    public bool HasSlowingTrapAppearedHotBar { get; set; }
+    public bool HasPaintballMinigunTrapAppearedHotBar { get; set; }
+    
 
     [Header("Game")]
     private float _fadeDelay = 1.1f;
     private bool _isFaded;
+    public bool HasMagicboard { get; set; }
+    public bool HasOpenedLetter { get; set; }
+    public bool HasOpenedTrunk { get; set; }
+    
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
     public int currentShotsTrap1; //BaseballLauncher
     public int currentShotsTrap2; //NailFiringMachine
     public List<List<Node>> levelRoutes;
-
+    public GameObject BasementDirectionMarkers;
+    public string EnemyType;
+    public int BaseballLauncherCount = 0;
+    public int FERNPaintballMinigunCount = 0;
+    public int InitialStock { get; private set; }
+    public BaseballLauncher BaseballLauncherPrefab;
+    public FERNPaintballMinigun FERNPaintballMinigunPrefab;
+    public PoolObjectStack<BaseballLauncher> BaseballLauncherPool { get; set; }
+    public PoolObjectStack<FERNPaintballMinigun> FERNPaintballMinigunPool { get; set; }
+    public bool PassedTutorial;
     #region Events
     public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
     public event OnCapturedCatChangeDelegate OnCapturedCatChange;
@@ -100,14 +134,14 @@ public class GameVars : MonoBehaviour
     {
         if (_gameVars == null) _gameVars = this;
         else Destroy(this);
-
+        
         SetKeys();
         LoadResources();
-
+        PassedTutorial = false;
         SceneManager.sceneLoaded += FindPlayer;
         SceneManager.sceneLoaded += FindCat;
     }
-
+    
     private void SetKeys()
     {
         jumpKey = KeyCode.Space;
@@ -145,20 +179,87 @@ public class GameVars : MonoBehaviour
         crosshairActivation = Resources.Load<Sprite>("ButtonPress");
         crosshairReloadTrap1 = Resources.Load<Sprite>("ReloadTrap1");
         imageBaseballTrap = Resources.Load<Sprite>("SpriteBaseballLauncher");
+        crosshairLockDoor = Resources.Load<Sprite>("LockDoorIcon");
+        crosshairMovingTrap = Resources.Load<Sprite>("MovingTrapIcon");
+        crosshairMovingObject = Resources.Load<Sprite>("MoveObject");
+        crosshairRightClickIcon = Resources.Load<Sprite>("RightClickMouseIcon");
+        crosshairWorkbenchCrafting = Resources.Load<Sprite>("WorkbenchCraftIcon");
+        switchTennisBallContainer = Resources.Load<Sprite>("SwitchTennisBallsContainer");
+        reloadingMinigunIcon = Resources.Load<Sprite>("ReloadingMinigunIcon");
         craftingScreen = Resources.Load<CraftingScreen>("CraftingCanvas");
         audioClips = Resources.LoadAll<AudioClip>("Sounds").ToList();
-        //youWinScreen = Resources.Load<YouWinScreen>("YouWin");
-        //youLoseScreen = Resources.Load<YouLoseScreen>("YouLose");
-        notifications = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("NotificationsText")).First();
-        playerLives = FindObjectsOfType<Text>().Where(x => x.gameObject.name.Equals("HealthText")).First();
-        playerLivesAnim = playerLives.gameObject.GetComponent<Animator>();
-        playerLivesAnim.SetBool("IsDamaged", false);
+        TrapHotBar = FindObjectOfType<TrapHotBar>();
+        backpack = FindObjectsOfType<GameObject>().Where(x => x.name.Equals("Backpack")).First();
+        itemGrabbedImage = FindObjectsOfType<Image>(true).Where(x => x.name.Equals("ItemGrabbed")).First();
+        notifications = FindObjectsOfType<RectTransform>(true).Where(x => x.gameObject.name.Equals("NotificationsBkg")).First();
+        playerLives = FindObjectsOfType<Image>().Where(x => x.gameObject.name.Contains("Life")).OrderBy(x => x.name).ToArray();
         soundManager = FindObjectOfType<SoundManager>();
         craftingContainer = FindObjectOfType<CraftingScreen>();
         soundManager.SetAudioClips(audioClips);
         LevelManager = GetComponent<LevelManager>();
         WaveManager = GetComponent<WaveManager>();
+        InitialStock = 5;
+        BaseballLauncherPool = new PoolObjectStack<BaseballLauncher>(BaseballLauncherFactory, ActivateBaseballLauncher, DeactivateBaseballLauncher, InitialStock, true);
+        FERNPaintballMinigunPool = new PoolObjectStack<FERNPaintballMinigun>(FERNPaintballMinigunFactory, ActivateFERNPaintballMinigun, DeactivateFERNPaintballMinigun, InitialStock, true);
     }
+
+    private void DeactivateFERNPaintballMinigun(FERNPaintballMinigun o)
+    {
+        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
+        o.gameObject.SetActive(false);
+        if (!o.gameObject.name.Contains("_"))
+        {
+            FERNPaintballMinigunCount++;
+            o.gameObject.name = o.gameObject.name.Replace("(Clone)", "");
+            o.gameObject.name += "_" + FERNPaintballMinigunCount;
+        }
+        o.transform.position = Vector3.zero;
+        o.transform.localPosition = Vector3.zero;
+    }
+
+    private void ActivateFERNPaintballMinigun(FERNPaintballMinigun o)
+    {
+        o.gameObject.SetActive(true);
+        o.InitializeTrap();
+    }
+
+    private FERNPaintballMinigun FERNPaintballMinigunFactory()
+    {
+        return Instantiate(FERNPaintballMinigunPrefab);
+    }
+
+    private void DeactivateBaseballLauncher(BaseballLauncher o)
+    {
+        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
+        o.gameObject.SetActive(false);
+        if (!o.gameObject.name.Contains("_")) 
+        { 
+            BaseballLauncherCount++;
+            o.gameObject.name = o.gameObject.name.Replace("(Clone)", "");
+            o.gameObject.name += "_" + BaseballLauncherCount;
+        }
+        o.transform.position = Vector3.zero;
+        o.transform.localPosition = Vector3.zero;
+    }
+
+    private void ActivateBaseballLauncher(BaseballLauncher o)
+    {
+        o.gameObject.SetActive(true);
+        o.InitializeTrap();
+    }
+
+    private BaseballLauncher BaseballLauncherFactory()
+    {
+        return Instantiate(BaseballLauncherPrefab);
+    }
+    #region TrapHotBar
+
+    public bool IsAllSlotsDisabled()
+    {
+        return TrapHotBar.IsAllSlotsDisabled();
+    }
+
+    #endregion
 
     #region Player
 
@@ -178,16 +279,46 @@ public class GameVars : MonoBehaviour
         player.PlayPickUpSound();
     }
 
-    public void ShowLivesRemaining(int lives, int maxHP)
+    public void PlayBackpackItemGrabbedAnim(Sprite itemImage)
     {
-        StartCoroutine(ShowAnimDamagedPlayer());
-        playerLives.text = "X " + Mathf.Clamp(lives, 0, maxHP);
+        itemGrabbedImage.sprite = itemImage;
+        StartCoroutine(ShowAnimationBackpack());
     }
-    public IEnumerator ShowAnimDamagedPlayer()
+    public IEnumerator ShowAnimationBackpack()
     {
-        playerLivesAnim.SetBool("IsDamaged", true);
-        yield return new WaitForSeconds(1f);
-        playerLivesAnim.SetBool("IsDamaged", false);
+        backpack.GetComponent<Animator>().SetBool("IsItemGrabbed", true);
+        yield return new WaitForSeconds(1.2f);
+        backpack.GetComponent<Animator>().SetBool("IsItemGrabbed", false);
+    }
+    public void ShowLivesRemaining(int damageAmount, int hp, int maxHP = 0)
+    {
+        if (hp == 3)
+        {
+            playerLives.ToList().ForEach(x => x.GetComponent<Animator>().SetBool("IsDamaged", false));
+            return;
+        }
+        //WIP Multiple Lives
+        if (damageAmount == 2)
+        {
+            var lives = playerLives.OrderByDescending(x => x.name).Skip(1);
+            lives.ToList().ForEach(x => x.GetComponent<Animator>().SetBool("IsDamaged", true));
+            Debug.Log("VIDAS: " + lives.Count());
+        }
+        else
+        {
+            if (hp == 2)
+            {
+                playerLives[maxHP - maxHP].GetComponent<Animator>().SetBool("IsDamaged", true);
+            }
+            else if (hp == 1)
+            {
+                playerLives[maxHP - 2].GetComponent<Animator>().SetBool("IsDamaged", true);
+            }
+            else if (hp == 0)
+            {
+                playerLives[maxHP - 1].GetComponent<Animator>().SetBool("IsDamaged", true);
+            }
+        }
     }
     public Vector3 GetPlayerPrefabPlacement()
     {
@@ -262,8 +393,21 @@ public class GameVars : MonoBehaviour
     #region Notifications
     public void ShowNotification(string text)
     {
-        notifications.text = text;
+        notifications.GetComponentInChildren<Text>().text = text;
         StartCoroutine(ShowNotification());
+    }
+    public string ShowMessageTutorialReminder() 
+    {
+        return PassedTutorial ? " First review the Footlocker at Kevin's Bed..." : "You have to press 'Enter' to conclude Tutorial before starting the waves. ";
+    }
+    public string ShowMessageNotificationByAction()
+    {
+        return HasOpenedLetter ? ShowMessageMagicboard() : " First review the letter in the Desk...";
+    }
+
+    public string ShowMessageMagicboard() 
+    {
+        return HasMagicboard ? ShowMessageTutorialReminder() : " Grab the Magicboard to keep a record of new experiments.";
     }
 
     public IEnumerator ShowNotification()
@@ -275,7 +419,7 @@ public class GameVars : MonoBehaviour
 
     public void ShowNotificationDefinedTime(string text, float time, Action action)
     {
-        notifications.text = text;
+        notifications.GetComponentInChildren<Text>().text = text;
         StartCoroutine(ShowNotificationDefinedTime(time, action));
     }
 
@@ -293,6 +437,7 @@ public class GameVars : MonoBehaviour
     public void SetCatFree()
     {
         _isCatCaptured = false;
+        CatDistanceBar.PlayFadeOut();
         OnCapturedCatChange(_isCatCaptured);
         cat.CatHasBeenReleased();
     }
@@ -301,13 +446,19 @@ public class GameVars : MonoBehaviour
     {
         return (cat != null) ? cat.GetDistance() : 0f;
     }
-
+    public void SetEnemyType(string enemyType) 
+    {
+        EnemyType = enemyType;
+    }
     public void TakeCat(Vector3 exitPos)
     {
+        if (cat == null) return;
+
         _isCatCaptured = true;
+        CatDistanceBar.PlayFadeIn();
         OnCapturedCatChange(_isCatCaptured);
         cat.CatIsBeingTaken();
         cat.SetExitPos(exitPos);
     }
-    #endregion
+    #endregion 
 }

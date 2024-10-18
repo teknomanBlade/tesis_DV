@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class EMPAttack : MonoBehaviour
 {
-    [SerializeField]
-    private GrayModel _myOwner;
+    [SerializeField] private Enemy _myOwner;
+    [SerializeField] private float _damageAmount;
     //[SerializeField] private int _damageAmount;
 
     void OnTriggerEnter(Collider other)
@@ -21,16 +21,32 @@ public class EMPAttack : MonoBehaviour
             
         }
         else*/
+
+        if (trap && other.GetComponent<FERNPaintballMinigun>())
+        {
+            trap.Inactive();
+            //_myOwner.RevertSpecialAttackBool();
+        }
+
         if (trap && other.GetComponent<ElectricTrap>())
         {
-            other.GetComponent<Trap>().Inactive();
-            _myOwner.RevertSpecialAttackBool();
+            trap.Inactive();
+            //_myOwner.RevertSpecialAttackBool();
         }
 
         if (trap && other.GetComponent<BaseballLauncher>())
         {
-            other.GetComponent<Trap>().Inactive();
-            _myOwner.RevertSpecialAttackBool();
+            trap.Inactive();
+           // _myOwner.RevertSpecialAttackBool();
+        }
+
+        if (trap && other.GetComponent<ForceField>())
+        {
+            if (other.GetComponent<ForceField>().IsDamageReturn)
+            {
+                _myOwner.TakeDamage(other.GetComponent<ForceField>().DamageReturnAmount);
+            }
+            other.GetComponent<ForceField>().TakeDamage(_damageAmount);
         }
     }
 }

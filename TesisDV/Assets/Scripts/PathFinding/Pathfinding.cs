@@ -2,6 +2,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Pathfinding
 {
@@ -75,6 +76,7 @@ public class Pathfinding
                     path.Add(nodeToAdd);
                     nodeToAdd = cameFrom[nodeToAdd];
                 }
+                path = path.Where(x => !x.blocked).ToList();
                 return path;
             }
 

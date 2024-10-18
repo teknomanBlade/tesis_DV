@@ -59,21 +59,22 @@ public class UFO : MonoBehaviour, IInRoundObserver
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         GameVars.Values.LevelManager.AddObserverInRound(this);
         GameVars.Values.LevelManager.AddUFO(this);
-        GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
+        
     }
 
     void Start()
     {
         parent = GameObject.Find("MainGame");
+        GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
         //Vector3 auxVector = new Vector3(_finalPos.x, 0f, _finalPos.z);
         //UFOIndicator = Instantiate(UFOIndicatorPrefab);
         //UFOIndicator.transform.position = auxVector;
     }
 
-    private void RotateUFOSpinner()
+    /*private void RotateUFOSpinner()
     {
         if(_UFOSpinner != null) _UFOSpinner.transform.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime));
-    }
+    }*/
     public void PlayAnimBeam(bool active)
     {
         _animBeam.SetBool("IsBeamSpawnerDeployed", active);
@@ -110,7 +111,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
     }
     private void Update()
     {
-        RotateUFOSpinner();
+        //RotateUFOSpinner();
         EnterPlanet();
         ExitPlanet();
 
@@ -125,7 +126,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
                 //Estaba equivocado, hace falta para que el NavMesh busque path despues del awake.
 
 
-                currentGray.AwakeGray();
+                //currentGray.AwakeGray();
 
                 BeginSpawn();
             }
@@ -163,14 +164,17 @@ public class UFO : MonoBehaviour, IInRoundObserver
     {
         yield return new WaitForSeconds(_spawnTimer);
         yield return new WaitUntil(() => this.enabled);
-        if(_graysSpawned <   EnemiesToSpawn.Count())
+        if(_graysSpawned < EnemiesToSpawn.Count())
         {
             if (!Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
             {
                 //CAMBIO PARA MVC
                 //La referencia cambia a GrayModel
-                currentGray = Instantiate(EnemiesToSpawn[_graysSpawned], transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
-                
+                //currentGray = Instantiate(EnemiesToSpawn[_graysSpawned], transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
+                currentGray = EnemiesToSpawn[_graysSpawned].SetExitUFO(transform.position);
+                currentGray.gameObject.SetActive(true);
+                GameVars.Values.enemyCount++;
+                AssignCountToEnemyByPairImpair(GameVars.Values.enemyCount, currentGray);
                 //_lm.EnemySpawned();
                 //SpawnGreyLerp();
                 spawning = false;
@@ -179,7 +183,17 @@ public class UFO : MonoBehaviour, IInRoundObserver
             else StartCoroutine("SpawnGrey");
         }
     }
-
+    public void AssignCountToEnemyByPairImpair(int count, Enemy enemy) 
+    {
+        if (gameObject.name.Contains("a") && count % 2 == 0) 
+        {
+            enemy.SetName(count.ToString());
+        }
+        else
+        {
+            enemy.SetName(count.ToString());
+        }
+    }
     public void ExitPlanet()
     {
         Vector3 dir = _spawnPos - transform.position;
@@ -245,7 +259,11 @@ public class UFO : MonoBehaviour, IInRoundObserver
         Gizmos.DrawWireCube(transform.position - startPos, new Vector3(0.5f, 0.5f, 0.5f));
         Gizmos.DrawWireCube(transform.position - endPos, new Vector3(0.5f, 0.5f, 0.5f));
     }
-
+    public UFO SetName(string name) 
+    {
+        gameObject.name += name;
+        return this;
+    }
     public UFO SetSpawnPos(Vector3 newPos)
     {
         transform.position = newPos;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SoundManager : MonoBehaviour
 {
@@ -68,13 +69,13 @@ public class SoundManager : MonoBehaviour
     {
         if (SoundLibrary.TryGetValue(clipName, out clip))
         {
-            _sound.clip = clip;
-            _sound.volume = volume;
-            _sound.loop = loop;
-            _sound.minDistance = 2f;
-            _sound.maxDistance = 400f;
-            _sound.spatialBlend = spatialBlend;
-            _sound.Play();
+            sound.clip = clip;
+            sound.volume = volume;
+            sound.loop = loop;
+            sound.minDistance = 2f;
+            sound.maxDistance = 400f;
+            sound.spatialBlend = spatialBlend;
+            sound.Play();
         }
     }
 
@@ -85,6 +86,14 @@ public class SoundManager : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(clip, position, volume);
         }
+    }
+    public float GetClipLength(string clipName) 
+    {
+        if (SoundLibrary.TryGetValue(clipName, out clip))
+        {
+            return clip.length;
+        }
+        return 0f;
     }
 
     public void StopSound(AudioSource audioSource)

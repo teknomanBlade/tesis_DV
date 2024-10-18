@@ -8,21 +8,15 @@ using System.Linq;
 
 public class Slot : MonoBehaviour
 {
-    [SerializeField]
-    private InventoryItem _item;
+    [SerializeField] private InventoryItem _item;
     private int _itemAmount = 0;
     private GameObject _itemAmountContainer;
     private Text _itemAmountText;
-    [SerializeField]
-    private Image _image;
-    [SerializeField]
-    private Image _keyImage;
-    [SerializeField]
-    private GameObject _myPrefab;
-    [SerializeField]
-    private int _itemID;
-    [SerializeField]
-    private CanvasGroup _slotCanvasGroup;
+    [SerializeField] private Image _image;
+    [SerializeField] private Image _keyImage;
+    [SerializeField] private GameObject _myPrefab;
+    [SerializeField] private int _itemID;
+    [SerializeField] private CanvasGroup _slotCanvasGroup;
     private CanvasGroup _keyCanvasGroup;
     private float fadeDelay = 1.1f;    
     private bool isFaded;

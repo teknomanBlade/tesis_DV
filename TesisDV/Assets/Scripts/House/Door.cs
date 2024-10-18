@@ -7,17 +7,26 @@ using System.Linq;
 
 public class Door : Item
 {
-    private Animator _anim;
+    protected Animator _anim;
+    [SerializeField]
+    protected Animator _animParent;
+    [SerializeField] protected BoxCollider _collider;
     private float _valueToChange;
     private NavMeshObstacle _navMeshObstacle;
-    private bool IsOpened { get; set; }
+    protected bool IsOpened { get; set; }
+    public bool IsLocked;
+    public bool IsLockedToGrays;
+    public bool IsEnemyInteracting;
     public bool IsFront = false;
     public DoorTrigger[] doorTriggers;
     // Start is called before the first frame update
     void Awake()
     {
         _anim = GetComponent<Animator>();
+        _animParent = transform.parent.GetComponent<Animator>();
+        _collider = GetComponent<BoxCollider>();
         doorTriggers = GetComponentsInChildren<DoorTrigger>();
+        itemType = ItemType.Interactable;
         //_navMeshObstacle = GetComponent<NavMeshObstacle>();
     }
 
@@ -61,9 +70,38 @@ public class Door : Item
     {
         StopAllCoroutines();
         doorTriggers.Select(x => x).ToList().ForEach(x => x.gameObject.SetActive(false));
-        if (!IsOpened)
+
+        if (IsEnemyInteracting) 
+        {
+            if (transform.CompareTag("Tutorial") && IsEnemyInteracting)
+            {
+                GameVars.Values.PassedTutorial = IsEnemyInteracting;
+                Debug.Log("PASSED TUTORIAL ENEMY INTERACTING = " + IsEnemyInteracting);
+            }
+            _animParent.SetBool("IsDropped", true);
+            _collider.enabled = false;
+        }
+
+        if (IsLocked)
+        {
+            if (transform.CompareTag("Tutorial"))
+            {
+                GameVars.Values.ShowNotification("You can't go out now." + GameVars.Values.ShowMessageNotificationByAction());
+            }
+            _anim.SetBool("IsBlocked", true);
+            GameVars.Values.soundManager.PlaySoundAtPoint("LockedDoorTry_" + RandomSound(), transform.position, 0.4f);
+            Invoke("SetBlockedFalse", 0.5f);
+            return;
+        }
+
+        if (!IsEnemyInteracting && !IsOpened)
         {
             IsOpened = true;
+            if (transform.CompareTag("Tutorial") && IsOpened)
+            {
+                GameVars.Values.PassedTutorial = IsOpened;
+                Debug.Log("PASSED TUTORIAL PLAYER = " + IsOpened);
+            }
             GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
             //_navMeshObstacle.enabled = false;
             StartCoroutine(LerpDoorAnim(1f, 2f));
@@ -76,6 +114,19 @@ public class Door : Item
             StartCoroutine(LerpDoorAnim(0f, 2f));
         }
 
+    }
+    public void EnemyInteractionCheck(bool enabled) 
+    {
+        IsEnemyInteracting = enabled;
+    }
+    private void SetBlockedFalse()
+    {
+        _anim.SetBool("IsBlocked", false);
+    }
+
+    protected string RandomSound()
+    {
+        return UnityEngine.Random.Range(1,3).ToString();
     }
 
     public bool GetDoorStatus()

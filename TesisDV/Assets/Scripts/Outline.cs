@@ -249,7 +249,7 @@ public class Outline : MonoBehaviour
                 if (group.Count() == 1)
                 {
                     continue;
-                }
+                } 
 
                 // Calculate the average normal
                 var smoothNormal = Vector3.zero;

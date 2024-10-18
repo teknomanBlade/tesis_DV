@@ -1,26 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BaseballLauncher : Trap, IMovable, IInteractable
 {
+    #region Events
+    public delegate void OnReloadDelegate();
+    public event OnReloadDelegate OnReload;
+    public delegate void OnSwitchLargeContainerDelegate();
+    public event OnSwitchLargeContainerDelegate OnSwitchLargeContainer;
+    #endregion
     private float _maxLife = 100f;
     [SerializeField] private float _currentLife;
     private float _valueToChange;
     private bool _isDestroyed;
     private bool _isDisabledSFX;
+    [SerializeField] private Inventory _inventory;
+    private GameObject _craftingScreen;
     public ParticleSystem HitTurret;
     public ParticleSystem ShootEffect;
     private AudioSource _as;
-    public delegate void OnReloadDelegate();
-    public event OnReloadDelegate OnReload;
+    
     public GameObject projectilePrefab;
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
-    public GameObject ballsState1, ballsState2, ballsState3;
+    //public GameObject ballsState1, ballsState2, ballsState3;
+    public GameObject ballsContainerSmall, ballsContainerLarge;
+    public GameObject ballsContainerUpgradeSmall, ballsContainerUpgradeLarge;
     [SerializeField] private GameObject trapDestroyPrefab;
-    public int shots = 15;
+    public int shots;
     public int shotsLeft;
+    public int shotsRemaining;
+    [SerializeField] private float _damageAmount;
+    [SerializeField] private float _coefMelee;
+    [SerializeField] private float _coefTank;
     public bool IsEmpty
     {
         get
@@ -28,7 +42,11 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             return shotsLeft == 0;
         }
     }
-    public bool HasPlayerTennisBallBox { get; set; }
+    public bool HasTennisBallContainerSmall;
+    public bool HasTennisBallContainerLarge;
+    public bool IsContainerLarge;
+    public bool IsContainerSmall;
+    public bool IsMoving;
     public float interval;
     Vector3 auxVector;
     private float _searchSpeed = 2.5f;
@@ -49,76 +67,58 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     #region Upgrades
     [Header("Upgrades")]
+    [SerializeField] private float _damageBoostCoef;
+    [SerializeField] private float _staticChargeSlowAmount;
     [SerializeField] private GameObject _staticBallsBlueprint;
     [SerializeField] private GameObject _staticBallsUpgrade;
-    private int _additionalDamage = 0;
-    [SerializeField] private GameObject _fireRateBlueprint;
-    [SerializeField] private GameObject _fireRateUpgrade;
-    public bool _canActivate1Upgrade {get; private set;}
-    public bool _canActivate2Upgrade {get; private set;}
+    [SerializeField] private GameObject _damageBoostBlueprint;
+    [SerializeField] private GameObject _damageBoostUpgrade;
+    [SerializeField] private GameObject _doubleLoaderSmallBlueprint;
+    [SerializeField] private GameObject _doubleLoaderSmallUpgrade;
+    [SerializeField] private GameObject _doubleLoaderLargeBlueprint;
+    [SerializeField] private GameObject _doubleLoaderLargeUpgrade;
+    public bool StaticBallsUpgradeEnabled;
+    public bool DoubleLoaderSmallUpgradeEnabled;
+    public bool DoubleLoaderLargeUpgradeEnabled;
+    public bool _canActivate1aUpgrade {get; private set;}
+    public bool _canActivate2aUpgrade {get; private set;}
+    public bool _canActivate1bUpgrade { get; private set; }
+    public bool _canActivate2bUpgrade { get; private set; }
     private SkillTree _skillTree;
 
     #endregion
+    private void Start()
+    {
+        _myTrapBase = transform.parent.GetComponent<TrapBase>();
+        _myTrapBase.SetTrap(this.gameObject);
+    }
     public void Awake()
     {
         //active = false; Ahora las trampas empiezan encendidas.
+        _craftingScreen = GameObject.Find("CraftingContainer");
+        _inventory = _craftingScreen.GetComponentInChildren<Inventory>();
+        _coefMelee = 3f;
+        _coefTank = 5f;
+        _damageBoostCoef = 2f;
+        _staticChargeSlowAmount = 1.2f;
+        GameVars.Values.IsAllSlotsDisabled();
         _animator = GetComponent<Animator>();
         _currentLife = _maxLife;
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
         _skillTree.OnUpgrade += CheckForUpgrades;
         CheckForUpgrades();
-        //_animator.SetBool("HasNoBalls", true); Ahora las trampas empiezan encendidas.
-        //GameVars.Values.ShowNotification("The Turret is inactive. Get near until you see the Active Button Icon."); Ahora las trampas empiezan encendidas.
         isFirstTime = true;
+        IsContainerSmall = true;
+        IsContainerLarge = false;
         myCannonSupport = transform.GetChild(2);
         myCannon = transform.GetChild(2).GetChild(0);
         _as = GetComponent<AudioSource>();
-        //Debug.Log(transform.GetChild(2));
-        shotsLeft = shots;
         laser.gameObject.SetActive(false);
         Baseball = Resources.Load<Baseball>("tennisBallaux");
         InitialStock = 20;
         BaseballPool = new PoolObject<Baseball>(BaseballFactory, ActivateBaseball, DeactivateBaseball, InitialStock, true);
-        ActiveBallsState1();
         StartTrap();
-    }
-
-    private void StartTrap()
-    {
-        active = true;
-        _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
-        if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
-        ShootCoroutine = StartCoroutine("ActiveCoroutine");
-    }
-
-    public void Interact()
-    {
-        if (HasPlayerTennisBallBox && IsEmpty)
-        {
-            if (ReloadCoroutine != null) StopCoroutine(ReloadCoroutine);
-            ReloadCoroutine = StartCoroutine(ReloadTurret());
-            return;
-        }
-
-        if (!active)
-        {
-            Debug.Log("Active la torreta");
-
-            if (isFirstTime) { isFirstTime = false; _animator.SetBool("HasNoBalls", false); }
-
-            active = true;
-            _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
-            if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
-            ShootCoroutine = StartCoroutine("ActiveCoroutine");
-        }
-    }
-    IEnumerator ReloadTurret()
-    {
-        GameVars.Values.ShowNotification("Reloading turret...");
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "ReloadingTurret1", 0.8f, false);
-        yield return new WaitForSeconds(2.5f);
-        Debug.Log("LLEGA A RELOAD?");
-        Reload();
+        SetUIIndicator("UI_BaseballLauncher_Indicator");
     }
 
     void Update()
@@ -128,25 +128,149 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             //Debug.Log("ENTRA EN ACTIVA?");
             FieldOfView();
         }
-        
-        /* 
-        if (shotsLeft == 0) Se chequea al instanciar una pelota.
-        {
-            Inactive();
-        } */
     }
+    #region Initialization Logic
+    public void SetShots(int s)
+    {
+        shotsLeft = shots = s;
+    }
+    public BaseballLauncher SetShotsRemainingZero()
+    {
+        if (!IsMoving)
+            shotsRemaining = 0;
+
+        return this;
+    }
+    public BaseballLauncher InitializeTrap()
+    {
+        StartTrap();
+        return this;
+    }
+    public BaseballLauncher SetInitPos(Vector3 pos)
+    {
+        this.transform.position = pos;
+        return this;
+    }
+    public BaseballLauncher SetInitRot(Quaternion rot)
+    {
+        this.transform.rotation = rot;
+        return this;
+    }
+    public BaseballLauncher SetParent(Transform parent)
+    {
+        this.transform.parent = parent;
+        return this;
+    }
+    public int GetShotsByContainer()
+    {
+        int shots = 0;
+
+        if (ballsContainerSmall.activeSelf)
+        {
+            shots = 5;
+        }
+        else if (ballsContainerLarge.activeSelf)
+        {
+            shots = 10;
+        }
+        else if (ballsContainerUpgradeSmall.activeSelf)
+        {
+            shots = 10;
+        }
+        else if (ballsContainerUpgradeLarge.activeSelf)
+        {
+            shots = 20;
+        }
+
+        return shots;
+    }
+    private void StartTrap()
+    {
+        active = true;
+
+        _staticBallsUpgrade.SetActive(StaticBallsUpgradeEnabled);
+        if (DoubleLoaderSmallUpgradeEnabled || DoubleLoaderLargeUpgradeEnabled)
+        {
+            ActiveDeactivateBallStates(false, false);
+        }
+        else
+        {
+            if (IsContainerLarge)
+            {
+                ActiveDeactivateBallStates(false, true);
+            }
+            else 
+            {
+                ActiveDeactivateBallStates(true, false);
+            }
+        }
+
+        ballsContainerUpgradeSmall.SetActive(DoubleLoaderSmallUpgradeEnabled);
+        ballsContainerUpgradeLarge.SetActive(DoubleLoaderLargeUpgradeEnabled);
+        if (IsMoving)
+        {
+            SetShots(shotsRemaining);
+        }
+        else
+        {
+            SetShots(GetShotsByContainer());
+        }
+        SearchingForObjectives();
+        _animator.SetBool("HasNoBalls", false);
+        _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
+        if (ShootCoroutine != null) StopCoroutine(ShootCoroutine);
+        ShootCoroutine = StartCoroutine("ActiveCoroutine");
+        IsMoving = false;
+    }
+    #endregion
+
+    #region Trap Actions
+    public void Interact()
+    {
+        if ((HasTennisBallContainerSmall || HasTennisBallContainerLarge) && IsEmpty)
+        {
+            if (ReloadCoroutine != null) StopCoroutine(ReloadCoroutine);
+            ReloadCoroutine = StartCoroutine(ReloadTurret());
+            return;
+        }
+
+        if (!active && !IsEmpty)
+        {
+            Debug.Log("Active la torreta");
+
+            StartTrap();
+        }
+    }
+
+    public void SwitchLargeContainer() 
+    {
+        ActiveDeactivateBallStates(false, true);
+        SetShots(GetShotsByContainer());
+        IsContainerLarge = true;
+        IsContainerSmall = false;
+        OnSwitchLargeContainer?.Invoke();
+    }
+
     public void Reload()
     {
-        shotsLeft = shots;
+        SetShots(GetShotsByContainer());
         active = true;
         StartCoroutine("ActiveCoroutine");
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
         _isDisabledSFX = false;
         _animator.enabled = true;
         _animator.SetBool("HasNoBalls", false);
-        ActiveDeactivateBallStates(true, false, false);
+        ActivateTennisBallsByReload();
         OnReload?.Invoke();
         GameVars.Values.ShowNotification("The Turret has been reloaded.");
+    }
+    IEnumerator ReloadTurret()
+    {
+        GameVars.Values.ShowNotification("Reloading turret...");
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "ReloadingTurret1", 0.8f, false);
+        yield return new WaitForSeconds(2.5f);
+        Debug.Log("LLEGA A RELOAD?");
+        Reload();
     }
     IEnumerator ActiveCoroutine()
     {
@@ -166,7 +290,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
 
     public void InstantiateBall()
     {
-        if  (_canShoot == false || _currentObjective.GetComponent<Enemy>().isDead)
+        if  (_canShoot == false || (_currentObjective != null && _currentObjective.GetComponent<Enemy>().isDead))
             return;
         
         if (shotsLeft == 0)
@@ -174,20 +298,21 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             Inactive();
         }
 
-        laser.gameObject.SetActive(true);
         ShootEffect.Play();
         shotsLeft--;
         shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
-        ChangeBallsState(shotsLeft);
+        
+        if (ballsContainerSmall.activeSelf) 
+        {
+            RemoveLastVisualTennisBall();
+        }
+        else if(ballsContainerLarge.activeSelf) 
+        {
+            RemoveLastVisualTennisBallLarge();
+        }
+        
         FireBaseball();
-        //GameObject aux = Instantiate(projectilePrefab, exitPoint.transform.position, Quaternion.identity);
-        //aux.GetComponent<Rigidbody>().AddForce(35f * exitPoint.transform.forward, ForceMode.Impulse);     Usamos Pool :D
         GameVars.Values.soundManager.PlaySoundAtPoint("BallLaunched", transform.position, 0.7f);
-    }
-
-    public void ActiveBallsState1()
-    {
-        ballsState1.SetActive(true);
     }
 
     public void TakeDamage(float dmgAmount)
@@ -201,28 +326,6 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             //Hacer animacion de destrucción, instanciar sus objetos de construcción y destruirse.
             isWorking = false;
             DestroyThisTrap();
-        }
-    }
-
-    public void ChangeBallsState(int shotsLeft)
-    {
-        if (shotsLeft <= 0)
-        {
-            ActiveDeactivateBallStates(false, false, false);
-            return;
-        }
-
-        if (shotsLeft == 15)
-        {
-            ActiveDeactivateBallStates(true, false, false);
-        }
-        else if (shotsLeft == 11)
-        {
-            ActiveDeactivateBallStates(false, !ballsState2.activeSelf, false);
-        }
-        else if (shotsLeft == 6)
-        {
-            ActiveDeactivateBallStates(false, false, !ballsState3.activeSelf);
         }
     }
 
@@ -261,7 +364,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         _animator.enabled = true;
         _animator.SetBool("IsDetectingTarget", true);
-
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_TurretDetection", 0.35f, true,1f);
     }
 
     private void EndSearchingForObjective()
@@ -270,18 +373,16 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _animator.SetBool("IsDetectingTarget", false);
     }
 
-    public void ActiveDeactivateBallStates(bool state1, bool state2, bool state3)
-    {
-        ballsState1.SetActive(state1);
-        ballsState2.SetActive(state2);
-        ballsState3.SetActive(state3);
-    }
-
     public void BecomeMovable()
     {
-        GameVars.Values.currentShotsTrap1 = shotsLeft;
+        IsMoving = true;
+        shotsRemaining = shotsLeft;
+        GameVars.Values.BaseballLauncherPool.ReturnObject(this);
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
-        Destroy(gameObject);
+        aux.GetComponent<StaticBlueprint>().SpendMaterials(false).CanBeCancelled(false);
+
+        transform.parent = null;
+        _myTrapBase.ResetBase();
     }
 
     public void DestroyThisTrap()
@@ -315,6 +416,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     private void DeactivateBaseball(Baseball o)
     {
         o.gameObject.SetActive(false);
+        o.transform.parent = transform;
         o.transform.localPosition = new Vector3(0f, 0f, 0f);
     }
 
@@ -322,43 +424,160 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         o.gameObject.SetActive(true);
     }
-
+    public override void ShootAnimation(Vector3 rotation)
+    {
+        //Debug.Log("ENTRA EN SHOOT ANIMATION?");
+        myCannon.rotation = Quaternion.Lerp(myCannon.rotation, Quaternion.Euler(0f, rotation.y, rotation.z), _shootSpeed * Time.deltaTime);
+    }
     private void FireBaseball()
     {
-        if(_canShoot)
+        if (_currentObjective != null && _canShoot)
         {
-            BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetAdditionalDamage(_additionalDamage).SetOwner(this);
+            BaseballPool.GetObject().SetInitialPos(exitPoint.transform.position).SetOwnerForward(exitPoint.transform.forward).SetOwner(this);
+            var enemy = _currentObjective.GetComponent<Enemy>();
+            EnemyDamageDifferential(enemy);
         }
     }
+
+    public void EnemyDamageDifferential(Enemy enemy)
+    {
+        if (enemy == null)
+            return;
+
+        if (_canActivate1bUpgrade)
+        {
+            Debug.Log("ACTIVO SLOW STATIC CHARGE...");
+            enemy.SlowDebuff(_staticChargeSlowAmount);
+            enemy.ElectricDebuffHit();
+        }
+
+        if (enemy.name.Contains("GrayMVC"))
+        {
+            Debug.Log("DAÑO GRAY: " + _damageAmount);
+            enemy.TakeDamage(_damageAmount);
+        }
+        else if (enemy.name.Contains("Melee"))
+        {
+            _damageAmount /= _coefMelee;
+            Debug.Log("DAÑO MELEE: " + _damageAmount);
+            enemy.TakeDamage(_damageAmount);
+        }
+        else if (enemy.name.Contains("Tank"))
+        {
+            _damageAmount /= _coefTank;
+            Debug.Log("DAÑO TANK: " + _damageAmount);
+            enemy.TakeDamage(_damageAmount);
+        }
+    }
+    #endregion
+
+    #region Visual Behaviour
+
+    public void ActiveDeactivateBallStates(bool ballContainerSmall, bool ballContainerLarge)
+    {
+        ballsContainerSmall.SetActive(ballContainerSmall);
+        ballsContainerLarge.SetActive(ballContainerLarge);
+    }
+    public void ActivateTennisBallsByReload() 
+    {
+        if (ballsContainerSmall.activeSelf)
+        {
+            var tennisBalls = ballsContainerSmall.transform.GetComponentsInChildren<Transform>(true).Where(x => x.name.Contains("tennisBall"));
+            if (tennisBalls.Count() <= 0) return;
+
+            tennisBalls.ToList().ForEach(x => x.gameObject.SetActive(true));
+        }
+        else if (ballsContainerLarge.activeSelf) 
+        {
+            var tennisBallsLarge = ballsContainerLarge.transform.GetComponentsInChildren<Transform>(true).Where(x => x.name.Contains("tennisBall"));
+            if (tennisBallsLarge.Count() <= 0) return;
+
+            tennisBallsLarge.ToList().ForEach(x => x.gameObject.SetActive(true));
+        }
+    }
+
+    public void RemoveVisualTennisBallsByShotsLeft() 
+    {
+        var tennisBalls = ballsContainerSmall.transform.GetComponentsInChildren<Transform>().Where(x => x.name.Contains("tennisBall"));
+        if (tennisBalls.Count() <= 0) return;
+
+        var amountToDeactivate = shots - shotsLeft;
+        tennisBalls.Reverse().Take(amountToDeactivate).ToList().ForEach(x => x.gameObject.SetActive(false));
+    }
+
+    public void RemoveLastVisualTennisBall()
+    {
+        var tennisBalls = ballsContainerSmall.transform.GetComponentsInChildren<Transform>().Where(x => x.name.Contains("tennisBall"));
+        //Debug.Log("Tennis Balls: " + tennisBalls.Count());
+        if (tennisBalls.Count() <= 0) return;
+
+        tennisBalls.LastOrDefault().gameObject.SetActive(false);
+    }
+
+    public void RemoveLastVisualTennisBallLarge()
+    {
+        var tennisBalls = ballsContainerLarge.transform.GetComponentsInChildren<Transform>().Where(x => x.name.Contains("tennisBall"));
+        //Debug.Log("Tennis Balls: " + tennisBalls.Count());
+        if (tennisBalls.Count() <= 0) return;
+
+        tennisBalls.LastOrDefault().gameObject.SetActive(false);
+    }
+    #endregion
 
     #region Upgrade Voids
     private void CheckForUpgrades()
     {
-        if(_skillTree.isBL1Activated)
+        if(_skillTree.isBL1aActivated)
         {
-            _staticBallsBlueprint.SetActive(true);
-            _canActivate1Upgrade = true;
+            Activate1aUpgrade();
         }
-        else if (_skillTree.isBL2Activated)
+        if (_skillTree.isBL1bActivated)
         {
-            _fireRateBlueprint.SetActive(true);
-            _canActivate2Upgrade = true;
+            Activate1bUpgrade();
+        }
+        if (_skillTree.isBL2aActivated)
+        {
+            Activate2aUpgrade();
+        }
+        if (_skillTree.isBL2bActivated)
+        {
+            Activate2bUpgrade();
         }
     }
 
-    public void ActivateFirstUpgrade()
+    public void Activate1aUpgrade()
     {
-        _staticBallsBlueprint.SetActive(false);
-        _staticBallsUpgrade.SetActive(true);
+        _canActivate1aUpgrade = true;
         //Aplicar beneficio del Upgrade
-        _additionalDamage = 2;
+        _damageAmount *= _damageBoostCoef;
+    }
+    public void Activate1bUpgrade()
+    {
+        _canActivate1bUpgrade = true;
+        _canActivate1aUpgrade = false;
+        StaticBallsUpgradeEnabled = _canActivate1bUpgrade;
+        //Aplicar beneficio del Upgrade
+        _damageBoostCoef = 3f;
+        _damageAmount = _damageBoostCoef;
     }
 
-    public void ActivateSecondUpgrade()
+    public void Activate2aUpgrade()
     {
-        _fireRateBlueprint.SetActive(false);
-        _fireRateUpgrade.SetActive(true);
-        //Aplicar beneficio del Upgrade
+        _canActivate2aUpgrade = true;
+        _canActivate1bUpgrade = false;
+        _canActivate1aUpgrade = false;
+        DoubleLoaderSmallUpgradeEnabled = _canActivate2aUpgrade;
+        SetShots(10);
+    }
+    public void Activate2bUpgrade()
+    {
+        _canActivate2bUpgrade = true;
+        _canActivate2aUpgrade = false;
+        _canActivate1bUpgrade = false;
+        _canActivate1aUpgrade = false;
+        DoubleLoaderLargeUpgradeEnabled = _canActivate2bUpgrade;
+        DoubleLoaderSmallUpgradeEnabled = _canActivate2aUpgrade;
+        SetShots(20);
     }
 
     #endregion
@@ -372,7 +591,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         Gizmos.DrawLine(transform.position, transform.position + lineA * viewRadius);
         Gizmos.DrawLine(transform.position, transform.position + lineB * viewRadius);
     }
-
+        
     Vector3 GetVectorFromAngle(float angle)
     {
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
