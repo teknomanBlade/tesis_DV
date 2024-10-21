@@ -29,7 +29,11 @@ public class TrapBase : MonoBehaviour
             ArrowIndicator.SetActive(true);
         }
     }
-
+    public TrapBase SetPos(Vector3 pos) 
+    {
+        transform.position = pos;
+        return this;
+    }
     public void SetHighIntensity()
     {
         //ArrowIndicator.SetActive(!_isAvailable);

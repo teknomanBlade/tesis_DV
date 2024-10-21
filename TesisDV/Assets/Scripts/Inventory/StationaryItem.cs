@@ -80,7 +80,7 @@ public class StationaryItem : Item
         {
             tvRotatePlane.SetActive(false);
             gameObject.AddComponent<TVTrap>().SetAddOnGameObject(batteryAddOn).SetBlueprint(batteryBlueprint);
-            gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = true;
+            //gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = true;
             Destroy(gameObject.GetComponent<StationaryItem>());
         }
 

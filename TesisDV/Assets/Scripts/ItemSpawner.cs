@@ -44,7 +44,8 @@ public class ItemSpawner : MonoBehaviour
                 _firstRoundItems.SetActive(true);
                 break;
             case 2:
-                GameVars.Values.ShowNotificationDefinedTime("You can go to the Basement at the Tools Workbench to Buy and Update Traps.", 4.5f, () => ActivateSecondWaveItems());
+                //GameVars.Values.ShowNotificationDefinedTime("You can go to the Basement at the Tools Workbench to Buy and Update Traps.", 4.5f, () => ActivateSecondWaveItems());
+                ActivateSecondWaveItems();
                 _levelDoors[2].IsLockedToGrays = false; //Puerta de la cocina a atras de la casa.
                 _levelDoors[3].IsLockedToGrays = false; //Puerta de la cocina a un costado de la casa.
                 _levelDoors[5].IsLockedToGrays = false; //Puerta de la cocina al living.
@@ -76,6 +77,10 @@ public class ItemSpawner : MonoBehaviour
     public void ActivateSecondWaveItems()
     {
         GameVars.Values.Cat.CatIsGoingToBasement();
+        var blueprintPos = FindObjectsOfType<WorkBenchCraftingMenu>().FirstOrDefault().transform.localPosition;
+        Debug.Log("BLUEPRINT BASEMENT POSITION: " + blueprintPos);
+        GameVars.Values.ShowNotification("You can go to the Basement at the Tools Workbench to Buy and Update Traps.",
+            blueprintPos);
         GameVars.Values.LevelManager.WorkbenchLight.GetComponentInParent<LightsEmissionHandler>().EnableBasementLightEmission();
         GameVars.Values.LevelManager.WorkbenchLight.SetActive(true);
         Blackboard.ActiveSecondExperiment();

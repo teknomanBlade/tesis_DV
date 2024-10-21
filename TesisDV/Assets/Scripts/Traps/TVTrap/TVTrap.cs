@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +6,7 @@ using UnityEngine;
 
 public class TVTrap : Item
 {
+    public Coroutine CoroutineBatteryDepletion;
     public Animator anim;
     public bool IsTurnOn;
     private bool _canStun;
@@ -38,15 +40,10 @@ public class TVTrap : Item
     // Update is called once per frame
     void Update()
     {
-        if (GameVars.Values.WaveManager.InRound)
-        {
-            Invoke("HideBatteryAddOnForEnergyDepletion", 15f);
-        }
-        else
+        /*if (!GameVars.Values.WaveManager.InRound)
         {
             _activeOncePerRound = false;
-        }
-        
+        }*/
 
         if (!_canStun && _timePassed > 0)
         {
@@ -61,8 +58,6 @@ public class TVTrap : Item
     public TVTrap SetAddOnGameObject(GameObject batteryAddOn)
     {
         this.batteryAddOn = batteryAddOn;
-        //IsTurnOn = true;
-        //anim.SetBool("IsTurnedOn", true);
         return this;
     }
     public TVTrap SetBlueprint(GameObject batteryBlueprint)
@@ -70,40 +65,40 @@ public class TVTrap : Item
         this.batteryBlueprint = batteryBlueprint;
         return this;
     }
+    IEnumerator BatteryDepletion() 
+    {
+        Debug.Log("START BATTERY DEPLETION...");
+        yield return new WaitForSeconds(12f);
+        HideBatteryAddOnForEnergyDepletion();
+        Debug.Log("END BATTERY DEPLETION...");
+    }
     public void HideBatteryAddOnForEnergyDepletion()
     {
-        if (!_activeOncePerRound)
-        {
-            TurnOff();
-            gameObject.AddComponent<StationaryItem>().SetAddOnGameObject(batteryAddOn).SetBlueprint(batteryBlueprint);
-            gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = false;
-            batteryAddOn.SetActive(false);
-            Destroy(gameObject.GetComponent<TVTrap>());
-        }
-        _activeOncePerRound = true;
+        TurnOff();
+        Debug.Log("TV TURNED OFF...");
+        gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = false;
+        batteryAddOn.SetActive(false);
         GameVars.Values.soundManager.StopSound(_as);
     }
 
     public void TurnOff()
     {
+        if (CoroutineBatteryDepletion == null) return;
         GameVars.Values.soundManager.StopSound(_as);
         IsTurnOn = false;
         TVLight.SetActive(false);
         anim.SetBool("IsTurnedOn", false);
-        CancelInvoke();
+        StopCoroutine(CoroutineBatteryDepletion);
         gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = false;
     }
 
     public void TurnOn()
-    {
+    { 
         IsTurnOn = true;
         TVLight.SetActive(true);
         anim.SetBool("IsTurnedOn", true);
-        GameVars.Values.soundManager.PlaySoundOnce(_as, "TvStaticSFX", 0.08f, true);
-
-        if (GameVars.Values.WaveManager.InRound)
-            Invoke("HideBatteryAddOnForEnergyDepletion", 15f);
-
+        GameVars.Values.soundManager.PlaySound(_as, "TvStaticSFX", 0.1f, true, 1f);
+        CoroutineBatteryDepletion = StartCoroutine(BatteryDepletion());
         gameObject.GetComponents<BoxCollider>().Where(x => x.isTrigger).FirstOrDefault().enabled = true;
     }
 
@@ -115,9 +110,15 @@ public class TVTrap : Item
             if (enemy)
             {
                 Debug.Log("STUNEO AL GRIS? - CHECK ONTRIGGERENTER?");
-                enemy.Stun(3f, _canStun);
+                enemy.Stun(4f, _canStun);
                 _canStun = false;
             } 
         }
+    }
+
+    internal void ActiveBatteryComponent()
+    {
+        batteryAddOn.SetActive(true);
+        batteryBlueprint.SetActive(false);
     }
 }

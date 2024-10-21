@@ -59,7 +59,7 @@ public class Blackboard : MonoBehaviour
         IsTrap2StageEnabled = true;
         
         GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
-        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
+        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!", transform.localPosition);
     }
     public void ActiveThirdExperiment()
     {
@@ -68,7 +68,7 @@ public class Blackboard : MonoBehaviour
         IsTrap3StageEnabled = true;
         GetComponent<BoxCollider>().enabled = IsTrap3StageEnabled;
         GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
-        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
+        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!", transform.localPosition);
     }
     public void ActiveFourthExperiment()
     {
@@ -77,7 +77,7 @@ public class Blackboard : MonoBehaviour
         IsTrap4StageEnabled = true;
         GetComponent<BoxCollider>().enabled = IsTrap4StageEnabled;
         GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
-        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
+        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!", transform.localPosition);
     }
     public void ActiveFifthExperiment()
     {
@@ -86,7 +86,7 @@ public class Blackboard : MonoBehaviour
         IsTrap5StageEnabled = true;
         GetComponent<BoxCollider>().enabled = IsTrap5StageEnabled;
         GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
-        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!");
+        GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!", transform.localPosition);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -100,24 +100,28 @@ public class Blackboard : MonoBehaviour
                 _trap2.gameObject.SetActive(true);
                 GetComponent<BoxCollider>().enabled = false;
                 GameVars.Values.soundManager.PlaySound(_as,"SFX_MagicboardWriting", 0.6f, false,1f);
+                GameVars.Values.ShowNotification("You have new Traps to Build! Check the Magicboard! (Tab)");
             }
             if (IsTrap3StageEnabled)
             {
                 _trap3.gameObject.SetActive(true);
                 GetComponent<BoxCollider>().enabled = false;
                 GameVars.Values.soundManager.PlaySound(_as, "SFX_MagicboardWriting", 0.6f, false, 1f);
+                GameVars.Values.ShowNotification("You have new Traps to Build! Check the Magicboard! (Tab)");
             }
             if (IsTrap4StageEnabled)
             {
                 _trap4.gameObject.SetActive(true);
                 GetComponent<BoxCollider>().enabled = false;
                 GameVars.Values.soundManager.PlaySound(_as, "SFX_MagicboardWriting", 0.6f, false, 1f);
+                GameVars.Values.ShowNotification("You have new Traps to Build! Check the Magicboard! (Tab)");
             }
             if (IsTrap5StageEnabled)
             {
                 _trap5.gameObject.SetActive(true);
                 GetComponent<BoxCollider>().enabled = false;
                 GameVars.Values.soundManager.PlaySound(_as, "SFX_MagicboardWriting", 0.6f, false, 1f);
+                GameVars.Values.ShowNotification("You have new Traps to Build! Check the Magicboard! (Tab)");
             }
         }
     }

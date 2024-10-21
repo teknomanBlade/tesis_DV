@@ -2,18 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TrapHotBar : MonoBehaviour
 {
     [SerializeField] TrapSlot[] trapSlots;
     private Animator _anim;
     [SerializeField] private CanvasGroup _myCanvasGroup;
+    [SerializeField] private HorizontalLayoutGroup _myHorizontalLayoutGroup;
     private float fadeDelay = 1.1f;
     private bool isFaded;
 
     private void Awake()
     {
         _myCanvasGroup = GetComponent<CanvasGroup>();
+        _myHorizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
         _anim = GetComponent<Animator>();
         isFaded = true;
     }
@@ -124,6 +127,19 @@ public class TrapHotBar : MonoBehaviour
         else
         {
             trapSlots[4].DeactivateImage();
+        }
+        if (GameVars.Values.TeslaCoilGenerator.HasTeslaCoilGeneratorItems(inventory))
+        {
+            if (isFaded)
+            {
+                FadeIn();
+            }
+            trapSlots[5].ActivateImage();
+            GameVars.Values.HasTeslaCoilGeneratorAppearedHotBar = true;
+        }
+        else
+        {
+            trapSlots[5].DeactivateImage();
         }
     }
 

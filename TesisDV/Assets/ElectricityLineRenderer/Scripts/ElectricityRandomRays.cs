@@ -49,7 +49,7 @@ public class ElectricityRandomRays : MonoBehaviour
 
     void ZapElectricity(Vector3 startPos, Vector3 endPos, ElectricityLineRenderer.ElectricityLineData lineData)
     {
-        Debug.Log(lineData != null);
+        //Debug.Log(lineData != null);
 
         Vector3 midPos = (startPos + endPos) * 0.5f;
 

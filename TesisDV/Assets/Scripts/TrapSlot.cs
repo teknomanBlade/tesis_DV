@@ -58,6 +58,11 @@ public class TrapSlot : MonoBehaviour
             SlotImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtPaintballMinigunTrap = false;
         }
+        if (GameVars.Values.HasBoughtTeslaCoilGenerator && _trapID == 6)
+        {
+            SlotImage.sprite = _trapSpriteEnabled;
+            GameVars.Values.HasBoughtTeslaCoilGenerator = false;
+        }
     }
 
     IEnumerator PlayKeySlotAnim()
@@ -76,7 +81,8 @@ public class TrapSlot : MonoBehaviour
 
     public void DeactivateImage()
     {
-        //_image.enabled = false;
+        if (SlotImage == null) return;
+
         SlotImage.enabled = false;
     }
 }

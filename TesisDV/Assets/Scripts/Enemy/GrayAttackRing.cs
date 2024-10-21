@@ -32,7 +32,7 @@ public class GrayAttackRing : MonoBehaviour
         {
             //Debug.Log("ENTRA EN TRIGGER DAMAGE?");
             OnAttackPlayerPosition += player.OnAttackPlayerPosition;
-            OnAttackPlayerPosition(_myOwner.transform.position, true);
+            OnAttackPlayerPosition(_myOwner.transform.localPosition, true);
             player.Damage(_damageAmount, _myOwner);
             GetComponent<BoxCollider>().enabled = false;
         }

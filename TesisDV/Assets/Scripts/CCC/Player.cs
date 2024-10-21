@@ -19,7 +19,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public event OnNewRacketGrabbedDelegate OnNewRacketGrabbed;
     public delegate void OnPlayerInteractDelegate(Transform player);
     public event OnPlayerInteractDelegate OnPlayerInteract;
-    
+    public delegate void OnPlayerNotificationObjectDelegate(Vector3 pos);
+    public event OnPlayerNotificationObjectDelegate OnPlayerNotificationObject;
     #endregion
 
     #region Components
@@ -146,6 +147,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         GameVars.Values.WaveManager.OnRoundEnd += CanStartNextWave;
         GameVars.Values.OnCapturedCatPosition += OnCapturedCatPosition;
+        GameVars.Values.OnObjectNotificationPosition += OnObjectNotificationPosition;
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
         _skillTree.OnUpgrade += CheckForUnlocks;
 
@@ -166,7 +168,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         ActiveFadeInEffect(1f);    
     }
 
-    
+   
+
     private void Start()
     {
 
@@ -219,16 +222,16 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     MoveTrap();
                 }
             }
-            if (Input.GetKeyDown(KeyCode.T))
+            if (Input.GetKeyDown(GameVars.Values.testKillingEnemiesKey))
             {
                 FindObjectsOfType<Door>().ToList().ForEach(x => { x.IsLocked = false; });
                 FindObjectOfType<FootLocker>().IsBlocked = false;
             }
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(GameVars.Values.testRecieveWittsKey))
             {
                 GameVars.Values.Inventory.ReceiveWitts(100);
             }
-            if (Input.GetKeyDown(KeyCode.Return) && _canStartNextWave)
+            if (Input.GetKeyDown(GameVars.Values.startWaveKey) && _canStartNextWave)
             {
                 _canStartNextWave = false;
                 _canMoveTraps = false;
@@ -273,12 +276,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha1) && !IsCrafting)
+                if (Input.GetKeyDown(GameVars.Values.firstTrapHotKey) && !IsCrafting)
                 {
                     GameVars.Values.BaseballLauncher.Craft(_inventory);
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha2) && !IsCrafting)
+                if (Input.GetKeyDown(GameVars.Values.secondTrapHotKey) && !IsCrafting)
                 {
                     if (_canBuildSlowTrap)
                     {
@@ -291,7 +294,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha3) && !IsCrafting)
+                if (Input.GetKeyDown(GameVars.Values.thirdTrapHotKey) && !IsCrafting)
                 {
                     if (_canBuildMicrowaveTrap)
                     {
@@ -304,7 +307,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha4) && !IsCrafting)
+                if (Input.GetKeyDown(GameVars.Values.fourthTrapHotKey) && !IsCrafting)
                 {
                     if (_canBuildElectricTrap)
                     {
@@ -317,7 +320,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Alpha5) && !IsCrafting)
+                if (Input.GetKeyDown(GameVars.Values.fifthTrapHotKey) && !IsCrafting)
                 {
                     if (_canBuildPaintballMinigunTrap)
                     {
@@ -330,7 +333,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.H))
+                if (Input.GetKeyDown(GameVars.Values.switchWeaponKey))
                 {
                     SwitchWeapon();
                 }
@@ -344,7 +347,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape)) //|| Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKeyDown(GameVars.Values.pauseKey))
             {
                 var screenPause = Instantiate(Resources.Load<ScreenPause>("PauseCanvas"));
                 ScreenManager.Instance.Push(screenPause);
@@ -1149,6 +1152,17 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 StationaryItem.IsLookedAt = false;
         }
 
+        if (lookingAt.gameObject.TryGetComponent<TVTrap>(out TVTrap tvTrap))
+        {
+            if (!tvTrap.GetComponent<BoxCollider>().isTrigger) 
+            {
+                crosshair.sprite = GameVars.Values.crosshairAddOnBattery;
+                interactKey.SetActive(true);
+                ChangeCrosshairSize(40f);
+            }
+            return;
+        }
+
         if (lookingAt.gameObject.TryGetComponent<FootLocker>(out FootLocker fl))
         {
             crosshair.sprite = GameVars.Values.crosshairHandHold;
@@ -1372,6 +1386,26 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 GameVars.Values.ShowNotificationDefinedTime("You need a Battery for this!", 2f, 
                     () => stationaryItem.HideBlueprint());
             }
+        }
+
+        if (lookingAt.gameObject.TryGetComponent(out TVTrap tvTrap))
+        {
+            if (!tvTrap.GetComponent<BoxCollider>().isTrigger)
+            {
+                if (_inventory.ContainsID(2, 1))
+                {
+                    _inventory.RemoveItemID(2, 1);
+                    tvTrap.ActiveBatteryComponent();
+                    lookingAt = null;
+                    StationaryItem = null;
+                    return;
+                }
+            }
+            /*else
+            {
+                GameVars.Values.ShowNotificationDefinedTime("You need a Battery for this!", 2f,
+                    () => stationaryItem.HideBlueprint());
+            }*/
         }
 
         if (lookingAt.gameObject.TryGetComponent(out Door door))
@@ -1693,6 +1727,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             _weapon = _weaponGORacket.GetComponent<Racket>();
             _weaponGORacket.SetActive(true);
         }
+    }
+    private void OnObjectNotificationPosition(Vector3 objectNotificationPos)
+    {
+        ActiveArrowUI(objectNotificationPos, false);
     }
     private void OnCapturedCatPosition(Vector3 catPos)
     {

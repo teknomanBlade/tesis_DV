@@ -262,11 +262,21 @@ public abstract class Enemy : MonoBehaviour
 
     public void Stun(float time, bool stunned)
     {
+        StartCoroutine(StunCycle(time, stunned));
+    }
+
+    IEnumerator StunCycle(float time, bool stunned) 
+    {
         Debug.Log("STUNEA AL GRIS");
         onStun(stunned);
         onWalk(!stunned);
         _movingSpeed = 0f;
         isStunned = stunned;
+        yield return new WaitForSeconds(time);
+        isStunned = false;
+        onStun(isStunned);
+        onWalk(!isStunned);
+        _movingSpeed = _startSpeed;
     }
 
     public void AttackPlayer() //Verifica que no estemos atacando para mirar hacia el jugador y envia nuevamente la animacion de ataque. El booleano se resetea con un AnimEvent.
