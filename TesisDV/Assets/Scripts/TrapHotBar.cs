@@ -17,6 +17,7 @@ public class TrapHotBar : MonoBehaviour
     {
         _myCanvasGroup = GetComponent<CanvasGroup>();
         _myHorizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
+        _myHorizontalLayoutGroup.spacing = -150;
         _anim = GetComponent<Animator>();
         isFaded = true;
     }
@@ -134,6 +135,11 @@ public class TrapHotBar : MonoBehaviour
             {
                 FadeIn();
             }
+            if (!trapSlots[5].gameObject.activeSelf)
+            {
+                trapSlots[5].gameObject.SetActive(true);
+            }
+            _myHorizontalLayoutGroup.spacing = 50;
             trapSlots[5].ActivateImage();
             GameVars.Values.HasTeslaCoilGeneratorAppearedHotBar = true;
         }

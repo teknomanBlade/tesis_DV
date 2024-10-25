@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4747478350437386103}
-  - component: {fileID: 258843103240325876}
-  m_Layer: 0
+  - component: {fileID: 6677140245161977896}
+  - component: {fileID: 6520489230349259029}
+  m_Layer: 10
   m_Name: TeslaCoilGeneratorBlueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +38,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &258843103240325876
+--- !u!65 &6677140245161977896
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4747478350437386096}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.7044401, z: 1}
+  m_Center: {x: 0, y: 0.3458743, z: 0}
+--- !u!114 &6520489230349259029
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,22 +60,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 4747478350437386096}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9cd1cee673ed5a47bb35d4679184ca8, type: 3}
+  m_Script: {fileID: 11500000, guid: 576e82fd62f0ac145b1bd2bb11239ce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canBuild: 0
   craftingRecipe: {fileID: 11400000, guid: e4fe69bd0662b574b89f08b56666a9e2, type: 2}
-  trapAnimPrefab: {fileID: 3969639025222156244, guid: 90b11eed8cd120a4087bb0443c05c92f, type: 3}
+  trapAnimPrefab: {fileID: 3263488728823015580, guid: 3cb681e049f914e44a465fff7ce05cb9, type: 3}
   particles: {fileID: 3984549846058083597, guid: 88689427b9f8a1c4ca13887e9bb12cd2, type: 3}
   customPivot: {fileID: 0}
   newMaterial: {fileID: 2100000, guid: 04d9b8823b798c944ac1ae3fed55dc18, type: 2}
   LayerMaskWall:
     serializedVersion: 2
-    m_Bits: 67584
-  TrapBaseMaskWall:
-    serializedVersion: 2
-    m_Bits: 2097152
-  ClickCounter: 0
+    m_Bits: 65536
 --- !u!1 &4747478350669676939
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,7 +82,7 @@ GameObject:
   - component: {fileID: 4747478350669676938}
   - component: {fileID: 4747478350669676936}
   - component: {fileID: 4747478350669676937}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ElectricReach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +244,7 @@ GameObject:
   - component: {fileID: 4747478351214066768}
   - component: {fileID: 4747478351214066774}
   - component: {fileID: 4747478351214066775}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TeslaCoilLarge
   m_TagString: Untagged
   m_Icon: {fileID: 0}

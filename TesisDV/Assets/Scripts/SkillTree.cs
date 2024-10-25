@@ -17,6 +17,7 @@ public class SkillTree : MonoBehaviour
     public GameObject UnlockMTTrap;
     public GameObject UnlockETTrap;
     public GameObject UnlockFPMTrap;
+    public GameObject UnlockTCGTrap;
     public GameObject UpgradeBL1a;
     public GameObject UpgradeBL1b;
     public GameObject UpgradeBL2a;
@@ -74,7 +75,14 @@ public class SkillTree : MonoBehaviour
     {
         get { return _isPaintballMinigunTrapUnlocked; }
     }
-
+    [Header("Tesla Coil Generator")]
+    [SerializeField] private int TeslaCoilGeneratorWittCost;
+    public Text TCGWitCostText;
+    private bool _isTeslaCoilGeneratorUnlocked;
+    public bool isTeslaCoilGeneratorUnlocked
+    {
+        get { return _isTeslaCoilGeneratorUnlocked; }
+    }
     #endregion
 
     #region BaseballLauncher Upgrades
@@ -278,6 +286,7 @@ public class SkillTree : MonoBehaviour
         MTWitCostText.text = MicrowaveTrapWittCost.ToString();
         FPMTrapWitCostText.text = PaintballMinigunTrapWittCost.ToString();
         ETWitCostText.text = ElectricTrapWittCost.ToString();
+        TCGWitCostText.text = TeslaCoilGeneratorWittCost.ToString();
 
         BLUpdate1aWitCostText.text = BL1aWittCost.ToString();
         BLUpdate1bWitCostText.text = BL1bWittCost.ToString();
@@ -376,6 +385,23 @@ public class SkillTree : MonoBehaviour
         UnlockFPMTrap.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
         {
             if (x.name.Contains("SpriteFERNPaintballMinigun"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+            }
+
+            if (x.name.Contains("BtnBuyTrapUnlock"))
+            {
+                x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
+                x.GetComponent<Button>().interactable = false;
+            }
+        });
+    }
+
+    public void HandleUITCGUnlockComponents()
+    {
+        UnlockTCGTrap.GetComponentsInChildren<RectTransform>(true).ToList().ForEach(x =>
+        {
+            if (x.name.Contains("SpriteTeslaCoilGenerator"))
             {
                 x.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2196078f);
             }
@@ -850,6 +876,18 @@ public class SkillTree : MonoBehaviour
             OnUpgrade?.Invoke();
         }
         
+    }
+    public void UnlockTeslaCoilGenerator()
+    {
+        if (!_isTeslaCoilGeneratorUnlocked && _inventory.HasEnoughWitts(TeslaCoilGeneratorWittCost))
+        {
+            HandleUITCGUnlockComponents();
+            GameVars.Values.soundManager.PlaySoundOnce(_as, PurchaseSound, soundVolume, false);
+            _inventory.RemoveWitts(TeslaCoilGeneratorWittCost);
+            _isTeslaCoilGeneratorUnlocked = true;
+            GameVars.Values.HasBoughtTeslaCoilGenerator = _isTeslaCoilGeneratorUnlocked;
+            OnUpgrade?.Invoke();
+        }
     }
 
     public void UpgradeBaseballLauncher1a()

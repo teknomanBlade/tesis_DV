@@ -14,6 +14,8 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
     public TrapBase trapBasePrefab;
     public PoolObjectStack<TrapBase> TrapBasePool { get; set; }
     public int InitialStock { get; private set; }
+    public int TrapBaseCount { get; private set; }
+
     public bool IsMoving;
     public GameObject blueprintPrefab;
 
@@ -39,6 +41,12 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
     {
         tb.gameObject.SetActive(false);
         tb.gameObject.transform.parent = transform;
+        if (!tb.gameObject.name.Contains("_"))
+        {
+            TrapBaseCount++;
+            tb.gameObject.name = tb.gameObject.name.Replace("(Clone)", "");
+            tb.gameObject.name += "_" + TrapBaseCount;
+        }
         tb.transform.localPosition = Vector3.zero;
         tb.transform.position = Vector3.zero;
     }
@@ -56,11 +64,14 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
     {
         Vector3 distantPositionTrapBase1 = transform.localPosition +
              Quaternion.Euler(0, 0, _trapBase1Angle) * Vector3.up * _distance;
-        distantPositionTrapBase1.y = transform.position.y;
+        distantPositionTrapBase1.x = transform.position.x - 1.45f;
+        distantPositionTrapBase1.y = transform.localPosition.y + 0.05f;
 
         Vector3 distantPositionTrapBase2 = transform.localPosition +
          Quaternion.Euler(0, 0, _trapBase2Angle) * Vector3.up * _distance;
-        distantPositionTrapBase2.y = transform.position.y;
+        distantPositionTrapBase2.x = transform.localPosition.x + 1.55f;
+        distantPositionTrapBase2.y = transform.localPosition.y + 0.05f;
+        distantPositionTrapBase2.z = transform.localPosition.z + 0.05f;
 
         posTrapBases.Add(distantPositionTrapBase1);
         posTrapBases.Add(distantPositionTrapBase2);
@@ -92,13 +103,12 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
     }
     public void BecomeMovable()
     {
-        IsMoving = true;
+        IsMoving = true; 
         GameVars.Values.TeslaCoilGeneratorPool.ReturnObject(this);
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
-        aux.GetComponent<StaticBlueprint>().SpendMaterials(false).CanBeCancelled(false);
+        aux.GetComponent<Blueprint>().SpendMaterials(false).CanBeCancelled(false);
 
         transform.parent = null;
-        //_myTrapBase.ResetBase();
     }
 
     public void Interact()

@@ -133,6 +133,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private bool _canBuildSlowTrap = false;
     private bool _canBuildElectricTrap = false;
     private bool _canBuildPaintballMinigunTrap = false;
+    private bool _canBuildTeslaCoilGenerator = false;
     public MicrowaveForceFieldGenerator microwaveFFG;
     public StationaryItem StationaryItem;
     //public ElectricTrap ElectricTrap;
@@ -330,6 +331,19 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     {
                         if (GameVars.Values.HasPaintballMinigunTrapAppearedHotBar)
                             GameVars.Values.ShowNotification("You can't set FERN Paintball Minigun until you have bought it in the Basement");
+                    }
+                }
+
+                if (Input.GetKeyDown(GameVars.Values.sixthTrapHotKey) && !IsCrafting)
+                {
+                    if (_canBuildTeslaCoilGenerator)
+                    {
+                        GameVars.Values.TeslaCoilGenerator.Craft(_inventory);
+                    }
+                    else
+                    {
+                        if (GameVars.Values.HasTeslaCoilGeneratorAppearedHotBar)
+                            GameVars.Values.ShowNotification("You can't set Tesla Coil Generator until you have bought it in the Basement");
                     }
                 }
 
@@ -884,6 +898,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         {
             _canBuildPaintballMinigunTrap = true;
         }
+        if (_skillTree.isTeslaCoilGeneratorUnlocked)
+        {
+            _canBuildTeslaCoilGenerator = true;
+        }
     }
 
     public void CanStartNextWave(int round)
@@ -1225,7 +1243,18 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             ChangeCrosshairSize(40f);
             return;
         }
-        
+        if (lookingAt.gameObject.TryGetComponent<TeslaCoilGenerator>(out TeslaCoilGenerator teslaCoilGenerator))
+        {
+            
+            crosshair.sprite = GameVars.Values.crosshairActivation;
+            movingTrapButton.SetActive(true);
+            movingTrapButton.GetComponent<Image>().sprite = GameVars.Values.crosshairRightClickIcon;
+            movingTrapButton.transform.GetChild(0).GetComponent<Image>().gameObject.SetActive(true);
+
+            ChangeCrosshairSize(40f);
+            return;
+        }
+
         if (lookingAt.gameObject.TryGetComponent<FERNPaintballMinigun>(out FERNPaintballMinigun FERNPaintballMinigun))
         {
             FERNPaintballMinigun.HasPaintballPelletMagazine = _inventory.ContainsID(7, 1);

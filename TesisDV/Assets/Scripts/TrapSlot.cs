@@ -74,7 +74,6 @@ public class TrapSlot : MonoBehaviour
 
     public void ActivateImage()
     {
-        //_image.enabled = true;
         StartCoroutine(PlayKeySlotAnim());
         SlotImage.enabled = true;
     }
