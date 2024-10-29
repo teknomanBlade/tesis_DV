@@ -137,14 +137,17 @@ public class GameVars : MonoBehaviour
     public int FERNPaintballMinigunCount = 0;
     public int TeslaCoilGeneratorCount = 0;
     public int InitialStock { get; private set; }
+    public ParticleSystem SmokePrefab;
     public BaseballLauncher BaseballLauncherPrefab;
     public FERNPaintballMinigun FERNPaintballMinigunPrefab;
     public TeslaCoilGenerator TeslaCoilGeneratorPrefab;
     public PoolObjectStack<BaseballLauncher> BaseballLauncherPool { get; set; }
     public PoolObjectStack<FERNPaintballMinigun> FERNPaintballMinigunPool { get; set; }
     public PoolObjectStack<TeslaCoilGenerator> TeslaCoilGeneratorPool { get; set; }
+    public PoolObjectStack<ParticleSystem> SmokeParticlesPool { get; set; }
     public bool PassedTutorial;
     public Vector3 positionObjectNotification;
+    public Vector3 smokeParticlesPos;
     #region Events
     public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
     public event OnCapturedCatChangeDelegate OnCapturedCatChange;
@@ -152,6 +155,7 @@ public class GameVars : MonoBehaviour
     public event OnCapturedCatPositionDelegate OnCapturedCatPosition;
     public delegate void OnObjectNotificationPositionDelegate(Vector3 objectNotificationPos);
     public event OnObjectNotificationPositionDelegate OnObjectNotificationPosition;
+   
 
     #endregion
 
@@ -228,6 +232,24 @@ public class GameVars : MonoBehaviour
         BaseballLauncherPool = new PoolObjectStack<BaseballLauncher>(BaseballLauncherFactory, ActivateBaseballLauncher, DeactivateBaseballLauncher, InitialStock, true);
         FERNPaintballMinigunPool = new PoolObjectStack<FERNPaintballMinigun>(FERNPaintballMinigunFactory, ActivateFERNPaintballMinigun, DeactivateFERNPaintballMinigun, InitialStock, true);
         TeslaCoilGeneratorPool = new PoolObjectStack<TeslaCoilGenerator>(TeslaCoilGeneratorFactory, ActivateTeslaCoilGenerator, DeactivateTeslaCoilGenerator, InitialStock, true);
+        SmokeParticlesPool = new PoolObjectStack<ParticleSystem>(SmokeParticlesFactory, ActivateSmokeParticles, DeactivateSmokeParticles, InitialStock, true);
+    }
+
+    private void DeactivateSmokeParticles(ParticleSystem o)
+    {
+        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
+        o.gameObject.SetActive(false);
+    }
+
+    private void ActivateSmokeParticles(ParticleSystem o)
+    {
+        o.gameObject.SetActive(true);
+        o.transform.position = smokeParticlesPos;
+    }
+
+    private ParticleSystem SmokeParticlesFactory()
+    {
+        return Instantiate(SmokePrefab);
     }
 
     private void DeactivateTeslaCoilGenerator(TeslaCoilGenerator o)
@@ -518,5 +540,10 @@ public class GameVars : MonoBehaviour
         cat.SetExitPos(exitPos);
         OnCapturedCatPosition(cat.transform.localPosition);
     }
-    #endregion 
+
+    internal void OnSmokeParticlesPosition(Vector3 smokeParticlePos)
+    {
+        smokeParticlesPos = smokeParticlePos;
+    }
+    #endregion
 }

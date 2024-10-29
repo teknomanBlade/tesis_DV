@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Blueprint : MonoBehaviour
 {
+    public delegate void OnSmokeParticlePositionDelegate(Vector3 smokeParticlePos);
+    public event OnSmokeParticlePositionDelegate OnSmokeParticlePosition;
     private Player _player;
     RaycastHit hit;
     Vector3 movePoint;
@@ -25,8 +28,8 @@ public class Blueprint : MonoBehaviour
     private Renderer[] _myChildrenRenderers;
     public LayerMask LayerMaskWall;
     int layerMask;
-    private GameObject parent;  
-
+    private GameObject parent;
+    public float time;
     void Start()
     {
         parent = GameObject.Find("MainGame");
@@ -38,17 +41,13 @@ public class Blueprint : MonoBehaviour
         originalMaterial = GetComponentInChildren<Renderer>().material;
         //myRenderer = GetComponent<Renderer>(); //Probar despues de arreglar posicionamiento.
         _myChildrenRenderers = GetComponentsInChildren<Renderer>();
-
+        OnSmokeParticlePosition += GameVars.Values.OnSmokeParticlesPosition;
     }
 
     void Update()
     {
-        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
         if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, LayerMaskWall))
         {
-            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            //Debug.Log("Blue print Hit " + hit.collider.gameObject.layer + " " + hit.collider.gameObject.name);
             canBuild = false;
             transform.position = hit.point;
             ChangeMaterial();
@@ -63,29 +62,15 @@ public class Blueprint : MonoBehaviour
 
         if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, GameVars.Values.GetFloorLayerMask()) && canBuild)
         {
-            //auxVector = new Vector3(hit.point.x, 1f, hit.point.z);
-            //transform.position = auxVector;
-            //Debug.Log("Blue print Hit " + hit.collider.gameObject.tag);
-
-
             transform.position = hit.point;
         }
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
             _player.SwitchIsCrafting();
-            //secondAuxVector = new Vector3(transform.position.x, 1f, transform.position.z);
-            //finalPosition = secondAuxVector;
             finalPosition = transform.position;
             finalRotation = transform.rotation;
             StartCoroutine(BuildTrap());
-
-            /* Instantiate(particles, transform.position, transform.rotation);
-            GameObject aux = Instantiate(trapAnimPrefab, transform.position, transform.rotation);
-            //Destroy(aux.GetComponent<InventoryItem>());
-            craftingRecipe.RemoveItems();
-            craftingRecipe.RestoreBuildAmount();
-            Destroy(gameObject); */
         }
 
         if (Input.GetKeyDown(GameVars.Values.secondaryFire) && _canBeCancelled)
@@ -111,51 +96,54 @@ public class Blueprint : MonoBehaviour
         _canBeCancelled = false;
         if (!trapAnimPrefab.name.Equals("SlowTrap")) 
         {
-            var particlesInstantiated = Instantiate(particles, transform.position, transform.rotation);
+            OnSmokeParticlePosition(transform.position);
+            particles = GameVars.Values.SmokeParticlesPool.GetObject().gameObject;
             GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
-        }
+        } 
         else
         {
             GameVars.Values.soundManager.PlaySoundAtPoint("SFX_TarPouringLiquid", transform.position, 0.9f);
         }
 
-        foreach (Renderer r in _myChildrenRenderers)
+        _myChildrenRenderers.ToList().ForEach(r =>
+        {
             r.enabled = false;
+        });
 
         //Canbuild provisional.
         canBuild = false;
-       
-        yield return new WaitForSeconds(2f);
+        var anim = trapAnimPrefab.GetComponent<Animator>();
+        var clips = anim.runtimeAnimatorController.animationClips;
+        time = clips.First().length;
+        yield return new WaitForSeconds(1f);
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, parent.transform);
-        //Destroy(aux.GetComponent<InventoryItem>());
 
-        if(_spendMaterials)
+        yield return new WaitForSeconds(time);
+        if (_spendMaterials)
         {
             craftingRecipe.RemoveItemsAndWitts(); 
         }
 
         craftingRecipe.RestoreBuildAmount();
-        //Destroy(particlesInstantiated);
+        GameVars.Values.SmokeParticlesPool.ReturnObject(particles.GetComponent<ParticleSystem>());
         Destroy(gameObject);
 
     }
 
     private void ChangeMaterial()
     {
-        //Renderer[] rs = GetComponentsInChildren<Renderer>();
-        foreach (Renderer r in _myChildrenRenderers)
+        _myChildrenRenderers.ToList().ForEach(r =>
+        {
             r.material = newMaterial;
-
-        //myRenderer.material = newMaterial; //Probar despues de arreglar posicionamiento.
+        });
     }
 
     private void SetOriginalMaterial()
     {
-        //Renderer[] rs = GetComponentsInChildren<Renderer>();
-        foreach (Renderer r in _myChildrenRenderers)
+        _myChildrenRenderers.ToList().ForEach(r =>
+        {
             r.material = originalMaterial;
-
-        //myRenderer.material = originalMaterial; //Probar despues de arreglar posicionamiento.
+        });
     }
 
     void OnTriggerStay(Collider other)

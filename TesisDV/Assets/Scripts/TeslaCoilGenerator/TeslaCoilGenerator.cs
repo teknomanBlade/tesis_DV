@@ -22,6 +22,7 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
     private void Awake()
     {
         InitialStock = 5;
+        IsMoving = false;
         _trapBase1Angle = 25f;
         _trapBase2Angle = -20f;
         _distance = 3.8f;
