@@ -77,6 +77,20 @@ namespace AmplifyShaderEditor
 		public string[] ReadOptionsHelper = new string[] { };
 
 		private bool m_lateRefresh = false;
+		
+		private Texture2D m_headerIcon = null;
+		public Texture2D HeaderIcon
+		{
+			get
+			{
+				if ( m_headerIcon == null )
+				{
+					m_headerIcon = AssetDatabase.LoadAssetAtPath<Texture2D>( AssetDatabase.GUIDToAssetPath( "5b59dcde73b12b746af7ff7c47a1195d" ) );
+				}
+				return m_headerIcon;
+			}
+		}
+		public const int HeaderIconSize = 32;
 
 		private Dictionary<int, bool> m_duplicatesBuffer = new Dictionary<int, bool>();
 		string LastLine( string text )
@@ -98,20 +112,7 @@ namespace AmplifyShaderEditor
 
 			if( Function.FunctionName.Length > 1 )
 			{
-				bool lastIsUpper = Char.IsUpper( Function.FunctionName, 0 );
-				System.Text.StringBuilder title = new System.Text.StringBuilder();
-				title.Append( Function.FunctionName[ 0 ] );
-				for( int i = 1; i < Function.FunctionName.Length; i++ )
-				{
-					bool currIsUpper = Char.IsUpper( Function.FunctionName, i );
-					if( currIsUpper && !lastIsUpper && Char.IsLetter( Function.FunctionName[ i - 1 ] ))
-					{
-						title.Append( " " );
-					}
-					lastIsUpper = currIsUpper;
-					title.Append( Function.FunctionName[ i ] );
-					SetTitleText( title.ToString() );
-				}
+				SetTitleText( GraphContextMenu.AddSpacesToSentence( Function.FunctionName ) );
 			}
 			else
 			{
@@ -230,9 +231,9 @@ namespace AmplifyShaderEditor
 				}
 			}
 
-			m_textLabelWidth = 120;
-
 			UIUtils.RegisterFunctionNode( this );
+
+			RefreshUIHeaderColor();
 
 			m_previewShaderGUID = "aca70c900c50c004e8ef0b47c4fac4d4";
 			m_useInternalPortData = false;
@@ -481,8 +482,14 @@ namespace AmplifyShaderEditor
 				case WirePortDataType.SAMPLER2D:
 				case WirePortDataType.SAMPLER3D:
 				case WirePortDataType.SAMPLERCUBE:
+				case WirePortDataType.SAMPLER2DARRAY:
 				{
-					port.CreatePortRestrictions( WirePortDataType.SAMPLER1D, WirePortDataType.SAMPLER2D, WirePortDataType.SAMPLER3D, WirePortDataType.SAMPLERCUBE, WirePortDataType.OBJECT );
+					port.CreatePortRestrictions( WirePortDataType.SAMPLER1D, WirePortDataType.SAMPLER2D, WirePortDataType.SAMPLER3D, WirePortDataType.SAMPLERCUBE, WirePortDataType.SAMPLER2DARRAY, WirePortDataType.OBJECT );
+				}
+				break;
+				case WirePortDataType.SAMPLERSTATE:
+				{
+					port.CreatePortRestrictions( WirePortDataType.SAMPLERSTATE );
 				}
 				break;
 				default:
@@ -505,15 +512,21 @@ namespace AmplifyShaderEditor
 				case WirePortDataType.FLOAT3x3:
 				case WirePortDataType.FLOAT4x4:
 				{
-					port.AddPortForbiddenTypes( WirePortDataType.SAMPLER1D, WirePortDataType.SAMPLER2D, WirePortDataType.SAMPLER3D, WirePortDataType.SAMPLERCUBE );
+					port.AddPortForbiddenTypes( WirePortDataType.SAMPLER1D, WirePortDataType.SAMPLER2D, WirePortDataType.SAMPLER3D, WirePortDataType.SAMPLERCUBE, WirePortDataType.SAMPLER2DARRAY );
 				}
 				break;
 				case WirePortDataType.SAMPLER1D:
 				case WirePortDataType.SAMPLER2D:
 				case WirePortDataType.SAMPLER3D:
 				case WirePortDataType.SAMPLERCUBE:
+				case WirePortDataType.SAMPLER2DARRAY:
 				{
-					port.CreatePortRestrictions( WirePortDataType.SAMPLER1D, WirePortDataType.SAMPLER2D, WirePortDataType.SAMPLER3D, WirePortDataType.SAMPLERCUBE, WirePortDataType.OBJECT );
+					port.CreatePortRestrictions( WirePortDataType.SAMPLER1D, WirePortDataType.SAMPLER2D, WirePortDataType.SAMPLER3D, WirePortDataType.SAMPLERCUBE, WirePortDataType.SAMPLER2DARRAY, WirePortDataType.OBJECT );
+				}
+				break;
+				case WirePortDataType.SAMPLERSTATE:
+				{
+					port.CreatePortRestrictions( WirePortDataType.SAMPLERSTATE );
 				}
 				break;
 				default:
@@ -794,7 +807,7 @@ namespace AmplifyShaderEditor
 					m_functionGraph.AllNodes[ i ].OnNodeLogicUpdate( drawInfo );
 				}
 
-				if( !string.IsNullOrEmpty( FunctionGraph.CurrentFunctionOutput.SubTitle ) )
+				//if( !string.IsNullOrEmpty( FunctionGraph.CurrentFunctionOutput.SubTitle ) )
 				{
 					SetAdditonalTitleText( FunctionGraph.CurrentFunctionOutput.SubTitle );
 				}
@@ -1043,7 +1056,7 @@ namespace AmplifyShaderEditor
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_reordenator != null ? m_reordenator.RawOrderIndex : -1 );
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_headerTitle );
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_functionGraphId );
-			IOUtils.AddFieldValueToString( ref nodeInfo, m_functionGUID );
+			IOUtils.AddFieldValueToString( ref nodeInfo, AssetDatabase.AssetPathToGUID( AssetDatabase.GetAssetPath( m_function ) ) );
 
 			int functionSwitchCount = m_allFunctionSwitches != null ? m_allFunctionSwitches.Count : 0;
 			string allOptions = functionSwitchCount.ToString();
@@ -1202,7 +1215,7 @@ namespace AmplifyShaderEditor
 
 			if( m_functionGraph != null )
 			{
-				Undo.RegisterCompleteObjectUndo( m_functionGraph, Id );
+				UndoUtils.RegisterCompleteObjectUndo( m_functionGraph, Id );
 				for( int i = 0; i < m_functionGraph.AllNodes.Count; i++ )
 				{
 					m_functionGraph.AllNodes[ i ].RecordObject( Id );

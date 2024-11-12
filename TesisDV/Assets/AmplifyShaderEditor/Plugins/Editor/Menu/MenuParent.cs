@@ -87,6 +87,9 @@ namespace AmplifyShaderEditor
 			if ( m_style == null )
 			{
 				m_style = new GUIStyle( UIUtils.TextArea );
+				m_style.normal.background = m_style.normal.scaledBackgrounds[ 0 ];
+				m_style.normal.scaledBackgrounds = null;
+				m_style.border = new RectOffset( 4, 4, 4, 4 );
 				m_style.stretchHeight = true;
 				m_style.stretchWidth = true;
 				m_style.fontSize = ( int ) Constants.DefaultTitleFontSize;

@@ -34,8 +34,10 @@ namespace AmplifyShaderEditor
 			m_insideSize.Set(50,20);
 			m_selectedLocation = PreviewLocation.BottomCenter;
 			AddOutputVectorPorts( WirePortDataType.FLOAT2, "XY" );
+			m_availableAttribs.Add( new PropertyAttributes( "Remap Sliders", "[RemapSliders]" ) );
 			m_previewShaderGUID = "88b4191eb06084d4da85d1dd2f984085";
 			m_srpBatcherCompatible = true;
+			m_showHybridInstancedUI = true;
 		}
 
 		public override void CopyDefaultsToMaterial()
@@ -235,7 +237,9 @@ namespace AmplifyShaderEditor
 
 		public override string GetPropertyValue()
 		{
-			return PropertyAttributes + m_propertyName + "(\"" + m_propertyInspectorName + "\", Vector) = (" + m_defaultValue.x + "," + m_defaultValue.y + ",0,0)";
+			string x = UIUtils.PropertyFloatToString( m_defaultValue.x );
+			string y = UIUtils.PropertyFloatToString( m_defaultValue.y );
+			return PropertyAttributes + m_propertyName + "(\"" + m_propertyInspectorName + "\", Vector) = (" + x + "," + y + ",0,0)";
 		}
 		
 		public override void UpdateMaterial( Material mat )

@@ -376,7 +376,7 @@ namespace AmplifyShaderEditor
 								rect.xMin -= 1;
 							}
 
-							float popUpWidth = style ? 75 : 60f;
+							float popUpWidth = style ? 80 : 65f;
 							float widthAdjust = m_additionalDirectives[ index ].LineType == AdditionalLineType.Include ? -14 : 0;
 							Rect popupPos = new Rect( rect.x, rect.y, popUpWidth, EditorGUIUtility.singleLineHeight );
 							Rect GUIDTogglePos = m_additionalDirectives[ index ].LineType == AdditionalLineType.Include ? new Rect( rect.x + rect.width - 3 * Constants.PlusMinusButtonLayoutWidth, rect.y, Constants.PlusMinusButtonLayoutWidth, Constants.PlusMinusButtonLayoutWidth ) : new Rect();
@@ -388,9 +388,7 @@ namespace AmplifyShaderEditor
 							if( m_additionalDirectives[ index ].Origin == AdditionalContainerOrigin.Native )
 							{
 								m_nativeRect = rect;
-#if UNITY_2019_3_OR_NEWER
 								m_nativeRect.y -= ( m_nativeRect.height - ( EditorGUIUtility.singleLineHeight + 5 ) ) * 0.5f;
-#endif
 								m_nativeRect.xMin += 2;
 								m_nativeRect.xMax -= 2;
 								m_nativeRect.yMax -= 2;

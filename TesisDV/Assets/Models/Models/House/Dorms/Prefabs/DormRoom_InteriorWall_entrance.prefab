@@ -1,5 +1,61 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2577281211910771824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 21412659402420489}
+  - component: {fileID: 4907039794873535254}
+  m_Layer: 16
+  m_Name: Decal Projector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &21412659402420489
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2577281211910771824}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.6581982, y: 0.25840902, z: -0.25840902, w: 0.6581982}
+  m_LocalPosition: {x: -2.322, y: 0.13, z: -5.418}
+  m_LocalScale: {x: 1.2394, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8770752670933841440}
+  m_LocalEulerAnglesHint: {x: 90, y: 42.87, z: 0}
+--- !u!114 &4907039794873535254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2577281211910771824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 2100000, guid: 4044c6528ee8d9e48a092847784dbb0c, type: 2}
+  m_DrawDistance: 1000
+  m_FadeScale: 1
+  m_StartAngleFade: 180
+  m_EndAngleFade: 180
+  m_UVScale: {x: 0.27460858, y: 0.29355013}
+  m_UVBias: {x: 0.46021882, y: 0.5074399}
+  m_DecalLayerMask: 4294967295
+  m_ScaleMode: 0
+  m_Offset: {x: 0, y: 0, z: 0.5}
+  m_Size: {x: 1.5, y: 1.5, z: 1}
+  m_FadeFactor: 1
 --- !u!1 &8285543289694825626
 GameObject:
   m_ObjectHideFlags: 0
@@ -27,13 +83,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8285543289694825626}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
   m_LocalPosition: {x: -21.757526, y: 15.130003, z: -42.799995}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5883340976192070032}
+  - {fileID: 21412659402420489}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 180}
 --- !u!33 &5627285671675623813
 MeshFilter:
@@ -54,6 +112,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -92,9 +151,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8285543289694825626}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 1.1298947, y: 0.1313658, z: 6.9978366}
   m_Center: {x: -4.438448, y: -0.0036478043, z: -3.5197544}
 --- !u!65 &2287404624349313058
@@ -105,9 +172,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8285543289694825626}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 1.0572623, y: 0.1313658, z: 6.9978366}
   m_Center: {x: -0.5320243, y: -0.0036478043, z: -3.5197544}
 --- !u!1001 &6034502818961669803
@@ -115,6 +190,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 8770752670933841440}
     m_Modifications:
     - target: {fileID: 151731664741998395, guid: a0b61098c0d69384aa33cbc8b4b65329, type: 3}
@@ -169,7 +245,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DecalAtomicSimbol
       objectReference: {fileID: 0}
+    - target: {fileID: 671282126943962497, guid: a0b61098c0d69384aa33cbc8b4b65329, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0b61098c0d69384aa33cbc8b4b65329, type: 3}
 --- !u!4 &5883340976192070032 stripped
 Transform:

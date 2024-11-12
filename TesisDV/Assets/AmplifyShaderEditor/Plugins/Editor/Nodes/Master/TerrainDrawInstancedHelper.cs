@@ -12,7 +12,6 @@ namespace AmplifyShaderEditor
 	[Serializable]
 	public class TerrainDrawInstancedHelper
 	{
-#if UNITY_2018_1_OR_NEWER
 		private readonly string[] InstancedPragmas =
 		{
 			"multi_compile_instancing",
@@ -24,6 +23,7 @@ namespace AmplifyShaderEditor
 			"#ifdef UNITY_INSTANCING_ENABLED//ASE Terrain Instancing",
 			"\tTEXTURE2D(_TerrainHeightmapTexture);//ASE Terrain Instancing",
 			"\tTEXTURE2D( _TerrainNormalmapTexture);//ASE Terrain Instancing",
+			"\tSAMPLER(sampler_TerrainNormalmapTexture);//ASE Terrain Instancing",
 			"#endif//ASE Terrain Instancing",
 			"UNITY_INSTANCING_BUFFER_START( Terrain )//ASE Terrain Instancing",
 			"\tUNITY_DEFINE_INSTANCED_PROP( float4, _TerrainPatchInstanceData )//ASE Terrain Instancing",
@@ -72,11 +72,11 @@ namespace AmplifyShaderEditor
 			"\t#else\n",
 			/* 0 - vertex normal*/"\t\t{0} = _TerrainNormalmapTexture.Load(int3(sampleCoords, 0)).rgb* 2 - 1;\n",
 			"\t#endif\n",
-			"#ifdef ENABLE_TERRAIN_PERPIXEL_NORMAL\n",
-			/* 0 - tex coord*/"\t{0}.xy = sampleCoords;\n",
-			"#else\n",
+			"",//"#ifdef ENABLE_TERRAIN_PERPIXEL_NORMAL\n",
+			"",///* 0 - tex coord*/"\t{0}.xy = sampleCoords;\n",
+			"",//"#else\n",
 			/* 0 - tex coord*/"\t{0}.xy = sampleCoords* _TerrainHeightmapRecipSize.zw;\n",
-			"#endif\n",
+			"",//"#endif\n",
 			"#endif\n",
 			/* 0 - var name*/"\treturn {0};\n",
 			"}\n"
@@ -166,20 +166,17 @@ namespace AmplifyShaderEditor
 			"Hidden/Nature/Terrain/Utilities/SELECTION"
 		};
 		private readonly string DrawInstancedLabel = "Instanced Terrain";
-#endif
+
 		[SerializeField]
 		private bool m_enable = false;
 
 		public void Draw( UndoParentNode owner )
 		{
-#if UNITY_2018_1_OR_NEWER
 			m_enable = owner.EditorGUILayoutToggle( DrawInstancedLabel, m_enable );
-#endif
 		}
 
 		public void UpdateDataCollectorForTemplates( ref MasterNodeDataCollector dataCollector, ref List<string> vertexInstructions )
 		{
-#if UNITY_2018_1_OR_NEWER
 			if( m_enable )
 			{
 				for( int i = 0; i < AdditionalUsePasses.Length; i++ )
@@ -299,12 +296,10 @@ namespace AmplifyShaderEditor
 
 				}
 			}
-#endif
 		}
 
 		public void UpdateDataCollectorForStandard( ref MasterNodeDataCollector dataCollector )
 		{
-#if UNITY_2018_1_OR_NEWER
 			if( m_enable )
 			{
 				for( int i = 0; i < AdditionalUsePasses.Length; i++ )
@@ -356,7 +351,6 @@ namespace AmplifyShaderEditor
 				
 				dataCollector.AddVertexInstruction( string.Format( ApplyMeshModificationInstructionStandard, "v" ) );
 			}
-#endif
 		}
 
 		public void ReadFromString( ref uint index, ref string[] nodeParams )
