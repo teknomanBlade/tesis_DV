@@ -28,6 +28,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public PoolObject<TallGrayModel> TallGrayPool { get; set; }
     public PoolObject<TankGrayModel> TankGrayPool { get; set; }
     public PoolObject<GrayDogModel> GrayDogPool { get; set; }
+    public PoolObject<UFO> UFOPool { get; set; }
 
     [Header("Wave Details")]
     [SerializeField]
@@ -83,6 +84,9 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     [SerializeField] private List<Enemy> _graysUFO14;
     [SerializeField] private List<Enemy> _graysUFO15;
     [SerializeField] private List<Enemy> _graysUFO16;
+    [SerializeField] private List<Enemy> _graysUFO17;
+    [SerializeField] private List<Enemy> _graysUFO18;
+    [SerializeField] private List<Enemy> _graysUFO19;
 
     [Header("UFO 2 Details")]
 
@@ -93,6 +97,9 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     [SerializeField] private List<Enemy> _graysUFO24;
     [SerializeField] private List<Enemy> _graysUFO25;
     [SerializeField] private List<Enemy> _graysUFO26;
+    [SerializeField] private List<Enemy> _graysUFO27;
+    [SerializeField] private List<Enemy> _graysUFO28;
+    [SerializeField] private List<Enemy> _graysUFO29;
 
     [SerializeField] private GameObject UFOIndicatorPrefab;
     private GameObject UFOIndicator;
@@ -119,8 +126,12 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         TallGrayPool = new PoolObject<TallGrayModel>(TallGrayFactory, ActivateTallGray, DeactivateTallGray, InitialStock, true);
         TankGrayPool = new PoolObject<TankGrayModel>(TankGrayFactory, ActivateTankGray, DeactivateTankGray, InitialStock, true);
         GrayDogPool = new PoolObject<GrayDogModel>(GrayDogFactory, ActivateGrayDog, DeactivateGrayDog, InitialStock, true);
+        UFOPool = new PoolObject<UFO>(UFOFactory, ActivateUFO, DeactivateUFO, InitialStock, true);
         LoadEnemiesInWaves();
     }
+
+   
+
     public void LoadEnemiesInWaves() 
     {
         ClearAllEnemiesLists();
@@ -134,11 +145,9 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         _graysUFO13.AddRange(GetEnemiesTypeForWave(2, EnemyType.Dog));
         _graysUFO23.AddRange(GetEnemiesTypeForWave(4, EnemyType.Common));
         //Wave 4
-        _graysUFO14.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
-        _graysUFO14.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO14.Add(GetEnemiesTypeForWave(2, EnemyType.Common).FirstOrDefault());
+        _graysUFO14.Add(GetEnemiesTypeForWave(2, EnemyType.Dog).FirstOrDefault());
         _graysUFO14.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
-        _graysUFO24.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
-        _graysUFO24.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
         _graysUFO24.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
         //Wave 5
         _graysUFO15.AddRange(GetEnemiesTypeForWave(3, EnemyType.Melee));
@@ -153,6 +162,39 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         _graysUFO26.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
         _graysUFO26.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
         _graysUFO26.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
+
+        //Wave 7
+        _graysUFO17.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
+        _graysUFO17.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO17.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
+        _graysUFO17.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
+        _graysUFO27.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
+        _graysUFO27.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO27.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
+        _graysUFO27.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
+        _graysUFO27.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
+
+        //Wave 8
+        _graysUFO18.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
+        _graysUFO18.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO18.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
+        _graysUFO18.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
+        _graysUFO18.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
+        _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
+        _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
+        _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
+        _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
+
+        //Wave 9
+        _graysUFO19.Add(GetEnemiesTypeForWave(2, EnemyType.Common).FirstOrDefault());
+        _graysUFO19.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO19.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
+        _graysUFO29.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO29.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO29.Add(GetEnemiesTypeForWave(4, EnemyType.Melee).FirstOrDefault());
+        _graysUFO19.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
     }
     public void ClearAllEnemiesLists() 
     {
@@ -162,12 +204,18 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         _graysUFO14.Clear();
         _graysUFO15.Clear();
         _graysUFO16.Clear();
+        _graysUFO17.Clear();
+        _graysUFO18.Clear();
+        _graysUFO19.Clear();
         _graysUFO2.Clear();
         _graysUFO22.Clear();
         _graysUFO23.Clear();
         _graysUFO24.Clear();
         _graysUFO25.Clear();
         _graysUFO26.Clear();
+        _graysUFO27.Clear();
+        _graysUFO28.Clear();
+        _graysUFO29.Clear();
     }
     private List<Enemy> GetEnemiesTypeForWave(int amount, EnemyType type)
     {
@@ -232,6 +280,22 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
         return amount;
     }
+    #region Pool Definitions
+    private void DeactivateUFO(UFO o)
+    {
+        o.gameObject.transform.parent = MainGameParent.transform;
+        o.gameObject.SetActive(false);
+    }
+
+    private void ActivateUFO(UFO o)
+    {
+        o.gameObject.SetActive(true);
+    }
+
+    private UFO UFOFactory()
+    {
+        return Instantiate(_myUFO);
+    }
     private GrayDogModel GrayDogFactory()
     {
         return Instantiate(GrayDogPrefab);
@@ -292,6 +356,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         o.gameObject.SetActive(true);
         o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
     }
+    #endregion
     void Start()
     {
         
@@ -456,75 +521,162 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             CurrentRound++;
             if(_currentRound == 1)
             {
-                Instantiate(_myEnemy, parent.transform).SetSpawnPos(_startingPosHard).SetPathHard(_waypoints);//.SetRotation(new Vector3(-90f, 0f, 0f));
+                Instantiate(_myEnemy, parent.transform).SetSpawnPos(_startingPosHard).SetPathHard(_waypoints);
             }
-            if(_currentRound == 2)
+            if(_currentRound == 2) 
             {
-                Instantiate(_myUFO, parent.transform)
+                UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos1)
-                    .SetGraysToSpawn(_graysUFO1).SetName("a");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO1).SetName("a");
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos2)
+                    .SetGraysToSpawn(_graysUFO2).SetName("b");
+                    
+                /*Instantiate(_myUFO, parent.transform)
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos1)
+                    .SetGraysToSpawn(_graysUFO1).SetName("a");
                 Instantiate(_myUFO, parent.transform)
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos2)
-                    .SetGraysToSpawn(_graysUFO2).SetName("b");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO2).SetName("b");*/
             }
             else if(_currentRound == 3)
             {
-                Instantiate(_myUFO, parent.transform)
+                UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos1)
-                    .SetGraysToSpawn(_graysUFO12).SetName("a");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO12).SetName("a");
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos2)
+                    .SetGraysToSpawn(_graysUFO22).SetName("b");
+
+                /*Instantiate(_myUFO, parent.transform)
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos1)
+                    .SetGraysToSpawn(_graysUFO12).SetName("a");
                 Instantiate(_myUFO, parent.transform)
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos2)
-                    .SetGraysToSpawn(_graysUFO22).SetName("b");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO22).SetName("b");*/
             }
             else if(_currentRound == 4)
             {
-                Instantiate(_myUFO, parent.transform)
+                UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos1)
-                    .SetGraysToSpawn(_graysUFO13).SetName("a");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO13).SetName("a");
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos2)
+                    .SetGraysToSpawn(_graysUFO23).SetName("b");
+
+                /*Instantiate(_myUFO, parent.transform)
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos1)
+                    .SetGraysToSpawn(_graysUFO13).SetName("a");
                 Instantiate(_myUFO, parent.transform)
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos2)
-                    .SetGraysToSpawn(_graysUFO23).SetName("b");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO23).SetName("b");*/
             }
             else if(_currentRound == 5)
             {
-                Instantiate(_myUFO, parent.transform)
+                UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos1)
-                    .SetGraysToSpawn(_graysUFO14).SetName("a");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO14).SetName("a");
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos2)
+                    .SetGraysToSpawn(_graysUFO24).SetName("b");
+
+                /*Instantiate(_myUFO, parent.transform)
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos1)
+                    .SetGraysToSpawn(_graysUFO14).SetName("a");
                 Instantiate(_myUFO, parent.transform)
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos2)
-                    .SetGraysToSpawn(_graysUFO24).SetName("b");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO24).SetName("b");*/
             }
             else if(_currentRound == 6)
             {
-                Instantiate(_myUFO, parent.transform)
+                UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos1)
-                    .SetGraysToSpawn(_graysUFO15).SetName("a");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO15).SetName("a");
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos2)
+                    .SetGraysToSpawn(_graysUFO25).SetName("b");
+
+                /*Instantiate(_myUFO, parent.transform)
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos1)
+                    .SetGraysToSpawn(_graysUFO15).SetName("a");
                 Instantiate(_myUFO, parent.transform)
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos2)
-                    .SetGraysToSpawn(_graysUFO25).SetName("b");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO25).SetName("b");*/
             }
             else if(_currentRound == 7)
             {
-                Instantiate(_myUFO, parent.transform)
+                UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos1)
-                    .SetGraysToSpawn(_graysUFO16).SetName("a");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO16).SetName("a");
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos2)
+                    .SetGraysToSpawn(_graysUFO26).SetName("b");
+
+                /*Instantiate(_myUFO, parent.transform)
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos1)
+                    .SetGraysToSpawn(_graysUFO16).SetName("a");
                 Instantiate(_myUFO, parent.transform)
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos2)
-                    .SetGraysToSpawn(_graysUFO26).SetName("b");//.SetRotation(new Vector3(-90f, 0f, 0f));
+                    .SetGraysToSpawn(_graysUFO26).SetName("b");*/
             }
-            
+            else if (_currentRound == 8)
+            {
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos1)
+                    .SetGraysToSpawn(_graysUFO17).SetName("a");
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos2)
+                    .SetGraysToSpawn(_graysUFO27).SetName("b");
+                
+            }
+            else if (_currentRound == 9)
+            {
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos1)
+                    .SetGraysToSpawn(_graysUFO18).SetName("a");
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos2)
+                    .SetGraysToSpawn(_graysUFO28).SetName("b");
+            }
+            else if (_currentRound == 10)
+            {
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos1)
+                    .SetGraysToSpawn(_graysUFO19).SetName("a");
+                UFOPool.GetObject()
+                    .SetSpawnPos(_startingPos)
+                    .SetFinalPos(_finalPos2)
+                    .SetGraysToSpawn(_graysUFO29).SetName("b");
+            }
         }
     }
 

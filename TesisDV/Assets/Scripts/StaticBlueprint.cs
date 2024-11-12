@@ -10,7 +10,9 @@ public class StaticBlueprint : MonoBehaviour
     public event OnSmokeParticlePositionDelegate OnSmokeParticlePosition;
     private Player _player;
     RaycastHit hit;
+    [SerializeField]
     private TrapBase _trapBase;
+    [SerializeField]
     private List<TrapBase> _trapBases;
     Vector3 movePoint;
     [SerializeField] private bool canBuild;
@@ -58,9 +60,12 @@ public class StaticBlueprint : MonoBehaviour
             _player.SwitchIsCrafting();
             finalPosition = transform.position;
             finalRotation = transform.rotation;
-            _trapBase.BuildOnBase();
-            _parent = _trapBase.transform.gameObject;
-            StartCoroutine(BuildTrap());
+            if (_trapBase) 
+            {
+                _trapBase.BuildOnBase();
+                _parent = _trapBase.transform.gameObject;
+                StartCoroutine(BuildTrap());
+            }
         }
 
         if (Input.GetKeyDown(GameVars.Values.secondaryFire) && _canBeCancelled)
@@ -126,8 +131,16 @@ public class StaticBlueprint : MonoBehaviour
         canBuild = false;
         GameVars.Values.soundManager.PlaySoundAtPoint("TrapConstructionSnd", transform.position, 0.9f);
         var anim = trapAnimPrefab.GetComponent<Animator>();
-        var clips = anim.runtimeAnimatorController.animationClips;
-        time = clips.First().length;
+        if (anim)
+        {
+            var clips = anim.runtimeAnimatorController.animationClips;
+            time = clips.First().length;
+        }
+        else 
+        {
+            time = 2f;
+        }
+        
         yield return new WaitForSeconds(1f);
 
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, _parent.transform);

@@ -108,10 +108,6 @@ using UnityEngine;
                     _inventory.RemoveItemID(itemAmount.craftingID, itemAmount.amount);
                 }
             }
-            /* foreach(ItemAmount itemAmount in results)
-            {
-                _inventory.RemoveWitts(itemAmount.wittValue); No se usan Witts para construir trampas.
-            } */
         }
 
         public void RestoreBuildAmount()

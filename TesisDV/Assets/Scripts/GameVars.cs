@@ -237,13 +237,14 @@ public class GameVars : MonoBehaviour
 
     private void DeactivateSmokeParticles(ParticleSystem o)
     {
-        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
+        o.gameObject.transform.parent = null;
         o.gameObject.SetActive(false);
     }
 
     private void ActivateSmokeParticles(ParticleSystem o)
     {
         o.gameObject.SetActive(true);
+        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
         o.transform.position = smokeParticlesPos;
     }
 

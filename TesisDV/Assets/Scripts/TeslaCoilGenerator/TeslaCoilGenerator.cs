@@ -87,6 +87,11 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
     {
         
     }
+    public TeslaCoilGenerator SetMovingToFalse(bool isMoving)
+    {
+        IsMoving = isMoving;
+        return this;
+    }
     public TeslaCoilGenerator SetInitPos(Vector3 pos)
     {
         this.transform.position = pos;

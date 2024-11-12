@@ -125,7 +125,11 @@ public class Blueprint : MonoBehaviour
         }
 
         craftingRecipe.RestoreBuildAmount();
-        GameVars.Values.SmokeParticlesPool.ReturnObject(particles.GetComponent<ParticleSystem>());
+        
+        if (!trapAnimPrefab.name.Equals("SlowTrap"))
+        {
+            GameVars.Values.SmokeParticlesPool.ReturnObject(particles.GetComponent<ParticleSystem>());
+        }
         Destroy(gameObject);
 
     }

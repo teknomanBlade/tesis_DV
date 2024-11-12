@@ -20,7 +20,8 @@ public class TeslaCoilGeneratorConstructAnim : MonoBehaviour
         var teslaCoilGenerator = GameVars.Values.TeslaCoilGeneratorPool.GetObject()
             .SetInitPos(transform.position)
             .SetInitRot(transform.rotation)
-            .SetParent(parent.transform);
+            .SetParent(parent.transform)
+            .SetMovingToFalse(false);
 
         Destroy(teslaCoilGenerator.gameObject.GetComponent<InventoryItem>());
         Destroy(gameObject);

@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UFO : MonoBehaviour, IInRoundObserver
+public class UFO : MonoBehaviour
 {
     private GameObject _UFOSpinner;
     [SerializeField]
@@ -40,9 +41,7 @@ public class UFO : MonoBehaviour, IInRoundObserver
     private float _UFOSpeed = 50f;
     [SerializeField] private int _graysSpawned;
     [SerializeField] private bool _inPosition;
-    private bool _canLeavePlanet;
-    private GameObject parent;
-
+    [SerializeField] private bool _canLeavePlanet;
     private void Awake()
     {
         _inPosition =  false;
@@ -57,24 +56,20 @@ public class UFO : MonoBehaviour, IInRoundObserver
         rotationFinal = Quaternion.Euler(-90f,0f,0f);
         _audioSource = GetComponent<AudioSource>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        GameVars.Values.LevelManager.AddObserverInRound(this);
-        GameVars.Values.LevelManager.AddUFO(this);
-        
+        _lm.OnRoundEnd += RoundEnd;
+        _lm.AddUFO(this);
+    }
+
+    private void RoundEnd(int amountEnemies)
+    {
+        _canLeavePlanet = amountEnemies == 0;
     }
 
     void Start()
     {
-        parent = GameObject.Find("MainGame");
         GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
-        //Vector3 auxVector = new Vector3(_finalPos.x, 0f, _finalPos.z);
-        //UFOIndicator = Instantiate(UFOIndicatorPrefab);
-        //UFOIndicator.transform.position = auxVector;
     }
 
-    /*private void RotateUFOSpinner()
-    {
-        if(_UFOSpinner != null) _UFOSpinner.transform.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime));
-    }*/
     public void PlayAnimBeam(bool active)
     {
         _animBeam.SetBool("IsBeamSpawnerDeployed", active);
@@ -111,7 +106,6 @@ public class UFO : MonoBehaviour, IInRoundObserver
     }
     private void Update()
     {
-        //RotateUFOSpinner();
         EnterPlanet();
         ExitPlanet();
 
@@ -121,13 +115,6 @@ public class UFO : MonoBehaviour, IInRoundObserver
         {
             if(currentGray != null)
             {
-                //CAMBIO PARA MVC
-                //Creo que no hace faltar hacer awake con el Gray nuevo, ampliaremos.
-                //Estaba equivocado, hace falta para que el NavMesh busque path despues del awake.
-
-
-                //currentGray.AwakeGray();
-
                 BeginSpawn();
             }
 
@@ -287,14 +274,5 @@ public class UFO : MonoBehaviour, IInRoundObserver
     {
         transform.rotation *= Quaternion.Euler(newRotation);
         return this;
-    }
-
-    public void OnNotifyInRound(string message)
-    {
-        if (message.Equals("EndRound"))
-        {
-            _canLeavePlanet = true;
-        }
-        
     }
 }
