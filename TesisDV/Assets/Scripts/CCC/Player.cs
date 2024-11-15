@@ -44,6 +44,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private Coroutine FadeOutSceneCoroutine;
     private Coroutine FadeInSceneCoroutine;
     [SerializeField] private Inventory _inventory;
+    [SerializeField] private TrapHotBar _trapHotBar;
     public GameObject _weaponGORacket;
     public GameObject _weaponGOBaseballBat;
     public GameObject _weaponGORemoteControl;
@@ -155,7 +156,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _craftingScreen = GameObject.Find("CraftingContainer");
         _craftingScreenScript = _craftingScreen.GetComponent<CraftingScreen>();
         _miniMapDisplay = GameObject.Find("MiniMapDisplay");
-        //_inventory = GameObject.Find("InventoryBar").GetComponent<Inventory>();
+        _trapHotBar = FindObjectOfType<TrapHotBar>();
         _inventory = _craftingScreen.gameObject.GetComponentInChildren<Inventory>();
         //Cambia el GetChild a la raqueta nueva.
         _audioSource = GetComponent<AudioSource>();
@@ -223,7 +224,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     MoveTrap();
                 }
             }
-            if (Input.GetKeyDown(GameVars.Values.testKillingEnemiesKey))
+            if (Input.GetKeyDown(GameVars.Values.testOpenAllDoorsKey))
             {
                 FindObjectsOfType<Door>().ToList().ForEach(x => { x.IsLocked = false; });
                 FindObjectOfType<FootLocker>().IsBlocked = false;
@@ -279,6 +280,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
                 if (Input.GetKeyDown(GameVars.Values.firstTrapHotKey) && !IsCrafting)
                 {
+                    _trapHotBar.PlayKeySlotHighlightAnim(1);
                     GameVars.Values.BaseballLauncher.Craft(_inventory);
                 }
 
@@ -290,8 +292,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                     else
                     {
-                        if (GameVars.Values.HasSlowingTrapAppearedHotBar)
+                        if (GameVars.Values.HasSlowingTrapAppearedHotBar) 
+                        {
+                            _trapHotBar.PlayKeySlotHighlightAnim(2);
                             GameVars.Values.ShowNotification("You can't set Tar Slowing Trap until you have bought it in the Basement");
+                        }
+                           
                     }
                 }
 
@@ -303,8 +309,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                     else
                     {
-                        if(GameVars.Values.HasMicrowaveTrapAppearedHotBar)
+                        if (GameVars.Values.HasMicrowaveTrapAppearedHotBar) 
+                        {
+                            _trapHotBar.PlayKeySlotHighlightAnim(3);
                             GameVars.Values.ShowNotification("You can't set Microwave ForceField Machine until you have bought it in the Basement");
+                        }
                     }
                 }
 
@@ -316,8 +325,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                     else
                     {
-                        if (GameVars.Values.HasElectricTrapAppearedHotBar)
+                        if (GameVars.Values.HasElectricTrapAppearedHotBar) 
+                        {
+                            _trapHotBar.PlayKeySlotHighlightAnim(4);
                             GameVars.Values.ShowNotification("You can't set the Electric Trap until you have bought it in the Basement");
+                        }
                     }
                 }
 
@@ -329,8 +341,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                     else
                     {
-                        if (GameVars.Values.HasPaintballMinigunTrapAppearedHotBar)
+                        if (GameVars.Values.HasPaintballMinigunTrapAppearedHotBar) 
+                        {
+                            _trapHotBar.PlayKeySlotHighlightAnim(5);
                             GameVars.Values.ShowNotification("You can't set FERN Paintball Minigun until you have bought it in the Basement");
+                        }
                     }
                 }
 
@@ -342,8 +357,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                     else
                     {
-                        if (GameVars.Values.HasTeslaCoilGeneratorAppearedHotBar)
+                        if (GameVars.Values.HasTeslaCoilGeneratorAppearedHotBar) 
+                        {
+                            _trapHotBar.PlayKeySlotHighlightAnim(6);
                             GameVars.Values.ShowNotification("You can't set Tesla Coil Generator until you have bought it in the Basement");
+                        }
                     }
                 }
 

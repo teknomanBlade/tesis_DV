@@ -113,8 +113,15 @@ public class Blueprint : MonoBehaviour
         //Canbuild provisional.
         canBuild = false;
         var anim = trapAnimPrefab.GetComponent<Animator>();
-        var clips = anim.runtimeAnimatorController.animationClips;
-        time = clips.First().length;
+        if (anim)
+        {
+            var clips = anim.runtimeAnimatorController.animationClips;
+            time = clips.First().length;
+        }
+        else
+        {
+            time = 2f;
+        }
         yield return new WaitForSeconds(1f);
         GameObject aux = Instantiate(trapAnimPrefab, finalPosition, finalRotation, parent.transform);
 

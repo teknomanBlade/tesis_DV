@@ -60,12 +60,9 @@ public class StaticBlueprint : MonoBehaviour
             _player.SwitchIsCrafting();
             finalPosition = transform.position;
             finalRotation = transform.rotation;
-            if (_trapBase) 
-            {
-                _trapBase.BuildOnBase();
-                _parent = _trapBase.transform.gameObject;
-                StartCoroutine(BuildTrap());
-            }
+            _trapBase?.BuildOnBase();
+            _parent = _trapBase?.transform.gameObject;
+            StartCoroutine(BuildTrap());
         }
 
         if (Input.GetKeyDown(GameVars.Values.secondaryFire) && _canBeCancelled)
@@ -87,15 +84,29 @@ public class StaticBlueprint : MonoBehaviour
 
         if (Physics.Raycast(GameVars.Values.GetPlayerCameraPosition(), GameVars.Values.GetPlayerCameraForward(), out hit, 100f, TrapBaseMaskWall))
         {
-            _trapBase = hit.transform.GetComponent<TrapBase>();
+            if (hit.transform.name.Contains("TeslaCoilGenerator"))
+            {
+                var trapBase = hit.transform.GetComponentInChildren<TrapBase>();
+                if (trapBase._isAvailable) 
+                {
+                    _trapBase = trapBase;
+                    transform.position = _trapBase.transform.position;
+                }
+                SetOriginalMaterial();
+            }
+            else 
+            {
+                _trapBase = hit.transform.GetComponent<TrapBase>();
+                transform.position = hit.transform.position;
+                SetOriginalMaterial();
+            }
             canBuild = true;
             _trapBases.ForEach(x => 
             { 
                 if(x.gameObject.name.Equals(_trapBase?.gameObject.name))
                     x.SetNormalIntensity(); 
             });
-            transform.position = hit.transform.position;
-            SetOriginalMaterial();
+            
             return;
         }
         else

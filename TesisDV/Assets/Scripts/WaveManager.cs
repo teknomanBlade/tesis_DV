@@ -129,9 +129,6 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         UFOPool = new PoolObject<UFO>(UFOFactory, ActivateUFO, DeactivateUFO, InitialStock, true);
         LoadEnemiesInWaves();
     }
-
-   
-
     public void LoadEnemiesInWaves() 
     {
         ClearAllEnemiesLists();
@@ -180,17 +177,15 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         _graysUFO18.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
         _graysUFO18.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
         _graysUFO18.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
-        _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
-        _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Common).FirstOrDefault());
-        _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
-        _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
+        _graysUFO28.Add(GetEnemiesTypeForWave(2, EnemyType.Common).FirstOrDefault());
+        _graysUFO28.Add(GetEnemiesTypeForWave(2, EnemyType.Dog).FirstOrDefault());
         _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Melee).FirstOrDefault());
         _graysUFO28.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
 
         //Wave 9
         _graysUFO19.Add(GetEnemiesTypeForWave(2, EnemyType.Common).FirstOrDefault());
         _graysUFO19.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
-        _graysUFO19.Add(GetEnemiesTypeForWave(1, EnemyType.Tank).FirstOrDefault());
+        _graysUFO19.Add(GetEnemiesTypeForWave(2, EnemyType.Tank).FirstOrDefault());
         _graysUFO29.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
         _graysUFO29.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
         _graysUFO29.Add(GetEnemiesTypeForWave(4, EnemyType.Melee).FirstOrDefault());
@@ -276,6 +271,18 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         if (CurrentRound == 6)
         {
             amount = _graysUFO16.Union(_graysUFO26).ToList().Count;
+        }
+        if (CurrentRound == 7)
+        {
+            amount = _graysUFO17.Union(_graysUFO27).ToList().Count;
+        }
+        if (CurrentRound == 8)
+        {
+            amount = _graysUFO18.Union(_graysUFO28).ToList().Count;
+        }
+        if (CurrentRound == 9)
+        {
+            amount = _graysUFO19.Union(_graysUFO29).ToList().Count;
         }
 
         return amount;
@@ -368,6 +375,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     void Update()
     {
+        if (Input.GetKeyDown(GameVars.Values.testKillingEnemiesKey)) KillAllEnemiesInScene();
+
         if (_inRound)
         {
             TimeWaves -= Time.deltaTime;
@@ -494,7 +503,19 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         yield return new WaitForSeconds(_timeBetweenWaves);
         SpawnWave();
     }
+    private void KillAllEnemiesInScene()
+    {
+        if (GameVars.Values.LevelManager.enemiesInScene.Count != 0)
+        {
+            if (!GameVars.Values.LevelManager.enemiesInScene[0].gameObject.CompareTag("Tutorial")) 
+            {
+                GameVars.Values.LevelManager.AmountEnemiesInScene--;
+                OnGrayAmountChange(GameVars.Values.LevelManager.AmountEnemiesInScene);
+            }
 
+            GameVars.Values.LevelManager.enemiesInScene[0].TakeDamage(999);
+        }
+    }
     public void StartRound()
     {
         TimeWaves = _timeBetweenWaves;

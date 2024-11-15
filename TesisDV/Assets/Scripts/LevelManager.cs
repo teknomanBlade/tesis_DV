@@ -70,13 +70,12 @@ public class LevelManager : MonoBehaviour
 
     private void GrayAmountChange(int newVal)
     {
-        AmountEnemiesInScene = newVal;
+        AmountEnemiesInScene = Mathf.Clamp(newVal, 0, 20);
     }
 
     private void Update() 
     {
-        //AmountEnemiesInScene = GameVars.Values.WaveManager.GetAmountEnemiesByWave();
-        if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
+        
     }
     public void WinGame()
     {
@@ -133,7 +132,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void KillAllEnemiesInScene()
+    /*private void KillAllEnemiesInScene()
     {
         if (enemiesInScene.Count != 0) 
         {
@@ -142,7 +141,7 @@ public class LevelManager : MonoBehaviour
 
             enemiesInScene[0].TakeDamage(999);
         }
-    }
+    }*/
 
     public void ChangeDoorsStatus()
     {

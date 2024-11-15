@@ -70,6 +70,7 @@ public class GameVars : MonoBehaviour
 
     [Header("KeyDebugBinds")]
     public KeyCode testRecieveWittsKey;
+    public KeyCode testOpenAllDoorsKey;
     public KeyCode testKillingEnemiesKey;
 
     [Header("Resources")]

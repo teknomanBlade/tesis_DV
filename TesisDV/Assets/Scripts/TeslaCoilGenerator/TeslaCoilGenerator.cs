@@ -75,7 +75,7 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
         distantPositionTrapBase2.z = transform.localPosition.z + 0.05f;
 
         posTrapBases.Add(distantPositionTrapBase1);
-        posTrapBases.Add(distantPositionTrapBase2);
+        //posTrapBases.Add(distantPositionTrapBase2);
 
         for (int i = 0; i < posTrapBases.Count; i++)
         {

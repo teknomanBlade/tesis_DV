@@ -149,5 +149,9 @@ public class TrapHotBar : MonoBehaviour
         }
     }
 
+    public void PlayKeySlotHighlightAnim(int keyCodeNumber) 
+    {
+        trapSlots[keyCodeNumber - 1].PlayKeySlotAnimHighlight();
+    }
     
 }
