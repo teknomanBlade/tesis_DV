@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7760867385018144261
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CustomToonLightning
-  m_Shader: {fileID: 4800000, guid: b618d530b6255434f9512d65e98095c6, type: 3}
+  m_Name: Custom_Skybox_Urp
+  m_Shader: {fileID: -6465566751694194690, guid: 7eee84f792f02f247afbcab3af791759, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -23,6 +36,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _SampleCubemap_92c9ef8b445d48d4b67b294b7ce329bd_Cube_1_Cubemap:
+        m_Texture: {fileID: 8900000, guid: feae472bcaab8e946a193250835196bd, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleCubemap_b2fceeb97d2d4c2ab2c279c1829c488d_Cube_1_Cubemap:
+        m_Texture: {fileID: 8900000, guid: e08063f3e666d544da6a286c824d90f8, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -37,19 +58,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaCutoff: 0.5
-    - _EnvironmentReflections: 1
-    - _FirstPosition: 0.49
-    - _Max: 0.578
-    - _Min: 0.26
+    - _Float: 0.001
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 1
-    - _SecondPosition: 0.14
-    - _SecondPositionIntensity: 0.65
-    - _ShadowIntensity: 0.174
-    - _SpecularHighlights: 1
-    - __dirty: 0
-    m_Colors:
-    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    m_Colors: []
   m_BuildTextureStacks: []

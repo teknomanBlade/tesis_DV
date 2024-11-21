@@ -190,7 +190,6 @@ Shader "Custom_Skybox"
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -622,9 +621,9 @@ Shader "Custom_Skybox"
 				float4 NoiseStars41 = saturate( ( color39 * smoothstepResult34 ) );
 				
 
-				float3 BaseColor = float3(0.5, 0.5, 0.5);
+				float3 BaseColor = ( lerpResult7 + NoiseStars41 ).rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = ( lerpResult7 + NoiseStars41 ).rgb;
+				float3 Emission = 0;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
@@ -874,7 +873,6 @@ Shader "Custom_Skybox"
 			#pragma multi_compile_instancing
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1186,7 +1184,6 @@ Shader "Custom_Skybox"
 			#pragma multi_compile_instancing
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1469,7 +1466,6 @@ Shader "Custom_Skybox"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1816,8 +1812,8 @@ Shader "Custom_Skybox"
 				float4 NoiseStars41 = saturate( ( color39 * smoothstepResult34 ) );
 				
 
-				float3 BaseColor = float3(0.5, 0.5, 0.5);
-				float3 Emission = ( lerpResult7 + NoiseStars41 ).rgb;
+				float3 BaseColor = ( lerpResult7 + NoiseStars41 ).rgb;
+				float3 Emission = 0;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -1856,7 +1852,6 @@ Shader "Custom_Skybox"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1874,7 +1869,9 @@ Shader "Custom_Skybox"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			
+			#define ASE_NEEDS_FRAG_WORLD_POSITION
+			#define ASE_NEEDS_VERT_NORMAL
+
 
 			struct VertexInput
 			{
@@ -1893,7 +1890,7 @@ Shader "Custom_Skybox"
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
 					float4 shadowCoord : TEXCOORD1;
 				#endif
-				
+				float4 ase_texcoord2 : TEXCOORD2;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -1935,7 +1932,9 @@ Shader "Custom_Skybox"
 				int _PassValue;
 			#endif
 
-			
+			samplerCUBE _Cubemap;
+			samplerCUBE _Clouds;
+
 
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/PBR2DPass.hlsl"
@@ -1944,7 +1943,73 @@ Shader "Custom_Skybox"
 			//#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/VisualEffectVertex.hlsl"
 			//#endif
 
+			float3 RotateAroundAxis( float3 center, float3 original, float3 u, float angle )
+			{
+				original -= center;
+				float C = cos( angle );
+				float S = sin( angle );
+				float t = 1 - C;
+				float m00 = t * u.x * u.x + C;
+				float m01 = t * u.x * u.y - S * u.z;
+				float m02 = t * u.x * u.z + S * u.y;
+				float m10 = t * u.x * u.y + S * u.z;
+				float m11 = t * u.y * u.y + C;
+				float m12 = t * u.y * u.z - S * u.x;
+				float m20 = t * u.x * u.z - S * u.y;
+				float m21 = t * u.y * u.z + S * u.x;
+				float m22 = t * u.z * u.z + C;
+				float3x3 finalMatrix = float3x3( m00, m01, m02, m10, m11, m12, m20, m21, m22 );
+				return mul( finalMatrix, original ) + center;
+			}
 			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
+			
+
 			VertexOutput VertexFunction( VertexInput v  )
 			{
 				VertexOutput o = (VertexOutput)0;
@@ -1952,7 +2017,12 @@ Shader "Custom_Skybox"
 				UNITY_TRANSFER_INSTANCE_ID( v, o );
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
+				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
+				o.ase_texcoord2.xyz = ase_worldNormal;
 				
+				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord2.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -2087,9 +2157,22 @@ Shader "Custom_Skybox"
 					#endif
 				#endif
 
+				float3 ase_worldViewDir = ( _WorldSpaceCameraPos.xyz - WorldPosition );
+				ase_worldViewDir = normalize(ase_worldViewDir);
+				float3 ase_worldNormal = IN.ase_texcoord2.xyz;
+				float3 temp_output_5_0 = reflect( -ase_worldViewDir , ase_worldNormal );
+				float mulTime28 = _TimeParameters.x * _Float0;
+				float3 rotatedValue26 = RotateAroundAxis( float3( 0,0,0 ), ase_worldNormal, normalize( float3( 0,1,0 ) ), mulTime28 );
+				float4 texCUBENode29 = texCUBE( _Clouds, reflect( -ase_worldViewDir , rotatedValue26 ) );
+				float4 lerpResult7 = lerp( texCUBE( _Cubemap, temp_output_5_0 ) , texCUBENode29 , texCUBENode29.a);
+				float4 color39 = IsGammaSpace() ? float4(1,0.9479667,0,0) : float4(1,0.8856899,0,0);
+				float simplePerlin3D37 = snoise( temp_output_5_0*_NoiseScale );
+				simplePerlin3D37 = simplePerlin3D37*0.5 + 0.5;
+				float smoothstepResult34 = smoothstep( min( _Float1 , _Float2 ) , max( _Float1 , _Float2 ) , simplePerlin3D37);
+				float4 NoiseStars41 = saturate( ( color39 * smoothstepResult34 ) );
 				
 
-				float3 BaseColor = float3(0.5, 0.5, 0.5);
+				float3 BaseColor = ( lerpResult7 + NoiseStars41 ).rgb;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -2121,7 +2204,6 @@ Shader "Custom_Skybox"
 			#pragma multi_compile_instancing
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -2447,7 +2529,6 @@ Shader "Custom_Skybox"
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -2867,9 +2948,9 @@ Shader "Custom_Skybox"
 				float4 NoiseStars41 = saturate( ( color39 * smoothstepResult34 ) );
 				
 
-				float3 BaseColor = float3(0.5, 0.5, 0.5);
+				float3 BaseColor = ( lerpResult7 + NoiseStars41 ).rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = ( lerpResult7 + NoiseStars41 ).rgb;
+				float3 Emission = 0;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
@@ -2991,7 +3072,6 @@ Shader "Custom_Skybox"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -3240,7 +3320,6 @@ Shader "Custom_Skybox"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -3510,7 +3589,7 @@ Node;AmplifyShaderEditor.LerpOp;7;-800.8117,4.237185;Inherit;True;3;0;COLOR;0,0,
 Node;AmplifyShaderEditor.GetLocalVarNode;42;-752.2858,-205.9288;Inherit;False;41;NoiseStars;1;0;OBJECT;;False;1;COLOR;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;43;-417.4417,26.71036;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;46;45,38;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;0;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;47;45,38;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;11;Custom_Skybox;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;47;45,38;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;Custom_Skybox;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;48;45,38;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;False;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=ShadowCaster;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;49;45,38;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;True;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;False;False;True;1;LightMode=DepthOnly;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;50;45,38;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;False;0;;0;0;Standard;0;False;0
@@ -3547,6 +3626,6 @@ WireConnection;7;1;29;0
 WireConnection;7;2;29;4
 WireConnection;43;0;7;0
 WireConnection;43;1;42;0
-WireConnection;47;2;43;0
+WireConnection;47;0;43;0
 ASEEND*/
-//CHKSM=4AE620BD307E8908FEAE8EA11FB1FAEDB3EED162
+//CHKSM=5CB5F81D2C3A39A7347BC748DD82DD3DC98FF471
