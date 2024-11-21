@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Linq;
-using TMPro;
-using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
@@ -1794,7 +1792,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
         Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
         Vector2 direction = (screenPosition - (Vector3)screenCenter).normalized;
-        Debug.Log("Dirección: " + direction);
+        //Debug.Log("Dirección: " + direction);
         if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
         {
             if (direction.x > 0)

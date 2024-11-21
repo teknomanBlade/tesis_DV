@@ -137,6 +137,10 @@ public class GrayView : MonoBehaviour
     {
         ActivateWitGainEffect();
         GameVars.Values.soundManager.PlaySound(_as, "CoinSFX", 0.45f, false, 1f);
+        if (!gameObject.CompareTag("Tutorial")) 
+        {
+            GameVars.Values.WaveManager.SubstractEnemyFromAmountInScene();
+        }
     }
     public void PlaySoundTelepathVoices()
     {

@@ -129,6 +129,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         UFOPool = new PoolObject<UFO>(UFOFactory, ActivateUFO, DeactivateUFO, InitialStock, true);
         LoadEnemiesInWaves();
     }
+    #region WaveLogic
     public void LoadEnemiesInWaves() 
     {
         ClearAllEnemiesLists();
@@ -287,6 +288,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
         return amount;
     }
+    #endregion
     #region Pool Definitions
     private void DeactivateUFO(UFO o)
     {
@@ -369,7 +371,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         
         _as = GetComponent<AudioSource>();
         GameVars.Values.soundManager.PlaySound(_as,"MusicPreWave", 0.1f, true,0f);
-        OnRoundEnd(_currentRound);
+        RoundEnd();
         InstantiateUFOIndicators();
     }
 
@@ -503,15 +505,20 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         yield return new WaitForSeconds(_timeBetweenWaves);
         SpawnWave();
     }
+    public void SubstractEnemyFromAmountInScene() 
+    {
+        GameVars.Values.LevelManager.AmountEnemiesInScene--;
+        OnGrayAmountChange(GameVars.Values.LevelManager.AmountEnemiesInScene);
+    }
     private void KillAllEnemiesInScene()
     {
         if (GameVars.Values.LevelManager.enemiesInScene.Count != 0)
         {
-            if (!GameVars.Values.LevelManager.enemiesInScene[0].gameObject.CompareTag("Tutorial")) 
+            /*if (!GameVars.Values.LevelManager.enemiesInScene[0].gameObject.CompareTag("Tutorial")) 
             {
                 GameVars.Values.LevelManager.AmountEnemiesInScene--;
                 OnGrayAmountChange(GameVars.Values.LevelManager.AmountEnemiesInScene);
-            }
+            }*/
 
             GameVars.Values.LevelManager.enemiesInScene[0].TakeDamage(999);
         }
@@ -704,15 +711,27 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     //Hacer por evento en lugar de void publico.
     public void SendNextRound()
     {
-        if (_currentRound >= _totalRounds)
-        {
-            Invoke(nameof(SendWinGame), 1f);
-            return;
-        }
         _inRound = false;
         OnRoundStartEnd?.Invoke(_inRound);
-        OnRoundEnd(_currentRound);
+        RoundEnd();
         RestartUFOIndicators();
+    }
+    public void CheckIfLastRound(bool enemiesAmountZero) 
+    {
+        if (enemiesAmountZero) 
+        {
+            if (_currentRound >= _totalRounds)
+            {
+                Debug.Log("BEFORE SEND WIN");
+                Invoke(nameof(SendWinGame), 1f);
+                Debug.Log("AFTER SEND WIN");
+                return;
+            }
+        }
+    }
+    public void RoundEnd() 
+    {
+        OnRoundEnd(_currentRound);
     }
 
     private void RestartUFOIndicators()
@@ -730,7 +749,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     private void SendWinGame()
     {
-        GameVars.Values.LevelManager.WinGame(); 
+        GameVars.Values.LevelManager.WinGame();
+        return;
     }
 
     private void InstantiateUFOIndicators()

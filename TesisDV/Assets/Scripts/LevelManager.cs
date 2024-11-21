@@ -43,7 +43,8 @@ public class LevelManager : MonoBehaviour
         {
             if (_amountEnemiesInScene == value) return;
             _amountEnemiesInScene = value;
-            OnRoundEnd(_amountEnemiesInScene);
+            OnRoundEnd(AmountEnemiesInScene);
+            GameVars.Values.WaveManager.RoundEnd();
         }
     }
     public Player _player;
@@ -71,6 +72,7 @@ public class LevelManager : MonoBehaviour
     private void GrayAmountChange(int newVal)
     {
         AmountEnemiesInScene = Mathf.Clamp(newVal, 0, 20);
+        GameVars.Values.WaveManager.CheckIfLastRound(AmountEnemiesInScene == 0);
     }
 
     private void Update() 
@@ -131,17 +133,6 @@ public class LevelManager : MonoBehaviour
             }
         }
     }
-
-    /*private void KillAllEnemiesInScene()
-    {
-        if (enemiesInScene.Count != 0) 
-        {
-            if (!enemiesInScene[0].gameObject.CompareTag("Tutorial"))
-                AmountEnemiesInScene--;
-
-            enemiesInScene[0].TakeDamage(999);
-        }
-    }*/
 
     public void ChangeDoorsStatus()
     {

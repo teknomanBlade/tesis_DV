@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class ItemSpawner : MonoBehaviour
 {
@@ -61,7 +59,7 @@ public class ItemSpawner : MonoBehaviour
     {
         GameVars.Values.Cat.CatIsGoingToBasement();
         var blueprintPos = FindObjectsOfType<WorkBenchCraftingMenu>().FirstOrDefault().transform.localPosition;
-        Debug.Log("BLUEPRINT BASEMENT POSITION: " + blueprintPos);
+        //Debug.Log("BLUEPRINT BASEMENT POSITION: " + blueprintPos);
         GameVars.Values.ShowNotification("You can go to the Basement at the Tools Workbench to Buy and Update Traps.",
             blueprintPos);
         GameVars.Values.LevelManager.WorkbenchLight.GetComponentInParent<LightsEmissionHandler>().EnableBasementLightEmission();

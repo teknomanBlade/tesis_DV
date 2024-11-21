@@ -86,6 +86,7 @@ public class GrayDogView : MonoBehaviour
     {
         ActivateWitGainEffect();
         GameVars.Values.soundManager.PlaySound(_as, "CoinSFX", 0.45f, false, 1f);
+        GameVars.Values.WaveManager.SubstractEnemyFromAmountInScene();
     }
     public void CatGrabAnimation(bool value)
     {

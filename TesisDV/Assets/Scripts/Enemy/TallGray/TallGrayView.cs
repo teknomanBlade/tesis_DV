@@ -115,6 +115,7 @@ public class TallGrayView : MonoBehaviour
     {
         ActivateWitGainEffect();
         GameVars.Values.soundManager.PlaySound(_as, "CoinSFX", 0.45f, false, 1f);
+        GameVars.Values.WaveManager.SubstractEnemyFromAmountInScene();
     }
     #region Shaders
     public void SwitchDissolveMaterial(Material material)       
