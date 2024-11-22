@@ -97,10 +97,10 @@ public class Outline : MonoBehaviour
 
         // Instantiate outline materials
         //outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
-        //outlineFillMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineFill"));
+        outlineFillMaterial = Instantiate(Resources.Load<Material>(@"Materials/Shader Graphs_OutlineShaderGraph"));
 
         //outlineMaskMaterial.name = "OutlineMask (Instance)";
-        //outlineFillMaterial.name = "OutlineFill (Instance)";
+        outlineFillMaterial.name = "OutlineFill (Instance)";
 
         // Retrieve or generate smooth normals
         LoadSmoothNormals();
@@ -111,17 +111,17 @@ public class Outline : MonoBehaviour
 
     void OnEnable()
     {
-        //foreach (var renderer in renderers)
-        //{
+        foreach (var renderer in renderers)
+        {
 
-        //    // Append outline shaders
-        //    var materials = renderer.sharedMaterials.ToList();
+            // Append outline shaders
+            var materials = renderer.sharedMaterials.ToList();
 
-        //    materials.Add(outlineMaskMaterial);
-        //    materials.Add(outlineFillMaterial);
+            //materials.Add(outlineMaskMaterial);
+            materials.Add(outlineFillMaterial);
 
-        //    renderer.materials = materials.ToArray();
-        //}
+            renderer.materials = materials.ToArray();
+        }
     }
 
     void OnValidate()
@@ -162,7 +162,7 @@ public class Outline : MonoBehaviour
             // Remove outline shaders
             var materials = renderer.sharedMaterials.ToList();
 
-            materials.Remove(outlineMaskMaterial);
+            //materials.Remove(outlineMaskMaterial);
             materials.Remove(outlineFillMaterial);
 
             renderer.materials = materials.ToArray();
@@ -173,7 +173,7 @@ public class Outline : MonoBehaviour
     {
 
         // Destroy material instances
-        Destroy(outlineMaskMaterial);
+        //Destroy(outlineMaskMaterial);
         Destroy(outlineFillMaterial);
     }
 
