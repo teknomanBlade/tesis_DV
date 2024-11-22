@@ -11,10 +11,12 @@ Material:
   m_Shader: {fileID: 4800000, guid: 41500fd21436a3445bee736ac991c536, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _RECEIVE_SHADOWS_OFF
   m_InvalidKeywords:
   - _METALLICGLOSSMAP
   - _NORMALMAP
+  - _RECEIVESHADOWS_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -101,7 +103,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _FirstPosition: 0.81
+    - _FirstPosition: 1.08
     - _FirstPosition1: 0.81
     - _GlossMapScale: 0.448
     - _Glossiness: 0.5
@@ -118,16 +120,16 @@ Material:
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 1
+    - _ReceiveShadows: 0
     - _Rim: 1
     - _Rim1: 0
     - _RimAmount: 1
     - _RimAmount1: 0
-    - _SecondPosition: 0.75
+    - _SecondPosition: 0.99
     - _SecondPosition1: 0.75
-    - _SecondPositionIntensity: 0.81
+    - _SecondPositionIntensity: 1.05
     - _SecondPositionIntensity1: 0.81
-    - _ShadowIntensity: 2.3
+    - _ShadowIntensity: 1.53
     - _ShadowIntensity1: 2.3
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
