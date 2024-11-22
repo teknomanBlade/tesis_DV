@@ -162,7 +162,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         _originalCamPos = _cam.transform.localPosition;
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
-
+        ResetAlphaArrowsValue();
         hp = maxHp;
         GameVars.Values.ShowLivesRemaining(0,hp);
         ActiveFadeInEffect(1f);    
@@ -564,6 +564,13 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             if (FadeOutSceneCoroutine != null) StopCoroutine(FadeOutSceneCoroutine);
             FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(1f, buttonEffect));
         }
+    }
+    public void ResetAlphaArrowsValue() 
+    {
+        arrowDown.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", 1);
+        arrowLeft.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", 1);
+        arrowRight.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", 1);
+        arrowUp.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", 1);
     }
     public void ActiveUIArrowFade(bool attacked, string arrowName) 
     {

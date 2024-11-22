@@ -41,8 +41,6 @@ public class Cat : MonoBehaviour
     public event Action onTaken = delegate { };
     public event Action onMeowing = delegate { };
 
-    public delegate void OnCatStateChangeDelegate(Vector3 startingPos);
-    public event OnCatStateChangeDelegate OnCatStateChange;
     #endregion Events
     void Awake()
     {
@@ -93,10 +91,6 @@ public class Cat : MonoBehaviour
     {
         yield return new WaitUntil(() =>  _wm.UFOLineRenderersList.Count > 0);
         Renderers = _wm.UFOLineRenderersList;
-        Renderers.ForEach(x =>
-        {
-            OnCatStateChange += x.OnRepaintLineRenderer;
-        });
         SetStartingPosition();
         LoadLastPathPositions();
     }
@@ -135,6 +129,7 @@ public class Cat : MonoBehaviour
         _isHeld = false;
         _isRepositioning = true;
         IsInShed = true;
+        StartingPosition = GetNewPos();
         _navMeshAgent.enabled = false;
         _fsm.ChangeCatState(CatStatesEnum.ShedState);
     }
@@ -145,6 +140,7 @@ public class Cat : MonoBehaviour
         _isRepositioning = true;
         IsInShed = false;
         IsInKitchen = true;
+        StartingPosition = GetNewPos();
         _navMeshAgent.enabled = false;
         _fsm.ChangeCatState(CatStatesEnum.KitchenState);
     }
@@ -180,7 +176,6 @@ public class Cat : MonoBehaviour
         var mid = _myPos.Count / 2;
         Debug.Log("MID VALUE: " + mid);
         StartingPosition = _myPos.ElementAt(mid);
-        OnCatStateChange?.Invoke(StartingPosition);
     }
 
     public void SetStartingPosition()
@@ -200,13 +195,30 @@ public class Cat : MonoBehaviour
         else if (IsInKitchen)
         {
             StartingPosition = _myPos.Last();
-            OnCatStateChange?.Invoke(StartingPosition);
         }
         else
         {
             StartingPosition = _myPos.First();
-            OnCatStateChange?.Invoke(StartingPosition);
         }
+    }
+
+    public Vector3 GetNewPos() 
+    {
+        if (IsInShed)
+        {
+            var mid = _myPos.Count / 2;
+            Debug.Log("MID VALUE: " + mid);
+            StartingPosition = _myPos.ElementAt(mid);
+        }
+        else if (IsInKitchen)
+        {
+            StartingPosition = _myPos.Last();
+        }
+        else
+        {
+            StartingPosition = _myPos.First();
+        }
+        return StartingPosition;
     }
     public void EnterIdleState()
     {

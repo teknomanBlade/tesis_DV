@@ -49,6 +49,10 @@ public class ShedState : IState
                     _cat._navMeshAgent.enabled = true;
                     _currentPathWaypoint = 0;
                     _cat.IsGoingBack = false;
+                    _cat.Renderers.ForEach(x =>
+                    {
+                        x.GetAStarPath();
+                    });
                     _fsm.ChangeCatState(CatStatesEnum.IdleState);
                 }
             }

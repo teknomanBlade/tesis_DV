@@ -73,6 +73,8 @@ public class ItemSpawner : MonoBehaviour
     public void ActivateThirdRoundItems(int currentRound) 
     {
         ActivateDeactivateItems(currentRound);
+        //TODO: puesto aqui para pruebas de Line Renderer, eliminar posteriormente
+        //GameVars.Values.Cat.CatIsGoingToShed();
         Blackboard.ActiveThirdExperiment();
         _levelDoors[1].IsLockedToGrays = false; //Puerta del baño al patio.
         _levelDoors[7].IsLockedToGrays = false; //Puerta del baño al living.

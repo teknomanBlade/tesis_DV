@@ -768,7 +768,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
         Vector3 auxVector2 = new Vector3(_finalPos2.x, 0.05f, _finalPos2.z);
         UFOIndicator2 = Instantiate(UFOIndicatorPrefab);
-        UFOLineRenderersList.AddRange(UFOIndicator.GetComponentsInChildren<UFOLineRenderer>());
+        UFOLineRenderersList.AddRange(UFOIndicator2.GetComponentsInChildren<UFOLineRenderer>());
         UFOIndicator2.transform.position = auxVector2;
     }
 
