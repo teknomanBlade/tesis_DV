@@ -1,11 +1,11 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class UFOLineRenderer : MonoBehaviour
 {
     private Cat _cat;
+    private Vector3 _catPosition;
     [SerializeField] private GameObject owner;
     [SerializeField] private LineRenderer lineRenderer;
     private float _nodeYPosition = 0.26f;
@@ -27,16 +27,19 @@ public class UFOLineRenderer : MonoBehaviour
         _pf = new Pathfinding();
         transform.position = owner.transform.position;
         _cat = GameVars.Values.Cat;
+        //_cat.OnCatStateChange += OnRepaintLineRenderer;
+        GetAStarPath();
+    }
 
-        //CalculatePath(_cat.GetStartingPosition());
-        //Hacer Pathfinding.
-        GetThetaStar();
+    public void OnRepaintLineRenderer(Vector3 startingPos)
+    {
+        _catPosition = startingPos;
+        GetAStarPath();
     }
 
     private void DrawLineRenderer(List<Node> waypoints) 
     {
         lineRenderer.positionCount = waypoints.Count;
-        //lineRenderer.SetPosition(0, waypoints[0].transform.position);
 
         for (int i = 0; i < waypoints.Count; i++)
         {
@@ -45,18 +48,16 @@ public class UFOLineRenderer : MonoBehaviour
         }
     }
 
-    public void GetThetaStar()
+    public void GetAStarPath()
     {
         myPath = new List<Node>();
 
         startingPoint = PathfindingManager.Instance.GetClosestNode(transform.position);
 
-        //_currentWaypoint = _enemy.GetCurrentWaypoint();
-        
-        endingPoint = PathfindingManager.Instance.GetClosestNode(_cat.GetStartingPosition());
+        var pos = (_catPosition == Vector3.zero) ? _cat.StartingPosition : _catPosition;
+        endingPoint = PathfindingManager.Instance.GetClosestNode(pos);
 
-        //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
-        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
+        myPath = _pf.ConstructPathAStar(startingPoint, endingPoint);
 
         DrawLineRenderer(myPath);
     }

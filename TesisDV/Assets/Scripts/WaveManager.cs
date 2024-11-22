@@ -104,6 +104,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     [SerializeField] private GameObject UFOIndicatorPrefab;
     private GameObject UFOIndicator;
     private GameObject UFOIndicator2;
+    public List<UFOLineRenderer> UFOLineRenderersList = new List<UFOLineRenderer>();
     public delegate void OnRoundChangedDelegate(int newVal);
     public event OnRoundChangedDelegate OnRoundChanged;
     public delegate void OnTimeWaveChangeDelegate(float newVal);
@@ -288,7 +289,125 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
         return amount;
     }
+    public void EnhanceEnemyStatsPerWave(Enemy e)
+    {
+        AugumentStatsPerType(e, CurrentRound);
+    }
+
+    public void AugumentStatsPerType(Enemy e, int CurrentRound)
+    {
+        if (e.enemyType == EnemyType.Common)
+        {
+            e.HP = GrayCommonHPByRoundInterval(CurrentRound);
+            Debug.Log("COMMON GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
+        }
+        else if (e.enemyType == EnemyType.Melee)
+        {
+            e.HP = GrayMeleeHPByRoundInterval(CurrentRound);
+            Debug.Log("MELEE GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
+        }
+        else if (e.enemyType == EnemyType.Dog)
+        {
+            e.HP = GrayDogHPByRoundInterval(CurrentRound);
+        }
+        else if (e.enemyType == EnemyType.Tank && CurrentRound == 7)
+        {
+            e.HP = GrayTankHPByRoundInterval(CurrentRound);
+            Debug.Log("TANK GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
+        }
+    }
+    public float GrayCommonHPByRoundInterval(int CurrentRound)
+    {
+        var hpResult = 0f;
+        if (CurrentRound > 0 && CurrentRound <= 3)
+        {
+            hpResult = 3f;
+            Debug.Log("GRAY COMMON NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 3 && CurrentRound <= 5)
+        {
+            hpResult = 6f;
+            Debug.Log("GRAY COMMON NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 5 && CurrentRound <= 7)
+        {
+            hpResult = 9f;
+            Debug.Log("GRAY COMMON NEW LIFE SECOND ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+
+        return hpResult;
+    }
+
+    public float GrayMeleeHPByRoundInterval(int CurrentRound)
+    {
+        var hpResult = 0f;
+        if (CurrentRound > 0 && CurrentRound <= 3)
+        {
+            hpResult = 8f;
+            Debug.Log("GRAY MELEE NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 3 && CurrentRound <= 5)
+        {
+            hpResult = 12f;
+            Debug.Log("GRAY MELEE NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 5 && CurrentRound <= 7)
+        {
+            hpResult = 16f;
+            Debug.Log("GRAY MELEE NEW LIFE SECOND ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+
+        return hpResult;
+    }
+
+    public float GrayDogHPByRoundInterval(int CurrentRound)
+    {
+        var hpResult = 0f;
+        if (CurrentRound > 0 && CurrentRound <= 3)
+        {
+            hpResult = 1.5f;
+            Debug.Log("GRAY DOG NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 3 && CurrentRound <= 5)
+        {
+            hpResult = 2f;
+            Debug.Log("GRAY DOG NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound > 5 && CurrentRound <= 7)
+        {
+            hpResult = 2.5f;
+            Debug.Log("GRAY DOG NEW LIFE SECOND ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+
+        return hpResult;
+    }
+
+    public float GrayTankHPByRoundInterval(int CurrentRound)
+    {
+        var hpResult = 0f;
+        if (CurrentRound == 6)
+        {
+            hpResult = 20f;
+            Debug.Log("GRAY DOG NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+        else if (CurrentRound == 7)
+        {
+            hpResult = 24f;
+            Debug.Log("GRAY DOG NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
+        }
+
+        return hpResult;
+    }
+
+
+    IEnumerator WaitBetweenWaves()
+    {
+        yield return new WaitForSeconds(_timeBetweenWaves);
+        SpawnWave();
+    }
+
     #endregion
+
     #region Pool Definitions
     private void DeactivateUFO(UFO o)
     {
@@ -389,122 +508,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             }
         }  
     }
-    public void EnhanceEnemyStatsPerWave(Enemy e)
-    {
-        AugumentStatsPerType(e, CurrentRound);
-    }
-
-    public void AugumentStatsPerType(Enemy e, int CurrentRound)
-    {
-        if (e.enemyType == EnemyType.Common)
-        {
-            e.HP = GrayCommonHPByRoundInterval(CurrentRound);
-            Debug.Log("COMMON GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
-        }
-        else if (e.enemyType == EnemyType.Melee)
-        {
-            e.HP = GrayMeleeHPByRoundInterval(CurrentRound);
-            Debug.Log("MELEE GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
-        }
-        else if (e.enemyType == EnemyType.Dog)
-        {
-            e.HP = GrayDogHPByRoundInterval(CurrentRound);
-        }
-        else if (e.enemyType == EnemyType.Tank && CurrentRound == 7)
-        {
-            e.HP = GrayTankHPByRoundInterval(CurrentRound);
-            Debug.Log("TANK GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
-        }
-    }
-    public float GrayCommonHPByRoundInterval(int CurrentRound)
-    {
-        var hpResult = 0f;
-        if (CurrentRound > 0 && CurrentRound <= 3)
-        {
-            hpResult = 3f;
-            Debug.Log("GRAY COMMON NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-        else if (CurrentRound > 3 && CurrentRound <= 5)
-        {
-            hpResult = 6f;
-            Debug.Log("GRAY COMMON NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-        else if (CurrentRound > 5 && CurrentRound <= 7)
-        {
-            hpResult = 9f;
-            Debug.Log("GRAY COMMON NEW LIFE SECOND ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-
-        return hpResult;
-    }
-
-    public float GrayMeleeHPByRoundInterval(int CurrentRound)
-    {
-        var hpResult = 0f;
-        if (CurrentRound > 0 && CurrentRound <= 3)
-        {
-            hpResult = 8f;
-            Debug.Log("GRAY MELEE NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-        else if (CurrentRound > 3 && CurrentRound <= 5)
-        {
-            hpResult = 12f;
-            Debug.Log("GRAY MELEE NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-        else if (CurrentRound > 5 && CurrentRound <= 7)
-        {
-            hpResult = 16f;
-            Debug.Log("GRAY MELEE NEW LIFE SECOND ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-
-        return hpResult;
-    }
-
-    public float GrayDogHPByRoundInterval(int CurrentRound) 
-    {
-        var hpResult = 0f;
-        if (CurrentRound > 0 && CurrentRound <= 3)
-        {
-            hpResult = 1.5f;
-            Debug.Log("GRAY DOG NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-        else if (CurrentRound > 3 && CurrentRound <= 5)
-        {
-            hpResult = 2f;
-            Debug.Log("GRAY DOG NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-        else if (CurrentRound > 5 && CurrentRound <= 7) 
-        {
-            hpResult = 2.5f;
-            Debug.Log("GRAY DOG NEW LIFE SECOND ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-
-        return hpResult;
-    }
-
-    public float GrayTankHPByRoundInterval(int CurrentRound)
-    {
-        var hpResult = 0f;
-        if (CurrentRound == 6)
-        {
-            hpResult = 20f;
-            Debug.Log("GRAY DOG NEW LIFE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-        else if (CurrentRound == 7)
-        {
-            hpResult = 24f;
-            Debug.Log("GRAY DOG NEW LIFE ELSE IF: " + hpResult + " ROUND: " + CurrentRound);
-        }
-
-        return hpResult;
-    }
-
-
-    IEnumerator WaitBetweenWaves()
-    {
-        yield return new WaitForSeconds(_timeBetweenWaves);
-        SpawnWave();
-    }
+    
     public void SubstractEnemyFromAmountInScene() 
     {
         GameVars.Values.LevelManager.AmountEnemiesInScene--;
@@ -720,6 +724,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     {
         if (enemiesAmountZero) 
         {
+            RoundEnd();
             if (_currentRound >= _totalRounds)
             {
                 Debug.Log("BEFORE SEND WIN");
@@ -755,12 +760,15 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     private void InstantiateUFOIndicators()
     {
+        UFOLineRenderersList.Clear();
         Vector3 auxVector = new Vector3(_finalPos1.x, 0f, _finalPos1.z);
         UFOIndicator = Instantiate(UFOIndicatorPrefab);
+        UFOLineRenderersList.AddRange(UFOIndicator.GetComponentsInChildren<UFOLineRenderer>());
         UFOIndicator.transform.position = auxVector;
 
         Vector3 auxVector2 = new Vector3(_finalPos2.x, 0.05f, _finalPos2.z);
         UFOIndicator2 = Instantiate(UFOIndicatorPrefab);
+        UFOLineRenderersList.AddRange(UFOIndicator.GetComponentsInChildren<UFOLineRenderer>());
         UFOIndicator2.transform.position = auxVector2;
     }
 

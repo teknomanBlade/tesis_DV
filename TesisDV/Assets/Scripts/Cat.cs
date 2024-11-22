@@ -14,9 +14,10 @@ public class Cat : MonoBehaviour
     private bool _isWalking;
     private bool _isRepositioning;
     public Vector3 StartingPosition;
-    //[SerializeField] private GameObject _startingPositionGameObject;
+    public List<UFOLineRenderer> Renderers = new List<UFOLineRenderer>();
     public NavMeshAgent _navMeshAgent;
     private LevelManager _lm;
+    private WaveManager _wm;
     private Vector3 _exitPos;
     private Animator _animator;
     [SerializeField] private List<Vector3> _myPos = new List<Vector3>();
@@ -40,13 +41,13 @@ public class Cat : MonoBehaviour
     public event Action onTaken = delegate { };
     public event Action onMeowing = delegate { };
 
+    public delegate void OnCatStateChangeDelegate(Vector3 startingPos);
+    public event OnCatStateChangeDelegate OnCatStateChange;
     #endregion Events
     void Awake()
     {
         _fsm = new StateMachine();
         _myController = new CatController(this, GetComponent<CatView>());
-        
-        StartingPosition = _myPos[2];
         _isHeld = false;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.speed = 0.6f;
@@ -56,10 +57,14 @@ public class Cat : MonoBehaviour
             .GetComponentsInChildren<Transform>().Skip(1).ToList();
         PathToKitchen = FindObjectsOfType<Transform>().Where(x => x.name.Equals("CatWaypointsToKitchen")).First()
             .GetComponentsInChildren<Transform>().Skip(1).ToList();
+        
         _navMeshAgent.enabled = false;
         Path = FindObjectsOfType<Transform>().Where(x => x.name.Equals("CatWaypoints")).First()
             .GetComponentsInChildren<Transform>().Skip(1).ToList();
+        
+        _wm = GameObject.Find("GameManagement").GetComponent<WaveManager>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
+        
         _animator = GetComponent<Animator>();
         _animator.SetBool("IsIdle", true);
         IsGoingBack = false;
@@ -76,14 +81,24 @@ public class Cat : MonoBehaviour
 
     void Start()
     {
-        SetStartingPosition();
-        LoadLastPathPositions();
         _fsm.ChangeCatState(CatStatesEnum.RoomState);
+        StartCoroutine(SetRenderersAwait());
     } 
 
     void Update()
     {
         _myController.OnUpdate();
+    }
+    IEnumerator SetRenderersAwait() 
+    {
+        yield return new WaitUntil(() =>  _wm.UFOLineRenderersList.Count > 0);
+        Renderers = _wm.UFOLineRenderersList;
+        Renderers.ForEach(x =>
+        {
+            OnCatStateChange += x.OnRepaintLineRenderer;
+        });
+        SetStartingPosition();
+        LoadLastPathPositions();
     }
     public void LoadLastPathPositions() 
     {
@@ -91,6 +106,7 @@ public class Cat : MonoBehaviour
         _myPos.Add(Path.Last().position);
         _myPos.Add(PathToShed.Last().position);
         _myPos.Add(PathToKitchen.Last().position);
+        
     }
     public void GoingBackToLiving() 
     {
@@ -156,30 +172,7 @@ public class Cat : MonoBehaviour
 
     public void RepositionBetweenWaves()
     {
-        if (IsInShed)
-        {
-            GetMidValue();
-        }
-        else if (IsInKitchen)
-        {
-            StartingPosition = _myPos.Last();
-        }
-        else 
-        {
-            StartingPosition = _myPos.First();
-        }
-
-        /*Vector3 newPos = _myPos[2];
-        if (newPos != _startingPosition)
-        {
-            _startingPosition = newPos;
-        }
-        else
-        {
-            //_startingPosition = _myPos[Random.Range(0, 3)];
-            _startingPosition = _myPos[2];
-        }*/
-
+        GetNewPosition();
     }
 
     public void GetMidValue() 
@@ -187,19 +180,34 @@ public class Cat : MonoBehaviour
         var mid = _myPos.Count / 2;
         Debug.Log("MID VALUE: " + mid);
         StartingPosition = _myPos.ElementAt(mid);
+        OnCatStateChange?.Invoke(StartingPosition);
     }
 
     public void SetStartingPosition()
     {
-        if(!_isHeld)
+        _myPos = _myPos.AsEnumerable().Reverse().ToList();
+        if (!_isHeld)
         {
-            //transform.position = _myPos[Random.Range(0, 3)];
-            //transform.position = _myPos[2];
-            //_startingPositionGameObject.transform.position = transform.position;
-            StartingPosition = _myPos[2];
+            GetNewPosition();
         }
     }
-
+    public void GetNewPosition() 
+    {
+        if (IsInShed)
+        {
+            GetMidValue();
+        }
+        else if (IsInKitchen)
+        {
+            StartingPosition = _myPos.Last();
+            OnCatStateChange?.Invoke(StartingPosition);
+        }
+        else
+        {
+            StartingPosition = _myPos.First();
+            OnCatStateChange?.Invoke(StartingPosition);
+        }
+    }
     public void EnterIdleState()
     {
         onIdle();
@@ -247,6 +255,7 @@ public class Cat : MonoBehaviour
 
     public Vector3 GetStartingPosition()
     {
+        
         return StartingPosition;
     }
 

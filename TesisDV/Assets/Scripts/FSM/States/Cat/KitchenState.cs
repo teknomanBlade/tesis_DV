@@ -48,6 +48,7 @@ public class KitchenState : IState
                 {
                     _cat._navMeshAgent.enabled = true;
                     _cat.IsGoingBack = false;
+                    _currentPathWaypoint = 0;
                     _fsm.ChangeCatState(CatStatesEnum.IdleState);
                 }
             }
