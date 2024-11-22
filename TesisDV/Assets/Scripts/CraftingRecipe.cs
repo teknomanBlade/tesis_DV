@@ -37,6 +37,10 @@ using UnityEngine;
         {
             return inventory.ContainsID(2, 1) && inventory.ContainsID(12, 1);
         }
+        public bool HasTeslaCoilGeneratorItems(Inventory inventory)
+        {
+            return inventory.ContainsID(2, 1) && inventory.ContainsID(13, 1) && inventory.ContainsID(17, 1);
+        }
         public bool HasElectricTrapItems(Inventory inventory)
         {
             return inventory.ContainsID(2, 1) && inventory.ContainsID(9, 1) && inventory.ContainsID(10, 1);
@@ -104,10 +108,6 @@ using UnityEngine;
                     _inventory.RemoveItemID(itemAmount.craftingID, itemAmount.amount);
                 }
             }
-            /* foreach(ItemAmount itemAmount in results)
-            {
-                _inventory.RemoveWitts(itemAmount.wittValue); No se usan Witts para construir trampas.
-            } */
         }
 
         public void RestoreBuildAmount()

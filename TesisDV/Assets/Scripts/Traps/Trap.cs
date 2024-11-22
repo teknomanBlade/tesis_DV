@@ -5,11 +5,13 @@ using UnityEngine;
 using System;
 using System.Linq;
 
+public enum TrapType { Autonomous, Dependent }
 public abstract class Trap : MonoBehaviour
 {
     public delegate void OnCollidersObjectivesZeroDelegate();
     public event OnCollidersObjectivesZeroDelegate OnCollidersObjectivesZero;
     public bool active;
+    public TrapType TrapType;
     protected bool _canShoot = false;
     protected Animator _animator;
     [SerializeField] protected GameObject UITrapIndicator;

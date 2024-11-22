@@ -100,7 +100,6 @@ public class Door : Item
             if (transform.CompareTag("Tutorial") && IsOpened)
             {
                 GameVars.Values.PassedTutorial = IsOpened;
-                Debug.Log("PASSED TUTORIAL PLAYER = " + IsOpened);
             }
             GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
             //_navMeshObstacle.enabled = false;

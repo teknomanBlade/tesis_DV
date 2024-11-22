@@ -2,18 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TrapHotBar : MonoBehaviour
 {
     [SerializeField] TrapSlot[] trapSlots;
     private Animator _anim;
     [SerializeField] private CanvasGroup _myCanvasGroup;
+    [SerializeField] private HorizontalLayoutGroup _myHorizontalLayoutGroup;
     private float fadeDelay = 1.1f;
     private bool isFaded;
 
     private void Awake()
     {
         _myCanvasGroup = GetComponent<CanvasGroup>();
+        _myHorizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
+        _myHorizontalLayoutGroup.spacing = -150;
         _anim = GetComponent<Animator>();
         isFaded = true;
     }
@@ -125,7 +129,29 @@ public class TrapHotBar : MonoBehaviour
         {
             trapSlots[4].DeactivateImage();
         }
+        if (GameVars.Values.TeslaCoilGenerator.HasTeslaCoilGeneratorItems(inventory))
+        {
+            if (isFaded)
+            {
+                FadeIn();
+            }
+            if (!trapSlots[5].gameObject.activeSelf)
+            {
+                trapSlots[5].gameObject.SetActive(true);
+            }
+            _myHorizontalLayoutGroup.spacing = 50;
+            trapSlots[5].ActivateImage();
+            GameVars.Values.HasTeslaCoilGeneratorAppearedHotBar = true;
+        }
+        else
+        {
+            trapSlots[5].DeactivateImage();
+        }
     }
 
+    public void PlayKeySlotHighlightAnim(int keyCodeNumber) 
+    {
+        trapSlots[keyCodeNumber - 1].PlayKeySlotAnimHighlight();
+    }
     
 }

@@ -5,18 +5,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LevelManager : MonoBehaviour, IInRoundObservable
+public class LevelManager : MonoBehaviour
 {
    
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
-    private List<IInRoundObserver> inRoundObservers = new List<IInRoundObserver>();
+    public delegate void OnRoundEndDelegate(int amountEnemies);
+    public event OnRoundEndDelegate OnRoundEnd;
     [SerializeField]
     private int InitialStockUFO;
     private GameObject _panelMain;
     public GameObject WorkbenchLight;
     public GameObject YouWin;
     public GameObject YouLose;
-
+     
     private Cat _cat;
     [SerializeField]
     public List<UFO> AllUFOs = new List<UFO>();
@@ -30,16 +31,10 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
     public bool InRound {
         get
         {
-            if (enemiesInScene.Count == 0)
-            {
-                TriggerHitInRound("EndRound");
-            }
-            inRound = enemiesInScene.Count > 0;
-            return enemiesInScene.Count > 0;
+            return AmountEnemiesInScene > 0;
         }
-
     }
-
+    [SerializeField]
     private int _amountEnemiesInScene = 0;
     public int AmountEnemiesInScene
     {
@@ -48,6 +43,8 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         {
             if (_amountEnemiesInScene == value) return;
             _amountEnemiesInScene = value;
+            OnRoundEnd(AmountEnemiesInScene);
+            GameVars.Values.WaveManager.RoundEnd();
         }
     }
     public Player _player;
@@ -74,13 +71,13 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
 
     private void GrayAmountChange(int newVal)
     {
-        AmountEnemiesInScene = newVal;
+        AmountEnemiesInScene = Mathf.Clamp(newVal, 0, 20);
+        GameVars.Values.WaveManager.CheckIfLastRound(AmountEnemiesInScene == 0);
     }
 
     private void Update() 
     {
-        //AmountEnemiesInScene = GameVars.Values.WaveManager.GetAmountEnemiesByWave();
-        if (Input.GetKeyDown(KeyCode.P)) KillAllEnemiesInScene();
+        
     }
     public void WinGame()
     {
@@ -137,17 +134,6 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
         }
     }
 
-    private void KillAllEnemiesInScene()
-    {
-        if (enemiesInScene.Count != 0) 
-        {
-            if (!enemiesInScene[0].gameObject.CompareTag("Tutorial"))
-                AmountEnemiesInScene--;
-
-            enemiesInScene[0].TakeDamage(999);
-        }
-    }
-
     public void ChangeDoorsStatus()
     {
         if(allDoorsAreClosed)
@@ -159,20 +145,5 @@ public class LevelManager : MonoBehaviour, IInRoundObservable
             allDoorsAreClosed = true;
         }
 
-    }
-
-    public void AddObserverInRound(IInRoundObserver obs)
-    {
-        inRoundObservers.Add(obs);
-    }
-
-    public void RemoveObserverInRound(IInRoundObserver obs)
-    {
-        if(inRoundObservers.Contains(obs)) inRoundObservers.Remove(obs);
-    }
-
-    public void TriggerHitInRound(string triggerMessage)
-    {
-        inRoundObservers.ForEach(x => x.OnNotifyInRound(triggerMessage));
     }
 }

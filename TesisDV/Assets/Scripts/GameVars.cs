@@ -57,7 +57,21 @@ public class GameVars : MonoBehaviour
     public KeyCode inventoryItem1Key;
     public KeyCode sprintKey;
     public KeyCode crouchKey;
+    public KeyCode startWaveKey;
+    public KeyCode firstTrapHotKey;
+    public KeyCode secondTrapHotKey;
+    public KeyCode thirdTrapHotKey;
+    public KeyCode fourthTrapHotKey;
+    public KeyCode fifthTrapHotKey;
+    public KeyCode sixthTrapHotKey;
+    public KeyCode pauseKey;
+    public KeyCode switchWeaponKey;
     public bool crouchToggle;
+
+    [Header("KeyDebugBinds")]
+    public KeyCode testRecieveWittsKey;
+    public KeyCode testOpenAllDoorsKey;
+    public KeyCode testKillingEnemiesKey;
 
     [Header("Resources")]
     public Sprite crosshair;
@@ -93,15 +107,18 @@ public class GameVars : MonoBehaviour
     public CraftingRecipe SlowTrap;
     public CraftingRecipe FERNPaintballMinigun;
     public CraftingRecipe ElectricTrap;
+    public CraftingRecipe TeslaCoilGenerator;
     public bool HasBoughtMicrowaveTrap { get; set; }
     public bool HasBoughtSlowingTrap { get; set; }
     public bool HasBoughtPaintballMinigunTrap { get; set; }
+    public bool HasBoughtTeslaCoilGenerator { get; set; }
     public bool HasBoughtElectricTrap { get; set; }
     public bool HasElectricTrapAppearedHotBar { get; set; }
     public bool HasMicrowaveTrapAppearedHotBar { get; set; }
     public bool HasSlowingTrapAppearedHotBar { get; set; }
     public bool HasPaintballMinigunTrapAppearedHotBar { get; set; }
-    
+    public bool HasTeslaCoilGeneratorAppearedHotBar { get; set; }
+
 
     [Header("Game")]
     private float _fadeDelay = 1.1f;
@@ -119,15 +136,28 @@ public class GameVars : MonoBehaviour
     public string EnemyType;
     public int BaseballLauncherCount = 0;
     public int FERNPaintballMinigunCount = 0;
+    public int TeslaCoilGeneratorCount = 0;
     public int InitialStock { get; private set; }
+    public ParticleSystem SmokePrefab;
     public BaseballLauncher BaseballLauncherPrefab;
     public FERNPaintballMinigun FERNPaintballMinigunPrefab;
+    public TeslaCoilGenerator TeslaCoilGeneratorPrefab;
     public PoolObjectStack<BaseballLauncher> BaseballLauncherPool { get; set; }
     public PoolObjectStack<FERNPaintballMinigun> FERNPaintballMinigunPool { get; set; }
+    public PoolObjectStack<TeslaCoilGenerator> TeslaCoilGeneratorPool { get; set; }
+    public PoolObjectStack<ParticleSystem> SmokeParticlesPool { get; set; }
     public bool PassedTutorial;
+    public Vector3 positionObjectNotification;
+    public Vector3 smokeParticlesPos;
     #region Events
     public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
     public event OnCapturedCatChangeDelegate OnCapturedCatChange;
+    public delegate void OnCapturedCatPositionDelegate(Vector3 catPos);
+    public event OnCapturedCatPositionDelegate OnCapturedCatPosition;
+    public delegate void OnObjectNotificationPositionDelegate(Vector3 objectNotificationPos);
+    public event OnObjectNotificationPositionDelegate OnObjectNotificationPosition;
+   
+
     #endregion
 
     private void Awake()
@@ -157,8 +187,9 @@ public class GameVars : MonoBehaviour
     void FindPlayer(Scene scene, LoadSceneMode mode)
     {
         var aux = GameObject.Find("Player");
-        if (aux != null) player = aux.GetComponent<Player>();
-        else player = null;
+        if (aux == null) return;
+        player = aux.GetComponent<Player>();
+
     }
 
     void FindCat(Scene scene, LoadSceneMode mode)
@@ -201,7 +232,51 @@ public class GameVars : MonoBehaviour
         InitialStock = 5;
         BaseballLauncherPool = new PoolObjectStack<BaseballLauncher>(BaseballLauncherFactory, ActivateBaseballLauncher, DeactivateBaseballLauncher, InitialStock, true);
         FERNPaintballMinigunPool = new PoolObjectStack<FERNPaintballMinigun>(FERNPaintballMinigunFactory, ActivateFERNPaintballMinigun, DeactivateFERNPaintballMinigun, InitialStock, true);
+        TeslaCoilGeneratorPool = new PoolObjectStack<TeslaCoilGenerator>(TeslaCoilGeneratorFactory, ActivateTeslaCoilGenerator, DeactivateTeslaCoilGenerator, InitialStock, true);
+        SmokeParticlesPool = new PoolObjectStack<ParticleSystem>(SmokeParticlesFactory, ActivateSmokeParticles, DeactivateSmokeParticles, InitialStock, true);
     }
+
+    private void DeactivateSmokeParticles(ParticleSystem o)
+    {
+        o.gameObject.transform.parent = null;
+        o.gameObject.SetActive(false);
+    }
+
+    private void ActivateSmokeParticles(ParticleSystem o)
+    {
+        o.gameObject.SetActive(true);
+        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
+        o.transform.position = smokeParticlesPos;
+    }
+
+    private ParticleSystem SmokeParticlesFactory()
+    {
+        return Instantiate(SmokePrefab);
+    }
+
+    private void DeactivateTeslaCoilGenerator(TeslaCoilGenerator o)
+    {
+        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
+        o.gameObject.SetActive(false);
+        if (!o.gameObject.name.Contains("_"))
+        {
+            TeslaCoilGeneratorCount++;
+            o.gameObject.name = o.gameObject.name.Replace("(Clone)", "");
+            o.gameObject.name += "_" + TeslaCoilGeneratorCount;
+        }
+        o.transform.position = Vector3.zero;
+        o.transform.localPosition = Vector3.zero;
+    }
+
+    private void ActivateTeslaCoilGenerator(TeslaCoilGenerator o)
+    {
+        o.gameObject.SetActive(true);
+    }
+
+    private TeslaCoilGenerator TeslaCoilGeneratorFactory()
+    {
+        return Instantiate(TeslaCoilGeneratorPrefab);
+    } 
 
     private void DeactivateFERNPaintballMinigun(FERNPaintballMinigun o)
     {
@@ -391,8 +466,14 @@ public class GameVars : MonoBehaviour
     #endregion
 
     #region Notifications
-    public void ShowNotification(string text)
+    public void ShowNotification(string text, Vector3 pos = new Vector3())
     {
+        if (pos != Vector3.zero) 
+        {
+            positionObjectNotification = pos;
+            OnObjectNotificationPosition(positionObjectNotification);
+        }
+
         notifications.GetComponentInChildren<Text>().text = text;
         StartCoroutine(ShowNotification());
     }
@@ -459,6 +540,12 @@ public class GameVars : MonoBehaviour
         OnCapturedCatChange(_isCatCaptured);
         cat.CatIsBeingTaken();
         cat.SetExitPos(exitPos);
+        OnCapturedCatPosition(cat.transform.localPosition);
     }
-    #endregion 
+
+    internal void OnSmokeParticlesPosition(Vector3 smokeParticlePos)
+    {
+        smokeParticlesPos = smokeParticlePos;
+    }
+    #endregion
 }

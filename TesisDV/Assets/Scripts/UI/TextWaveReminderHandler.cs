@@ -30,7 +30,6 @@ public class TextWaveReminderHandler : MonoBehaviour
     }
     public void PrintEvent()
     {
-        Debug.Log("LLEGA AL EVENTO?");
         anim.SetBool("IsWaveReminder", false);
         GameVars.Values.PassedTutorial = false;
         IsReachedEventFirstTime = true;
