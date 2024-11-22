@@ -6,11 +6,7 @@ Shader "BaseballMachinePart2"
 	{
 		[HideInInspector] _AlphaCutoff("Alpha Cutoff ", Range(0, 1)) = 0.5
 		[HideInInspector] _EmissionColor("Emission Color", Color) = (1,1,1,1)
-		[ASEBegin]_FirstPosition1("FirstPosition", Float) = 0
-		_SecondPosition1("SecondPosition", Float) = 0
-		_SecondPositionIntensity1("SecondPositionIntensity", Float) = 0
-		_ShadowIntensity1("ShadowIntensity", Float) = 0
-		_MainTexture2("Main Texture", 2D) = "white" {}
+		[ASEBegin]_MainTexture2("Main Texture", 2D) = "white" {}
 		_Emission_One("Emission_One", 2D) = "white" {}
 		_TintActive1("TintActive", Color) = (1,0.9813726,0,0)
 		_Emission_Two("Emission_Two", 2D) = "white" {}
@@ -247,10 +243,7 @@ Shader "BaseballMachinePart2"
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			#define ASE_NEEDS_FRAG_WORLD_NORMAL
-			#define ASE_NEEDS_FRAG_WORLD_POSITION
-			#define ASE_NEEDS_FRAG_SHADOWCOORDS
-
+			
 
 			struct VertexInput
 			{
@@ -292,10 +285,6 @@ Shader "BaseballMachinePart2"
 			float4 _Emission_One_ST;
 			float4 _Emission_Two_ST;
 			float4 _Active;
-			float _FirstPosition1;
-			float _SecondPosition1;
-			float _SecondPositionIntensity1;
-			float _ShadowIntensity1;
 			float _ColorInterpolatorBattery;
 			float _Float0;
 			#ifdef ASE_TRANSMISSION
@@ -564,19 +553,13 @@ Shader "BaseballMachinePart2"
 
 				float2 uv_MainTexture2 = IN.ase_texcoord8.xy * _MainTexture2_ST.xy + _MainTexture2_ST.zw;
 				float4 tex2DNode48 = tex2D( _MainTexture2, uv_MainTexture2 );
-				float dotResult69 = dot( _MainLightPosition.xyz , WorldNormal );
-				float temp_output_71_0 = ( ( dotResult69 + 1.0 ) * 0.5 );
-				float temp_output_82_0 = ( saturate( ( 1.0 - step( temp_output_71_0 , _FirstPosition1 ) ) ) + saturate( ( ( 1.0 - step( temp_output_71_0 , _SecondPosition1 ) ) - _SecondPositionIntensity1 ) ) );
-				float ase_lightAtten = 0;
-				Light ase_mainLight = GetMainLight( ShadowCoords );
-				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 				float2 uv_Emission_One = IN.ase_texcoord8.xy * _Emission_One_ST.xy + _Emission_One_ST.zw;
 				float2 uv_Emission_Two = IN.ase_texcoord8.xy * _Emission_Two_ST.xy + _Emission_Two_ST.zw;
 				float4 lerpResult54 = lerp( tex2D( _Emission_One, uv_Emission_One ) , tex2D( _Emission_Two, uv_Emission_Two ) , (_TimeParameters.y*_Float0 + _Float0));
 				
 
-				float3 BaseColor = saturate( ( tex2DNode48 * ( ( temp_output_82_0 + ( ( 1.0 - temp_output_82_0 ) * _ShadowIntensity1 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
+				float3 BaseColor = tex2DNode48.rgb;
 				float3 Normal = float3(0, 0, 1);
 				float3 Emission = ( saturate( ( tex2DNode48.a * _TintActive1 * _ColorInterpolatorBattery ) ) + ( lerpResult54 * _Active ) ).rgb;
 				float3 Specular = 0.5;
@@ -882,10 +865,6 @@ Shader "BaseballMachinePart2"
 			float4 _Emission_One_ST;
 			float4 _Emission_Two_ST;
 			float4 _Active;
-			float _FirstPosition1;
-			float _SecondPosition1;
-			float _SecondPositionIntensity1;
-			float _ShadowIntensity1;
 			float _ColorInterpolatorBattery;
 			float _Float0;
 			#ifdef ASE_TRANSMISSION
@@ -1199,10 +1178,6 @@ Shader "BaseballMachinePart2"
 			float4 _Emission_One_ST;
 			float4 _Emission_Two_ST;
 			float4 _Active;
-			float _FirstPosition1;
-			float _SecondPosition1;
-			float _SecondPositionIntensity1;
-			float _ShadowIntensity1;
 			float _ColorInterpolatorBattery;
 			float _Float0;
 			#ifdef ASE_TRANSMISSION
@@ -1458,15 +1433,7 @@ Shader "BaseballMachinePart2"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/MetaInput.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			#define ASE_NEEDS_VERT_NORMAL
-			#define ASE_NEEDS_FRAG_WORLD_POSITION
-			#define ASE_NEEDS_FRAG_SHADOWCOORDS
-			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
-			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
-			#pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
-			#pragma multi_compile_fragment _ _SHADOWS_SOFT
-			#pragma multi_compile _ _FORWARD_PLUS
-
+			
 
 			struct VertexInput
 			{
@@ -1493,7 +1460,6 @@ Shader "BaseballMachinePart2"
 					float4 LightCoord : TEXCOORD3;
 				#endif
 				float4 ase_texcoord4 : TEXCOORD4;
-				float4 ase_texcoord5 : TEXCOORD5;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -1504,10 +1470,6 @@ Shader "BaseballMachinePart2"
 			float4 _Emission_One_ST;
 			float4 _Emission_Two_ST;
 			float4 _Active;
-			float _FirstPosition1;
-			float _SecondPosition1;
-			float _SecondPositionIntensity1;
-			float _ShadowIntensity1;
 			float _ColorInterpolatorBattery;
 			float _Float0;
 			#ifdef ASE_TRANSMISSION
@@ -1562,14 +1524,10 @@ Shader "BaseballMachinePart2"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
-				o.ase_texcoord5.xyz = ase_worldNormal;
-				
 				o.ase_texcoord4.xy = v.texcoord0.xy;
 				
 				//setting value to unused interpolator channels and avoid initialization warnings
 				o.ase_texcoord4.zw = 0;
-				o.ase_texcoord5.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -1722,20 +1680,13 @@ Shader "BaseballMachinePart2"
 
 				float2 uv_MainTexture2 = IN.ase_texcoord4.xy * _MainTexture2_ST.xy + _MainTexture2_ST.zw;
 				float4 tex2DNode48 = tex2D( _MainTexture2, uv_MainTexture2 );
-				float3 ase_worldNormal = IN.ase_texcoord5.xyz;
-				float dotResult69 = dot( _MainLightPosition.xyz , ase_worldNormal );
-				float temp_output_71_0 = ( ( dotResult69 + 1.0 ) * 0.5 );
-				float temp_output_82_0 = ( saturate( ( 1.0 - step( temp_output_71_0 , _FirstPosition1 ) ) ) + saturate( ( ( 1.0 - step( temp_output_71_0 , _SecondPosition1 ) ) - _SecondPositionIntensity1 ) ) );
-				float ase_lightAtten = 0;
-				Light ase_mainLight = GetMainLight( ShadowCoords );
-				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 				float2 uv_Emission_One = IN.ase_texcoord4.xy * _Emission_One_ST.xy + _Emission_One_ST.zw;
 				float2 uv_Emission_Two = IN.ase_texcoord4.xy * _Emission_Two_ST.xy + _Emission_Two_ST.zw;
 				float4 lerpResult54 = lerp( tex2D( _Emission_One, uv_Emission_One ) , tex2D( _Emission_Two, uv_Emission_Two ) , (_TimeParameters.y*_Float0 + _Float0));
 				
 
-				float3 BaseColor = saturate( ( tex2DNode48 * ( ( temp_output_82_0 + ( ( 1.0 - temp_output_82_0 ) * _ShadowIntensity1 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
+				float3 BaseColor = tex2DNode48.rgb;
 				float3 Emission = ( saturate( ( tex2DNode48.a * _TintActive1 * _ColorInterpolatorBattery ) ) + ( lerpResult54 * _Active ) ).rgb;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
@@ -1793,15 +1744,7 @@ Shader "BaseballMachinePart2"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			#define ASE_NEEDS_VERT_NORMAL
-			#define ASE_NEEDS_FRAG_WORLD_POSITION
-			#define ASE_NEEDS_FRAG_SHADOWCOORDS
-			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
-			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
-			#pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
-			#pragma multi_compile_fragment _ _SHADOWS_SOFT
-			#pragma multi_compile _ _FORWARD_PLUS
-
+			
 
 			struct VertexInput
 			{
@@ -1821,7 +1764,6 @@ Shader "BaseballMachinePart2"
 					float4 shadowCoord : TEXCOORD1;
 				#endif
 				float4 ase_texcoord2 : TEXCOORD2;
-				float4 ase_texcoord3 : TEXCOORD3;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -1832,10 +1774,6 @@ Shader "BaseballMachinePart2"
 			float4 _Emission_One_ST;
 			float4 _Emission_Two_ST;
 			float4 _Active;
-			float _FirstPosition1;
-			float _SecondPosition1;
-			float _SecondPositionIntensity1;
-			float _ShadowIntensity1;
 			float _ColorInterpolatorBattery;
 			float _Float0;
 			#ifdef ASE_TRANSMISSION
@@ -1888,14 +1826,10 @@ Shader "BaseballMachinePart2"
 				UNITY_TRANSFER_INSTANCE_ID( v, o );
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
-				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
-				o.ase_texcoord3.xyz = ase_worldNormal;
-				
 				o.ase_texcoord2.xy = v.ase_texcoord.xy;
 				
 				//setting value to unused interpolator channels and avoid initialization warnings
 				o.ase_texcoord2.zw = 0;
-				o.ase_texcoord3.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -2033,16 +1967,9 @@ Shader "BaseballMachinePart2"
 
 				float2 uv_MainTexture2 = IN.ase_texcoord2.xy * _MainTexture2_ST.xy + _MainTexture2_ST.zw;
 				float4 tex2DNode48 = tex2D( _MainTexture2, uv_MainTexture2 );
-				float3 ase_worldNormal = IN.ase_texcoord3.xyz;
-				float dotResult69 = dot( _MainLightPosition.xyz , ase_worldNormal );
-				float temp_output_71_0 = ( ( dotResult69 + 1.0 ) * 0.5 );
-				float temp_output_82_0 = ( saturate( ( 1.0 - step( temp_output_71_0 , _FirstPosition1 ) ) ) + saturate( ( ( 1.0 - step( temp_output_71_0 , _SecondPosition1 ) ) - _SecondPositionIntensity1 ) ) );
-				float ase_lightAtten = 0;
-				Light ase_mainLight = GetMainLight( ShadowCoords );
-				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 
-				float3 BaseColor = saturate( ( tex2DNode48 * ( ( temp_output_82_0 + ( ( 1.0 - temp_output_82_0 ) * _ShadowIntensity1 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
+				float3 BaseColor = tex2DNode48.rgb;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -2131,10 +2058,6 @@ Shader "BaseballMachinePart2"
 			float4 _Emission_One_ST;
 			float4 _Emission_Two_ST;
 			float4 _Active;
-			float _FirstPosition1;
-			float _SecondPosition1;
-			float _SecondPositionIntensity1;
-			float _ShadowIntensity1;
 			float _ColorInterpolatorBattery;
 			float _Float0;
 			#ifdef ASE_TRANSMISSION
@@ -2453,13 +2376,7 @@ Shader "BaseballMachinePart2"
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			#define ASE_NEEDS_FRAG_WORLD_NORMAL
-			#define ASE_NEEDS_FRAG_WORLD_POSITION
-			#define ASE_NEEDS_FRAG_SHADOWCOORDS
-			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
-			#pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
-			#pragma multi_compile _ _FORWARD_PLUS
-
+			
 
 			struct VertexInput
 			{
@@ -2501,10 +2418,6 @@ Shader "BaseballMachinePart2"
 			float4 _Emission_One_ST;
 			float4 _Emission_Two_ST;
 			float4 _Active;
-			float _FirstPosition1;
-			float _SecondPosition1;
-			float _SecondPositionIntensity1;
-			float _ShadowIntensity1;
 			float _ColorInterpolatorBattery;
 			float _Float0;
 			#ifdef ASE_TRANSMISSION
@@ -2766,19 +2679,13 @@ Shader "BaseballMachinePart2"
 
 				float2 uv_MainTexture2 = IN.ase_texcoord8.xy * _MainTexture2_ST.xy + _MainTexture2_ST.zw;
 				float4 tex2DNode48 = tex2D( _MainTexture2, uv_MainTexture2 );
-				float dotResult69 = dot( _MainLightPosition.xyz , WorldNormal );
-				float temp_output_71_0 = ( ( dotResult69 + 1.0 ) * 0.5 );
-				float temp_output_82_0 = ( saturate( ( 1.0 - step( temp_output_71_0 , _FirstPosition1 ) ) ) + saturate( ( ( 1.0 - step( temp_output_71_0 , _SecondPosition1 ) ) - _SecondPositionIntensity1 ) ) );
-				float ase_lightAtten = 0;
-				Light ase_mainLight = GetMainLight( ShadowCoords );
-				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 				float2 uv_Emission_One = IN.ase_texcoord8.xy * _Emission_One_ST.xy + _Emission_One_ST.zw;
 				float2 uv_Emission_Two = IN.ase_texcoord8.xy * _Emission_Two_ST.xy + _Emission_Two_ST.zw;
 				float4 lerpResult54 = lerp( tex2D( _Emission_One, uv_Emission_One ) , tex2D( _Emission_Two, uv_Emission_Two ) , (_TimeParameters.y*_Float0 + _Float0));
 				
 
-				float3 BaseColor = saturate( ( tex2DNode48 * ( ( temp_output_82_0 + ( ( 1.0 - temp_output_82_0 ) * _ShadowIntensity1 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
+				float3 BaseColor = tex2DNode48.rgb;
 				float3 Normal = float3(0, 0, 1);
 				float3 Emission = ( saturate( ( tex2DNode48.a * _TintActive1 * _ColorInterpolatorBattery ) ) + ( lerpResult54 * _Active ) ).rgb;
 				float3 Specular = 0.5;
@@ -2948,10 +2855,6 @@ Shader "BaseballMachinePart2"
 			float4 _Emission_One_ST;
 			float4 _Emission_Two_ST;
 			float4 _Active;
-			float _FirstPosition1;
-			float _SecondPosition1;
-			float _SecondPositionIntensity1;
-			float _ShadowIntensity1;
 			float _ColorInterpolatorBattery;
 			float _Float0;
 			#ifdef ASE_TRANSMISSION
@@ -3204,10 +3107,6 @@ Shader "BaseballMachinePart2"
 			float4 _Emission_One_ST;
 			float4 _Emission_Two_ST;
 			float4 _Active;
-			float _FirstPosition1;
-			float _SecondPosition1;
-			float _SecondPositionIntensity1;
-			float _ShadowIntensity1;
 			float _ColorInterpolatorBattery;
 			float _Float0;
 			#ifdef ASE_TRANSMISSION
@@ -3450,9 +3349,7 @@ Node;AmplifyShaderEditor.SimpleMultiplyOpNode;49;911.5494,-602.23;Inherit;False;
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;60;1368.426,-165.9363;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SaturateNode;65;1508.477,-845.4615;Inherit;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SaturateNode;50;1074.507,-519.5123;Inherit;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;93;1731.262,-519.4384;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;94;1967.462,-310.5421;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;0;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;95;1967.462,-310.5421;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;BaseballMachinePart2;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;96;1967.462,-310.5421;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;False;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=ShadowCaster;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;97;1967.462,-310.5421;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;True;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;False;False;True;1;LightMode=DepthOnly;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;98;1967.462,-310.5421;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;False;0;;0;0;Standard;0;False;0
@@ -3461,6 +3358,8 @@ Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;100;1967.462,-310.5421;Floa
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;101;1967.462,-310.5421;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalGBuffer;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;102;1967.462,-310.5421;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;SceneSelectionPass;0;8;SceneSelectionPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=SceneSelectionPass;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;103;1967.462,-310.5421;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ScenePickingPass;0;9;ScenePickingPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Picking;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;93;1731.262,-519.4384;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;95;1977.406,-865.5558;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;BaseballMachinePart2;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
 WireConnection;69;0;68;0
 WireConnection;69;1;67;0
 WireConnection;70;0;69;0
@@ -3504,7 +3403,7 @@ WireConnection;65;0;64;0
 WireConnection;50;0;49;0
 WireConnection;93;0;65;0
 WireConnection;93;1;60;0
-WireConnection;95;0;50;0
+WireConnection;95;0;48;0
 WireConnection;95;2;93;0
 ASEEND*/
-//CHKSM=03D7C13807DB959CDB5627C7411972755780C7E1
+//CHKSM=2ACBB3140D5E8ADC43AB73F40E38F962B731747C

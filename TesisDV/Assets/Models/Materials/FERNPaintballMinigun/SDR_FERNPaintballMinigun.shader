@@ -192,6 +192,7 @@ Shader "SDR_FERNPaintballMinigun"
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -555,6 +556,7 @@ Shader "SDR_FERNPaintballMinigun"
 				float2 uv_PrimaryTexture = IN.ase_texcoord8.xy * _PrimaryTexture_ST.xy + _PrimaryTexture_ST.zw;
 				float2 uv_SecondaryTexture = IN.ase_texcoord8.xy * _SecondaryTexture_ST.xy + _SecondaryTexture_ST.zw;
 				float4 lerpResult31 = lerp( tex2D( _PrimaryTexture, uv_PrimaryTexture ) , tex2D( _SecondaryTexture, uv_SecondaryTexture ) , _TransitionTextureVal);
+				
 				float dotResult3 = dot( _MainLightPosition.xyz , WorldNormal );
 				float temp_output_6_0 = ( ( dotResult3 + 1.0 ) * 0.5 );
 				float temp_output_16_0 = ( saturate( ( 1.0 - step( temp_output_6_0 , _FirstPosition2 ) ) ) + saturate( ( ( 1.0 - step( temp_output_6_0 , _SecondPosition2 ) ) - _SecondPositionIntensity2 ) ) );
@@ -563,9 +565,9 @@ Shader "SDR_FERNPaintballMinigun"
 				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 
-				float3 BaseColor = saturate( ( lerpResult31 * ( ( temp_output_16_0 + ( ( 1.0 - temp_output_16_0 ) * _ShadowIntensity2 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
+				float3 BaseColor = lerpResult31.rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = 0;
+				float3 Emission = saturate( ( lerpResult31 * ( ( temp_output_16_0 + ( ( 1.0 - temp_output_16_0 ) * _ShadowIntensity2 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
@@ -815,6 +817,7 @@ Shader "SDR_FERNPaintballMinigun"
 			#pragma multi_compile_instancing
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1129,6 +1132,7 @@ Shader "SDR_FERNPaintballMinigun"
 			#pragma multi_compile_instancing
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1414,6 +1418,7 @@ Shader "SDR_FERNPaintballMinigun"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1694,6 +1699,7 @@ Shader "SDR_FERNPaintballMinigun"
 				float2 uv_PrimaryTexture = IN.ase_texcoord4.xy * _PrimaryTexture_ST.xy + _PrimaryTexture_ST.zw;
 				float2 uv_SecondaryTexture = IN.ase_texcoord4.xy * _SecondaryTexture_ST.xy + _SecondaryTexture_ST.zw;
 				float4 lerpResult31 = lerp( tex2D( _PrimaryTexture, uv_PrimaryTexture ) , tex2D( _SecondaryTexture, uv_SecondaryTexture ) , _TransitionTextureVal);
+				
 				float3 ase_worldNormal = IN.ase_texcoord5.xyz;
 				float dotResult3 = dot( _MainLightPosition.xyz , ase_worldNormal );
 				float temp_output_6_0 = ( ( dotResult3 + 1.0 ) * 0.5 );
@@ -1703,8 +1709,8 @@ Shader "SDR_FERNPaintballMinigun"
 				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 
-				float3 BaseColor = saturate( ( lerpResult31 * ( ( temp_output_16_0 + ( ( 1.0 - temp_output_16_0 ) * _ShadowIntensity2 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
-				float3 Emission = 0;
+				float3 BaseColor = lerpResult31.rgb;
+				float3 Emission = saturate( ( lerpResult31 * ( ( temp_output_16_0 + ( ( 1.0 - temp_output_16_0 ) * _ShadowIntensity2 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -1743,6 +1749,7 @@ Shader "SDR_FERNPaintballMinigun"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1760,15 +1767,7 @@ Shader "SDR_FERNPaintballMinigun"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			#define ASE_NEEDS_VERT_NORMAL
-			#define ASE_NEEDS_FRAG_WORLD_POSITION
-			#define ASE_NEEDS_FRAG_SHADOWCOORDS
-			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
-			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
-			#pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
-			#pragma multi_compile_fragment _ _SHADOWS_SOFT
-			#pragma multi_compile _ _FORWARD_PLUS
-
+			
 
 			struct VertexInput
 			{
@@ -1788,7 +1787,6 @@ Shader "SDR_FERNPaintballMinigun"
 					float4 shadowCoord : TEXCOORD1;
 				#endif
 				float4 ase_texcoord2 : TEXCOORD2;
-				float4 ase_texcoord3 : TEXCOORD3;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -1852,14 +1850,10 @@ Shader "SDR_FERNPaintballMinigun"
 				UNITY_TRANSFER_INSTANCE_ID( v, o );
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
-				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
-				o.ase_texcoord3.xyz = ase_worldNormal;
-				
 				o.ase_texcoord2.xy = v.ase_texcoord.xy;
 				
 				//setting value to unused interpolator channels and avoid initialization warnings
 				o.ase_texcoord2.zw = 0;
-				o.ase_texcoord3.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -1998,16 +1992,9 @@ Shader "SDR_FERNPaintballMinigun"
 				float2 uv_PrimaryTexture = IN.ase_texcoord2.xy * _PrimaryTexture_ST.xy + _PrimaryTexture_ST.zw;
 				float2 uv_SecondaryTexture = IN.ase_texcoord2.xy * _SecondaryTexture_ST.xy + _SecondaryTexture_ST.zw;
 				float4 lerpResult31 = lerp( tex2D( _PrimaryTexture, uv_PrimaryTexture ) , tex2D( _SecondaryTexture, uv_SecondaryTexture ) , _TransitionTextureVal);
-				float3 ase_worldNormal = IN.ase_texcoord3.xyz;
-				float dotResult3 = dot( _MainLightPosition.xyz , ase_worldNormal );
-				float temp_output_6_0 = ( ( dotResult3 + 1.0 ) * 0.5 );
-				float temp_output_16_0 = ( saturate( ( 1.0 - step( temp_output_6_0 , _FirstPosition2 ) ) ) + saturate( ( ( 1.0 - step( temp_output_6_0 , _SecondPosition2 ) ) - _SecondPositionIntensity2 ) ) );
-				float ase_lightAtten = 0;
-				Light ase_mainLight = GetMainLight( ShadowCoords );
-				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 
-				float3 BaseColor = saturate( ( lerpResult31 * ( ( temp_output_16_0 + ( ( 1.0 - temp_output_16_0 ) * _ShadowIntensity2 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
+				float3 BaseColor = lerpResult31.rgb;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -2039,6 +2026,7 @@ Shader "SDR_FERNPaintballMinigun"
 			#pragma multi_compile_instancing
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -2367,6 +2355,7 @@ Shader "SDR_FERNPaintballMinigun"
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -2721,6 +2710,7 @@ Shader "SDR_FERNPaintballMinigun"
 				float2 uv_PrimaryTexture = IN.ase_texcoord8.xy * _PrimaryTexture_ST.xy + _PrimaryTexture_ST.zw;
 				float2 uv_SecondaryTexture = IN.ase_texcoord8.xy * _SecondaryTexture_ST.xy + _SecondaryTexture_ST.zw;
 				float4 lerpResult31 = lerp( tex2D( _PrimaryTexture, uv_PrimaryTexture ) , tex2D( _SecondaryTexture, uv_SecondaryTexture ) , _TransitionTextureVal);
+				
 				float dotResult3 = dot( _MainLightPosition.xyz , WorldNormal );
 				float temp_output_6_0 = ( ( dotResult3 + 1.0 ) * 0.5 );
 				float temp_output_16_0 = ( saturate( ( 1.0 - step( temp_output_6_0 , _FirstPosition2 ) ) ) + saturate( ( ( 1.0 - step( temp_output_6_0 , _SecondPosition2 ) ) - _SecondPositionIntensity2 ) ) );
@@ -2729,9 +2719,9 @@ Shader "SDR_FERNPaintballMinigun"
 				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 
-				float3 BaseColor = saturate( ( lerpResult31 * ( ( temp_output_16_0 + ( ( 1.0 - temp_output_16_0 ) * _ShadowIntensity2 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
+				float3 BaseColor = lerpResult31.rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = 0;
+				float3 Emission = saturate( ( lerpResult31 * ( ( temp_output_16_0 + ( ( 1.0 - temp_output_16_0 ) * _ShadowIntensity2 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
@@ -2853,6 +2843,7 @@ Shader "SDR_FERNPaintballMinigun"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -3104,6 +3095,7 @@ Shader "SDR_FERNPaintballMinigun"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -3355,11 +3347,11 @@ Node;AmplifyShaderEditor.WorldSpaceLightDirHlpNode;1;-3810.908,-139.2264;Inherit
 Node;AmplifyShaderEditor.WorldNormalVector;2;-3810.908,36.77393;Inherit;False;False;1;0;FLOAT3;0,0,1;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
 Node;AmplifyShaderEditor.DotProductOpNode;3;-3522.908,-59.22607;Inherit;False;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;4;-3314.908,-27.22607;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;1;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;5;-3069.82,212.4872;Inherit;False;Property;_SecondPosition2;SecondPosition;1;0;Create;True;0;0;0;False;0;False;0;0.56;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;5;-3069.82,212.4872;Inherit;False;Property;_SecondPosition2;SecondPosition;1;0;Create;True;0;0;0;False;0;False;0;0.32;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;6;-3122.908,-75.22614;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0.5;False;1;FLOAT;0
 Node;AmplifyShaderEditor.StepOpNode;7;-2806.053,108.2423;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;8;-2943.44,-188.9454;Inherit;False;Property;_FirstPosition2;FirstPosition;0;0;Create;True;0;0;0;False;0;False;0;0.49;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;9;-2370.908,468.774;Inherit;False;Property;_SecondPositionIntensity2;SecondPositionIntensity;2;0;Create;True;0;0;0;False;0;False;0;0.03;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;8;-2943.44,-188.9454;Inherit;False;Property;_FirstPosition2;FirstPosition;0;0;Create;True;0;0;0;False;0;False;0;0.46;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;9;-2370.908,468.774;Inherit;False;Property;_SecondPositionIntensity2;SecondPositionIntensity;2;0;Create;True;0;0;0;False;0;False;0;0.4;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.OneMinusNode;10;-2523.632,88.16385;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.StepOpNode;11;-2625.498,-196.8981;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.OneMinusNode;12;-2420.755,-212.7778;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
@@ -3369,7 +3361,7 @@ Node;AmplifyShaderEditor.SaturateNode;14;-1890.909,260.7738;Inherit;False;1;0;FL
 Node;AmplifyShaderEditor.SimpleAddOpNode;16;-1698.908,84.77396;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.OneMinusNode;17;-1394.909,260.7738;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.LightAttenuation;18;-1131.246,796.0283;Inherit;False;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;19;-1426.909,516.774;Inherit;False;Property;_ShadowIntensity2;ShadowIntensity;3;0;Create;True;0;0;0;False;0;False;0;-0.16;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;19;-1426.909,516.774;Inherit;False;Property;_ShadowIntensity2;ShadowIntensity;3;0;Create;True;0;0;0;False;0;False;0;3.02;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;20;-1138.909,356.7739;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.StepOpNode;21;-824.5391,647.7311;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.OneMinusNode;23;-703.7723,501.6877;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
@@ -3383,7 +3375,7 @@ Node;AmplifyShaderEditor.LerpOp;31;-90.8805,-484.4619;Inherit;False;3;0;COLOR;0,
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;27;201.527,-48.84894;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SaturateNode;28;364.4846,33.86871;Inherit;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;33;605.2789,-196.2815;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;0;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;34;605.2789,-196.2815;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;SDR_FERNPaintballMinigun;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;34;605.2789,-196.2815;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;SDR_FERNPaintballMinigun;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;35;605.2789,-196.2815;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;False;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=ShadowCaster;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;36;605.2789,-196.2815;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;True;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;False;False;True;1;LightMode=DepthOnly;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;37;605.2789,-196.2815;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;False;0;;0;0;Standard;0;False;0
@@ -3424,6 +3416,7 @@ WireConnection;31;2;32;0
 WireConnection;27;0;31;0
 WireConnection;27;1;26;0
 WireConnection;28;0;27;0
-WireConnection;34;0;28;0
+WireConnection;34;0;31;0
+WireConnection;34;2;28;0
 ASEEND*/
-//CHKSM=A11B70CE2D791EC369F041889475197E01FB9707
+//CHKSM=348B5D87E571DCC1E3B23B7EDBB9B67173E6F141

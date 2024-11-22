@@ -285,11 +285,11 @@ Shader "BaseballMachinePart3"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture2_ST;
 			float4 _TintActive2;
-			float _ColorInterpolatorPivotableBase;
 			float _FirstPosition1;
 			float _SecondPosition1;
 			float _SecondPositionIntensity1;
 			float _ShadowIntensity1;
+			float _ColorInterpolatorPivotableBase;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -563,9 +563,9 @@ Shader "BaseballMachinePart3"
 				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 
-				float3 BaseColor = saturate( ( tex2DNode48.a * _TintActive2 * _ColorInterpolatorPivotableBase ) ).rgb;
+				float3 BaseColor = tex2DNode48.rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = saturate( ( tex2DNode48 * ( ( temp_output_70_0 + ( ( 1.0 - temp_output_70_0 ) * _ShadowIntensity1 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
+				float3 Emission = ( saturate( ( tex2DNode48 * ( ( temp_output_70_0 + ( ( 1.0 - temp_output_70_0 ) * _ShadowIntensity1 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ) + saturate( ( tex2DNode48.a * _TintActive2 * _ColorInterpolatorPivotableBase ) ) ).rgb;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
@@ -866,11 +866,11 @@ Shader "BaseballMachinePart3"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture2_ST;
 			float4 _TintActive2;
-			float _ColorInterpolatorPivotableBase;
 			float _FirstPosition1;
 			float _SecondPosition1;
 			float _SecondPositionIntensity1;
 			float _ShadowIntensity1;
+			float _ColorInterpolatorPivotableBase;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -1179,11 +1179,11 @@ Shader "BaseballMachinePart3"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture2_ST;
 			float4 _TintActive2;
-			float _ColorInterpolatorPivotableBase;
 			float _FirstPosition1;
 			float _SecondPosition1;
 			float _SecondPositionIntensity1;
 			float _ShadowIntensity1;
+			float _ColorInterpolatorPivotableBase;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -1480,11 +1480,11 @@ Shader "BaseballMachinePart3"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture2_ST;
 			float4 _TintActive2;
-			float _ColorInterpolatorPivotableBase;
 			float _FirstPosition1;
 			float _SecondPosition1;
 			float _SecondPositionIntensity1;
 			float _ShadowIntensity1;
+			float _ColorInterpolatorPivotableBase;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -1705,8 +1705,8 @@ Shader "BaseballMachinePart3"
 				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 
-				float3 BaseColor = saturate( ( tex2DNode48.a * _TintActive2 * _ColorInterpolatorPivotableBase ) ).rgb;
-				float3 Emission = saturate( ( tex2DNode48 * ( ( temp_output_70_0 + ( ( 1.0 - temp_output_70_0 ) * _ShadowIntensity1 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
+				float3 BaseColor = tex2DNode48.rgb;
+				float3 Emission = ( saturate( ( tex2DNode48 * ( ( temp_output_70_0 + ( ( 1.0 - temp_output_70_0 ) * _ShadowIntensity1 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ) + saturate( ( tex2DNode48.a * _TintActive2 * _ColorInterpolatorPivotableBase ) ) ).rgb;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -1790,11 +1790,11 @@ Shader "BaseballMachinePart3"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture2_ST;
 			float4 _TintActive2;
-			float _ColorInterpolatorPivotableBase;
 			float _FirstPosition1;
 			float _SecondPosition1;
 			float _SecondPositionIntensity1;
 			float _ShadowIntensity1;
+			float _ColorInterpolatorPivotableBase;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -1988,7 +1988,7 @@ Shader "BaseballMachinePart3"
 				float4 tex2DNode48 = tex2D( _MainTexture2, uv_MainTexture2 );
 				
 
-				float3 BaseColor = saturate( ( tex2DNode48.a * _TintActive2 * _ColorInterpolatorPivotableBase ) ).rgb;
+				float3 BaseColor = tex2DNode48.rgb;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -2074,11 +2074,11 @@ Shader "BaseballMachinePart3"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture2_ST;
 			float4 _TintActive2;
-			float _ColorInterpolatorPivotableBase;
 			float _FirstPosition1;
 			float _SecondPosition1;
 			float _SecondPositionIntensity1;
 			float _ShadowIntensity1;
+			float _ColorInterpolatorPivotableBase;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -2440,11 +2440,11 @@ Shader "BaseballMachinePart3"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture2_ST;
 			float4 _TintActive2;
-			float _ColorInterpolatorPivotableBase;
 			float _FirstPosition1;
 			float _SecondPosition1;
 			float _SecondPositionIntensity1;
 			float _ShadowIntensity1;
+			float _ColorInterpolatorPivotableBase;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -2711,9 +2711,9 @@ Shader "BaseballMachinePart3"
 				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
 				
 
-				float3 BaseColor = saturate( ( tex2DNode48.a * _TintActive2 * _ColorInterpolatorPivotableBase ) ).rgb;
+				float3 BaseColor = tex2DNode48.rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = saturate( ( tex2DNode48 * ( ( temp_output_70_0 + ( ( 1.0 - temp_output_70_0 ) * _ShadowIntensity1 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ).rgb;
+				float3 Emission = ( saturate( ( tex2DNode48 * ( ( temp_output_70_0 + ( ( 1.0 - temp_output_70_0 ) * _ShadowIntensity1 ) ) * _MainLightColor * ( 1.0 - step( ase_lightAtten , 0.0 ) ) ) ) ) + saturate( ( tex2DNode48.a * _TintActive2 * _ColorInterpolatorPivotableBase ) ) ).rgb;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
@@ -2878,11 +2878,11 @@ Shader "BaseballMachinePart3"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture2_ST;
 			float4 _TintActive2;
-			float _ColorInterpolatorPivotableBase;
 			float _FirstPosition1;
 			float _SecondPosition1;
 			float _SecondPositionIntensity1;
 			float _ShadowIntensity1;
+			float _ColorInterpolatorPivotableBase;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -3130,11 +3130,11 @@ Shader "BaseballMachinePart3"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture2_ST;
 			float4 _TintActive2;
-			float _ColorInterpolatorPivotableBase;
 			float _FirstPosition1;
 			float _SecondPosition1;
 			float _SecondPositionIntensity1;
 			float _ShadowIntensity1;
+			float _ColorInterpolatorPivotableBase;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -3368,7 +3368,7 @@ Node;AmplifyShaderEditor.SimpleMultiplyOpNode;49;1859.027,-404.3394;Inherit;Fals
 Node;AmplifyShaderEditor.SaturateNode;50;2077.357,-308.843;Inherit;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SaturateNode;54;2400.857,-974.7047;Inherit;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;80;2639.546,-356.8073;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;0;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;81;2639.546,-356.8073;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;BaseballMachinePart3;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;81;2639.546,-356.8073;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;BaseballMachinePart3;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;82;2639.546,-356.8073;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;False;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=ShadowCaster;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;83;2639.546,-356.8073;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;True;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;False;False;True;1;LightMode=DepthOnly;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;84;2639.546,-356.8073;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;False;0;;0;0;Standard;0;False;0
@@ -3377,6 +3377,7 @@ Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;86;2639.546,-356.8073;Float
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;87;2639.546,-356.8073;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalGBuffer;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;88;2639.546,-356.8073;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;SceneSelectionPass;0;8;SceneSelectionPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=SceneSelectionPass;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;89;2639.546,-356.8073;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ScenePickingPass;0;9;ScenePickingPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Picking;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;90;2354.032,-422.7722;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 WireConnection;57;0;56;0
 WireConnection;57;1;55;0
 WireConnection;58;0;57;0
@@ -3410,7 +3411,9 @@ WireConnection;49;0;48;0
 WireConnection;49;1;79;0
 WireConnection;50;0;49;0
 WireConnection;54;0;53;0
-WireConnection;81;0;54;0
-WireConnection;81;2;50;0
+WireConnection;81;0;48;0
+WireConnection;81;2;90;0
+WireConnection;90;0;50;0
+WireConnection;90;1;54;0
 ASEEND*/
-//CHKSM=A354D6641318D685C04CF5A736F5EB4AF7D0DCB2
+//CHKSM=B9DC95C69265DFE579040ACB1E896493FD9D85D2
