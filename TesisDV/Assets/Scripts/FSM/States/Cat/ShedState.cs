@@ -32,7 +32,7 @@ public class ShedState : IState
         if (_cat.canMove)
         {
             _cat.EnterWalkingState();
-
+            Debug.Log("Shed State - Current Path Waypoint: " + _currentPathWaypoint);
             Vector3 dir = _pathToShed[_currentPathWaypoint].transform.position - _cat.transform.position;
 
             Vector3 aux = dir;
@@ -47,7 +47,12 @@ public class ShedState : IState
                 if (Vector3.Distance(_cat.transform.position, last.transform.position) < 1f)
                 {
                     _cat._navMeshAgent.enabled = true;
+                    _currentPathWaypoint = 0;
                     _cat.IsGoingBack = false;
+                    _cat.Renderers.ForEach(x =>
+                    {
+                        x.GetAStarPath();
+                    });
                     _fsm.ChangeCatState(CatStatesEnum.IdleState);
                 }
             }

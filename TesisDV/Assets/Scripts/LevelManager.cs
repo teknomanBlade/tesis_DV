@@ -44,7 +44,6 @@ public class LevelManager : MonoBehaviour
             if (_amountEnemiesInScene == value) return;
             _amountEnemiesInScene = value;
             OnRoundEnd(AmountEnemiesInScene);
-            GameVars.Values.WaveManager.RoundEnd();
         }
     }
     public Player _player;

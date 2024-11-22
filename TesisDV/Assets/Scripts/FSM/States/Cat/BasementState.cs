@@ -30,6 +30,7 @@ public class BasementState : IState
         {
             _cat.EnterWalkingState();
 
+            Debug.Log("Basement State - Current Path Waypoint: " + _currentPathWaypoint);
             Vector3 dir = _cat.PathToBasement[_currentPathWaypoint].transform.position - _cat.transform.position;
 
             Vector3 aux = dir;
@@ -44,6 +45,7 @@ public class BasementState : IState
                 if (Vector3.Distance(_cat.transform.position, last.transform.position) < 1f)
                 {
                     _cat._navMeshAgent.enabled = true;
+                    _currentPathWaypoint = 0;
                     _cat.GoingBackToLiving();
                     _fsm.ChangeCatState(CatStatesEnum.IdleState);
                 }
