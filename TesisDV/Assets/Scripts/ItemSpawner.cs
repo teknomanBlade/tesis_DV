@@ -33,6 +33,8 @@ public class ItemSpawner : MonoBehaviour
         {
             _items.Add(x.gameObject);
         });
+
+
         _blackboard = FindObjectsOfType<GameObject>().Where(x => x.name.Equals("DecalsBlackBoardHouse")).FirstOrDefault();
         Blackboard = _blackboard.GetComponentInParent<Blackboard>();
     }
