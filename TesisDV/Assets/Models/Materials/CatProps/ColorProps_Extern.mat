@@ -13,7 +13,8 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _RECEIVE_SHADOWS_OFF
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _RECEIVESHADOWS_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -111,7 +112,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Intensity: 0
+    - _Intensity: 6
     - _Max2: 0.73
     - _Metallic: 0
     - _Min2: 0.59
@@ -121,15 +122,15 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 0
-    - _Rim: 0
+    - _Rim: 1
     - _Rim1: 0
-    - _RimAmount: 0
+    - _RimAmount: 0.102
     - _RimAmount1: 0
     - _SecondPosition: 2
     - _SecondPosition2: 0.62
     - _SecondPositionIntensity: 0.4
     - _SecondPositionIntensity2: 0.25
-    - _ShadowIntensity: 0.2
+    - _ShadowIntensity: 0.97
     - _ShadowIntensity2: 0.13
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -138,16 +139,16 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _AmbientColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 0}
+    - _AmbientColor: {r: 1, g: 0.9198113, b: 0.9198113, a: 0}
     - _AmbientColor1: {r: 0.490566, g: 0.490566, b: 0.490566, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorBase: {r: 0, g: 0, b: 0, a: 0}
     - _Color_Base: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MainColor: {r: 0.23921569, g: 0.23921569, b: 0.23921569, a: 0}
+    - _MainColor: {r: 0.2392157, g: 0.2392157, b: 0.2392157, a: 0}
     - _MainColor1: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 0}
-    - _RimColor: {r: 0, g: 0, b: 0, a: 0}
+    - _RimColor: {r: 0.5, g: 0.5, b: 0.5, a: 0}
     - _RimColor1: {r: 0, g: 0, b: 0, a: 0}
-    - _SpecularColor: {r: 0.9811321, g: 0.9811321, b: 0.9811321, a: 0}
+    - _SpecularColor: {r: 3.670588, g: 3.670588, b: 3.670588, a: 0}
     - _SpecularColor1: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -6,6 +6,18 @@ Shader "ToonShadowsDecalsWithTransparency"
 	{
 		[HideInInspector] _AlphaCutoff("Alpha Cutoff ", Range(0, 1)) = 0.5
 		[HideInInspector] _EmissionColor("Emission Color", Color) = (1,1,1,1)
+		[ASEBegin]_MainTexture("Main Texture", 2D) = "white" {}
+		_SecondExperimentColumn("SecondExperimentColumn", Float) = 0
+		_FirstPosition("FirstPosition", Float) = 0
+		_FourthFifthExperimentRow("FourthFifthExperimentRow", Float) = 0
+		_FirstExperimentColumn("FirstExperimentColumn", Float) = 0
+		_Min("Min", Float) = 0
+		_Max("Max", Float) = 0
+		_SecondPosition("SecondPosition", Float) = 0
+		_SecondPositionIntensity("SecondPositionIntensity", Float) = 0
+		_ShadowIntensity("ShadowIntensity", Float) = 0
+		[ASEEnd]_Color_Decals("Color_Decals", Color) = (0,0,0,0)
+		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 
 
 		//_TransmissionShadow( "Transmission Shadow", Range( 0, 1 ) ) = 0.5
@@ -40,10 +52,10 @@ Shader "ToonShadowsDecalsWithTransparency"
 
 		
 
-		Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque" "Queue"="Geometry" }
+		Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Transparent" "Queue"="Transparent" }
 
 		Cull Back
-		ZWrite On
+		ZWrite Off
 		ZTest LEqual
 		Offset 0 , 0
 		AlphaToMask Off
@@ -168,7 +180,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 			Name "Forward"
 			Tags { "LightMode"="UniversalForward" }
 
-			Blend One Zero, One Zero
+			Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
 			ZWrite On
 			ZTest LEqual
 			Offset 0 , 0
@@ -184,6 +196,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _SURFACE_TYPE_TRANSPARENT 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -234,7 +248,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			
+			#define ASE_NEEDS_FRAG_WORLD_NORMAL
+
 
 			struct VertexInput
 			{
@@ -265,13 +280,24 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#if defined(DYNAMICLIGHTMAP_ON)
 					float2 dynamicLightmapUV : TEXCOORD7;
 				#endif
-				
+				float4 ase_texcoord8 : TEXCOORD8;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-						#ifdef ASE_TRANSMISSION
+			float4 _MainTexture_ST;
+			float4 _Color_Decals;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
+			float _Min;
+			float _Max;
+			float _FirstPosition;
+			float _SecondPosition;
+			float _SecondPositionIntensity;
+			float _ShadowIntensity;
+			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -303,7 +329,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				int _PassValue;
 			#endif
 
-			
+			sampler2D _MainTexture;
+
 
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/PBRForwardPass.hlsl"
@@ -320,7 +347,10 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				o.ase_texcoord8.xy = v.texcoord.xy;
 				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord8.zw = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -529,16 +559,42 @@ Shader "ToonShadowsDecalsWithTransparency"
 
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
+				float2 texCoord226 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_0 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_1 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_2 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
+				float2 uv_MainTexture = IN.ase_texcoord8.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
+				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
+				
+				float temp_output_64_0 = min( _Min , _Max );
+				float temp_output_65_0 = max( _Max , _Min );
+				float dotResult56 = dot( _MainLightPosition.xyz , WorldNormal );
+				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
+				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
+				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
+				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
 				
 
-				float3 BaseColor = half3(0,0,0);
+				float3 BaseColor = lerpResult238.rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = 0;
+				float3 Emission = lerpResult238.rgb;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
 				float Occlusion = 1;
-				float Alpha = 1;
+				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 				float3 BakedGI = 0;
@@ -783,6 +839,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#pragma multi_compile_instancing
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _SURFACE_TYPE_TRANSPARENT 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -806,13 +864,14 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
 			#endif
 
-			
+			#define ASE_NEEDS_VERT_NORMAL
+
 
 			struct VertexInput
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -825,13 +884,25 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
 					float4 shadowCoord : TEXCOORD1;
 				#endif
-				
+				float4 ase_texcoord2 : TEXCOORD2;
+				float4 ase_texcoord3 : TEXCOORD3;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-						#ifdef ASE_TRANSMISSION
+			float4 _MainTexture_ST;
+			float4 _Color_Decals;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
+			float _Min;
+			float _Max;
+			float _FirstPosition;
+			float _SecondPosition;
+			float _SecondPositionIntensity;
+			float _ShadowIntensity;
+			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -863,7 +934,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				int _PassValue;
 			#endif
 
-			
+			sampler2D _MainTexture;
+
 
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShadowCasterPass.hlsl"
@@ -883,7 +955,14 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
+				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
+				o.ase_texcoord3.xyz = ase_worldNormal;
 				
+				o.ase_texcoord2.xy = v.ase_texcoord.xy;
+				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord2.zw = 0;
+				o.ase_texcoord3.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -939,7 +1018,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -956,7 +1036,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				o.vertex = v.vertex;
 				o.ase_normal = v.ase_normal;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -995,7 +1075,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				VertexInput o = (VertexInput) 0;
 				o.vertex = patch[0].vertex * bary.x + patch[1].vertex * bary.y + patch[2].vertex * bary.z;
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -1042,9 +1122,19 @@ Shader "ToonShadowsDecalsWithTransparency"
 					#endif
 				#endif
 
+				float2 uv_MainTexture = IN.ase_texcoord2.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
+				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
+				float temp_output_64_0 = min( _Min , _Max );
+				float temp_output_65_0 = max( _Max , _Min );
+				float3 ase_worldNormal = IN.ase_texcoord3.xyz;
+				float dotResult56 = dot( _MainLightPosition.xyz , ase_worldNormal );
+				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
+				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
+				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
+				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
 				
 
-				float Alpha = 1;
+				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 
@@ -1090,6 +1180,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#pragma multi_compile_instancing
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _SURFACE_TYPE_TRANSPARENT 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1111,13 +1203,14 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
 			#endif
 
-			
+			#define ASE_NEEDS_VERT_NORMAL
+
 
 			struct VertexInput
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1130,13 +1223,25 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
 				float4 shadowCoord : TEXCOORD1;
 				#endif
-				
+				float4 ase_texcoord2 : TEXCOORD2;
+				float4 ase_texcoord3 : TEXCOORD3;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-						#ifdef ASE_TRANSMISSION
+			float4 _MainTexture_ST;
+			float4 _Color_Decals;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
+			float _Min;
+			float _Max;
+			float _FirstPosition;
+			float _SecondPosition;
+			float _SecondPositionIntensity;
+			float _ShadowIntensity;
+			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -1168,7 +1273,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				int _PassValue;
 			#endif
 
-			
+			sampler2D _MainTexture;
+
 
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/DepthOnlyPass.hlsl"
@@ -1185,7 +1291,14 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
+				o.ase_texcoord3.xyz = ase_worldNormal;
 				
+				o.ase_texcoord2.xy = v.ase_texcoord.xy;
+				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord2.zw = 0;
+				o.ase_texcoord3.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -1226,7 +1339,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1243,7 +1357,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				o.vertex = v.vertex;
 				o.ase_normal = v.ase_normal;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -1282,7 +1396,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				VertexInput o = (VertexInput) 0;
 				o.vertex = patch[0].vertex * bary.x + patch[1].vertex * bary.y + patch[2].vertex * bary.z;
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -1329,9 +1443,19 @@ Shader "ToonShadowsDecalsWithTransparency"
 					#endif
 				#endif
 
+				float2 uv_MainTexture = IN.ase_texcoord2.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
+				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
+				float temp_output_64_0 = min( _Min , _Max );
+				float temp_output_65_0 = max( _Max , _Min );
+				float3 ase_worldNormal = IN.ase_texcoord3.xyz;
+				float dotResult56 = dot( _MainLightPosition.xyz , ase_worldNormal );
+				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
+				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
+				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
+				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
 				
 
-				float Alpha = 1;
+				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
 				float AlphaClipThreshold = 0.5;
 				#ifdef ASE_DEPTH_WRITE_ON
 					float DepthValue = 0;
@@ -1368,6 +1492,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _SURFACE_TYPE_TRANSPARENT 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1388,7 +1514,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/MetaInput.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			
+			#define ASE_NEEDS_VERT_NORMAL
+
 
 			struct VertexInput
 			{
@@ -1414,13 +1541,25 @@ Shader "ToonShadowsDecalsWithTransparency"
 					float4 VizUV : TEXCOORD2;
 					float4 LightCoord : TEXCOORD3;
 				#endif
-				
+				float4 ase_texcoord4 : TEXCOORD4;
+				float4 ase_texcoord5 : TEXCOORD5;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-						#ifdef ASE_TRANSMISSION
+			float4 _MainTexture_ST;
+			float4 _Color_Decals;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
+			float _Min;
+			float _Max;
+			float _FirstPosition;
+			float _SecondPosition;
+			float _SecondPositionIntensity;
+			float _ShadowIntensity;
+			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -1452,7 +1591,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				int _PassValue;
 			#endif
 
-			
+			sampler2D _MainTexture;
+
 
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/LightingMetaPass.hlsl"
@@ -1469,7 +1609,14 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
+				o.ase_texcoord5.xyz = ase_worldNormal;
 				
+				o.ase_texcoord4.xy = v.texcoord0.xy;
+				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord4.zw = 0;
+				o.ase_texcoord5.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -1620,11 +1767,38 @@ Shader "ToonShadowsDecalsWithTransparency"
 					#endif
 				#endif
 
+				float2 texCoord226 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_0 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_1 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_2 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
+				float2 uv_MainTexture = IN.ase_texcoord4.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
+				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
+				
+				float temp_output_64_0 = min( _Min , _Max );
+				float temp_output_65_0 = max( _Max , _Min );
+				float3 ase_worldNormal = IN.ase_texcoord5.xyz;
+				float dotResult56 = dot( _MainLightPosition.xyz , ase_worldNormal );
+				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
+				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
+				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
+				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
 				
 
-				float3 BaseColor = half3(0,0,0);
-				float3 Emission = 0;
-				float Alpha = 1;
+				float3 BaseColor = lerpResult238.rgb;
+				float3 Emission = lerpResult238.rgb;
+				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
 				float AlphaClipThreshold = 0.5;
 
 				#ifdef _ALPHATEST_ON
@@ -1651,7 +1825,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 			Name "Universal2D"
 			Tags { "LightMode"="Universal2D" }
 
-			Blend One Zero, One Zero
+			Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
 			ZWrite On
 			ZTest LEqual
 			Offset 0 , 0
@@ -1662,6 +1836,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _SURFACE_TYPE_TRANSPARENT 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1679,13 +1855,14 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			
+			#define ASE_NEEDS_VERT_NORMAL
+
 
 			struct VertexInput
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1698,13 +1875,25 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
 					float4 shadowCoord : TEXCOORD1;
 				#endif
-				
+				float4 ase_texcoord2 : TEXCOORD2;
+				float4 ase_texcoord3 : TEXCOORD3;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-						#ifdef ASE_TRANSMISSION
+			float4 _MainTexture_ST;
+			float4 _Color_Decals;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
+			float _Min;
+			float _Max;
+			float _FirstPosition;
+			float _SecondPosition;
+			float _SecondPositionIntensity;
+			float _ShadowIntensity;
+			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -1736,7 +1925,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				int _PassValue;
 			#endif
 
-			
+			sampler2D _MainTexture;
+
 
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/PBR2DPass.hlsl"
@@ -1753,7 +1943,14 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID( v, o );
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
+				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
+				o.ase_texcoord3.xyz = ase_worldNormal;
 				
+				o.ase_texcoord2.xy = v.ase_texcoord.xy;
+				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord2.zw = 0;
+				o.ase_texcoord3.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -1795,7 +1992,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1812,7 +2010,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				o.vertex = v.vertex;
 				o.ase_normal = v.ase_normal;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -1851,7 +2049,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				VertexInput o = (VertexInput) 0;
 				o.vertex = patch[0].vertex * bary.x + patch[1].vertex * bary.y + patch[2].vertex * bary.z;
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -1888,10 +2086,37 @@ Shader "ToonShadowsDecalsWithTransparency"
 					#endif
 				#endif
 
+				float2 texCoord226 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_0 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_1 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_2 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
+				float2 uv_MainTexture = IN.ase_texcoord2.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
+				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
+				
+				float temp_output_64_0 = min( _Min , _Max );
+				float temp_output_65_0 = max( _Max , _Min );
+				float3 ase_worldNormal = IN.ase_texcoord3.xyz;
+				float dotResult56 = dot( _MainLightPosition.xyz , ase_worldNormal );
+				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
+				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
+				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
+				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
 				
 
-				float3 BaseColor = half3(0,0,0);
-				float Alpha = 1;
+				float3 BaseColor = lerpResult238.rgb;
+				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
 				float AlphaClipThreshold = 0.5;
 
 				half4 color = half4(BaseColor, Alpha );
@@ -1922,6 +2147,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#pragma multi_compile_instancing
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _SURFACE_TYPE_TRANSPARENT 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -1945,14 +2172,15 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
 			#endif
 
-			
+			#define ASE_NEEDS_FRAG_WORLD_NORMAL
+
 
 			struct VertexInput
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
 				float4 ase_tangent : TANGENT;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1967,13 +2195,24 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#endif
 				float3 worldNormal : TEXCOORD2;
 				float4 worldTangent : TEXCOORD3;
-				
+				float4 ase_texcoord4 : TEXCOORD4;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-						#ifdef ASE_TRANSMISSION
+			float4 _MainTexture_ST;
+			float4 _Color_Decals;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
+			float _Min;
+			float _Max;
+			float _FirstPosition;
+			float _SecondPosition;
+			float _SecondPositionIntensity;
+			float _ShadowIntensity;
+			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -2005,7 +2244,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				int _PassValue;
 			#endif
 
-			
+			sampler2D _MainTexture;
+
 
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/DepthNormalsOnlyPass.hlsl"
@@ -2022,7 +2262,10 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				o.ase_texcoord4.xy = v.ase_texcoord.xy;
 				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord4.zw = 0;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
@@ -2068,7 +2311,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
 				float4 ase_tangent : TANGENT;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -2086,7 +2330,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				o.vertex = v.vertex;
 				o.ase_normal = v.ase_normal;
 				o.ase_tangent = v.ase_tangent;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -2126,7 +2370,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				o.vertex = patch[0].vertex * bary.x + patch[1].vertex * bary.y + patch[2].vertex * bary.z;
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
 				o.ase_tangent = patch[0].ase_tangent * bary.x + patch[1].ase_tangent * bary.y + patch[2].ase_tangent * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -2175,10 +2419,19 @@ Shader "ToonShadowsDecalsWithTransparency"
 					#endif
 				#endif
 
+				float2 uv_MainTexture = IN.ase_texcoord4.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
+				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
+				float temp_output_64_0 = min( _Min , _Max );
+				float temp_output_65_0 = max( _Max , _Min );
+				float dotResult56 = dot( _MainLightPosition.xyz , WorldNormal );
+				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
+				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
+				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
+				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
 				
 
 				float3 Normal = float3(0, 0, 1);
-				float Alpha = 1;
+				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
 				float AlphaClipThreshold = 0.5;
 				#ifdef ASE_DEPTH_WRITE_ON
 					float DepthValue = 0;
@@ -2228,7 +2481,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 			Name "GBuffer"
 			Tags { "LightMode"="UniversalGBuffer" }
 
-			Blend One Zero, One Zero
+			Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
 			ZWrite On
 			ZTest LEqual
 			Offset 0 , 0
@@ -2243,6 +2496,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _SURFACE_TYPE_TRANSPARENT 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -2288,7 +2543,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			
+			#define ASE_NEEDS_FRAG_WORLD_NORMAL
+
 
 			struct VertexInput
 			{
@@ -2319,13 +2575,24 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#if defined(DYNAMICLIGHTMAP_ON)
 				float2 dynamicLightmapUV : TEXCOORD7;
 				#endif
-				
+				float4 ase_texcoord8 : TEXCOORD8;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-						#ifdef ASE_TRANSMISSION
+			float4 _MainTexture_ST;
+			float4 _Color_Decals;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
+			float _Min;
+			float _Max;
+			float _FirstPosition;
+			float _SecondPosition;
+			float _SecondPositionIntensity;
+			float _ShadowIntensity;
+			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -2357,7 +2624,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				int _PassValue;
 			#endif
 
-			
+			sampler2D _MainTexture;
+
 
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/UnityGBuffer.hlsl"
@@ -2371,7 +2639,10 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				o.ase_texcoord8.xy = v.texcoord.xy;
 				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord8.zw = 0;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
@@ -2576,16 +2847,42 @@ Shader "ToonShadowsDecalsWithTransparency"
 
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
+				float2 texCoord226 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_0 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_1 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_2 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
+				float2 uv_MainTexture = IN.ase_texcoord8.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
+				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
+				
+				float temp_output_64_0 = min( _Min , _Max );
+				float temp_output_65_0 = max( _Max , _Min );
+				float dotResult56 = dot( _MainLightPosition.xyz , WorldNormal );
+				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
+				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
+				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
+				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
 				
 
-				float3 BaseColor = half3(0,0,0);
+				float3 BaseColor = lerpResult238.rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = 0;
+				float3 Emission = lerpResult238.rgb;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
 				float Occlusion = 1;
-				float Alpha = 1;
+				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 				float3 BakedGI = 0;
@@ -2702,6 +2999,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _SURFACE_TYPE_TRANSPARENT 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -2723,26 +3022,39 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			
+			#define ASE_NEEDS_VERT_NORMAL
+
 
 			struct VertexInput
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
 			struct VertexOutput
 			{
 				float4 clipPos : SV_POSITION;
-				
+				float4 ase_texcoord : TEXCOORD0;
+				float4 ase_texcoord1 : TEXCOORD1;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-						#ifdef ASE_TRANSMISSION
+			float4 _MainTexture_ST;
+			float4 _Color_Decals;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
+			float _Min;
+			float _Max;
+			float _FirstPosition;
+			float _SecondPosition;
+			float _SecondPositionIntensity;
+			float _ShadowIntensity;
+			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -2774,7 +3086,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				int _PassValue;
 			#endif
 
-			
+			sampler2D _MainTexture;
+
 
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/SelectionPickingPass.hlsl"
@@ -2799,7 +3112,14 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
+				o.ase_texcoord1.xyz = ase_worldNormal;
 				
+				o.ase_texcoord.xy = v.ase_texcoord.xy;
+				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord.zw = 0;
+				o.ase_texcoord1.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -2829,7 +3149,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -2846,7 +3167,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				o.vertex = v.vertex;
 				o.ase_normal = v.ase_normal;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -2885,7 +3206,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				VertexInput o = (VertexInput) 0;
 				o.vertex = patch[0].vertex * bary.x + patch[1].vertex * bary.y + patch[2].vertex * bary.z;
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -2907,9 +3228,19 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				SurfaceDescription surfaceDescription = (SurfaceDescription)0;
 
+				float2 uv_MainTexture = IN.ase_texcoord.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
+				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
+				float temp_output_64_0 = min( _Min , _Max );
+				float temp_output_65_0 = max( _Max , _Min );
+				float3 ase_worldNormal = IN.ase_texcoord1.xyz;
+				float dotResult56 = dot( _MainLightPosition.xyz , ase_worldNormal );
+				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
+				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
+				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
+				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
 				
 
-				surfaceDescription.Alpha = 1;
+				surfaceDescription.Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
 				surfaceDescription.AlphaClipThreshold = 0.5;
 
 				#if _ALPHATEST_ON
@@ -2946,6 +3277,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#define _NORMAL_DROPOFF_TS 1
 			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
+			#define _SURFACE_TYPE_TRANSPARENT 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 140010
 
 
@@ -2967,26 +3300,39 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			
+			#define ASE_NEEDS_VERT_NORMAL
+
 
 			struct VertexInput
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
 			struct VertexOutput
 			{
 				float4 clipPos : SV_POSITION;
-				
+				float4 ase_texcoord : TEXCOORD0;
+				float4 ase_texcoord1 : TEXCOORD1;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-						#ifdef ASE_TRANSMISSION
+			float4 _MainTexture_ST;
+			float4 _Color_Decals;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
+			float _Min;
+			float _Max;
+			float _FirstPosition;
+			float _SecondPosition;
+			float _SecondPositionIntensity;
+			float _ShadowIntensity;
+			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -3018,7 +3364,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 				int _PassValue;
 			#endif
 
-			
+			sampler2D _MainTexture;
+
 
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 			//#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/SelectionPickingPass.hlsl"
@@ -3043,7 +3390,14 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
+				o.ase_texcoord1.xyz = ase_worldNormal;
 				
+				o.ase_texcoord.xy = v.ase_texcoord.xy;
+				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord.zw = 0;
+				o.ase_texcoord1.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -3072,7 +3426,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -3089,7 +3444,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				o.vertex = v.vertex;
 				o.ase_normal = v.ase_normal;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -3128,7 +3483,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				VertexInput o = (VertexInput) 0;
 				o.vertex = patch[0].vertex * bary.x + patch[1].vertex * bary.y + patch[2].vertex * bary.z;
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -3150,9 +3505,19 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				SurfaceDescription surfaceDescription = (SurfaceDescription)0;
 
+				float2 uv_MainTexture = IN.ase_texcoord.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
+				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
+				float temp_output_64_0 = min( _Min , _Max );
+				float temp_output_65_0 = max( _Max , _Min );
+				float3 ase_worldNormal = IN.ase_texcoord1.xyz;
+				float dotResult56 = dot( _MainLightPosition.xyz , ase_worldNormal );
+				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
+				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
+				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
+				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
 				
 
-				surfaceDescription.Alpha = 1;
+				surfaceDescription.Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
 				surfaceDescription.AlphaClipThreshold = 0.5;
 
 				#if _ALPHATEST_ON
@@ -3203,15 +3568,15 @@ Node;AmplifyShaderEditor.RangedFloatNode;71;-1184,32;Inherit;False;Property;_Sec
 Node;AmplifyShaderEditor.SimpleSubtractOpNode;59;-1712,-464;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SmoothstepOpNode;61;-1216,-528;Inherit;True;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleSubtractOpNode;70;-912,-224;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;228;248.9396,698.7893;Inherit;False;Property;_SecondExperimentColumn;SecondExperimentColumn;1;0;Create;True;0;0;0;False;0;False;0;0.65;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;228;248.9396,698.7893;Inherit;False;Property;_SecondExperimentColumn;SecondExperimentColumn;1;0;Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SaturateNode;69;-704,-432;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.TextureCoordinatesNode;226;308.847,416.8619;Inherit;True;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SaturateNode;73;-704,-176;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;217;255.6036,1278.811;Inherit;False;Property;_FirstExperimentColumn;FirstExperimentColumn;4;0;Create;True;0;0;0;False;0;False;0;0.37;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;217;255.6036,1278.811;Inherit;False;Property;_FirstExperimentColumn;FirstExperimentColumn;4;0;Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.OneMinusNode;231;630.1028,402.3269;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMinOpNode;229;656.5693,601.347;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMinOpNode;219;638.515,1178.89;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;242;555.9238,1845.663;Inherit;False;Property;_FourthFifthExperimentRow;FourthFifthExperimentRow;3;0;Create;True;0;0;0;False;0;False;0;0.54;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;242;555.9238,1845.663;Inherit;False;Property;_FourthFifthExperimentRow;FourthFifthExperimentRow;3;0;Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMaxOpNode;218;652.497,1335.794;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMaxOpNode;230;669.0164,725.688;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;74;-512,-352;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
@@ -3229,7 +3594,6 @@ Node;AmplifyShaderEditor.PosterizeNode;239;1168.487,1028.269;Inherit;True;200;2;
 Node;AmplifyShaderEditor.PosterizeNode;240;1166.877,470.5142;Inherit;True;256;2;1;COLOR;0,0,0,0;False;0;INT;256;False;1;COLOR;0
 Node;AmplifyShaderEditor.PosterizeNode;247;1343.335,1545.21;Inherit;True;200;2;1;COLOR;0,0,0,0;False;0;INT;200;False;1;COLOR;0
 Node;AmplifyShaderEditor.SaturateNode;224;1504.303,1059.111;Inherit;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SamplerNode;45;55.36771,-1224.442;Inherit;True;Property;_MainTexture;Main Texture;0;0;Create;True;0;0;0;False;0;False;-1;None;112c18993e8d8e042b6083c1dd5c45d9;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.LightColorNode;80;128,192;Inherit;False;0;3;COLOR;0;FLOAT3;1;FLOAT;2
 Node;AmplifyShaderEditor.SaturateNode;235;1476.594,481.4;Inherit;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;76;240,-320;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
@@ -3245,17 +3609,18 @@ Node;AmplifyShaderEditor.SimpleMultiplyOpNode;82;1255.429,-764.0844;Inherit;Fals
 Node;AmplifyShaderEditor.RangedFloatNode;253;1736.182,-847.1005;Inherit;False;Property;_OutlineAlpha;OutlineAlpha;13;0;Create;True;0;0;0;False;0;False;0;0;0;2;0;1;FLOAT;0
 Node;AmplifyShaderEditor.LerpOp;238;2319.203,-130.817;Inherit;True;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
 Node;AmplifyShaderEditor.OutlineNode;252;2169.382,-916.5258;Inherit;False;0;True;Transparent;0;0;Off;True;True;True;True;0;False;;3;0;FLOAT3;0,0,0;False;2;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.SaturateNode;50;1566.141,-547.5917;Inherit;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;254;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;0;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;255;2732.427,-686.5903;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;ToonShadowsDecalsWithTransparency;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;256;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;False;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=ShadowCaster;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;257;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;True;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;False;False;True;1;LightMode=DepthOnly;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;258;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;259;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Universal2D;0;5;Universal2D;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=Universal2D;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;260;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthNormals;0;6;DepthNormals;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=DepthNormals;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;261;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalGBuffer;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;262;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;SceneSelectionPass;0;8;SceneSelectionPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=SceneSelectionPass;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;263;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ScenePickingPass;0;9;ScenePickingPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Picking;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.SaturateNode;50;1566.141,-547.5917;Inherit;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;254;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;0;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;255;2732.427,-686.5903;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;ToonShadowsDecalsWithTransparency;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;2;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;True;3;True;12;all;0;False;True;1;5;False;;10;False;;1;1;False;;10;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;1;638680786196191904;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;256;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;False;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=ShadowCaster;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;257;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;True;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;False;False;True;1;LightMode=DepthOnly;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;258;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;259;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Universal2D;0;5;Universal2D;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;5;False;;10;False;;1;1;False;;10;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=Universal2D;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;260;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthNormals;0;6;DepthNormals;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=DepthNormals;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;261;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;5;False;;10;False;;1;1;False;;10;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalGBuffer;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;262;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;SceneSelectionPass;0;8;SceneSelectionPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=SceneSelectionPass;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;263;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ScenePickingPass;0;9;ScenePickingPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Picking;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.SamplerNode;45;202.4612,-1227.271;Inherit;True;Property;_MainTexture;Main Texture;0;0;Create;True;0;0;0;False;0;False;-1;None;0200212456f403545bdc25fd547c555e;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 WireConnection;56;0;54;0
 WireConnection;56;1;55;0
 WireConnection;57;0;56;0
@@ -3329,6 +3694,8 @@ WireConnection;252;0;251;0
 WireConnection;252;2;253;0
 WireConnection;252;1;250;0
 WireConnection;50;0;82;0
-WireConnection;255;0;252;0
+WireConnection;255;0;238;0
+WireConnection;255;2;238;0
+WireConnection;255;6;50;0
 ASEEND*/
-//CHKSM=677E3B330EC0BF3FDE27D3BB1BA9874A1AE08F7B
+//CHKSM=794EDD15F242F97A08D31E6AC65E3EA99C09E775
