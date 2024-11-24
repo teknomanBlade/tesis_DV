@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
@@ -69,7 +70,7 @@ public class Outline : MonoBehaviour
     private Color outlineColor = Color.white;
 
     [SerializeField, Range(0f, 10f)]
-    private float outlineWidth = 2f;
+    private float outlineWidth = 0.05f;
 
     [Header("Optional")]
 
@@ -87,7 +88,7 @@ public class Outline : MonoBehaviour
     private Material outlineMaskMaterial;
     private Material outlineFillMaterial;
 
-    private bool needsUpdate;
+    public bool needsUpdate;
 
     void Awake()
     {
@@ -96,14 +97,14 @@ public class Outline : MonoBehaviour
         renderers = GetComponentsInChildren<Renderer>();
 
         // Instantiate outline materials
-        //outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
+        outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
         outlineFillMaterial = Instantiate(Resources.Load<Material>(@"Materials/Shader Graphs_OutlineShaderGraph"));
 
-        //outlineMaskMaterial.name = "OutlineMask (Instance)";
+        outlineMaskMaterial.name = "OutlineMask (Instance)";
         outlineFillMaterial.name = "OutlineFill (Instance)";
 
         // Retrieve or generate smooth normals
-        LoadSmoothNormals();
+        //LoadSmoothNormals();
 
         // Apply material properties immediately
         needsUpdate = false;
@@ -140,7 +141,7 @@ public class Outline : MonoBehaviour
         // Generate smooth normals when baking is enabled
         if (precomputeOutline && bakeKeys.Count == 0)
         {
-            Bake();
+            //Bake();
         }
     }
 
@@ -158,6 +159,7 @@ public class Outline : MonoBehaviour
     {
         foreach (var renderer in renderers)
         {
+            UnityEngine.Debug.Log("BEFORE SEND WIN");
 
             // Remove outline shaders
             var materials = renderer.sharedMaterials.ToList();
@@ -272,8 +274,8 @@ public class Outline : MonoBehaviour
         }
         catch( Exception ex)
         {
-            Debug.Log(gameObject.name);
-            Debug.LogError(ex.ToString());
+            UnityEngine.Debug.Log(gameObject.name);
+            UnityEngine.Debug.LogError(ex.ToString());
             return null;
 
         }
@@ -284,6 +286,7 @@ public class Outline : MonoBehaviour
 
         // Apply properties according to mode
         outlineFillMaterial.SetColor("_OutlineColor", outlineColor);
+        outlineFillMaterial.SetFloat("_OutlineThickness", outlineWidth);
 
         //switch (outlineMode)
         //{

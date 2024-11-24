@@ -1685,7 +1685,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         if (outLine == null)
             return;
         outLine.OutlineColor = Color.green;
-        outLine.OutlineWidth = 6f;
+        outLine.OutlineWidth = 0.02f;
+        outLine.needsUpdate = true;
+
     }
 
     private void SetOffItem(IInteractable item)
@@ -1698,7 +1700,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             return;
 
         outLine.OutlineWidth = 0f;
-
+        outLine.needsUpdate = true;
     }
 
     public void OnNotify(string message)
