@@ -123,6 +123,7 @@ public class GameVars : MonoBehaviour
     [Header("Game")]
     private float _fadeDelay = 1.1f;
     private bool _isFaded;
+    public bool IsUFOExitPlanetAnimFinished;
     public bool HasMagicboard { get; set; }
     public bool HasOpenedLetter { get; set; }
     public bool HasOpenedTrunk { get; set; }
@@ -156,7 +157,7 @@ public class GameVars : MonoBehaviour
     public event OnCapturedCatPositionDelegate OnCapturedCatPosition;
     public delegate void OnObjectNotificationPositionDelegate(Vector3 objectNotificationPos);
     public event OnObjectNotificationPositionDelegate OnObjectNotificationPosition;
-   
+    
 
     #endregion
 
@@ -168,6 +169,7 @@ public class GameVars : MonoBehaviour
         SetKeys();
         LoadResources();
         PassedTutorial = false;
+        IsUFOExitPlanetAnimFinished = false;
         SceneManager.sceneLoaded += FindPlayer;
         SceneManager.sceneLoaded += FindCat;
     }

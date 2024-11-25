@@ -124,7 +124,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public float gizmoScale = 1f;
     public LayerMask itemMask;
     private float _valueToChange;
+    [SerializeField]
     private bool _canStartNextWave;
+    private bool _UFOExitAnimFinished;
     private bool _canMoveTraps;
     //SkillTree, deberia ver de mover esto a craftingrecipee, pero para llegar a este viernes sirve.
     private SkillTree _skillTree;
@@ -929,10 +931,22 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void CanStartNextWave(int round)
     {
-        _canStartNextWave = true;
+        if (!GameVars.Values.PassedTutorial)
+        {
+            _canStartNextWave = true;
+        }
+        else 
+        {
+            StartCoroutine(WaitToConditionMet());
+        }
         _canMoveTraps = true;
     }
 
+    IEnumerator WaitToConditionMet() 
+    {
+        yield return new WaitUntil(() => GameVars.Values.IsUFOExitPlanetAnimFinished);
+        _canStartNextWave = GameVars.Values.IsUFOExitPlanetAnimFinished;
+    }
     public void Dead()
     {
         isDead = true;

@@ -28,7 +28,7 @@ public class UFO : MonoBehaviour
     private Vector3 _spawnPos;
     private Vector3 _finalPos;
     public Vector3 endPos;
-    [Range(0,1)]
+    [Range(0, 1)]
     public float sliderSoundVolume;
     private float _spawnTimer;
     [SerializeField] private GameObject UFOIndicatorPrefab;
@@ -44,7 +44,7 @@ public class UFO : MonoBehaviour
     [SerializeField] private bool _canLeavePlanet;
     private void Awake()
     {
-        _inPosition =  false;
+        _inPosition = false;
         _spawnTimer = 5f;
         _arriveRadius = 20f;
         _maxSpeed = 30f;
@@ -53,7 +53,7 @@ public class UFO : MonoBehaviour
         _UFOSpinner = GameObject.Find("UFOSpinner");
         _animUFO = GetComponent<Animator>();
         _animUFO.enabled = true;
-        rotationFinal = Quaternion.Euler(-90f,0f,0f);
+        rotationFinal = Quaternion.Euler(-90f, 0f, 0f);
         _audioSource = GetComponent<AudioSource>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _lm.OnRoundEnd += RoundEnd;
@@ -113,7 +113,7 @@ public class UFO : MonoBehaviour
 
         if (timer >= timeLimit)
         {
-            if(currentGray != null)
+            if (currentGray != null)
             {
                 BeginSpawn();
             }
@@ -151,7 +151,7 @@ public class UFO : MonoBehaviour
     {
         yield return new WaitForSeconds(_spawnTimer);
         yield return new WaitUntil(() => this.enabled);
-        if(_graysSpawned < EnemiesToSpawn.Count())
+        if (_graysSpawned < EnemiesToSpawn.Count())
         {
             if (!Physics.CheckBox(transform.position - checkCubePos, checkCubeExt, Quaternion.identity, 1 << LayerMask.NameToLayer("Enemy")))
             {
@@ -170,9 +170,9 @@ public class UFO : MonoBehaviour
             else StartCoroutine("SpawnGrey");
         }
     }
-    public void AssignCountToEnemyByPairImpair(int count, Enemy enemy) 
+    public void AssignCountToEnemyByPairImpair(int count, Enemy enemy)
     {
-        if (gameObject.name.Contains("a") && count % 2 == 0) 
+        if (gameObject.name.Contains("a") && count % 2 == 0)
         {
             enemy.SetName(count.ToString());
         }
@@ -188,20 +188,27 @@ public class UFO : MonoBehaviour
         {
             StartCoroutine(PlayAnimRetractBeam());
             transform.position = Vector3.MoveTowards(transform.position, _spawnPos, _UFOSpeed * Time.deltaTime);
-            if(dir.magnitude < 0.2f)
+            if (dir.magnitude < 0.2f)
             {
                 _animUFO.enabled = true;
                 _animUFO.SetBool("IsWarping", true);
             }
         }
-        
+
     }
 
     public void DestroyUFO()
     {
         GameVars.Values.LevelManager.RemoveUFO(this);
+        GameVars.Values.IsUFOExitPlanetAnimFinished = true;
+        Invoke(nameof(DestroyAndSetFalseAnimFinished),2f);
+    }
+    public void DestroyAndSetFalseAnimFinished() 
+    {
+        GameVars.Values.IsUFOExitPlanetAnimFinished = false;
         Destroy(this.gameObject);
     }
+
     IEnumerator PlayAnimRetractBeam()
     {
         PlayAnimBeam(false);
