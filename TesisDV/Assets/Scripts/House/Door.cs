@@ -100,6 +100,7 @@ public class Door : Item
             if (transform.CompareTag("Tutorial") && IsOpened)
             {
                 GameVars.Values.PassedTutorial = IsOpened;
+                GameVars.Values.IsTutorial = IsOpened;
             }
             GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
             //_navMeshObstacle.enabled = false;
@@ -131,7 +132,14 @@ public class Door : Item
     public bool GetDoorStatus()
     {
         return IsOpened;
-    }   
+    }
+
+    internal void OnEnemyDoorInteract()
+    {
+        IsLocked = false;
+        EnemyInteractionCheck(true);
+        Interact();
+    }
 }
 
 public enum EnumDoor

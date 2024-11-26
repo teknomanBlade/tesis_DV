@@ -19,10 +19,11 @@ public class ObstacleDetector : MonoBehaviour
         //Se usa el OverlapSphere del Gray para detectar trampas. Esto se usa para las puertas.
 
 
-        if (door && !other.GetComponent<Door>().GetDoorStatus())
+        if (door && !door.GetDoorStatus())
         {
             //_myOwner.GetDoor(other.GetComponent<Door>());
-            _myOwner.GetDoor(other.GetComponent<Door>());
+            _myOwner.OnDoorInteract += door.OnEnemyDoorInteract;
+            _myOwner.DoorInteract();
         }
         else if (forceField && other.GetComponent<ForceField>() && !_myOwner.hasObjective)
         {

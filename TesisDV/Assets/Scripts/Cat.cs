@@ -40,7 +40,10 @@ public class Cat : MonoBehaviour
     public event Action onRun = delegate { };
     public event Action onTaken = delegate { };
     public event Action onMeowing = delegate { };
-
+    public delegate void OnCatBasementStateDelegate();
+    public event OnCatBasementStateDelegate OnCatBasementState;
+    public delegate void OnCatLivingStateFinishedDelegate();
+    public event OnCatLivingStateFinishedDelegate OnCatLivingStateFinished;
     #endregion Events
     void Awake()
     {
@@ -71,8 +74,7 @@ public class Cat : MonoBehaviour
         _fsm.AddCatState(CatStatesEnum.WalkingState, new WalkingState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.TakenState, new TakenState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.RunningState, new RunningState(_fsm, this));
-        _fsm.AddCatState(CatStatesEnum.BasementState, new BasementState(_fsm, this));
-        _fsm.AddCatState(CatStatesEnum.LivingState, new LivingState(_fsm, this));
+        StartCoroutine(AddPlayerBasedStates());
         _fsm.AddCatState(CatStatesEnum.ShedState, new ShedState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.KitchenState, new KitchenState(_fsm, this));
     }
@@ -86,6 +88,12 @@ public class Cat : MonoBehaviour
     void Update()
     {
         _myController.OnUpdate();
+    }
+    IEnumerator AddPlayerBasedStates()
+    {
+        yield return new WaitUntil(() => GameVars.Values != null && GameVars.Values.Player != null);
+        _fsm.AddCatState(CatStatesEnum.BasementState, new BasementState(_fsm, this, GameVars.Values.Player));
+        _fsm.AddCatState(CatStatesEnum.LivingState, new LivingState(_fsm, this, GameVars.Values.Player));
     }
     IEnumerator SetRenderersAwait() 
     {
@@ -115,6 +123,17 @@ public class Cat : MonoBehaviour
         _navMeshAgent.enabled = false;
         _fsm.ChangeCatState(CatStatesEnum.LivingState);
     }
+
+    public void CallBasementStateStart() 
+    {
+        OnCatBasementState();
+    }
+
+    public void CallLivingStateFinished()
+    {
+        OnCatLivingStateFinished();
+    }
+
     public void CatIsGoingToBasement() 
     {
         _isHeld = false;
@@ -123,7 +142,6 @@ public class Cat : MonoBehaviour
         _navMeshAgent.enabled = false;
         _fsm.ChangeCatState(CatStatesEnum.BasementState);
     }
-
     public void CatIsGoingToShed()
     {
         _isHeld = false;

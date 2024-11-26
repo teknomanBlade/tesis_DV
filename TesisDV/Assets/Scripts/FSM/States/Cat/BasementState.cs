@@ -7,21 +7,28 @@ public class BasementState : IState
 {
     private StateMachine _fsm;
     private Cat _cat;
+    private Player _player;
     private int _currentPathWaypoint;
-    public BasementState(StateMachine fsm, Cat p)
+    
+    public BasementState(StateMachine fsm, Cat c, Player p)
     {
         _fsm = fsm;
-        _cat = p;
+        _cat = c;
+        _player = p;
     }
 
     public void OnExit()
     {
         Debug.Log("Salí de BasementState");
+        
     }
 
     public void OnStart()
     {
         Debug.Log("Entré a BasementState");
+        GameVars.Values.IsCatBasementStateFinished = false;
+        _cat.OnCatBasementState += _player.NotStartingWaveUntilCatBasementStateFinishes;
+        _cat.CallBasementStateStart();
     }
 
     public void OnUpdate()

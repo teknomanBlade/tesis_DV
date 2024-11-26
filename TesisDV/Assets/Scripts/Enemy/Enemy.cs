@@ -104,6 +104,9 @@ public abstract class Enemy : MonoBehaviour
     public event Action onDisolve = delegate { };
     public event Action onEndSpawn = delegate { };
     public event Action<Enemy> onStatsEnhanced = delegate { };
+
+    public delegate void OnDoorInteractDelegate();
+    public event OnDoorInteractDelegate OnDoorInteract;
     #endregion Events
 
     public void ActiveGrayAttackRingCollider()
@@ -421,7 +424,7 @@ public abstract class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void GetDoor(Door door)
+    /*public void GetDoor(Door door)
     {
         OpenDoor(door);
     }
@@ -431,11 +434,12 @@ public abstract class Enemy : MonoBehaviour
         door.IsLocked = false;
         door.EnemyInteractionCheck(true);
         door.Interact();
+        GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
+    }*/
 
-        //Refeencia a View donde hace un play de la animacion de abrir la puerta.
-
-        //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
-        //TriggerDoorGrayInteract("GrayDoorInteract");
+    public void DoorInteract() 
+    {
+        OnDoorInteract();
     }
 
     public void SendWitts()

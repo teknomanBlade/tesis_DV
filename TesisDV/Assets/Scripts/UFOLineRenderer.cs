@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UFOLineRenderer : MonoBehaviour
@@ -43,11 +45,17 @@ public class UFOLineRenderer : MonoBehaviour
         if (transform == null) return;
         
         startingPoint = PathfindingManager.Instance.GetClosestNode(transform.position);
+        if(gameObject.activeSelf)
+            StartCoroutine(nameof(WaitToPositionSet));
 
+    }
+
+    IEnumerator WaitToPositionSet() 
+    {
+        yield return new WaitUntil(() => _cat.StartingPosition != Vector3.zero);
         endingPoint = PathfindingManager.Instance.GetClosestNode(_cat.StartingPosition);
 
-        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
-
-        DrawLineRenderer(myPath);
+        myPath = _pf.ConstructPathAStar(startingPoint, endingPoint);
+        DrawLineRenderer(myPath.AsEnumerable().Reverse().ToList());
     }
 }

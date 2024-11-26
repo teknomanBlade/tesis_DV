@@ -124,6 +124,7 @@ public class GameVars : MonoBehaviour
     private float _fadeDelay = 1.1f;
     private bool _isFaded;
     public bool IsUFOExitPlanetAnimFinished;
+    public bool IsCatBasementStateFinished;
     public bool HasMagicboard { get; set; }
     public bool HasOpenedLetter { get; set; }
     public bool HasOpenedTrunk { get; set; }
@@ -133,7 +134,6 @@ public class GameVars : MonoBehaviour
     public int currentShotsTrap1; //BaseballLauncher
     public int currentShotsTrap2; //NailFiringMachine
     public List<List<Node>> levelRoutes;
-    public GameObject BasementDirectionMarkers;
     public string EnemyType;
     public int BaseballLauncherCount = 0;
     public int FERNPaintballMinigunCount = 0;
@@ -148,6 +148,7 @@ public class GameVars : MonoBehaviour
     public PoolObjectStack<TeslaCoilGenerator> TeslaCoilGeneratorPool { get; set; }
     public PoolObjectStack<ParticleSystem> SmokeParticlesPool { get; set; }
     public bool PassedTutorial;
+    public bool IsTutorial;
     public Vector3 positionObjectNotification;
     public Vector3 smokeParticlesPos;
     #region Events
@@ -169,6 +170,7 @@ public class GameVars : MonoBehaviour
         SetKeys();
         LoadResources();
         PassedTutorial = false;
+        IsTutorial = false;
         IsUFOExitPlanetAnimFinished = false;
         SceneManager.sceneLoaded += FindPlayer;
         SceneManager.sceneLoaded += FindCat;

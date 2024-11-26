@@ -34,14 +34,11 @@ public class RoomState : IState
             if (dir.magnitude < 0.4f)
             {
                 _currentPathWaypoint++;
-                //if (_currentPathWaypoint > _cat.Path.Count - 1)
-                //{
                 if(Vector3.Distance(_cat.transform.position, _cat.StartingPosition) < 1f)
                 {
                     _cat._navMeshAgent.enabled = true;
                     _fsm.ChangeCatState(CatStatesEnum.IdleState);
                 }
-                //}
             }
         }
     }

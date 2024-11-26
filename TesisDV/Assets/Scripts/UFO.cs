@@ -200,8 +200,10 @@ public class UFO : MonoBehaviour
     public void DestroyUFO()
     {
         GameVars.Values.LevelManager.RemoveUFO(this);
-        GameVars.Values.IsUFOExitPlanetAnimFinished = true;
-        Invoke(nameof(DestroyAndSetFalseAnimFinished),2f);
+        if(GameVars.Values.IsCatBasementStateFinished)
+            GameVars.Values.IsUFOExitPlanetAnimFinished = true;
+        
+        Invoke(nameof(DestroyAndSetFalseAnimFinished),1.5f);
     }
     public void DestroyAndSetFalseAnimFinished() 
     {
