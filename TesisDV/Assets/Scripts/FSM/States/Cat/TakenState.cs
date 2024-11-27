@@ -22,9 +22,9 @@ public class TakenState : IState
     public void OnUpdate()
     {
         Debug.Log("Estoy en TakenState");
-        if (GameVars.Values.EnemyType.Equals("Dog")) 
+        if (_cat.MyOwner.enemyType == EnemyType.Dog) 
         {
-            Debug.Log("Estoy en IF DOG");
+            _cat.IsHeld = false;
             _cat._fsm.ChangeCatState(CatStatesEnum.RunningState);
         }
     }

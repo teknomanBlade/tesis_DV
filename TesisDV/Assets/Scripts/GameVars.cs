@@ -158,8 +158,10 @@ public class GameVars : MonoBehaviour
     public event OnCapturedCatPositionDelegate OnCapturedCatPosition;
     public delegate void OnObjectNotificationPositionDelegate(Vector3 objectNotificationPos);
     public event OnObjectNotificationPositionDelegate OnObjectNotificationPosition;
-    
-
+    public delegate void OnCatReleasedDelegate();
+    public event OnCatReleasedDelegate OnCatReleased;
+    public delegate void OnCatTakenDelegate();
+    public event OnCatTakenDelegate OnCatTaken;
     #endregion
 
     private void Awake()
@@ -202,6 +204,11 @@ public class GameVars : MonoBehaviour
         var aux = FindObjectOfType<Cat>();
         if (aux != null) cat = aux.GetComponent<Cat>();
         else cat = null;
+        if (scene.buildIndex == 1) 
+        {
+            OnCatReleased += cat.CatHasBeenReleased;
+            OnCatTaken += cat.CatIsBeingTaken;
+        }
     }
 
     private void LoadResources()
@@ -524,7 +531,7 @@ public class GameVars : MonoBehaviour
         _isCatCaptured = false;
         CatDistanceBar.PlayFadeOut();
         OnCapturedCatChange(_isCatCaptured);
-        cat.CatHasBeenReleased();
+        OnCatReleased();
     }
 
     public float GetCatDistance()
@@ -535,15 +542,16 @@ public class GameVars : MonoBehaviour
     {
         EnemyType = enemyType;
     }
-    public void TakeCat(Vector3 exitPos)
+    public void TakeCat(Vector3 exitPos, Enemy owner = null)
     {
         if (cat == null) return;
 
         _isCatCaptured = true;
         CatDistanceBar.PlayFadeIn();
         OnCapturedCatChange(_isCatCaptured);
-        cat.CatIsBeingTaken();
+        OnCatTaken();
         cat.SetExitPos(exitPos);
+        cat.SetOwner(owner);
         OnCapturedCatPosition(cat.transform.localPosition);
     }
 

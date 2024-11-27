@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RoomState : IState
@@ -30,7 +31,7 @@ public class RoomState : IState
             dir = new Vector3 (aux.x , aux.y, aux.z);
             _cat.transform.forward = dir;
             _cat.transform.position += _cat.transform.forward * _cat._walkingSpeed * Time.deltaTime;
-
+            
             if (dir.magnitude < 0.4f)
             {
                 _currentPathWaypoint++;

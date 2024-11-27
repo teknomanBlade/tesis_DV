@@ -51,7 +51,7 @@ public class CatState : IState
     {
         _enemy.DetectTraps();
 
-        if(Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 3f)//1f) Lo cambiamos hasta que el tallGray tenga la escala bien puesta.
+        if(Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 2f)//1f) Lo cambiamos hasta que el tallGray tenga la escala bien puesta.
         {
             _enemy.GrabCat();
             GameVars.Values.ShowNotification("The cat has been captured! You must prevent the grays getting to the ship!");

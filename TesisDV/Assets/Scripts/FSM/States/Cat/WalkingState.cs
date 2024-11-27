@@ -21,7 +21,7 @@ public class WalkingState : IState
 
     public void OnUpdate()
     {
-        if(Vector3.Distance(_cat.transform.position, _cat.StartingPosition) > 1f)
+        if (Vector3.Distance(_cat.transform.position, _cat.StartingPosition) > 1f)
         {
             Vector3 dest = default(Vector3);
             dest = _cat.StartingPosition;

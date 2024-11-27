@@ -26,6 +26,7 @@ public class BasementState : IState
     public void OnStart()
     {
         Debug.Log("Entré a BasementState");
+        _cat.EnterWalkingState();
         GameVars.Values.IsCatBasementStateFinished = false;
         _cat.OnCatBasementState += _player.NotStartingWaveUntilCatBasementStateFinishes;
         _cat.CallBasementStateStart();

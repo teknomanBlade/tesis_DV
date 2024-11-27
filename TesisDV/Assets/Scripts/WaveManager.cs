@@ -135,11 +135,11 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     {
         ClearAllEnemiesLists();
         //Wave 1
-        _graysUFO1.Add(GetEnemiesTypeForWave(2, EnemyType.Common).FirstOrDefault());
-        _graysUFO2.Add(GetEnemiesTypeForWave(2, EnemyType.Common).LastOrDefault());
+        _graysUFO1.AddRange(GetEnemiesTypeForWave(1, EnemyType.Common));
+        _graysUFO2.AddRange(GetEnemiesTypeForWave(1, EnemyType.Common));
         //Wave 2
         _graysUFO12.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
-        _graysUFO22.AddRange(GetEnemiesTypeForWave(3, EnemyType.Common));
+        _graysUFO22.AddRange(GetEnemiesTypeForWave(4, EnemyType.Common));
         //Wave 3
         _graysUFO13.AddRange(GetEnemiesTypeForWave(2, EnemyType.Dog));
         _graysUFO23.AddRange(GetEnemiesTypeForWave(4, EnemyType.Common));

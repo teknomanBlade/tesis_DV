@@ -56,7 +56,6 @@ public class GrayDogModel : Enemy
     {
         onRunning();
     }
-    
     public void BackToPool() //Se llama desde la animacion.
     {
         GameVars.Values.WaveManager.GrayDogPool.ReturnObject(this);

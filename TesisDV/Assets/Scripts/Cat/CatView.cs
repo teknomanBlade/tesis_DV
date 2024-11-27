@@ -29,6 +29,8 @@ public class CatView : MonoBehaviour
             GameVars.Values.soundManager.PlaySoundAtPoint("SFX_CatMeowingToBasement", transform.position, 0.2f);
         
         _myAnimator.SetBool("IsWalking", true);
+        _myAnimator.SetBool("IsIdle", true);
+        _myAnimator.SetBool("IsRunning", false);
         IsPlayedOnce = false;
     }
     public void TakenAnim()

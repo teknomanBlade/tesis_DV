@@ -10,7 +10,12 @@ public class Cat : MonoBehaviour
     IController _myController;
     public float _runningSpeed;
     public float _walkingSpeed;
-    private bool _isHeld;
+    [SerializeField] private bool _isHeld;
+    public bool IsHeld { 
+        get { return _isHeld; } 
+        set { _isHeld = value; }
+    }
+    public Enemy MyOwner;
     private bool _isWalking;
     private bool _isRepositioning;
     public Vector3 StartingPosition;
@@ -44,6 +49,8 @@ public class Cat : MonoBehaviour
     public event OnCatBasementStateDelegate OnCatBasementState;
     public delegate void OnCatLivingStateFinishedDelegate();
     public event OnCatLivingStateFinishedDelegate OnCatLivingStateFinished;
+    public delegate void OnDoorInteractDelegate();
+    public event OnDoorInteractDelegate OnDoorInteract;
     #endregion Events
     void Awake()
     {
@@ -133,7 +140,10 @@ public class Cat : MonoBehaviour
     {
         OnCatLivingStateFinished();
     }
-
+    public void DoorInteract()
+    {
+        OnDoorInteract();
+    }
     public void CatIsGoingToBasement() 
     {
         _isHeld = false;
@@ -257,7 +267,10 @@ public class Cat : MonoBehaviour
     {
         onRun();
     }
-
+    public void SetOwner(Enemy Owner)
+    {
+        MyOwner = Owner;
+    }
     public void SetExitPos(Vector3 exitPos)
     {
         _exitPos = exitPos;

@@ -359,7 +359,7 @@ public abstract class Enemy : MonoBehaviour
         ReduceSpeed();
         AIManager.Instance.SetNewTarget(this.gameObject);
         onCatGrab(true);
-        GameVars.Values.TakeCat(_exitPos); //Todo esto se hace en una corrutina para darle tiempo al Gray a encontrar la nave mas cercana.
+        GameVars.Values.TakeCat(_exitPos, this); //Todo esto se hace en una corrutina para darle tiempo al Gray a encontrar la nave mas cercana.
         hasObjective = true;
         _lm.CheckForObjective();
 
@@ -578,6 +578,7 @@ public abstract class Enemy : MonoBehaviour
     {
         
     }
+
     public void SetPath(List<Node> nodos) //esto no hace falta, es para testear.
     {
         Path = null;
