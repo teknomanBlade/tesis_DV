@@ -173,6 +173,13 @@ public class Cat : MonoBehaviour
         _fsm.ChangeCatState(CatStatesEnum.KitchenState);
     }
 
+    public void CatTaken(Vector3 exitPos, Enemy enemy) 
+    {
+        SetExitPos(exitPos);
+        SetOwner(enemy);
+        CatIsBeingTaken();
+    }
+
     public void CatIsBeingTaken()
     {
         _isHeld = true;

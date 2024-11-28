@@ -135,8 +135,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     {
         ClearAllEnemiesLists();
         //Wave 1
-        _graysUFO1.AddRange(GetEnemiesTypeForWave(1, EnemyType.Common));
-        _graysUFO2.AddRange(GetEnemiesTypeForWave(1, EnemyType.Common));
+        _graysUFO1.AddRange(GetEnemiesTypeForWave(1, EnemyType.Dog));
+        _graysUFO2.AddRange(GetEnemiesTypeForWave(1, EnemyType.Dog));
         //Wave 2
         _graysUFO12.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
         _graysUFO22.AddRange(GetEnemiesTypeForWave(4, EnemyType.Common));
@@ -431,6 +431,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private void DeactivateGrayDog(GrayDogModel o)
     {
         o.gameObject.transform.parent = MainGameParent.transform;
+        o.hasObjective = false;
         o.gameObject.SetActive(false);
     }
 

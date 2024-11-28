@@ -107,6 +107,10 @@ public abstract class Enemy : MonoBehaviour
 
     public delegate void OnDoorInteractDelegate();
     public event OnDoorInteractDelegate OnDoorInteract;
+    public delegate void OnCatReleasedDelegate();
+    public event OnCatReleasedDelegate OnCatReleased;
+    public delegate void OnCatTakenDelegate(Vector3 exitPos, Enemy enemy);
+    public event OnCatTakenDelegate OnCatTaken;
     #endregion Events
 
     public void ActiveGrayAttackRingCollider()
@@ -141,6 +145,7 @@ public abstract class Enemy : MonoBehaviour
             {
                 Debug.Log("LLEGA A DROP CAT: " + gameObject.name);
                 DropCat();
+                CatDropped();
             }
 
             isDead = true;
@@ -359,7 +364,7 @@ public abstract class Enemy : MonoBehaviour
         ReduceSpeed();
         AIManager.Instance.SetNewTarget(this.gameObject);
         onCatGrab(true);
-        GameVars.Values.TakeCat(_exitPos, this); //Todo esto se hace en una corrutina para darle tiempo al Gray a encontrar la nave mas cercana.
+        GameVars.Values.TakeCat(); //Todo esto se hace en una corrutina para darle tiempo al Gray a encontrar la nave mas cercana.
         hasObjective = true;
         _lm.CheckForObjective();
 
@@ -436,7 +441,14 @@ public abstract class Enemy : MonoBehaviour
         door.Interact();
         GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
     }*/
-
+    public void CatDropped() 
+    {
+        OnCatReleased();
+    }
+    public void CatTaken(Vector3 exitPos, Enemy owner) 
+    {
+        OnCatTaken(exitPos, owner);
+    }
     public void DoorInteract() 
     {
         OnDoorInteract();

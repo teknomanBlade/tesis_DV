@@ -204,11 +204,11 @@ public class GameVars : MonoBehaviour
         var aux = FindObjectOfType<Cat>();
         if (aux != null) cat = aux.GetComponent<Cat>();
         else cat = null;
-        if (scene.buildIndex == 1) 
+        /*if (scene.buildIndex == 1) 
         {
             OnCatReleased += cat.CatHasBeenReleased;
             OnCatTaken += cat.CatIsBeingTaken;
-        }
+        }*/
     }
 
     private void LoadResources()
@@ -531,7 +531,7 @@ public class GameVars : MonoBehaviour
         _isCatCaptured = false;
         CatDistanceBar.PlayFadeOut();
         OnCapturedCatChange(_isCatCaptured);
-        OnCatReleased();
+        //OnCatReleased();
     }
 
     public float GetCatDistance()
@@ -542,16 +542,16 @@ public class GameVars : MonoBehaviour
     {
         EnemyType = enemyType;
     }
-    public void TakeCat(Vector3 exitPos, Enemy owner = null)
+    public void TakeCat()
     {
         if (cat == null) return;
 
         _isCatCaptured = true;
         CatDistanceBar.PlayFadeIn();
         OnCapturedCatChange(_isCatCaptured);
-        OnCatTaken();
-        cat.SetExitPos(exitPos);
-        cat.SetOwner(owner);
+        //OnCatTaken();
+        //cat.SetExitPos(exitPos);
+        //cat.SetOwner(owner);
         OnCapturedCatPosition(cat.transform.localPosition);
     }
 
