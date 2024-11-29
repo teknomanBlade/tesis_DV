@@ -78,7 +78,9 @@ public class Door : Item
                 GameVars.Values.PassedTutorial = IsEnemyInteracting;
                 Debug.Log("PASSED TUTORIAL ENEMY INTERACTING = " + IsEnemyInteracting);
             }
-            _animParent.SetBool("IsDropped", true);
+            if(_animParent != null)
+                _animParent.SetBool("IsDropped", true);
+            
             _collider.enabled = false;
         }
 

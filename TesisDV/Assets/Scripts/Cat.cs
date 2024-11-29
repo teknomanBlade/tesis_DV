@@ -23,6 +23,8 @@ public class Cat : MonoBehaviour
     public NavMeshAgent _navMeshAgent;
     private LevelManager _lm;
     private WaveManager _wm;
+    [SerializeField]
+    private CatCaptured _catCapturedUI;
     private Vector3 _exitPos;
     private Animator _animator;
     [SerializeField] private List<Vector3> _myPos = new List<Vector3>();
@@ -72,7 +74,7 @@ public class Cat : MonoBehaviour
         
         _wm = GameObject.Find("GameManagement").GetComponent<WaveManager>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        
+        _catCapturedUI = FindObjectOfType<CatCaptured>(true);
         _animator = GetComponent<Animator>();
         _animator.SetBool("IsIdle", true);
         IsGoingBack = false;
@@ -177,6 +179,7 @@ public class Cat : MonoBehaviour
     {
         SetExitPos(exitPos);
         SetOwner(enemy);
+        _catCapturedUI.CapturedCatChangeUI(true);
         CatIsBeingTaken();
     }
 
@@ -194,7 +197,7 @@ public class Cat : MonoBehaviour
     {
         _isHeld = false;
         _isRepositioning = true;
-
+        _catCapturedUI.CapturedCatChangeUI(false);
         RepositionBetweenWaves();
 
         _navMeshAgent.enabled = true;

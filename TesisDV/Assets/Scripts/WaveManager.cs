@@ -135,8 +135,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     {
         ClearAllEnemiesLists();
         //Wave 1
-        _graysUFO1.AddRange(GetEnemiesTypeForWave(1, EnemyType.Dog));
-        _graysUFO2.AddRange(GetEnemiesTypeForWave(1, EnemyType.Dog));
+        _graysUFO1.AddRange(GetEnemiesTypeForWave(1, EnemyType.Common));
+        _graysUFO2.AddRange(GetEnemiesTypeForWave(1, EnemyType.Common));
         //Wave 2
         _graysUFO12.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
         _graysUFO22.AddRange(GetEnemiesTypeForWave(4, EnemyType.Common));
@@ -543,7 +543,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
         DisableUFOLR(); 
         SpawnWave();
-        GameVars.Values.soundManager.PlaySound(_as,"MusicWaves", 0.12f, true,0f);
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_UFOSpookyMusicWaves", 0.12f, true,0f);
         TimeWaves = _timeBetweenWaves;
     }
 
@@ -738,6 +738,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public void RoundEnd() 
     {
         OnRoundEnd(_currentRound);
+        GameVars.Values.soundManager.StopSound(_as);
     }
 
     private void RestartUFOIndicators()

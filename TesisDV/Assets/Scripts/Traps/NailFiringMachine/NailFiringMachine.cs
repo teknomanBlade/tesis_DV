@@ -121,7 +121,7 @@ public class NailFiringMachine : Trap, IMovable, IInteractable
 
     public void BecomeMovable()
     {
-        GameVars.Values.currentShotsTrap2 = shotsLeft;
+        //GameVars.Values.currentShotsTrap2 = shotsLeft;
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
         aux.GetComponent<StaticBlueprint>().SpendMaterials(false);
         aux.GetComponent<StaticBlueprint>().CanBeCancelled(false);

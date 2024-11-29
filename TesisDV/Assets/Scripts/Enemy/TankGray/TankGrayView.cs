@@ -58,6 +58,7 @@ public class TankGrayView : MonoBehaviour
 
     public void DeathAnimation()
     {
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "SFX_TankGroan", 0.4f, true);
         _myAnimator.SetBool("IsDead", true);
     }
 

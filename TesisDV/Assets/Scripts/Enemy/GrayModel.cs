@@ -60,7 +60,11 @@ public class GrayModel : Enemy
             _myController.OnUpdate();
         }
     }
-
+    public override void ActiveStasisField(bool active)
+    {
+        transform.GetComponentsInChildren<Transform>(true)
+            .Where(x => x.name.Equals("StasisField")).FirstOrDefault().gameObject.SetActive(active);
+    }
     public void BackToPool()
     {
         GameVars.Values.WaveManager.GrayCommonPool.ReturnObject(this);

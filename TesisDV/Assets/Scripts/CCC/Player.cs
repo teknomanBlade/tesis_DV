@@ -128,6 +128,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     [SerializeField]
     private bool _canStartNextWave;
     private bool _UFOExitAnimFinished;
+    [SerializeField]
     private bool _canMoveTraps;
     //SkillTree, deberia ver de mover esto a craftingrecipee, pero para llegar a este viernes sirve.
     private SkillTree _skillTree;
@@ -388,11 +389,18 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 _rb.isKinematic = true;
             }
 
-            /*if (Input.GetKeyDown(GameVars.Values.dropKey))
+            if (Input.GetKeyDown(GameVars.Values.testBuyFourthTrap))
             {
-                Damage(2, EnemyType.Tank);
-                ActiveTankHitFistDamageEffect();
-            }*/
+                //Damage(2, EnemyType.Tank);
+                //ActiveTankHitFistDamageEffect();
+                FindObjectOfType<SkillTree>(true).UnlockElectricTrap();
+            }
+            if (Input.GetKeyDown(GameVars.Values.testBuySixthTrap))
+            {
+                //Damage(2, EnemyType.Tank);
+                //ActiveTankHitFistDamageEffect();
+                FindObjectOfType<SkillTree>(true).UnlockTeslaCoilGenerator();
+            }
         }
 
     }
@@ -419,15 +427,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             Walk();
         }
     }
-
-    public void ActiveDamageEffect()
-    {
-        if (volume.profile.TryGetSettings(out postProcessDamage))
-        {
-            StartCoroutine(LerpDamageEffect(0.6f, 1f));
-        }
-    }
-
     public void SwitchKinematics()
     {
         if (_rb.isKinematic == false)
@@ -439,7 +438,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             _rb.isKinematic = false;
         }
     }
-
+    #region PostProcess Effects
+    public void ActiveDamageEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessDamage))
+        {
+            StartCoroutine(LerpDamageEffect(0.6f, 1f));
+        }
+    }
     IEnumerator LerpDamageEffect(float endValue, float duration)
     {
         float time = 0;
@@ -568,6 +574,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(1f, buttonEffect));
         }
     }
+    #endregion
     public void ResetAlphaArrowsValue()
     {
         arrowDown.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", 1);

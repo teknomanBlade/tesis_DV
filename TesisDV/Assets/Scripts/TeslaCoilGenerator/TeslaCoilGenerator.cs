@@ -1,23 +1,24 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class TeslaCoilGenerator : Trap, IMovable, IInteractable
 {
     private float _trapBase1Angle;
     private float _trapBase2Angle;
     private float _distance;
+    public Player Player;
     public AudioSource _as;
     public List<Vector3> posTrapBases = new List<Vector3>();
+    public List<TrapBase> trapBasesPlaced = new List<TrapBase>();
     public TrapBase trapBasePrefab;
     public PoolObjectStack<TrapBase> TrapBasePool { get; set; }
     public int InitialStock { get; private set; }
     public int TrapBaseCount { get; private set; }
-
+    public bool HasTrapsInside;
     public bool IsMoving;
     public GameObject blueprintPrefab;
+    public ElectricityRandomRays RandomRays;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
     void Start()
     {
         _as = GetComponent<AudioSource>();
+        RandomRays = GetComponentInChildren<ElectricityRandomRays>();
         GameVars.Values.soundManager.PlaySound(_as, "SFX_TeslaCoilGenerator", 0.15f, true, 1f);
         SetTrapBases();
     }
@@ -79,7 +81,7 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
 
         for (int i = 0; i < posTrapBases.Count; i++)
         {
-            TrapBasePool.GetObject().SetPos(posTrapBases[i]);
+            trapBasesPlaced.Add(TrapBasePool.GetObject().SetPos(posTrapBases[i]));
         }
     }
     // Update is called once per frame
@@ -90,6 +92,15 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
     public TeslaCoilGenerator SetMovingToFalse(bool isMoving)
     {
         IsMoving = isMoving;
+        if(_as != null)
+            GameVars.Values.soundManager.PlaySound(_as, "SFX_TeslaCoilGenerator", 0.15f, true, 1f);
+        
+        RandomRays?.StartRays();
+        return this;
+    }
+    public TeslaCoilGenerator SetOwner(Player player) 
+    {
+        Player = player;
         return this;
     }
     public TeslaCoilGenerator SetInitPos(Vector3 pos)
@@ -109,12 +120,22 @@ public class TeslaCoilGenerator : Trap, IMovable, IInteractable
     }
     public void BecomeMovable()
     {
-        IsMoving = true; 
-        GameVars.Values.TeslaCoilGeneratorPool.ReturnObject(this);
-        GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
-        aux.GetComponent<Blueprint>().SpendMaterials(false).CanBeCancelled(false);
+        HasTrapsInside = trapBasesPlaced.Any(x => !x._isAvailable);
+        if (!HasTrapsInside)
+        {
+            IsMoving = true;
+            GameVars.Values.TeslaCoilGeneratorPool.ReturnObject(this);
+            GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
+            aux.GetComponent<Blueprint>().SpendMaterials(false).CanBeCancelled(false);
 
-        transform.parent = null;
+            transform.parent = null;
+        }
+        else 
+        {
+            GameVars.Values.ShowNotification("You can't move Tesla Coil Generator until you have moved all the Traps inside.");
+            HasTrapsInside = false;
+            Player.IsCrafting = false;
+        }
     }
 
     public void Interact()

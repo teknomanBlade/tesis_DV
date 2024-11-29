@@ -154,13 +154,8 @@ public abstract class Enemy : MonoBehaviour
 
             //SendWitts();
             _capsuleCollider.enabled = false;
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
             _lm.RemoveGray(this);
-
-            //_navMeshAgent.speed = 0; //Se va el navmesh
-
-            //Desabilitar colliders y lo que haga falta.
         }
     }
 
@@ -366,6 +361,7 @@ public abstract class Enemy : MonoBehaviour
         onCatGrab(true);
         GameVars.Values.TakeCat(); //Todo esto se hace en una corrutina para darle tiempo al Gray a encontrar la nave mas cercana.
         hasObjective = true;
+        ActiveStasisField(hasObjective);
         _lm.CheckForObjective();
 
         GetNearestUFO();
@@ -381,6 +377,7 @@ public abstract class Enemy : MonoBehaviour
     public void DropCat()
     {
         hasObjective = false;
+        ActiveStasisField(hasObjective);
         GameVars.Values.SetCatFree();
         _lm.CheckForObjective();
     }
@@ -587,6 +584,11 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void OnSpecialChildEvent() 
+    {
+        
+    }
+
+    public virtual void ActiveStasisField(bool active) 
     {
         
     }

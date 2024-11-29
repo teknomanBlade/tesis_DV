@@ -67,14 +67,16 @@ public class ElectricityRandomRays : MonoBehaviour
 
     private void Start()
     {
-
+        StartRays();
+    }
+    public void StartRays() 
+    {
         if (electricityLineRenderer == null)
             electricityLineRenderer = GetComponent<ElectricityLineRenderer>();
 
         if (electricityLineRenderer)
             StartCoroutine(RayChecking());
     }
-
 
     IEnumerator RayChecking()
     {

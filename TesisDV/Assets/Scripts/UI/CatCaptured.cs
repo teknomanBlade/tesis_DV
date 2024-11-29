@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,12 +7,21 @@ public class CatCaptured : MonoBehaviour
     public Sprite catReleasedSprite;
     public Sprite catCapturedSprite;
     public GameObject catImage;
+    public Cat Owner;
+    public delegate void OnCapturedCatChangeDelegate(bool isCaptured);
+    public event OnCapturedCatChangeDelegate OnCapturedCatChange;
 
     void Start()
     {
-        GameVars.Values.OnCapturedCatChange += CatCaptureChanged;
+        //GameVars.Values.OnCapturedCatChange += CatCaptureChanged;
+        Owner = GameVars.Values.Cat;
+        OnCapturedCatChange += CatCaptureChanged;
         _animator = GetComponent<Animator>();
+    }
 
+    public void CapturedCatChangeUI(bool isCaptured) 
+    {
+        OnCapturedCatChange(isCaptured);
     }
 
     public void SetAnimatorCaptureBool(bool isCaptured)

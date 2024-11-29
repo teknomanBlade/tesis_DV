@@ -72,6 +72,8 @@ public class GameVars : MonoBehaviour
     public KeyCode testRecieveWittsKey;
     public KeyCode testOpenAllDoorsKey;
     public KeyCode testKillingEnemiesKey;
+    public KeyCode testBuySixthTrap;
+    public KeyCode testBuyFourthTrap;
 
     [Header("Resources")]
     public Sprite crosshair;
@@ -96,8 +98,6 @@ public class GameVars : MonoBehaviour
 
     public Animator playerLivesAnim { get; private set; }
 
-    //public YouWinScreen youWinScreen;
-    //public YouLoseScreen youLoseScreen;
     public List<AudioClip> audioClips;
     public GameObject backpack;
     public Image itemGrabbedImage;
@@ -131,24 +131,24 @@ public class GameVars : MonoBehaviour
     
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
-    public int currentShotsTrap1; //BaseballLauncher
-    public int currentShotsTrap2; //NailFiringMachine
     public List<List<Node>> levelRoutes;
-    public string EnemyType;
     public int BaseballLauncherCount = 0;
     public int FERNPaintballMinigunCount = 0;
     public int TeslaCoilGeneratorCount = 0;
-    public int InitialStock { get; private set; }
+    [Header("Pool Operations")]
     public ParticleSystem SmokePrefab;
     public BaseballLauncher BaseballLauncherPrefab;
     public FERNPaintballMinigun FERNPaintballMinigunPrefab;
     public TeslaCoilGenerator TeslaCoilGeneratorPrefab;
+    public int InitialStock { get; private set; }
     public PoolObjectStack<BaseballLauncher> BaseballLauncherPool { get; set; }
     public PoolObjectStack<FERNPaintballMinigun> FERNPaintballMinigunPool { get; set; }
     public PoolObjectStack<TeslaCoilGenerator> TeslaCoilGeneratorPool { get; set; }
     public PoolObjectStack<ParticleSystem> SmokeParticlesPool { get; set; }
+    [Header("Tutorial Operations")]
     public bool PassedTutorial;
     public bool IsTutorial;
+    [Header("ArrowUI Operations")]
     public Vector3 positionObjectNotification;
     public Vector3 smokeParticlesPos;
     #region Events
@@ -158,10 +158,6 @@ public class GameVars : MonoBehaviour
     public event OnCapturedCatPositionDelegate OnCapturedCatPosition;
     public delegate void OnObjectNotificationPositionDelegate(Vector3 objectNotificationPos);
     public event OnObjectNotificationPositionDelegate OnObjectNotificationPosition;
-    public delegate void OnCatReleasedDelegate();
-    public event OnCatReleasedDelegate OnCatReleased;
-    public delegate void OnCatTakenDelegate();
-    public event OnCatTakenDelegate OnCatTaken;
     #endregion
 
     private void Awake()
@@ -528,9 +524,9 @@ public class GameVars : MonoBehaviour
     #region Cat
     public void SetCatFree()
     {
-        _isCatCaptured = false;
+        //_isCatCaptured = false;
         CatDistanceBar.PlayFadeOut();
-        OnCapturedCatChange(_isCatCaptured);
+        //OnCapturedCatChange(_isCatCaptured);
         //OnCatReleased();
     }
 
@@ -538,17 +534,13 @@ public class GameVars : MonoBehaviour
     {
         return (cat != null) ? cat.GetDistance() : 0f;
     }
-    public void SetEnemyType(string enemyType) 
-    {
-        EnemyType = enemyType;
-    }
     public void TakeCat()
     {
         if (cat == null) return;
 
-        _isCatCaptured = true;
+        //_isCatCaptured = true;
         CatDistanceBar.PlayFadeIn();
-        OnCapturedCatChange(_isCatCaptured);
+        //OnCapturedCatChange(_isCatCaptured);
         //OnCatTaken();
         //cat.SetExitPos(exitPos);
         //cat.SetOwner(owner);
