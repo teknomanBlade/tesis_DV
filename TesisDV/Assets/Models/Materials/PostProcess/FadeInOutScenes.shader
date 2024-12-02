@@ -1,4 +1,4 @@
-// Made with Amplify Shader Editor
+// Made with Amplify Shader Editor v1.9.1.3
 // Available at the Unity Asset Store - http://u3d.as/y3X 
 Shader "FadeInOutScenes"
 {
@@ -85,8 +85,8 @@ Shader "FadeInOutScenes"
 				float4 ase_ppsScreenPosFragNorm = float4(i.texcoordStereo,0,1);
 
 				float2 uv_MainTex = i.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
-				float2 uv024 = i.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 lerpResult28 = lerp( tex2D( _MainTex, uv_MainTex ) , float4( 0,0,0,0 ) , step( _Intensity , distance( uv024 , float2( 0.5,0.5 ) ) ));
+				float2 texCoord24 = i.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
+				float4 lerpResult28 = lerp( tex2D( _MainTex, uv_MainTex ) , float4( 0,0,0,0 ) , step( _Intensity , distance( texCoord24 , float2( 0.5,0.5 ) ) ));
 				
 
 				float4 color = lerpResult28;
@@ -98,21 +98,20 @@ Shader "FadeInOutScenes"
 	}
 	CustomEditor "ASEMaterialInspector"
 	
-	
+	Fallback Off
 }
 /*ASEBEGIN
-Version=17800
-234;417;1307;378;1494.143;413.0709;1.839034;True;False
+Version=19103
 Node;AmplifyShaderEditor.TextureCoordinatesNode;24;-1142.732,36.44088;Inherit;False;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.Vector2Node;26;-978.1505,187.4527;Inherit;False;Constant;_Vector0;Vector 0;2;0;Create;True;0;0;False;0;0.5,0.5;0,0;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
+Node;AmplifyShaderEditor.Vector2Node;26;-978.1505,187.4527;Inherit;False;Constant;_Vector0;Vector 0;2;0;Create;True;0;0;0;False;0;False;0.5,0.5;0,0;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
 Node;AmplifyShaderEditor.DistanceOpNode;25;-740.058,13.86804;Inherit;True;2;0;FLOAT2;0,0;False;1;FLOAT2;0,0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TemplateShaderPropertyNode;1;-433.5619,-237.6363;Inherit;False;0;0;_MainTex;Pass;0;5;SAMPLER2D;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;13;-825.4161,-75.94054;Inherit;False;Property;_Intensity;Intensity;0;0;Create;True;0;0;False;0;0;1;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TemplateShaderPropertyNode;1;-433.5619,-237.6363;Inherit;False;0;0;_MainTex;Pass;False;0;5;SAMPLER2D;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;13;-825.4161,-75.94054;Inherit;False;Property;_Intensity;Intensity;0;0;Create;True;0;0;0;False;0;False;0;0;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.StepOpNode;27;-414.8357,-5.036811;Inherit;True;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SamplerNode;3;-229.9778,-252.2285;Inherit;True;Property;_TextureSample0;Texture Sample 0;0;0;Create;True;0;0;False;0;-1;39254807ac63ccf408c845b18ba7b08d;39254807ac63ccf408c845b18ba7b08d;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;20;-1239.679,230.7406;Inherit;False;Property;_Distortion;Distortion;1;0;Create;True;0;0;False;0;0.88;0.88;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SamplerNode;3;-229.9778,-252.2285;Inherit;True;Property;_TextureSample0;Texture Sample 0;0;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;20;-1239.679,230.7406;Inherit;False;Property;_Distortion;Distortion;1;0;Create;True;0;0;0;False;0;False;0.88;0.88;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.LerpOp;28;183.0558,-205.26;Inherit;True;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;0;562.0831,-111.274;Float;False;True;-1;2;ASEMaterialInspector;0;9;FadeInOutScenes;6ee3f8b6a5b82cb45858d55fcbadce45;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;1;False;False;False;True;2;False;-1;False;False;True;2;False;-1;True;7;False;-1;False;False;False;0;False;False;False;False;False;False;False;False;False;False;True;2;0;;0;0;Standard;0;0;1;True;False;;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;30;562.0831,-111.274;Float;False;True;-1;2;ASEMaterialInspector;0;5;FadeInOutScenes;32139be9c1eb75640a847f011acf3bcf;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;True;7;False;;False;False;False;False;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;0;;0;0;Standard;0;0;1;True;False;;False;0
 WireConnection;25;0;24;0
 WireConnection;25;1;26;0
 WireConnection;27;0;13;0
@@ -120,6 +119,6 @@ WireConnection;27;1;25;0
 WireConnection;3;0;1;0
 WireConnection;28;0;3;0
 WireConnection;28;2;27;0
-WireConnection;0;0;28;0
+WireConnection;30;0;28;0
 ASEEND*/
-//CHKSM=08ED45921DA175492B4A94C679BE8BC736CE72E6
+//CHKSM=A24842FC55533ED5B04832BBF2981EEC41BEA308
