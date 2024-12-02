@@ -2,20 +2,26 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Shred_wall_toon
   m_Shader: {fileID: 4800000, guid: c181b5f9b94735d4db2356bacb063191, type: 3}
-  m_ShaderKeywords: _NORMALMAP
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _NORMALMAP
+  - _VERTEXPOSITION_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -59,7 +65,23 @@ Material:
         m_Texture: {fileID: 2800000, guid: e36978dd68feebe44982c72f682899d6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _PaintStains:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SuitTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -67,34 +89,70 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
+    - _AlphaCutoff: 0.5
+    - _AmountReflection: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _EdgeThickness: 0
+    - _ElectricityEffect: 0
+    - _EnvironmentReflections: 1
+    - _FirstPosition: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.012
     - _Glossiness1: 0
     - _GlossyReflections: 1
+    - _LerpAmount: 0
+    - _LerpStains: 0
+    - _LowerLimit: 5
     - _Metallic: 0
     - _Mode: 0
+    - _NoiseScrollspeed: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _Rim: 0
     - _Rim1: 0
     - _RimAmount: 0
     - _RimAmount1: 0
+    - _ScaleDissolveGray: 0.4301261
+    - _SecondPosition: 0
+    - _SecondPositionIntensity: 0
+    - _ShadowIntensity: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
+    - _UpperLimit: -5
+    - _VertexPosition: 1
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
     - _AmbientColor: {r: 0, g: 0, b: 0, a: 0}
     - _AmbientColor1: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DissolveDirection: {r: 0, g: 1, b: 0, a: 0}
+    - _EdgeColor: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _NoiseDirection: {r: 0, g: 1, b: 0, a: 0}
+    - _NoiseScale: {r: 2, g: 2, b: 0, a: 0}
     - _RimColor: {r: 0, g: 0, b: 0, a: 0}
     - _RimColor1: {r: 0, g: 0, b: 0, a: 0}
     - _SpecularColor: {r: 0, g: 0, b: 0, a: 0}
