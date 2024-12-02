@@ -288,15 +288,15 @@ Shader "ToonShadowsDecalsWithTransparency"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture_ST;
 			float4 _Color_Decals;
-			float _SecondExperimentColumn;
-			float _FirstExperimentColumn;
-			float _FourthFifthExperimentRow;
 			float _Min;
 			float _Max;
 			float _FirstPosition;
 			float _SecondPosition;
 			float _SecondPositionIntensity;
 			float _ShadowIntensity;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -559,25 +559,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				float2 texCoord226 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
-				float4 temp_cast_0 = (smoothstepResult233).xxxx;
-				float div240=256.0/float(256);
-				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
-				float2 texCoord215 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
-				float4 temp_cast_1 = (smoothstepResult221).xxxx;
-				float div239=256.0/float(200);
-				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
-				float2 texCoord243 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
-				float4 temp_cast_2 = (smoothstepResult246).xxxx;
-				float div247=256.0/float(200);
-				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
 				float2 uv_MainTexture = IN.ase_texcoord8.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
 				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
-				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
-				
 				float temp_output_64_0 = min( _Min , _Max );
 				float temp_output_65_0 = max( _Max , _Min );
 				float dotResult56 = dot( _MainLightPosition.xyz , WorldNormal );
@@ -585,16 +568,34 @@ Shader "ToonShadowsDecalsWithTransparency"
 				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
 				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
 				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
+				float4 temp_output_50_0 = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) );
+				
+				float2 texCoord226 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_2 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_2 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_3 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_3 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_4 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_4 * div247 ) / div247 );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
 				
 
-				float3 BaseColor = lerpResult238.rgb;
+				float3 BaseColor = temp_output_50_0.rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = lerpResult238.rgb;
+				float3 Emission = temp_output_50_0.rgb;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
 				float Occlusion = 1;
-				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
+				float Alpha = lerpResult238.r;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 				float3 BakedGI = 0;
@@ -864,8 +865,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
 			#endif
 
-			#define ASE_NEEDS_VERT_NORMAL
-
+			
 
 			struct VertexInput
 			{
@@ -885,7 +885,6 @@ Shader "ToonShadowsDecalsWithTransparency"
 					float4 shadowCoord : TEXCOORD1;
 				#endif
 				float4 ase_texcoord2 : TEXCOORD2;
-				float4 ase_texcoord3 : TEXCOORD3;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -893,15 +892,15 @@ Shader "ToonShadowsDecalsWithTransparency"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture_ST;
 			float4 _Color_Decals;
-			float _SecondExperimentColumn;
-			float _FirstExperimentColumn;
-			float _FourthFifthExperimentRow;
 			float _Min;
 			float _Max;
 			float _FirstPosition;
 			float _SecondPosition;
 			float _SecondPositionIntensity;
 			float _ShadowIntensity;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -955,14 +954,10 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
-				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
-				o.ase_texcoord3.xyz = ase_worldNormal;
-				
 				o.ase_texcoord2.xy = v.ase_texcoord.xy;
 				
 				//setting value to unused interpolator channels and avoid initialization warnings
 				o.ase_texcoord2.zw = 0;
-				o.ase_texcoord3.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -1122,19 +1117,27 @@ Shader "ToonShadowsDecalsWithTransparency"
 					#endif
 				#endif
 
+				float2 texCoord226 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_0 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_1 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_2 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
 				float2 uv_MainTexture = IN.ase_texcoord2.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
 				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
-				float temp_output_64_0 = min( _Min , _Max );
-				float temp_output_65_0 = max( _Max , _Min );
-				float3 ase_worldNormal = IN.ase_texcoord3.xyz;
-				float dotResult56 = dot( _MainLightPosition.xyz , ase_worldNormal );
-				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
-				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
-				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
-				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
 				
 
-				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
+				float Alpha = lerpResult238.r;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 
@@ -1203,8 +1206,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
 			#endif
 
-			#define ASE_NEEDS_VERT_NORMAL
-
+			
 
 			struct VertexInput
 			{
@@ -1224,7 +1226,6 @@ Shader "ToonShadowsDecalsWithTransparency"
 				float4 shadowCoord : TEXCOORD1;
 				#endif
 				float4 ase_texcoord2 : TEXCOORD2;
-				float4 ase_texcoord3 : TEXCOORD3;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -1232,15 +1233,15 @@ Shader "ToonShadowsDecalsWithTransparency"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture_ST;
 			float4 _Color_Decals;
-			float _SecondExperimentColumn;
-			float _FirstExperimentColumn;
-			float _FourthFifthExperimentRow;
 			float _Min;
 			float _Max;
 			float _FirstPosition;
 			float _SecondPosition;
 			float _SecondPositionIntensity;
 			float _ShadowIntensity;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -1291,14 +1292,10 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
-				o.ase_texcoord3.xyz = ase_worldNormal;
-				
 				o.ase_texcoord2.xy = v.ase_texcoord.xy;
 				
 				//setting value to unused interpolator channels and avoid initialization warnings
 				o.ase_texcoord2.zw = 0;
-				o.ase_texcoord3.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -1443,19 +1440,27 @@ Shader "ToonShadowsDecalsWithTransparency"
 					#endif
 				#endif
 
+				float2 texCoord226 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_0 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_1 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_2 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
 				float2 uv_MainTexture = IN.ase_texcoord2.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
 				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
-				float temp_output_64_0 = min( _Min , _Max );
-				float temp_output_65_0 = max( _Max , _Min );
-				float3 ase_worldNormal = IN.ase_texcoord3.xyz;
-				float dotResult56 = dot( _MainLightPosition.xyz , ase_worldNormal );
-				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
-				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
-				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
-				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
 				
 
-				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
+				float Alpha = lerpResult238.r;
 				float AlphaClipThreshold = 0.5;
 				#ifdef ASE_DEPTH_WRITE_ON
 					float DepthValue = 0;
@@ -1550,15 +1555,15 @@ Shader "ToonShadowsDecalsWithTransparency"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture_ST;
 			float4 _Color_Decals;
-			float _SecondExperimentColumn;
-			float _FirstExperimentColumn;
-			float _FourthFifthExperimentRow;
 			float _Min;
 			float _Max;
 			float _FirstPosition;
 			float _SecondPosition;
 			float _SecondPositionIntensity;
 			float _ShadowIntensity;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -1767,25 +1772,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 					#endif
 				#endif
 
-				float2 texCoord226 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
-				float4 temp_cast_0 = (smoothstepResult233).xxxx;
-				float div240=256.0/float(256);
-				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
-				float2 texCoord215 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
-				float4 temp_cast_1 = (smoothstepResult221).xxxx;
-				float div239=256.0/float(200);
-				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
-				float2 texCoord243 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
-				float4 temp_cast_2 = (smoothstepResult246).xxxx;
-				float div247=256.0/float(200);
-				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
 				float2 uv_MainTexture = IN.ase_texcoord4.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
 				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
-				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
-				
 				float temp_output_64_0 = min( _Min , _Max );
 				float temp_output_65_0 = max( _Max , _Min );
 				float3 ase_worldNormal = IN.ase_texcoord5.xyz;
@@ -1794,11 +1782,29 @@ Shader "ToonShadowsDecalsWithTransparency"
 				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
 				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
 				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
+				float4 temp_output_50_0 = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) );
+				
+				float2 texCoord226 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_2 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_2 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_3 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_3 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_4 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_4 * div247 ) / div247 );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
 				
 
-				float3 BaseColor = lerpResult238.rgb;
-				float3 Emission = lerpResult238.rgb;
-				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
+				float3 BaseColor = temp_output_50_0.rgb;
+				float3 Emission = temp_output_50_0.rgb;
+				float Alpha = lerpResult238.r;
 				float AlphaClipThreshold = 0.5;
 
 				#ifdef _ALPHATEST_ON
@@ -1884,15 +1890,15 @@ Shader "ToonShadowsDecalsWithTransparency"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture_ST;
 			float4 _Color_Decals;
-			float _SecondExperimentColumn;
-			float _FirstExperimentColumn;
-			float _FourthFifthExperimentRow;
 			float _Min;
 			float _Max;
 			float _FirstPosition;
 			float _SecondPosition;
 			float _SecondPositionIntensity;
 			float _ShadowIntensity;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -2086,25 +2092,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 					#endif
 				#endif
 
-				float2 texCoord226 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
-				float4 temp_cast_0 = (smoothstepResult233).xxxx;
-				float div240=256.0/float(256);
-				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
-				float2 texCoord215 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
-				float4 temp_cast_1 = (smoothstepResult221).xxxx;
-				float div239=256.0/float(200);
-				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
-				float2 texCoord243 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
-				float4 temp_cast_2 = (smoothstepResult246).xxxx;
-				float div247=256.0/float(200);
-				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
 				float2 uv_MainTexture = IN.ase_texcoord2.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
 				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
-				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
-				
 				float temp_output_64_0 = min( _Min , _Max );
 				float temp_output_65_0 = max( _Max , _Min );
 				float3 ase_worldNormal = IN.ase_texcoord3.xyz;
@@ -2113,10 +2102,28 @@ Shader "ToonShadowsDecalsWithTransparency"
 				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
 				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
 				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
+				float4 temp_output_50_0 = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) );
+				
+				float2 texCoord226 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_1 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_1 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_2 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_2 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_3 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_3 * div247 ) / div247 );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
 				
 
-				float3 BaseColor = lerpResult238.rgb;
-				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
+				float3 BaseColor = temp_output_50_0.rgb;
+				float Alpha = lerpResult238.r;
 				float AlphaClipThreshold = 0.5;
 
 				half4 color = half4(BaseColor, Alpha );
@@ -2172,8 +2179,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 				#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
 			#endif
 
-			#define ASE_NEEDS_FRAG_WORLD_NORMAL
-
+			
 
 			struct VertexInput
 			{
@@ -2203,15 +2209,15 @@ Shader "ToonShadowsDecalsWithTransparency"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture_ST;
 			float4 _Color_Decals;
-			float _SecondExperimentColumn;
-			float _FirstExperimentColumn;
-			float _FourthFifthExperimentRow;
 			float _Min;
 			float _Max;
 			float _FirstPosition;
 			float _SecondPosition;
 			float _SecondPositionIntensity;
 			float _ShadowIntensity;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -2419,19 +2425,28 @@ Shader "ToonShadowsDecalsWithTransparency"
 					#endif
 				#endif
 
+				float2 texCoord226 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_0 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_1 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord4.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_2 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
 				float2 uv_MainTexture = IN.ase_texcoord4.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
 				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
-				float temp_output_64_0 = min( _Min , _Max );
-				float temp_output_65_0 = max( _Max , _Min );
-				float dotResult56 = dot( _MainLightPosition.xyz , WorldNormal );
-				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
-				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
-				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
-				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
 				
 
 				float3 Normal = float3(0, 0, 1);
-				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
+				float Alpha = lerpResult238.r;
 				float AlphaClipThreshold = 0.5;
 				#ifdef ASE_DEPTH_WRITE_ON
 					float DepthValue = 0;
@@ -2583,15 +2598,15 @@ Shader "ToonShadowsDecalsWithTransparency"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture_ST;
 			float4 _Color_Decals;
-			float _SecondExperimentColumn;
-			float _FirstExperimentColumn;
-			float _FourthFifthExperimentRow;
 			float _Min;
 			float _Max;
 			float _FirstPosition;
 			float _SecondPosition;
 			float _SecondPositionIntensity;
 			float _ShadowIntensity;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -2847,25 +2862,8 @@ Shader "ToonShadowsDecalsWithTransparency"
 
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				float2 texCoord226 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
-				float4 temp_cast_0 = (smoothstepResult233).xxxx;
-				float div240=256.0/float(256);
-				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
-				float2 texCoord215 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
-				float4 temp_cast_1 = (smoothstepResult221).xxxx;
-				float div239=256.0/float(200);
-				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
-				float2 texCoord243 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
-				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
-				float4 temp_cast_2 = (smoothstepResult246).xxxx;
-				float div247=256.0/float(200);
-				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
 				float2 uv_MainTexture = IN.ase_texcoord8.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
 				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
-				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
-				
 				float temp_output_64_0 = min( _Min , _Max );
 				float temp_output_65_0 = max( _Max , _Min );
 				float dotResult56 = dot( _MainLightPosition.xyz , WorldNormal );
@@ -2873,16 +2871,34 @@ Shader "ToonShadowsDecalsWithTransparency"
 				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
 				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
 				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
+				float4 temp_output_50_0 = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) );
+				
+				float2 texCoord226 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_2 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_2 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_3 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_3 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord8.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_4 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_4 * div247 ) / div247 );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
 				
 
-				float3 BaseColor = lerpResult238.rgb;
+				float3 BaseColor = temp_output_50_0.rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = lerpResult238.rgb;
+				float3 Emission = temp_output_50_0.rgb;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
 				float Occlusion = 1;
-				float Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
+				float Alpha = lerpResult238.r;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 				float3 BakedGI = 0;
@@ -3022,8 +3038,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			#define ASE_NEEDS_VERT_NORMAL
-
+			
 
 			struct VertexInput
 			{
@@ -3037,7 +3052,6 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				float4 clipPos : SV_POSITION;
 				float4 ase_texcoord : TEXCOORD0;
-				float4 ase_texcoord1 : TEXCOORD1;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -3045,15 +3059,15 @@ Shader "ToonShadowsDecalsWithTransparency"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture_ST;
 			float4 _Color_Decals;
-			float _SecondExperimentColumn;
-			float _FirstExperimentColumn;
-			float _FourthFifthExperimentRow;
 			float _Min;
 			float _Max;
 			float _FirstPosition;
 			float _SecondPosition;
 			float _SecondPositionIntensity;
 			float _ShadowIntensity;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -3112,14 +3126,10 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
-				o.ase_texcoord1.xyz = ase_worldNormal;
-				
 				o.ase_texcoord.xy = v.ase_texcoord.xy;
 				
 				//setting value to unused interpolator channels and avoid initialization warnings
 				o.ase_texcoord.zw = 0;
-				o.ase_texcoord1.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -3228,19 +3238,27 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				SurfaceDescription surfaceDescription = (SurfaceDescription)0;
 
+				float2 texCoord226 = IN.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_0 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_1 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_2 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
 				float2 uv_MainTexture = IN.ase_texcoord.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
 				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
-				float temp_output_64_0 = min( _Min , _Max );
-				float temp_output_65_0 = max( _Max , _Min );
-				float3 ase_worldNormal = IN.ase_texcoord1.xyz;
-				float dotResult56 = dot( _MainLightPosition.xyz , ase_worldNormal );
-				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
-				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
-				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
-				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
 				
 
-				surfaceDescription.Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
+				surfaceDescription.Alpha = lerpResult238.r;
 				surfaceDescription.AlphaClipThreshold = 0.5;
 
 				#if _ALPHATEST_ON
@@ -3300,8 +3318,7 @@ Shader "ToonShadowsDecalsWithTransparency"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			#define ASE_NEEDS_VERT_NORMAL
-
+			
 
 			struct VertexInput
 			{
@@ -3315,7 +3332,6 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				float4 clipPos : SV_POSITION;
 				float4 ase_texcoord : TEXCOORD0;
-				float4 ase_texcoord1 : TEXCOORD1;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -3323,15 +3339,15 @@ Shader "ToonShadowsDecalsWithTransparency"
 			CBUFFER_START(UnityPerMaterial)
 			float4 _MainTexture_ST;
 			float4 _Color_Decals;
-			float _SecondExperimentColumn;
-			float _FirstExperimentColumn;
-			float _FourthFifthExperimentRow;
 			float _Min;
 			float _Max;
 			float _FirstPosition;
 			float _SecondPosition;
 			float _SecondPositionIntensity;
 			float _ShadowIntensity;
+			float _SecondExperimentColumn;
+			float _FirstExperimentColumn;
+			float _FourthFifthExperimentRow;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -3390,14 +3406,10 @@ Shader "ToonShadowsDecalsWithTransparency"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
-				o.ase_texcoord1.xyz = ase_worldNormal;
-				
 				o.ase_texcoord.xy = v.ase_texcoord.xy;
 				
 				//setting value to unused interpolator channels and avoid initialization warnings
 				o.ase_texcoord.zw = 0;
-				o.ase_texcoord1.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -3505,19 +3517,27 @@ Shader "ToonShadowsDecalsWithTransparency"
 			{
 				SurfaceDescription surfaceDescription = (SurfaceDescription)0;
 
+				float2 texCoord226 = IN.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult233 = smoothstep( min( _SecondExperimentColumn , _SecondExperimentColumn ) , max( _SecondExperimentColumn , _SecondExperimentColumn ) , ( 1.0 - texCoord226.x ));
+				float4 temp_cast_0 = (smoothstepResult233).xxxx;
+				float div240=256.0/float(256);
+				float4 posterize240 = ( floor( temp_cast_0 * div240 ) / div240 );
+				float2 texCoord215 = IN.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult221 = smoothstep( min( _FirstExperimentColumn , _FirstExperimentColumn ) , max( _FirstExperimentColumn , _FirstExperimentColumn ) , texCoord215.y);
+				float4 temp_cast_1 = (smoothstepResult221).xxxx;
+				float div239=256.0/float(200);
+				float4 posterize239 = ( floor( temp_cast_1 * div239 ) / div239 );
+				float2 texCoord243 = IN.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
+				float smoothstepResult246 = smoothstep( min( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , max( _FourthFifthExperimentRow , _FourthFifthExperimentRow ) , texCoord243.y);
+				float4 temp_cast_2 = (smoothstepResult246).xxxx;
+				float div247=256.0/float(200);
+				float4 posterize247 = ( floor( temp_cast_2 * div247 ) / div247 );
 				float2 uv_MainTexture = IN.ase_texcoord.xy * _MainTexture_ST.xy + _MainTexture_ST.zw;
 				float4 tex2DNode45 = tex2D( _MainTexture, uv_MainTexture );
-				float temp_output_64_0 = min( _Min , _Max );
-				float temp_output_65_0 = max( _Max , _Min );
-				float3 ase_worldNormal = IN.ase_texcoord1.xyz;
-				float dotResult56 = dot( _MainLightPosition.xyz , ase_worldNormal );
-				float temp_output_58_0 = ( ( dotResult56 + 1.0 ) * 0.5 );
-				float smoothstepResult61 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _FirstPosition ));
-				float smoothstepResult68 = smoothstep( temp_output_64_0 , temp_output_65_0 , ( temp_output_58_0 - _SecondPosition ));
-				float temp_output_74_0 = ( saturate( smoothstepResult61 ) + saturate( ( smoothstepResult68 - _SecondPositionIntensity ) ) );
+				float4 lerpResult238 = lerp( float4( 0,0,0,0 ) , ( ( saturate( posterize240 ) * saturate( posterize239 ) ) + saturate( posterize247 ) ) , tex2DNode45.a);
 				
 
-				surfaceDescription.Alpha = saturate( ( ( tex2DNode45 * _Color_Decals ) * ( ( temp_output_74_0 + ( ( 1.0 - temp_output_74_0 ) * _ShadowIntensity ) ) * _MainLightColor ) ) ).r;
+				surfaceDescription.Alpha = lerpResult238.r;
 				surfaceDescription.AlphaClipThreshold = 0.5;
 
 				#if _ALPHATEST_ON
@@ -3602,13 +3622,9 @@ Node;AmplifyShaderEditor.SimpleMultiplyOpNode;84;702.3867,-1035.302;Inherit;True
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;79;592.3793,-424.2421;Inherit;True;2;2;0;FLOAT;0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;237;1805.357,724.0733;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SaturateNode;248;1681.446,1438.208;Inherit;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;250;1782.884,-709.503;Inherit;False;Property;_OutlineWidth;OutlineWidth;12;0;Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;251;1782.183,-1096.808;Inherit;False;Property;_ColorTint;ColorTint;11;0;Create;True;0;0;0;False;0;False;0,0,0,0;0.167352,1,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleAddOpNode;249;2129.526,730.5776;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;82;1255.429,-764.0844;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;253;1736.182,-847.1005;Inherit;False;Property;_OutlineAlpha;OutlineAlpha;13;0;Create;True;0;0;0;False;0;False;0;0;0;2;0;1;FLOAT;0
 Node;AmplifyShaderEditor.LerpOp;238;2319.203,-130.817;Inherit;True;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.OutlineNode;252;2169.382,-916.5258;Inherit;False;0;True;Transparent;0;0;Off;True;True;True;True;0;False;;3;0;FLOAT3;0,0,0;False;2;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.SaturateNode;50;1566.141,-547.5917;Inherit;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;254;2732.427,-686.5903;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;3;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;0;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;255;2732.427,-686.5903;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;9;ToonShadowsDecalsWithTransparency;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;2;False;;True;3;False;;True;True;0;False;;0;False;;True;3;RenderPipeline=UniversalPipeline;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;True;3;True;12;all;0;False;True;1;5;False;;10;False;;1;1;False;;10;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;41;Workflow;1;0;Surface;1;638680786196191904;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
@@ -3690,12 +3706,9 @@ WireConnection;82;0;84;0
 WireConnection;82;1;79;0
 WireConnection;238;1;249;0
 WireConnection;238;2;45;4
-WireConnection;252;0;251;0
-WireConnection;252;2;253;0
-WireConnection;252;1;250;0
 WireConnection;50;0;82;0
-WireConnection;255;0;238;0
-WireConnection;255;2;238;0
-WireConnection;255;6;50;0
+WireConnection;255;0;50;0
+WireConnection;255;2;50;0
+WireConnection;255;6;238;0
 ASEEND*/
-//CHKSM=794EDD15F242F97A08D31E6AC65E3EA99C09E775
+//CHKSM=850D7A88BC38D8D18EF521D0D6D85FE8F4518572
