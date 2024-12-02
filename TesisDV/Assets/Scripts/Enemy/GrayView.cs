@@ -69,6 +69,7 @@ public class GrayView : MonoBehaviour
 
     public void DeathAnimation()
     {
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
         _myAnimator.SetBool("IsDead", true);
     }
 

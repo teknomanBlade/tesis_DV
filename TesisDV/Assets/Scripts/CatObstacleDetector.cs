@@ -1,6 +1,3 @@
-using System.Runtime.Serialization;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CatObstacleDetector : MonoBehaviour
@@ -11,9 +8,11 @@ public class CatObstacleDetector : MonoBehaviour
     {
         var door = other.GetComponent<Door>();
 
-        if (door && !other.GetComponent<Door>().GetDoorStatus())
+        if (door && !door.GetDoorStatus())
         {
-            _myOwner.GetDoor(other.GetComponent<Door>());
+            //_myOwner.GetDoor(other.GetComponent<Door>());
+            _myOwner.OnDoorInteract += door.OnEnemyDoorInteract;
+            _myOwner.DoorInteract();
         }
     }
 }

@@ -39,7 +39,8 @@ public class CatState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.ChaseTrapState);
         }
-
+        _enemy.OnCatTaken += _enemy._cat.CatTaken;
+        _enemy.OnCatReleased += _enemy._cat.CatHasBeenReleased;
         GetThetaStar();
         Debug.Log("Entre a CatState");
 
@@ -51,9 +52,10 @@ public class CatState : IState
     {
         _enemy.DetectTraps();
 
-        if(Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 3f)//1f) Lo cambiamos hasta que el tallGray tenga la escala bien puesta.
+        if(Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 2f)//1f) Lo cambiamos hasta que el tallGray tenga la escala bien puesta.
         {
             _enemy.GrabCat();
+            _enemy.CatTaken(_enemy._exitPos, _enemy);
             GameVars.Values.ShowNotification("The cat has been captured! You must prevent the grays getting to the ship!");
 
             _fsm.ChangeState(EnemyStatesEnum.EscapeState); 
@@ -139,7 +141,7 @@ public class CatState : IState
         //}
 
         //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
-        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
+        myPath = _pf.ConstructPathAStar(startingPoint, endingPoint);
         _enemy.SetPath(myPath); //esto no hace falta, es para testear.
     }
 }

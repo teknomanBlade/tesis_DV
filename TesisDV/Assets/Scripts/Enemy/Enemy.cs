@@ -104,6 +104,13 @@ public abstract class Enemy : MonoBehaviour
     public event Action onDisolve = delegate { };
     public event Action onEndSpawn = delegate { };
     public event Action<Enemy> onStatsEnhanced = delegate { };
+
+    public delegate void OnDoorInteractDelegate();
+    public event OnDoorInteractDelegate OnDoorInteract;
+    public delegate void OnCatReleasedDelegate();
+    public event OnCatReleasedDelegate OnCatReleased;
+    public delegate void OnCatTakenDelegate(Vector3 exitPos, Enemy enemy);
+    public event OnCatTakenDelegate OnCatTaken;
     #endregion Events
 
     public void ActiveGrayAttackRingCollider()
@@ -138,6 +145,7 @@ public abstract class Enemy : MonoBehaviour
             {
                 Debug.Log("LLEGA A DROP CAT: " + gameObject.name);
                 DropCat();
+                CatDropped();
             }
 
             isDead = true;
@@ -146,13 +154,8 @@ public abstract class Enemy : MonoBehaviour
 
             //SendWitts();
             _capsuleCollider.enabled = false;
-            GameVars.Values.soundManager.PlaySoundOnce(_as, "GrayDeathSound", 0.4f, true);
             onDeath();
             _lm.RemoveGray(this);
-
-            //_navMeshAgent.speed = 0; //Se va el navmesh
-
-            //Desabilitar colliders y lo que haga falta.
         }
     }
 
@@ -356,8 +359,9 @@ public abstract class Enemy : MonoBehaviour
         ReduceSpeed();
         AIManager.Instance.SetNewTarget(this.gameObject);
         onCatGrab(true);
-        GameVars.Values.TakeCat(_exitPos); //Todo esto se hace en una corrutina para darle tiempo al Gray a encontrar la nave mas cercana.
+        GameVars.Values.TakeCat(); //Todo esto se hace en una corrutina para darle tiempo al Gray a encontrar la nave mas cercana.
         hasObjective = true;
+        ActiveStasisField(hasObjective);
         _lm.CheckForObjective();
 
         GetNearestUFO();
@@ -373,6 +377,7 @@ public abstract class Enemy : MonoBehaviour
     public void DropCat()
     {
         hasObjective = false;
+        ActiveStasisField(hasObjective);
         GameVars.Values.SetCatFree();
         _lm.CheckForObjective();
     }
@@ -421,7 +426,7 @@ public abstract class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void GetDoor(Door door)
+    /*public void GetDoor(Door door)
     {
         OpenDoor(door);
     }
@@ -431,11 +436,19 @@ public abstract class Enemy : MonoBehaviour
         door.IsLocked = false;
         door.EnemyInteractionCheck(true);
         door.Interact();
-
-        //Refeencia a View donde hace un play de la animacion de abrir la puerta.
-
-        //GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
-        //TriggerDoorGrayInteract("GrayDoorInteract");
+        GameVars.Values.ShowNotification("The Grays have entered through the " + GetDoorAccessName(door.itemName));
+    }*/
+    public void CatDropped() 
+    {
+        OnCatReleased();
+    }
+    public void CatTaken(Vector3 exitPos, Enemy owner) 
+    {
+        OnCatTaken(exitPos, owner);
+    }
+    public void DoorInteract() 
+    {
+        OnDoorInteract();
     }
 
     public void SendWitts()
@@ -574,6 +587,12 @@ public abstract class Enemy : MonoBehaviour
     {
         
     }
+
+    public virtual void ActiveStasisField(bool active) 
+    {
+        
+    }
+
     public void SetPath(List<Node> nodos) //esto no hace falta, es para testear.
     {
         Path = null;

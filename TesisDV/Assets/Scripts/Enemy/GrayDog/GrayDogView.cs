@@ -51,6 +51,7 @@ public class GrayDogView : MonoBehaviour
     public void DeathAnimation()
     {
         GameVars.Values.soundManager.StopSound(_as);
+        GameVars.Values.soundManager.PlaySoundOnce(_as, "SFX_GrayDogDeathSound", 0.4f, true);
         _myAnimator.SetBool("IsDead", true);
     }
 

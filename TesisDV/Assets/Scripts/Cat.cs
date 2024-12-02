@@ -10,7 +10,12 @@ public class Cat : MonoBehaviour
     IController _myController;
     public float _runningSpeed;
     public float _walkingSpeed;
-    private bool _isHeld;
+    [SerializeField] private bool _isHeld;
+    public bool IsHeld { 
+        get { return _isHeld; } 
+        set { _isHeld = value; }
+    }
+    public Enemy MyOwner;
     private bool _isWalking;
     private bool _isRepositioning;
     public Vector3 StartingPosition;
@@ -18,6 +23,8 @@ public class Cat : MonoBehaviour
     public NavMeshAgent _navMeshAgent;
     private LevelManager _lm;
     private WaveManager _wm;
+    [SerializeField]
+    private CatCaptured _catCapturedUI;
     private Vector3 _exitPos;
     private Animator _animator;
     [SerializeField] private List<Vector3> _myPos = new List<Vector3>();
@@ -40,7 +47,12 @@ public class Cat : MonoBehaviour
     public event Action onRun = delegate { };
     public event Action onTaken = delegate { };
     public event Action onMeowing = delegate { };
-
+    public delegate void OnCatBasementStateDelegate();
+    public event OnCatBasementStateDelegate OnCatBasementState;
+    public delegate void OnCatLivingStateFinishedDelegate();
+    public event OnCatLivingStateFinishedDelegate OnCatLivingStateFinished;
+    public delegate void OnDoorInteractDelegate();
+    public event OnDoorInteractDelegate OnDoorInteract;
     #endregion Events
     void Awake()
     {
@@ -62,7 +74,7 @@ public class Cat : MonoBehaviour
         
         _wm = GameObject.Find("GameManagement").GetComponent<WaveManager>();
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
-        
+        _catCapturedUI = FindObjectOfType<CatCaptured>(true);
         _animator = GetComponent<Animator>();
         _animator.SetBool("IsIdle", true);
         IsGoingBack = false;
@@ -71,8 +83,7 @@ public class Cat : MonoBehaviour
         _fsm.AddCatState(CatStatesEnum.WalkingState, new WalkingState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.TakenState, new TakenState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.RunningState, new RunningState(_fsm, this));
-        _fsm.AddCatState(CatStatesEnum.BasementState, new BasementState(_fsm, this));
-        _fsm.AddCatState(CatStatesEnum.LivingState, new LivingState(_fsm, this));
+        StartCoroutine(AddPlayerBasedStates());
         _fsm.AddCatState(CatStatesEnum.ShedState, new ShedState(_fsm, this));
         _fsm.AddCatState(CatStatesEnum.KitchenState, new KitchenState(_fsm, this));
     }
@@ -86,6 +97,12 @@ public class Cat : MonoBehaviour
     void Update()
     {
         _myController.OnUpdate();
+    }
+    IEnumerator AddPlayerBasedStates()
+    {
+        yield return new WaitUntil(() => GameVars.Values != null && GameVars.Values.Player != null);
+        _fsm.AddCatState(CatStatesEnum.BasementState, new BasementState(_fsm, this, GameVars.Values.Player));
+        _fsm.AddCatState(CatStatesEnum.LivingState, new LivingState(_fsm, this, GameVars.Values.Player));
     }
     IEnumerator SetRenderersAwait() 
     {
@@ -115,6 +132,20 @@ public class Cat : MonoBehaviour
         _navMeshAgent.enabled = false;
         _fsm.ChangeCatState(CatStatesEnum.LivingState);
     }
+
+    public void CallBasementStateStart() 
+    {
+        OnCatBasementState();
+    }
+
+    public void CallLivingStateFinished()
+    {
+        OnCatLivingStateFinished();
+    }
+    public void DoorInteract()
+    {
+        OnDoorInteract();
+    }
     public void CatIsGoingToBasement() 
     {
         _isHeld = false;
@@ -123,7 +154,6 @@ public class Cat : MonoBehaviour
         _navMeshAgent.enabled = false;
         _fsm.ChangeCatState(CatStatesEnum.BasementState);
     }
-
     public void CatIsGoingToShed()
     {
         _isHeld = false;
@@ -145,6 +175,14 @@ public class Cat : MonoBehaviour
         _fsm.ChangeCatState(CatStatesEnum.KitchenState);
     }
 
+    public void CatTaken(Vector3 exitPos, Enemy enemy) 
+    {
+        SetExitPos(exitPos);
+        SetOwner(enemy);
+        _catCapturedUI.CapturedCatChangeUI(true);
+        CatIsBeingTaken();
+    }
+
     public void CatIsBeingTaken()
     {
         _isHeld = true;
@@ -159,7 +197,7 @@ public class Cat : MonoBehaviour
     {
         _isHeld = false;
         _isRepositioning = true;
-
+        _catCapturedUI.CapturedCatChangeUI(false);
         RepositionBetweenWaves();
 
         _navMeshAgent.enabled = true;
@@ -239,7 +277,10 @@ public class Cat : MonoBehaviour
     {
         onRun();
     }
-
+    public void SetOwner(Enemy Owner)
+    {
+        MyOwner = Owner;
+    }
     public void SetExitPos(Vector3 exitPos)
     {
         _exitPos = exitPos;

@@ -34,7 +34,8 @@ public class GrayDogCatState : IState
         {
             _fsm.ChangeState(EnemyStatesEnum.GrayDogProtectState);
         }*/
-
+        _enemy.OnCatTaken += _enemy._cat.CatTaken;
+        _enemy.OnCatReleased += _enemy._cat.CatHasBeenReleased;
         GetThetaStar();
         Debug.Log("Entre a GrayDogCatState");
     }
@@ -43,18 +44,13 @@ public class GrayDogCatState : IState
     {
         if (_enemy._cat == null) return;
 
-        if (Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 3f)//1f) Lo cambiamos hasta que el tallGray tenga la escala bien puesta.
+        if (Vector3.Distance(_enemy.transform.position, _enemy._cat.transform.position) < 2f)//1f) Lo cambiamos hasta que el tallGray tenga la escala bien puesta.
         {
             _enemy.GrabCat();
-            GameVars.Values.EnemyType = _enemy.enemyType.ToString();
+            _enemy.CatTaken(_enemy._exitPos, _enemy);
             GameVars.Values.ShowNotification("The cat has been captured! You must prevent the grays getting to the ship!");
-
             _fsm.ChangeState(EnemyStatesEnum.GrayDogEscapeState);
         }
-        /*else if (_enemy._lm.enemyHasObjective)
-        {
-            _fsm.ChangeState(EnemyStatesEnum.GrayDogProtectState);
-        }*/
         
         RaycastHit hit;
         Vector3 catDir = _enemy._cat.transform.position - _enemy.transform.position;
@@ -114,7 +110,7 @@ public class GrayDogCatState : IState
         //}
 
         //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
-        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
+        myPath = _pf.ConstructPathAStar(startingPoint, endingPoint);
         _enemy.SetPath(myPath); //esto no hace falta, es para testear.
     }
 }

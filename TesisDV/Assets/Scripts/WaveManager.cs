@@ -7,11 +7,11 @@ using UnityEngine;
 public class WaveManager : MonoBehaviour, IRoundChangeObservable
 {
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
-
+   
     private Coroutine _currentCoroutine;
     [SerializeField]
-    private GameObject parent;
-    public GameObject MainGameParent
+    private GameObject parent;  
+    public GameObject MainGameParent 
     {
         get { return parent; }
         set { parent = value; }
@@ -50,14 +50,14 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private bool _inRound;
     public bool InRound
     {
-        get
+        get 
         {
-            return _inRound;
+            return _inRound;  
         }
-        set
+        set 
         {
-
-            _inRound = value;
+            
+            _inRound = value; 
         }
     }
     [SerializeField] private float _timeWaves = 0;
@@ -69,7 +69,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             if (_timeWaves == value) return;
             _timeWaves = value;
             OnTimeWaveChange?.Invoke(_timeWaves);
-
+            
         }
     }
     [SerializeField] private int _totalRounds;
@@ -131,15 +131,15 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         LoadEnemiesInWaves();
     }
     #region WaveLogic
-    public void LoadEnemiesInWaves()
+    public void LoadEnemiesInWaves() 
     {
         ClearAllEnemiesLists();
         //Wave 1
-        _graysUFO1.Add(GetEnemiesTypeForWave(2, EnemyType.Common).FirstOrDefault());
-        _graysUFO2.Add(GetEnemiesTypeForWave(2, EnemyType.Common).LastOrDefault());
+        _graysUFO1.AddRange(GetEnemiesTypeForWave(1, EnemyType.Common));
+        _graysUFO2.AddRange(GetEnemiesTypeForWave(1, EnemyType.Common));
         //Wave 2
         _graysUFO12.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
-        _graysUFO22.AddRange(GetEnemiesTypeForWave(3, EnemyType.Common));
+        _graysUFO22.AddRange(GetEnemiesTypeForWave(4, EnemyType.Common));
         //Wave 3
         _graysUFO13.AddRange(GetEnemiesTypeForWave(2, EnemyType.Dog));
         _graysUFO23.AddRange(GetEnemiesTypeForWave(4, EnemyType.Common));
@@ -193,7 +193,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         _graysUFO29.Add(GetEnemiesTypeForWave(4, EnemyType.Melee).FirstOrDefault());
         _graysUFO19.Add(GetEnemiesTypeForWave(1, EnemyType.Dog).FirstOrDefault());
     }
-    public void ClearAllEnemiesLists()
+    public void ClearAllEnemiesLists() 
     {
         _graysUFO1.Clear();
         _graysUFO12.Clear();
@@ -224,7 +224,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
                 enemiesList.Add(GrayCommonPool.GetObjectDisabled());
             }
         }
-        else if (type == EnemyType.Melee)
+        else if (type == EnemyType.Melee) 
         {
             for (int i = 0; i < amount; i++)
             {
@@ -247,10 +247,10 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         }
         return enemiesList;
     }
-    public int GetAmountEnemiesByWave()
+    public int GetAmountEnemiesByWave() 
     {
         var amount = 0;
-        if (CurrentRound == 1)
+        if (CurrentRound == 1) 
         {
             amount = _graysUFO1.Union(_graysUFO2).ToList().Count;
         }
@@ -431,6 +431,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private void DeactivateGrayDog(GrayDogModel o)
     {
         o.gameObject.transform.parent = MainGameParent.transform;
+        o.hasObjective = false;
         o.gameObject.SetActive(false);
     }
 
@@ -487,9 +488,9 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     #endregion
     void Start()
     {
-
+        
         _as = GetComponent<AudioSource>();
-        GameVars.Values.soundManager.PlaySound(_as, "MusicPreWave", 0.1f, true, 0f);
+        GameVars.Values.soundManager.PlaySound(_as,"MusicPreWave", 0.1f, true,0f);
         RoundEnd();
         InstantiateUFOIndicators();
     }
@@ -502,14 +503,14 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         {
             TimeWaves -= Time.deltaTime;
 
-            if (TimeWaves <= 0)
+            if(TimeWaves <= 0)
             {
                 SendUFOS();
             }
-        }
+        }  
     }
-
-    public void SubstractEnemyFromAmountInScene()
+    
+    public void SubstractEnemyFromAmountInScene() 
     {
         GameVars.Values.LevelManager.AmountEnemiesInScene--;
         OnGrayAmountChange(GameVars.Values.LevelManager.AmountEnemiesInScene);
@@ -540,9 +541,9 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         _inRound = false;
         OnRoundStartEnd(_inRound);
 
-        DisableUFOLR();
+        DisableUFOLR(); 
         SpawnWave();
-        GameVars.Values.soundManager.PlaySound(_as, "MusicWaves", 0.12f, true, 0f);
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_UFOSpookyMusicWaves", 0.12f, true,0f);
         TimeWaves = _timeBetweenWaves;
     }
 
@@ -551,11 +552,11 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         if (_currentRound < _totalRounds)
         {
             CurrentRound++;
-            if (_currentRound == 1)
+            if(_currentRound == 1)
             {
                 Instantiate(_myEnemy, parent.transform).SetSpawnPos(_startingPosHard).SetPathHard(_waypoints);
             }
-            if (_currentRound == 2)
+            if(_currentRound == 2) 
             {
                 UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
@@ -565,7 +566,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos2)
                     .SetGraysToSpawn(_graysUFO2).SetName("b");
-
+                    
                 /*Instantiate(_myUFO, parent.transform)
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos1)
@@ -575,7 +576,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
                     .SetFinalPos(_finalPos2)
                     .SetGraysToSpawn(_graysUFO2).SetName("b");*/
             }
-            else if (_currentRound == 3)
+            else if(_currentRound == 3)
             {
                 UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
@@ -595,7 +596,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
                     .SetFinalPos(_finalPos2)
                     .SetGraysToSpawn(_graysUFO22).SetName("b");*/
             }
-            else if (_currentRound == 4)
+            else if(_currentRound == 4)
             {
                 UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
@@ -615,7 +616,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
                     .SetFinalPos(_finalPos2)
                     .SetGraysToSpawn(_graysUFO23).SetName("b");*/
             }
-            else if (_currentRound == 5)
+            else if(_currentRound == 5)
             {
                 UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
@@ -635,7 +636,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
                     .SetFinalPos(_finalPos2)
                     .SetGraysToSpawn(_graysUFO24).SetName("b");*/
             }
-            else if (_currentRound == 6)
+            else if(_currentRound == 6)
             {
                 UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
@@ -655,7 +656,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
                     .SetFinalPos(_finalPos2)
                     .SetGraysToSpawn(_graysUFO25).SetName("b");*/
             }
-            else if (_currentRound == 7)
+            else if(_currentRound == 7)
             {
                 UFOPool.GetObject()
                     .SetSpawnPos(_startingPos)
@@ -685,7 +686,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
                     .SetSpawnPos(_startingPos)
                     .SetFinalPos(_finalPos2)
                     .SetGraysToSpawn(_graysUFO27).SetName("b");
-
+                
             }
             else if (_currentRound == 9)
             {
@@ -720,9 +721,9 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         RoundEnd();
         RestartUFOIndicators();
     }
-    public void CheckIfLastRound(bool enemiesAmountZero)
+    public void CheckIfLastRound(bool enemiesAmountZero) 
     {
-        if (enemiesAmountZero)
+        if (enemiesAmountZero) 
         {
             RoundEnd();
             if (_currentRound >= _totalRounds)
@@ -734,9 +735,10 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
             }
         }
     }
-    public void RoundEnd()
+    public void RoundEnd() 
     {
         OnRoundEnd(_currentRound);
+        GameVars.Values.soundManager.StopSound(_as);
     }
 
     private void RestartUFOIndicators()
@@ -748,18 +750,9 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     private void DisableUFOLR()
     {
-        if (UFOIndicator != null && UFOIndicator2 != null)
-        {
-            var uFOLandingIndicator = UFOIndicator.GetComponent<UFOLandingIndicator>();
-
-            uFOLandingIndicator.DisableLineRenderer();
-
-            uFOLandingIndicator = UFOIndicator2.GetComponent<UFOLandingIndicator>();
-
-            uFOLandingIndicator.DisableLineRenderer();
-        }
-
-    }
+        UFOIndicator.GetComponent<UFOLandingIndicator>().DisableLineRenderer();
+        UFOIndicator2.GetComponent<UFOLandingIndicator>().DisableLineRenderer();
+    }    
 
     private void SendWinGame()
     {

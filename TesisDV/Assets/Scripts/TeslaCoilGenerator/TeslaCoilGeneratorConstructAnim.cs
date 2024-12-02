@@ -21,6 +21,7 @@ public class TeslaCoilGeneratorConstructAnim : MonoBehaviour
             .SetInitPos(transform.position)
             .SetInitRot(transform.rotation)
             .SetParent(parent.transform)
+            .SetOwner(GameVars.Values.Player)
             .SetMovingToFalse(false);
 
         Destroy(teslaCoilGenerator.gameObject.GetComponent<InventoryItem>());

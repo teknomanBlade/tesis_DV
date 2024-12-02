@@ -22,11 +22,6 @@ public class TakenState : IState
     public void OnUpdate()
     {
         Debug.Log("Estoy en TakenState");
-        if (GameVars.Values.EnemyType.Equals("Dog")) 
-        {
-            Debug.Log("Estoy en IF DOG");
-            _cat._fsm.ChangeCatState(CatStatesEnum.RunningState);
-        }
     }
 
     public void OnExit()

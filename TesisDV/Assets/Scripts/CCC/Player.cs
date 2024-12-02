@@ -15,6 +15,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     #region Events
     public delegate void OnNewRacketGrabbedDelegate();
     public event OnNewRacketGrabbedDelegate OnNewRacketGrabbed;
+
     public delegate void OnPlayerInteractDelegate(Transform player);
     public event OnPlayerInteractDelegate OnPlayerInteract;
     public delegate void OnPlayerNotificationObjectDelegate(Vector3 pos);
@@ -52,7 +53,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     private bool _weaponIsActive = false;
     private bool _hasMagicBoard = false;
     public string typeFloor { get; private set; }
-    
+
     private AudioSource _audioSource;
     private GameObject _craftingScreen;
     private CraftingScreen _craftingScreenScript;
@@ -124,7 +125,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public float gizmoScale = 1f;
     public LayerMask itemMask;
     private float _valueToChange;
+    [SerializeField]
     private bool _canStartNextWave;
+    private bool _UFOExitAnimFinished;
+    [SerializeField]
     private bool _canMoveTraps;
     //SkillTree, deberia ver de mover esto a craftingrecipee, pero para llegar a este viernes sirve.
     private SkillTree _skillTree;
@@ -164,11 +168,11 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
         ResetAlphaArrowsValue();
         hp = maxHp;
-        GameVars.Values.ShowLivesRemaining(0,hp);
-        ActiveFadeInEffect(1f);    
+        GameVars.Values.ShowLivesRemaining(0, hp);
+        ActiveFadeInEffect(1f);
     }
 
-   
+
 
     private void Start()
     {
@@ -177,7 +181,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void Update()
     {
-        if(_isAlive)
+        if (_isAlive)
         {
             LookingAt();
             CheckGround();
@@ -200,7 +204,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     MovingObject(true);
                 }
             }
-            if (Input.GetKeyUp(GameVars.Values.useKey)) 
+            if (Input.GetKeyUp(GameVars.Values.useKey))
             {
                 if (lookingAt != null)
                 {
@@ -238,17 +242,17 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 GameVars.Values.WaveManager.StartRound();
             }
 
-            if(Input.GetKeyDown(GameVars.Values.inventoryKey) && _craftingScreen.activeInHierarchy)
+            if (Input.GetKeyDown(GameVars.Values.inventoryKey) && _craftingScreen.activeInHierarchy)
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 _craftingScreen.SetActive(false);
                 _craftingScreenScript.IsWorkbenchScreenOpened = false;
                 _miniMapDisplay.SetActive(true);
             }
-            else if(Input.GetKeyDown(GameVars.Values.inventoryKey) && !_craftingScreen.activeInHierarchy)
+            else if (Input.GetKeyDown(GameVars.Values.inventoryKey) && !_craftingScreen.activeInHierarchy)
             {
                 //Cursor.lockState = CursorLockMode.Locked;
-                if (_hasMagicBoard) 
+                if (_hasMagicBoard)
                 {
                     _craftingScreen.SetActive(true);
                     _craftingScreenScript.BTN_PageOne();
@@ -290,12 +294,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                     else
                     {
-                        if (GameVars.Values.HasSlowingTrapAppearedHotBar) 
+                        if (GameVars.Values.HasSlowingTrapAppearedHotBar)
                         {
                             _trapHotBar.PlayKeySlotHighlightAnim(2);
                             GameVars.Values.ShowNotification("You can't set Tar Slowing Trap until you have bought it in the Basement");
                         }
-                           
+
                     }
                 }
 
@@ -307,7 +311,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                     else
                     {
-                        if (GameVars.Values.HasMicrowaveTrapAppearedHotBar) 
+                        if (GameVars.Values.HasMicrowaveTrapAppearedHotBar)
                         {
                             _trapHotBar.PlayKeySlotHighlightAnim(3);
                             GameVars.Values.ShowNotification("You can't set Microwave ForceField Machine until you have bought it in the Basement");
@@ -323,7 +327,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                     else
                     {
-                        if (GameVars.Values.HasElectricTrapAppearedHotBar) 
+                        if (GameVars.Values.HasElectricTrapAppearedHotBar)
                         {
                             _trapHotBar.PlayKeySlotHighlightAnim(4);
                             GameVars.Values.ShowNotification("You can't set the Electric Trap until you have bought it in the Basement");
@@ -339,7 +343,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                     else
                     {
-                        if (GameVars.Values.HasPaintballMinigunTrapAppearedHotBar) 
+                        if (GameVars.Values.HasPaintballMinigunTrapAppearedHotBar)
                         {
                             _trapHotBar.PlayKeySlotHighlightAnim(5);
                             GameVars.Values.ShowNotification("You can't set FERN Paintball Minigun until you have bought it in the Basement");
@@ -355,7 +359,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     }
                     else
                     {
-                        if (GameVars.Values.HasTeslaCoilGeneratorAppearedHotBar) 
+                        if (GameVars.Values.HasTeslaCoilGeneratorAppearedHotBar)
                         {
                             _trapHotBar.PlayKeySlotHighlightAnim(6);
                             GameVars.Values.ShowNotification("You can't set Tesla Coil Generator until you have bought it in the Basement");
@@ -385,18 +389,25 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 _rb.isKinematic = true;
             }
 
-            /*if (Input.GetKeyDown(GameVars.Values.dropKey))
+            if (Input.GetKeyDown(GameVars.Values.testBuyFourthTrap))
             {
-                Damage(2, EnemyType.Tank);
-                ActiveTankHitFistDamageEffect();
-            }*/
+                //Damage(2, EnemyType.Tank);
+                //ActiveTankHitFistDamageEffect();
+                FindObjectOfType<SkillTree>(true).UnlockElectricTrap();
+            }
+            if (Input.GetKeyDown(GameVars.Values.testBuySixthTrap))
+            {
+                //Damage(2, EnemyType.Tank);
+                //ActiveTankHitFistDamageEffect();
+                FindObjectOfType<SkillTree>(true).UnlockTeslaCoilGenerator();
+            }
         }
-        
+
     }
 
     private void MovingObject(bool isMoving)
     {
-        if(lookingAt == null) return;
+        if (lookingAt == null) return;
 
         if (lookingAt.gameObject.TryGetComponent(out MovableObjects movableObject))
         {
@@ -416,18 +427,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             Walk();
         }
     }
-    
-    public void ActiveDamageEffect()
-    {
-        if (volume.profile.TryGetSettings(out postProcessDamage))
-        {
-            StartCoroutine(LerpDamageEffect(0.6f,1f));
-        }
-    }
-
     public void SwitchKinematics()
     {
-        if(_rb.isKinematic == false)
+        if (_rb.isKinematic == false)
         {
             _rb.isKinematic = true;
         }
@@ -436,7 +438,14 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             _rb.isKinematic = false;
         }
     }
-
+    #region PostProcess Effects
+    public void ActiveDamageEffect()
+    {
+        if (volume.profile.TryGetSettings(out postProcessDamage))
+        {
+            StartCoroutine(LerpDamageEffect(0.6f, 1f));
+        }
+    }
     IEnumerator LerpDamageEffect(float endValue, float duration)
     {
         float time = 0;
@@ -452,7 +461,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
 
         _valueToChange = endValue;
-        StartCoroutine(LerpDamageEffect(0f,1f));
+        StartCoroutine(LerpDamageEffect(0f, 1f));
     }
     public void ActiveTankHitFistDamageEffect()
     {
@@ -565,14 +574,15 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             FadeOutSceneCoroutine = StartCoroutine(LerpFadeOutEffect(1f, buttonEffect));
         }
     }
-    public void ResetAlphaArrowsValue() 
+    #endregion
+    public void ResetAlphaArrowsValue()
     {
         arrowDown.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", 1);
         arrowLeft.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", 1);
         arrowRight.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", 1);
         arrowUp.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", 1);
     }
-    public void ActiveUIArrowFade(bool attacked, string arrowName) 
+    public void ActiveUIArrowFade(bool attacked, string arrowName)
     {
         StartCoroutine(LerpArrowUIFade(1f, attacked, arrowName));
     }
@@ -583,15 +593,15 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         while (time > 0 && time < duration)
         {
             time -= Time.deltaTime;
-            if (arrowName.Equals("Up")) 
+            if (arrowName.Equals("Up"))
             {
                 arrowDown.SetActive(false);
                 arrowLeft.SetActive(false);
                 arrowRight.SetActive(false);
                 arrowUp.SetActive(true);
                 arrowUp.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", Mathf.Clamp01(time / duration));
-                
-                if(attacked)
+
+                if (attacked)
                     arrowUp.GetComponent<Image>().material.SetFloat("_TransitionColorVal", Mathf.Clamp01(time / duration));
             }
             else if (arrowName.Equals("Down"))
@@ -635,7 +645,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             StartCoroutine(LerpArrowUIFadeOut(1f, attacked));
         }
     }
-    IEnumerator LerpArrowUIFadeOut(float duration, bool attacked) 
+    IEnumerator LerpArrowUIFadeOut(float duration, bool attacked)
     {
         float time = 0f;
 
@@ -646,8 +656,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             if (arrowUp.activeSelf)
             {
                 arrowUp.GetComponent<Image>().material.SetFloat("_AlphaTransitionVal", Mathf.Clamp01(time / duration));
-                
-                if(attacked)
+
+                if (attacked)
                     arrowUp.GetComponent<Image>().material.SetFloat("_TransitionColorVal", Mathf.Clamp01(time / duration));
             }
             else if (arrowDown.activeSelf)
@@ -892,7 +902,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void SwitchIsCrafting()
     {
-        if(IsCrafting)
+        if (IsCrafting)
         {
             IsCrafting = false;
         }
@@ -905,19 +915,19 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void CheckForUnlocks()
     {
-        if(_skillTree.isMicrowaveTrapUnlocked)
+        if (_skillTree.isMicrowaveTrapUnlocked)
         {
             _canBuildMicrowaveTrap = true;
         }
-        if(_skillTree.isSlowTrapUnlocked)
+        if (_skillTree.isSlowTrapUnlocked)
         {
             _canBuildSlowTrap = true;
         }
-        if(_skillTree.isElectricTrapUnlocked)
+        if (_skillTree.isElectricTrapUnlocked)
         {
             _canBuildElectricTrap = true;
         }
-        if(_skillTree.isPaintballMinigunTrapUnlocked)
+        if (_skillTree.isPaintballMinigunTrapUnlocked)
         {
             _canBuildPaintballMinigunTrap = true;
         }
@@ -929,10 +939,39 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void CanStartNextWave(int round)
     {
-        _canStartNextWave = true;
+        if (!GameVars.Values.IsTutorial)
+        {
+            _canStartNextWave = true;
+        }
+        else
+        {
+            CallWaitToExitPlanetFinished();
+        }
         _canMoveTraps = true;
     }
+    internal void NotStartingWaveUntilCatBasementStateFinishes()
+    {
+        _canStartNextWave = false;
+    }
+    public void CallWaitToExitPlanetFinished()
+    {
+        StartCoroutine(WaitToConditionMet());
+    }
+    IEnumerator WaitToConditionMet()
+    {
+        yield return new WaitUntil(() => GameVars.Values.IsUFOExitPlanetAnimFinished);
+        _canStartNextWave = GameVars.Values.IsUFOExitPlanetAnimFinished;
+    }
 
+    public void CallCatLivingStateFinished() 
+    {
+        StartCoroutine(WaitToConditionMetLivingState());
+    }
+    IEnumerator WaitToConditionMetLivingState() 
+    {
+        yield return new WaitUntil(() => GameVars.Values.IsCatBasementStateFinished);
+        _canStartNextWave = GameVars.Values.IsCatBasementStateFinished;
+    }
     public void Dead()
     {
         isDead = true;
@@ -1835,5 +1874,5 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
         }
     }
 
-    
+   
 }

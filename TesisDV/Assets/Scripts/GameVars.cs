@@ -72,6 +72,8 @@ public class GameVars : MonoBehaviour
     public KeyCode testRecieveWittsKey;
     public KeyCode testOpenAllDoorsKey;
     public KeyCode testKillingEnemiesKey;
+    public KeyCode testBuySixthTrap;
+    public KeyCode testBuyFourthTrap;
 
     [Header("Resources")]
     public Sprite crosshair;
@@ -96,8 +98,6 @@ public class GameVars : MonoBehaviour
 
     public Animator playerLivesAnim { get; private set; }
 
-    //public YouWinScreen youWinScreen;
-    //public YouLoseScreen youLoseScreen;
     public List<AudioClip> audioClips;
     public GameObject backpack;
     public Image itemGrabbedImage;
@@ -123,30 +123,32 @@ public class GameVars : MonoBehaviour
     [Header("Game")]
     private float _fadeDelay = 1.1f;
     private bool _isFaded;
+    public bool IsUFOExitPlanetAnimFinished;
+    public bool IsCatBasementStateFinished;
     public bool HasMagicboard { get; set; }
     public bool HasOpenedLetter { get; set; }
     public bool HasOpenedTrunk { get; set; }
     
     public float projectileLifeTime = 5f;
     public float itemPickUpLerpSpeed = 0.2f;
-    public int currentShotsTrap1; //BaseballLauncher
-    public int currentShotsTrap2; //NailFiringMachine
     public List<List<Node>> levelRoutes;
-    public GameObject BasementDirectionMarkers;
-    public string EnemyType;
     public int BaseballLauncherCount = 0;
     public int FERNPaintballMinigunCount = 0;
     public int TeslaCoilGeneratorCount = 0;
-    public int InitialStock { get; private set; }
+    [Header("Pool Operations")]
     public ParticleSystem SmokePrefab;
     public BaseballLauncher BaseballLauncherPrefab;
     public FERNPaintballMinigun FERNPaintballMinigunPrefab;
     public TeslaCoilGenerator TeslaCoilGeneratorPrefab;
+    public int InitialStock { get; private set; }
     public PoolObjectStack<BaseballLauncher> BaseballLauncherPool { get; set; }
     public PoolObjectStack<FERNPaintballMinigun> FERNPaintballMinigunPool { get; set; }
     public PoolObjectStack<TeslaCoilGenerator> TeslaCoilGeneratorPool { get; set; }
     public PoolObjectStack<ParticleSystem> SmokeParticlesPool { get; set; }
+    [Header("Tutorial Operations")]
     public bool PassedTutorial;
+    public bool IsTutorial;
+    [Header("ArrowUI Operations")]
     public Vector3 positionObjectNotification;
     public Vector3 smokeParticlesPos;
     #region Events
@@ -156,8 +158,6 @@ public class GameVars : MonoBehaviour
     public event OnCapturedCatPositionDelegate OnCapturedCatPosition;
     public delegate void OnObjectNotificationPositionDelegate(Vector3 objectNotificationPos);
     public event OnObjectNotificationPositionDelegate OnObjectNotificationPosition;
-   
-
     #endregion
 
     private void Awake()
@@ -168,6 +168,8 @@ public class GameVars : MonoBehaviour
         SetKeys();
         LoadResources();
         PassedTutorial = false;
+        IsTutorial = false;
+        IsUFOExitPlanetAnimFinished = false;
         SceneManager.sceneLoaded += FindPlayer;
         SceneManager.sceneLoaded += FindCat;
     }
@@ -198,6 +200,11 @@ public class GameVars : MonoBehaviour
         var aux = FindObjectOfType<Cat>();
         if (aux != null) cat = aux.GetComponent<Cat>();
         else cat = null;
+        /*if (scene.buildIndex == 1) 
+        {
+            OnCatReleased += cat.CatHasBeenReleased;
+            OnCatTaken += cat.CatIsBeingTaken;
+        }*/
     }
 
     private void LoadResources()
@@ -517,29 +524,26 @@ public class GameVars : MonoBehaviour
     #region Cat
     public void SetCatFree()
     {
-        _isCatCaptured = false;
+        //_isCatCaptured = false;
         CatDistanceBar.PlayFadeOut();
-        OnCapturedCatChange(_isCatCaptured);
-        cat.CatHasBeenReleased();
+        //OnCapturedCatChange(_isCatCaptured);
+        //OnCatReleased();
     }
 
     public float GetCatDistance()
     {
         return (cat != null) ? cat.GetDistance() : 0f;
     }
-    public void SetEnemyType(string enemyType) 
-    {
-        EnemyType = enemyType;
-    }
-    public void TakeCat(Vector3 exitPos)
+    public void TakeCat()
     {
         if (cat == null) return;
 
-        _isCatCaptured = true;
+        //_isCatCaptured = true;
         CatDistanceBar.PlayFadeIn();
-        OnCapturedCatChange(_isCatCaptured);
-        cat.CatIsBeingTaken();
-        cat.SetExitPos(exitPos);
+        //OnCapturedCatChange(_isCatCaptured);
+        //OnCatTaken();
+        //cat.SetExitPos(exitPos);
+        //cat.SetOwner(owner);
         OnCapturedCatPosition(cat.transform.localPosition);
     }
 

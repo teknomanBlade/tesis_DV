@@ -78,7 +78,9 @@ public class Door : Item
                 GameVars.Values.PassedTutorial = IsEnemyInteracting;
                 Debug.Log("PASSED TUTORIAL ENEMY INTERACTING = " + IsEnemyInteracting);
             }
-            _animParent.SetBool("IsDropped", true);
+            if(_animParent != null)
+                _animParent.SetBool("IsDropped", true);
+            
             _collider.enabled = false;
         }
 
@@ -100,6 +102,7 @@ public class Door : Item
             if (transform.CompareTag("Tutorial") && IsOpened)
             {
                 GameVars.Values.PassedTutorial = IsOpened;
+                GameVars.Values.IsTutorial = IsOpened;
             }
             GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
             //_navMeshObstacle.enabled = false;
@@ -131,7 +134,14 @@ public class Door : Item
     public bool GetDoorStatus()
     {
         return IsOpened;
-    }   
+    }
+
+    internal void OnEnemyDoorInteract()
+    {
+        IsLocked = false;
+        EnemyInteractionCheck(true);
+        Interact();
+    }
 }
 
 public enum EnumDoor
