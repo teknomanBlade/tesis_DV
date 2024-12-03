@@ -44,6 +44,11 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     #endregion
     private void Start()
     {
+        _myTrapBase = transform.parent.GetComponent<TrapBase>();
+        _myTrapBase.SetTrap(this.gameObject);
+    }
+    private void Awake()
+    {
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
         _skillTree.OnUpgrade += CheckForUpgrades;
         CheckForUpgrades();
@@ -51,8 +56,6 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         _initDPS = 0.05f;
         _damageBoostCoef = 2;
         _dpsBoostCoef = 1.45f;
-        _myTrapBase = transform.parent.GetComponent<TrapBase>();
-        _myTrapBase.SetTrap(this.gameObject);
         GameVars.Values.IsAllSlotsDisabled();
         active = true; // Ahora las trampas empiezan encendidas.   
         _as = GetComponent<AudioSource>();
@@ -60,7 +63,6 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         GameVars.Values.soundManager.PlaySound(_as, "ElectricTrapSFX", 0.25f, true, 1f);
         SetUIIndicator("UI_ElectricTrap_Indicator");
     }
-
     private void Update()
     {
         

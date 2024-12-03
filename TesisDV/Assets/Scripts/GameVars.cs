@@ -135,15 +135,18 @@ public class GameVars : MonoBehaviour
     public int BaseballLauncherCount = 0;
     public int FERNPaintballMinigunCount = 0;
     public int TeslaCoilGeneratorCount = 0;
+    public int TeslaElectricTrapCount = 0;
     [Header("Pool Operations")]
     public ParticleSystem SmokePrefab;
     public BaseballLauncher BaseballLauncherPrefab;
     public FERNPaintballMinigun FERNPaintballMinigunPrefab;
     public TeslaCoilGenerator TeslaCoilGeneratorPrefab;
+    public ElectricTrap TeslaElectricTrapPrefab;
     public int InitialStock { get; private set; }
     public PoolObjectStack<BaseballLauncher> BaseballLauncherPool { get; set; }
     public PoolObjectStack<FERNPaintballMinigun> FERNPaintballMinigunPool { get; set; }
     public PoolObjectStack<TeslaCoilGenerator> TeslaCoilGeneratorPool { get; set; }
+    public PoolObjectStack<ElectricTrap> TeslaElectricTrapPool { get; set; }
     public PoolObjectStack<ParticleSystem> SmokeParticlesPool { get; set; }
     [Header("Tutorial Operations")]
     public bool PassedTutorial;
@@ -240,7 +243,32 @@ public class GameVars : MonoBehaviour
         BaseballLauncherPool = new PoolObjectStack<BaseballLauncher>(BaseballLauncherFactory, ActivateBaseballLauncher, DeactivateBaseballLauncher, InitialStock, true);
         FERNPaintballMinigunPool = new PoolObjectStack<FERNPaintballMinigun>(FERNPaintballMinigunFactory, ActivateFERNPaintballMinigun, DeactivateFERNPaintballMinigun, InitialStock, true);
         TeslaCoilGeneratorPool = new PoolObjectStack<TeslaCoilGenerator>(TeslaCoilGeneratorFactory, ActivateTeslaCoilGenerator, DeactivateTeslaCoilGenerator, InitialStock, true);
+        TeslaElectricTrapPool = new PoolObjectStack<ElectricTrap>(TeslaElectricTrapFactory, ActivateTeslaElectricTrap, DeactivateTeslaElectricTrap, InitialStock, true);
         SmokeParticlesPool = new PoolObjectStack<ParticleSystem>(SmokeParticlesFactory, ActivateSmokeParticles, DeactivateSmokeParticles, InitialStock, true);
+    }
+
+    private void DeactivateTeslaElectricTrap(ElectricTrap o)
+    {
+        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
+        o.gameObject.SetActive(false);
+        if (!o.gameObject.name.Contains("_"))
+        {
+            TeslaElectricTrapCount++;
+            o.gameObject.name = o.gameObject.name.Replace("(Clone)", "");
+            o.gameObject.name += "_" + TeslaElectricTrapCount;
+        }
+        o.transform.position = Vector3.zero;
+        o.transform.localPosition = Vector3.zero;
+    }
+
+    private void ActivateTeslaElectricTrap(ElectricTrap o)
+    {
+        o.gameObject.SetActive(true);
+    }
+
+    private ElectricTrap TeslaElectricTrapFactory()
+    {
+        return Instantiate(TeslaElectricTrapPrefab);
     }
 
     private void DeactivateSmokeParticles(ParticleSystem o)

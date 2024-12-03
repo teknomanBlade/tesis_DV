@@ -44,5 +44,6 @@ public class CatView : MonoBehaviour
     public void RunningAnim()
     {
         _myAnimator.SetBool("IsRunning", true);
+        _myAnimator.SetBool("IsMad", false);
     }
 }

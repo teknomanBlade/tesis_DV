@@ -159,6 +159,7 @@ public class UFO : MonoBehaviour
                 //La referencia cambia a GrayModel
                 //currentGray = Instantiate(EnemiesToSpawn[_graysSpawned], transform.position - startPos, Quaternion.identity, parent.transform).GetComponent<Enemy>().SetExitUFO(transform.position);
                 currentGray = EnemiesToSpawn[_graysSpawned].SetExitUFO(transform.position);
+                currentGray.SetStatsEnhanced();
                 currentGray.gameObject.SetActive(true);
                 GameVars.Values.enemyCount++;
                 AssignCountToEnemyByPairImpair(GameVars.Values.enemyCount, currentGray);

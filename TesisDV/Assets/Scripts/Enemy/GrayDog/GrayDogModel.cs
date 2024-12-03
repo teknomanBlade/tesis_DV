@@ -16,7 +16,7 @@ public class GrayDogModel : Enemy
         HP = 1.5f;
         _startSpeed = _movingSpeed;
         PoisonHitted = false;
-        SetStatsEnhanced();
+        //SetStatsEnhanced();
         //GameVars.Values.WaveManager.EnhanceEnemyStatsPerWave(this);
         _fsm.AddState(EnemyStatesEnum.SpawningState, new SpawningState(_fsm, this, EnemyStatesEnum.GrayDogCatState));
         _fsm.AddState(EnemyStatesEnum.GrayDogCatState, new GrayDogCatState(_fsm, this, _pf));

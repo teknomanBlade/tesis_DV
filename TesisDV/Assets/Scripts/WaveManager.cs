@@ -7,7 +7,10 @@ using UnityEngine;
 public class WaveManager : MonoBehaviour, IRoundChangeObservable
 {
     private List<IRoundChangeObserver> roundChangeObservers = new List<IRoundChangeObserver>();
-   
+    private Dictionary<int, Tuple<int, Action, float>> intervalActionsGrayCommon;
+    private Dictionary<int, Tuple<int, Action, float>> intervalActionsGrayMelee;
+    private Dictionary<int, Tuple<int, Action, float>> intervalActionsGrayTank;
+    private Dictionary<int, Tuple<int, Action, float>> intervalActionsGrayDog;
     private Coroutine _currentCoroutine;
     [SerializeField]
     private GameObject parent;  
@@ -128,6 +131,30 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         TankGrayPool = new PoolObject<TankGrayModel>(TankGrayFactory, ActivateTankGray, DeactivateTankGray, InitialStock, true);
         GrayDogPool = new PoolObject<GrayDogModel>(GrayDogFactory, ActivateGrayDog, DeactivateGrayDog, InitialStock, true);
         UFOPool = new PoolObject<UFO>(UFOFactory, ActivateUFO, DeactivateUFO, InitialStock, true);
+        intervalActionsGrayCommon = new Dictionary<int, Tuple<int, Action, float>> { 
+            { 0, new Tuple<int, Action, float>(3, () => Debug.Log("Intervalo 0-3"), 3f) }, 
+            { 4, new Tuple<int, Action, float>(6, () => Debug.Log("Intervalo 4-6"), 6f) }, 
+            { 7, new Tuple<int, Action, float>(8, () => Debug.Log("Intervalo 7-8"), 9f) },
+            { 9, new Tuple<int, Action, float>(10, () => Debug.Log("Intervalo 9-10"),12f) }
+        };
+        intervalActionsGrayMelee = new Dictionary<int, Tuple<int, Action, float>> {
+            { 0, new Tuple<int, Action, float>(3, () => Debug.Log("Intervalo 0-3"), 8f) },
+            { 4, new Tuple<int, Action, float>(6, () => Debug.Log("Intervalo 4-6"), 12f) },
+            { 7, new Tuple<int, Action, float>(8, () => Debug.Log("Intervalo 7-8"), 16f) },
+            { 9, new Tuple<int, Action, float>(10, () => Debug.Log("Intervalo 9-10"),18f) }
+        };
+        intervalActionsGrayTank = new Dictionary<int, Tuple<int, Action, float>> {
+            { 0, new Tuple<int, Action, float>(3, () => Debug.Log("Intervalo 0-3"), 20f) },
+            { 4, new Tuple<int, Action, float>(6, () => Debug.Log("Intervalo 4-6"), 24f) },
+            { 7, new Tuple<int, Action, float>(8, () => Debug.Log("Intervalo 7-8"), 28f) },
+            { 9, new Tuple<int, Action, float>(10, () => Debug.Log("Intervalo 9-10"),32f) }
+        };
+        intervalActionsGrayDog = new Dictionary<int, Tuple<int, Action, float>> {
+            { 0, new Tuple<int, Action, float>(3, () => Debug.Log("Intervalo 0-3"), 1.5f) },
+            { 4, new Tuple<int, Action, float>(6, () => Debug.Log("Intervalo 4-6"), 2f) },
+            { 7, new Tuple<int, Action, float>(8, () => Debug.Log("Intervalo 7-8"), 3f) },
+            { 9, new Tuple<int, Action, float>(10, () => Debug.Log("Intervalo 9-10"),4f) }
+        };
         LoadEnemiesInWaves();
     }
     #region WaveLogic
@@ -298,25 +325,75 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     {
         if (e.enemyType == EnemyType.Common)
         {
-            e.HP = GrayCommonHPByRoundInterval(CurrentRound);
+            e.HP = GrayCommonHPByRoundIntervalNew(CurrentRound);
             Debug.Log("COMMON GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
         }
         else if (e.enemyType == EnemyType.Melee)
         {
-            e.HP = GrayMeleeHPByRoundInterval(CurrentRound);
+            e.HP = GrayMeleeHPByRoundIntervalNew(CurrentRound);
             Debug.Log("MELEE GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
         }
         else if (e.enemyType == EnemyType.Dog)
         {
-            e.HP = GrayDogHPByRoundInterval(CurrentRound);
+            e.HP = GrayDogHPByRoundIntervalNew(CurrentRound);
         }
-        else if (e.enemyType == EnemyType.Tank && CurrentRound == 7)
+        else if (e.enemyType == EnemyType.Tank)
         {
-            e.HP = GrayTankHPByRoundInterval(CurrentRound);
+            e.HP = GrayTankHPByRoundIntervalNew(CurrentRound);
             Debug.Log("TANK GRAY NEW LIFE: " + e.HP + " ROUND: " + CurrentRound);
         }
     }
-    public float GrayCommonHPByRoundInterval(int CurrentRound)
+    public float GrayCommonHPByRoundIntervalNew(int CurrentRound) 
+    {
+        foreach (var interval in intervalActionsGrayCommon) { 
+            if (CurrentRound >= interval.Key && CurrentRound <= interval.Value.Item1) { 
+                interval.Value.Item2.Invoke();
+                return interval.Value.Item3;
+            } 
+        }
+        Debug.Log("Número fuera de los intervalos definidos.");
+        return -1;
+    }
+    public float GrayMeleeHPByRoundIntervalNew(int CurrentRound)
+    {
+        foreach (var interval in intervalActionsGrayMelee)
+        {
+            if (CurrentRound >= interval.Key && CurrentRound <= interval.Value.Item1)
+            {
+                interval.Value.Item2.Invoke();
+                return interval.Value.Item3;
+            }
+        }
+        Debug.Log("Número fuera de los intervalos definidos.");
+        return -1;
+    }
+    public float GrayTankHPByRoundIntervalNew(int CurrentRound)
+    {
+        foreach (var interval in intervalActionsGrayTank)
+        {
+            if (CurrentRound >= interval.Key && CurrentRound <= interval.Value.Item1)
+            {
+                interval.Value.Item2.Invoke();
+                return interval.Value.Item3;
+            }
+        }
+        Debug.Log("Número fuera de los intervalos definidos.");
+        return -1;
+    }
+    public float GrayDogHPByRoundIntervalNew(int CurrentRound)
+    {
+        foreach (var interval in intervalActionsGrayDog)
+        {
+            if (CurrentRound >= interval.Key && CurrentRound <= interval.Value.Item1)
+            {
+                interval.Value.Item2.Invoke();
+                return interval.Value.Item3;
+            }
+        }
+        Debug.Log("Número fuera de los intervalos definidos.");
+        return -1;
+    }
+    /*public float GrayCommonHPByRoundInterval(int CurrentRound)
     {
         var hpResult = 0f;
         if (CurrentRound > 0 && CurrentRound <= 3)
@@ -397,7 +474,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
         }
 
         return hpResult;
-    }
+    }*/
 
 
     IEnumerator WaitBetweenWaves()
@@ -411,12 +488,12 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     #region Pool Definitions
     private void DeactivateUFO(UFO o)
     {
-        o.gameObject.transform.parent = MainGameParent.transform;
         o.gameObject.SetActive(false);
     }
 
     private void ActivateUFO(UFO o)
     {
+        o.gameObject.transform.parent = MainGameParent.transform;
         o.gameObject.SetActive(true);
     }
 
@@ -431,6 +508,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private void DeactivateGrayDog(GrayDogModel o)
     {
         o.gameObject.transform.parent = MainGameParent.transform;
+        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
         o.hasObjective = false;
         o.gameObject.SetActive(false);
     }
@@ -438,7 +516,6 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private void ActivateGrayDog(GrayDogModel o)
     {
         o.gameObject.SetActive(true);
-        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
     }
     private TankGrayModel TankGrayFactory()
     {
@@ -447,13 +524,13 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private void DeactivateTankGray(TankGrayModel o)
     {
         o.gameObject.transform.parent = MainGameParent.transform;
+        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
         o.gameObject.SetActive(false);
     }
 
     private void ActivateTankGray(TankGrayModel o)
     {
         o.gameObject.SetActive(true);
-        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
     }
     private TallGrayModel TallGrayFactory()
     {
@@ -462,13 +539,13 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private void DeactivateTallGray(TallGrayModel o)
     {
         o.gameObject.transform.parent = MainGameParent.transform;
+        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
         o.gameObject.SetActive(false);
     }
 
     private void ActivateTallGray(TallGrayModel o)
     {
         o.gameObject.SetActive(true);
-        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
     }
     private GrayModel GrayCommonFactory()
     {
@@ -477,18 +554,17 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     private void DeactivateGrayCommon(GrayModel o)
     {
         o.gameObject.transform.parent = MainGameParent.transform;
+        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
         o.gameObject.SetActive(false);
     }
 
     private void ActivateGrayCommon(GrayModel o)
     {
         o.gameObject.SetActive(true);
-        o.onStatsEnhanced += EnhanceEnemyStatsPerWave;
     }
     #endregion
     void Start()
     {
-        
         _as = GetComponent<AudioSource>();
         GameVars.Values.soundManager.PlaySound(_as,"MusicPreWave", 0.1f, true,0f);
         RoundEnd();

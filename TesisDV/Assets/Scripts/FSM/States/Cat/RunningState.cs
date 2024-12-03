@@ -24,7 +24,7 @@ public class RunningState : IState
     public void OnUpdate()
     {
         Debug.Log("Estoy en RunningState");
-        if (Vector3.Distance(_cat.transform.position, _cat.StartingPosition) > 1f)
+        if (Vector3.Distance(_cat.transform.position, _cat.StartingPosition) > 1.5f)
         {
             Vector3 dest = default(Vector3);
             dest = _cat.StartingPosition;
@@ -36,6 +36,7 @@ public class RunningState : IState
         }
         else
         {
+            Debug.Log("Salgo de Running y entro en Idle?");
             _fsm.ChangeCatState(CatStatesEnum.IdleState);
         }
     }
