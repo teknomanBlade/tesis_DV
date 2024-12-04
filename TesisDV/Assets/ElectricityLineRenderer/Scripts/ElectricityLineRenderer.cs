@@ -103,7 +103,7 @@ public class ElectricityLineRenderer : MonoBehaviour
             x.endLight.gameObject.SetActive(enabled);
         });
     }
-
+    
     public Vector3 GetBezierCurvePosition(float t, Vector3 p0, Vector3 p1, Vector3 p2)
     {
         p1 += p1 - ((p2) * 0.5f) - (p0 * 0.5f); // force through midpoint

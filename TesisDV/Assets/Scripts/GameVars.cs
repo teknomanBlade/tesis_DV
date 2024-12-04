@@ -74,6 +74,7 @@ public class GameVars : MonoBehaviour
     public KeyCode testKillingEnemiesKey;
     public KeyCode testBuySixthTrap;
     public KeyCode testBuyFourthTrap;
+    public KeyCode testBuyThirdTrap;
 
     [Header("Resources")]
     public Sprite crosshair;
@@ -136,17 +137,20 @@ public class GameVars : MonoBehaviour
     public int FERNPaintballMinigunCount = 0;
     public int TeslaCoilGeneratorCount = 0;
     public int TeslaElectricTrapCount = 0;
+    public int MicrowaveForceFieldGeneratorCount = 0;
     [Header("Pool Operations")]
     public ParticleSystem SmokePrefab;
     public BaseballLauncher BaseballLauncherPrefab;
     public FERNPaintballMinigun FERNPaintballMinigunPrefab;
     public TeslaCoilGenerator TeslaCoilGeneratorPrefab;
     public ElectricTrap TeslaElectricTrapPrefab;
+    public MicrowaveForceFieldGenerator MicrowaveForceFieldGeneratorPrefab;
     public int InitialStock { get; private set; }
     public PoolObjectStack<BaseballLauncher> BaseballLauncherPool { get; set; }
     public PoolObjectStack<FERNPaintballMinigun> FERNPaintballMinigunPool { get; set; }
     public PoolObjectStack<TeslaCoilGenerator> TeslaCoilGeneratorPool { get; set; }
     public PoolObjectStack<ElectricTrap> TeslaElectricTrapPool { get; set; }
+    public PoolObjectStack<MicrowaveForceFieldGenerator> MicrowaveForceFieldGeneratorPool { get; set; }
     public PoolObjectStack<ParticleSystem> SmokeParticlesPool { get; set; }
     [Header("Tutorial Operations")]
     public bool PassedTutorial;
@@ -244,7 +248,32 @@ public class GameVars : MonoBehaviour
         FERNPaintballMinigunPool = new PoolObjectStack<FERNPaintballMinigun>(FERNPaintballMinigunFactory, ActivateFERNPaintballMinigun, DeactivateFERNPaintballMinigun, InitialStock, true);
         TeslaCoilGeneratorPool = new PoolObjectStack<TeslaCoilGenerator>(TeslaCoilGeneratorFactory, ActivateTeslaCoilGenerator, DeactivateTeslaCoilGenerator, InitialStock, true);
         TeslaElectricTrapPool = new PoolObjectStack<ElectricTrap>(TeslaElectricTrapFactory, ActivateTeslaElectricTrap, DeactivateTeslaElectricTrap, InitialStock, true);
+        MicrowaveForceFieldGeneratorPool = new PoolObjectStack<MicrowaveForceFieldGenerator>(MicrowaveForceFieldGeneratorFactory, ActivateMicrowaveForceFieldGenerator, DeactivateMicrowaveForceFieldGenerator, InitialStock, true);
         SmokeParticlesPool = new PoolObjectStack<ParticleSystem>(SmokeParticlesFactory, ActivateSmokeParticles, DeactivateSmokeParticles, InitialStock, true);
+    }
+
+    private void DeactivateMicrowaveForceFieldGenerator(MicrowaveForceFieldGenerator o)
+    {
+        o.gameObject.transform.parent = WaveManager.MainGameParent.transform;
+        o.gameObject.SetActive(false);
+        if (!o.gameObject.name.Contains("_"))
+        {
+            MicrowaveForceFieldGeneratorCount++;
+            o.gameObject.name = o.gameObject.name.Replace("(Clone)", "");
+            o.gameObject.name += "_" + MicrowaveForceFieldGeneratorCount;
+        }
+        o.transform.position = Vector3.zero;
+        o.transform.localPosition = Vector3.zero;
+    }
+
+    private void ActivateMicrowaveForceFieldGenerator(MicrowaveForceFieldGenerator o)
+    {
+        o.gameObject.SetActive(true);
+    }
+
+    private MicrowaveForceFieldGenerator MicrowaveForceFieldGeneratorFactory()
+    {
+        return Instantiate(MicrowaveForceFieldGeneratorPrefab);
     }
 
     private void DeactivateTeslaElectricTrap(ElectricTrap o)

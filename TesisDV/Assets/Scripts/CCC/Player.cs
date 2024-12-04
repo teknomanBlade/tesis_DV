@@ -401,6 +401,12 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 //ActiveTankHitFistDamageEffect();
                 FindObjectOfType<SkillTree>(true).UnlockTeslaCoilGenerator();
             }
+            if (Input.GetKeyDown(GameVars.Values.testBuyThirdTrap))
+            {
+                //Damage(2, EnemyType.Tank);
+                //ActiveTankHitFistDamageEffect();
+                FindObjectOfType<SkillTree>(true).UnlockMicrowaveTrap();
+            }
         }
 
     }

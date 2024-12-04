@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FERNPaintballMinigunConstructing : MonoBehaviour
+public class FERNPaintballMinigunConstructing : MonoBehaviour, ITrapBuildable
 {
     public GameObject trapPrefab;
     Animator myAnimator;

@@ -14,9 +14,12 @@ public class TriggerLightning : MonoBehaviour
 
     private void Start()
     {
+        StartZaps();
+    }
+    public void StartZaps() 
+    {
         StartCoroutine(ZapTimer());
     }
-
     IEnumerator ZapTimer()
     {
         while (true)

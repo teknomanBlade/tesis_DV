@@ -22,6 +22,7 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     private AudioSource _as;
     private bool _isDisabledSFX;
     public bool IsBatteryFried;
+    public bool IsMoving;
     #region Upgrades
     [Header("Upgrades")]
     
@@ -131,8 +132,9 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
 
     public void BecomeMovable()
     {
+        IsMoving = true;
+        GameVars.Values.MicrowaveForceFieldGeneratorPool.ReturnObject(this);
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
-        Destroy(gameObject);
     }
 
     public void Interact()
@@ -175,5 +177,28 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         yield return new WaitForSeconds(1f);
         GameVars.Values.soundManager.StopSound();
         _isDisabledSFX = true;
+    }
+    public MicrowaveForceFieldGenerator SetInitPos(Vector3 pos)
+    {
+        this.transform.position = pos;
+        return this;
+    }
+    public MicrowaveForceFieldGenerator SetInitRot(Quaternion rot)
+    {
+        this.transform.rotation = rot;
+        return this;
+    }
+    public MicrowaveForceFieldGenerator SetParent(Transform parent)
+    {
+        this.transform.parent = parent;
+        return this;
+    }
+    public MicrowaveForceFieldGenerator SetMovingToFalse(bool isMoving)
+    {
+        IsMoving = isMoving;
+        if (_as != null)
+            GameVars.Values.soundManager.PlaySound(_as, "EMRingWavesSFX", 0.15f, true, 1f);
+
+        return this;
     }
 }

@@ -14,13 +14,15 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     private float _dpsBoostCoef;
     [SerializeField] private GameObject midPositionDamage;
     [SerializeField] private GameObject endPositionDamage;
+    [SerializeField] private GameObject areaOfEffectDamage;
     [SerializeField] private float _currentLife;
     public ElectricityLineRenderer ElectricityLineRenderer;
+    public Material ElectricZapMaterial;
     public GameObject blueprintPrefab;
     public GameObject ParticleLightning;
     private bool _isDisabledSFX;
     private AudioSource _as;
-
+    public bool IsMoving;
     #region Upgrades
     [Header("Upgrades")]
     [SerializeField] private GameObject _doubleDamageBlueprint;
@@ -135,11 +137,12 @@ public class ElectricTrap : Trap, IMovable, IInteractable
 
     public void BecomeMovable()
     {
+        IsMoving = true;
+        GetComponent<TriggerLightning>().electricityArcs = new ElectricityArc[1];
+        GameVars.Values.TeslaElectricTrapPool.ReturnObject(this);
         GameObject aux = Instantiate(blueprintPrefab, transform.position, transform.rotation);
-        aux.GetComponent<StaticBlueprint>().SpendMaterials(false);
-        aux.GetComponent<StaticBlueprint>().CanBeCancelled(false);
+        aux.GetComponent<StaticBlueprint>().SpendMaterials(false).CanBeCancelled(false);
         _myTrapBase.ResetBase();
-        Destroy(gameObject);
     }
     #region Upgrade Voids
     private void CheckForUpgrades()
@@ -195,11 +198,38 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         _canActivate2aUpgrade = false;
         _canActivate2bUpgrade = true;
         AreaOfEffectActive = _canActivate2bUpgrade;
+        GetComponent<TriggerLightning>().electricityArcs = new ElectricityArc[0];
         GetComponent<SphereCollider>().enabled = true;
         midPositionDamage.SetActive(false);
         endPositionDamage.SetActive(false);
+        areaOfEffectDamage.SetActive(true);
         //Aplicar beneficio del Upgrade
     }
 
     #endregion
+    
+    public ElectricTrap SetInitPos(Vector3 pos)
+    {
+        this.transform.position = pos;
+        return this;
+    }
+    public ElectricTrap SetInitRot(Quaternion rot)
+    {
+        this.transform.rotation = rot;
+        return this;
+    }
+    public ElectricTrap SetParent(Transform parent)
+    {
+        this.transform.parent = parent;
+        return this;
+    }
+    public ElectricTrap SetMovingToFalse(bool isMoving)
+    {
+        IsMoving = isMoving;
+        if (_as != null)
+            GameVars.Values.soundManager.PlaySound(_as, "ElectricTrapSFX", 0.15f, true, 1f);
+        GetComponent<TriggerLightning>().electricityArcs[0] = GetComponent<ElectricityArc>();
+        GetComponent<TriggerLightning>().StartZaps();
+        return this;
+    }
 }

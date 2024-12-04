@@ -2,27 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseballLauncherAnim : MonoBehaviour, ITrapBuildable
+public class ElectricTeslaTrapConstructAnim : MonoBehaviour, ITrapBuildable
 {
-    public GameObject trapPrefab;
-    Animator myAnimator;
-    public GameObject parent; 
+    public Animator myAnimator;
+    public GameObject parent;
+
+    // Start is called before the first frame update
     void Start()
     {
         myAnimator = GetComponent<Animator>();
-        //parent = GameObject.Find("MainGame");
         parent = transform.parent.gameObject;
     }
 
     public void FinishAnim()
     {
-        var baseballTrap = GameVars.Values.BaseballLauncherPool.GetObject()
+        var electricTeslaTrap = GameVars.Values.TeslaElectricTrapPool.GetObject()
             .SetInitPos(transform.position)
             .SetInitRot(transform.rotation)
             .SetParent(parent.transform)
-            .SetShotsRemainingZero();
-
-        Destroy(baseballTrap.gameObject.GetComponent<InventoryItem>());
+            .SetMovingToFalse(false);
+         
+        Destroy(electricTeslaTrap.gameObject.GetComponent<InventoryItem>());
         Destroy(gameObject);
     }
 }

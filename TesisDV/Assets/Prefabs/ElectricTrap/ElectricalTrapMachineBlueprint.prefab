@@ -307,9 +307,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9cd1cee673ed5a47bb35d4679184ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _trapBase: {fileID: 0}
+  _trapBases: []
   canBuild: 0
   craftingRecipe: {fileID: 11400000, guid: da753bcb7dc572c49a1955651c1ddc03, type: 2}
-  trapAnimPrefab: {fileID: 923361385767164133, guid: 942247aea58e7644a880141f42434b67, type: 3}
+  trapAnimPrefab: {fileID: 5849369545449418034, guid: 339b58508877b9544848783b94e015a0, type: 3}
   particles: {fileID: 3984549846058083597, guid: 88689427b9f8a1c4ca13887e9bb12cd2, type: 3}
   customPivot: {fileID: 0}
   newMaterial: {fileID: 2100000, guid: 04d9b8823b798c944ac1ae3fed55dc18, type: 2}
@@ -319,6 +321,8 @@ MonoBehaviour:
   TrapBaseMaskWall:
     serializedVersion: 2
     m_Bits: 2097152
+  ClickCounter: 0
+  time: 0
 --- !u!1 &5801268668148865684
 GameObject:
   m_ObjectHideFlags: 0
