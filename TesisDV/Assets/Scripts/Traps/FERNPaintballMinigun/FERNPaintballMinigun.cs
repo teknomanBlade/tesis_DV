@@ -9,6 +9,8 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     private float _maxLife = 10f;
     [SerializeField] private float _currentLife;
     private AudioSource _as;
+    public Animator UIAnim;
+    public float currentTimeAnimUI;
     private bool _isDestroyed;
     public int shots;
     public int shotsLeft;
@@ -27,7 +29,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     {
         get
         {
-            if (shotsLeft == 0) { _magazine.SetActive(false); }
+            _magazine.GetComponent<Animator>().SetBool("IsEmptyMagazine", shotsLeft == 0);
             return shotsLeft == 0;
         }
     }
@@ -86,6 +88,7 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
         _magazine = transform.GetComponentsInChildren<Transform>(true).Where(x => x.name.Equals("FERNMinigunPelletsMagazine")).FirstOrDefault().gameObject;
         _as = GetComponent<AudioSource>();
         _animator = GetComponent<Animator>();
+        UIAnim = GetComponentsInChildren<Animator>().Where(x => x.name.Contains("BulletIndicatorUIParent")).FirstOrDefault();
         PaintballPellet = Resources.Load<PaintballPellet>("PaintballPellet");
         exitPoint = transform.GetComponentsInChildren<Transform>().FirstOrDefault(x => x.name.Equals("BulletSpawnPoint")).gameObject;
         PaintballPelletsPool = new PoolObject<PaintballPellet>(PaintballPelletFactory, PaintballPelletActivate, PaintballPelletDeactivate, InitialStock, true);
@@ -169,6 +172,8 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     private void StartTrap()
     {
         active = true;
+        currentTimeAnimUI = (float)ShotsLeft / shots;
+        UIAnim.SetFloat("PelletStates", currentTimeAnimUI);
         SearchingForObjectives();
         if (shotsLeft > 0) { _magazine.SetActive(true); }
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
@@ -264,7 +269,9 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
     public void Reload()
     {
         SetShots(shots);
-        if (shotsLeft > 0) { _magazine.SetActive(true); }
+        _magazine.GetComponent<Animator>().SetBool("IsReloading", shotsLeft > 0);
+        currentTimeAnimUI = (float)ShotsLeft / shots;
+        UIAnim.SetFloat("PelletStates", currentTimeAnimUI);
         active = true;
         StartCoroutine("ActiveCoroutine");
         _currentObjectiveDistance = MAX_CURRENT_OBJETIVE_DISTANCE;
@@ -300,6 +307,8 @@ public class FERNPaintballMinigun : Trap, IMovable, IInteractable
         //ShootEffect.Play();
         ShotsLeft--;
         ShotsLeft = Mathf.Clamp(ShotsLeft, 0, shots);
+        currentTimeAnimUI = (float) ShotsLeft / shots;
+        UIAnim.SetFloat("PelletStates", currentTimeAnimUI);
         FirePaintballPellet();
     }
 

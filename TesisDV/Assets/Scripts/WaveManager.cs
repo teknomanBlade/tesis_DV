@@ -573,8 +573,9 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
     void Update()
     {
+        #if UNITY_EDITOR
         if (Input.GetKeyDown(GameVars.Values.testKillingEnemiesKey)) KillAllEnemiesInScene();
-
+        #endif
         if (_inRound)
         {
             TimeWaves -= Time.deltaTime;

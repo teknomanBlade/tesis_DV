@@ -73,6 +73,7 @@ public class GameVars : MonoBehaviour
     public KeyCode testOpenAllDoorsKey;
     public KeyCode testKillingEnemiesKey;
     public KeyCode testBuySixthTrap;
+    public KeyCode testBuyFifthTrap;
     public KeyCode testBuyFourthTrap;
     public KeyCode testBuyThirdTrap;
 

@@ -21,7 +21,8 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     public ParticleSystem HitTurret;
     public ParticleSystem ShootEffect;
     private AudioSource _as;
-    
+    public Animator UIAnim;
+    public float currentTimeAnimUI;
     public GameObject projectilePrefab;
     public GameObject blueprintPrefab;
     public GameObject exitPoint;
@@ -91,6 +92,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     {
         _myTrapBase = transform.parent.GetComponent<TrapBase>();
         _myTrapBase.SetTrap(this.gameObject);
+        
     }
     public void Awake()
     {
@@ -103,6 +105,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _staticChargeSlowAmount = 1.2f;
         GameVars.Values.IsAllSlotsDisabled();
         _animator = GetComponent<Animator>();
+        UIAnim = GetComponentsInChildren<Animator>().Where(x => x.name.Contains("BulletIndicatorUI")).FirstOrDefault();
         _currentLife = _maxLife;
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
         _skillTree.OnUpgrade += CheckForUpgrades;
@@ -187,7 +190,8 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
     private void StartTrap()
     {
         active = true;
-
+        currentTimeAnimUI = (float)shotsLeft / shots;
+        UIAnim.SetFloat("BallStates", currentTimeAnimUI);
         _staticBallsUpgrade.SetActive(StaticBallsUpgradeEnabled);
         if (DoubleLoaderSmallUpgradeEnabled || DoubleLoaderLargeUpgradeEnabled)
         {
@@ -262,6 +266,8 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _animator.SetBool("HasNoBalls", false);
         ActivateTennisBallsByReload();
         OnReload?.Invoke();
+        currentTimeAnimUI = (float)shotsLeft / shots;
+        UIAnim.SetFloat("BallStates", currentTimeAnimUI);
         GameVars.Values.ShowNotification("The Turret has been reloaded.");
     }
     IEnumerator ReloadTurret()
@@ -287,7 +293,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         }
 
     }
-
+    
     public void InstantiateBall()
     {
         if  (_canShoot == false || (_currentObjective != null && _currentObjective.GetComponent<Enemy>().isDead))
@@ -301,7 +307,8 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         ShootEffect.Play();
         shotsLeft--;
         shotsLeft = Mathf.Clamp(shotsLeft, 0, shots);
-        
+        currentTimeAnimUI = (float) 1 / shotsLeft;
+        UIAnim.SetFloat("BallStates", currentTimeAnimUI);
         if (ballsContainerSmall.activeSelf) 
         {
             RemoveLastVisualTennisBall();
@@ -451,18 +458,18 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
             enemy.ElectricDebuffHit();
         }
 
-        if (enemy.name.Contains("GrayMVC"))
+        if (enemy.enemyType == EnemyType.Common)
         {
             Debug.Log("DAÑO GRAY: " + _damageAmount);
             enemy.TakeDamage(_damageAmount);
         }
-        else if (enemy.name.Contains("Melee"))
+        else if (enemy.enemyType == EnemyType.Melee)
         {
             _damageAmount /= _coefMelee;
             Debug.Log("DAÑO MELEE: " + _damageAmount);
             enemy.TakeDamage(_damageAmount);
         }
-        else if (enemy.name.Contains("Tank"))
+        else if (enemy.enemyType == EnemyType.Tank)
         {
             _damageAmount /= _coefTank;
             Debug.Log("DAÑO TANK: " + _damageAmount);

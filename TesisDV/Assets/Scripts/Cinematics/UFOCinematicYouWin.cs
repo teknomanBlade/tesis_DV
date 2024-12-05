@@ -6,10 +6,11 @@ public class UFOCinematicYouWin : MonoBehaviour
 {
     public delegate void OnFinishUFOWarpingAwayDelegate();
     public event OnFinishUFOWarpingAwayDelegate OnFinishUFOWarpingAway;
+    public AudioSource _as;
     // Start is called before the first frame update
     void Start()
     {
-
+        _as = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -19,6 +20,7 @@ public class UFOCinematicYouWin : MonoBehaviour
     }
     public void CallFinishUFOWarpingAway()
     {
+        _as.Stop();
         OnFinishUFOWarpingAway?.Invoke();
     }
 }

@@ -17,7 +17,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
     [SerializeField] private GameObject areaOfEffectDamage;
     [SerializeField] private float _currentLife;
     public ElectricityLineRenderer ElectricityLineRenderer;
-    public Material ElectricZapMaterial;
+    public ElectricityRandomRays RandomRays;
     public GameObject blueprintPrefab;
     public GameObject ParticleLightning;
     private bool _isDisabledSFX;
@@ -62,6 +62,7 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         active = true; // Ahora las trampas empiezan encendidas.   
         _as = GetComponent<AudioSource>();
         ElectricityLineRenderer = GetComponent<ElectricityLineRenderer>();
+        RandomRays = GetComponentInChildren<ElectricityRandomRays>(true);
         GameVars.Values.soundManager.PlaySound(_as, "ElectricTrapSFX", 0.25f, true, 1f);
         SetUIIndicator("UI_ElectricTrap_Indicator");
     }
@@ -228,8 +229,16 @@ public class ElectricTrap : Trap, IMovable, IInteractable
         IsMoving = isMoving;
         if (_as != null)
             GameVars.Values.soundManager.PlaySound(_as, "ElectricTrapSFX", 0.15f, true, 1f);
-        GetComponent<TriggerLightning>().electricityArcs[0] = GetComponent<ElectricityArc>();
-        GetComponent<TriggerLightning>().StartZaps();
+
+        if (!AreaOfEffectActive)
+        {
+            GetComponent<TriggerLightning>().electricityArcs[0] = GetComponent<ElectricityArc>();
+            GetComponent<TriggerLightning>().StartZaps();
+        }
+        else 
+        {
+            RandomRays?.StartRays();
+        }
         return this;
     }
 }

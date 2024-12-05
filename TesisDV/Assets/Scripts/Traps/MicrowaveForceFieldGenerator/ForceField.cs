@@ -30,7 +30,7 @@ public class ForceField : Trap
     }
     public void SetShieldPoints(float shieldPoints) 
     {
-        Health += shieldPoints;
+        Health = shieldPoints;
     }
     public void DamageReturned() 
     {

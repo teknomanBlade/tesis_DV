@@ -226,15 +226,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                     MoveTrap();
                 }
             }
-            if (Input.GetKeyDown(GameVars.Values.testOpenAllDoorsKey))
-            {
-                FindObjectsOfType<Door>().ToList().ForEach(x => { x.IsLocked = false; });
-                FindObjectOfType<FootLocker>().IsBlocked = false;
-            }
-            if (Input.GetKeyDown(GameVars.Values.testRecieveWittsKey))
-            {
-                GameVars.Values.Inventory.ReceiveWitts(100);
-            }
+            
             if (Input.GetKeyDown(GameVars.Values.startWaveKey) && _canStartNextWave)
             {
                 _canStartNextWave = false;
@@ -388,12 +380,27 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 _rb.velocity = Vector3.zero;
                 _rb.isKinematic = true;
             }
-
+            #if UNITY_EDITOR
+            if (Input.GetKeyDown(GameVars.Values.testOpenAllDoorsKey))
+            {
+                FindObjectsOfType<Door>().ToList().ForEach(x => { x.IsLocked = false; });
+                FindObjectOfType<FootLocker>().IsBlocked = false;
+            }
+            if (Input.GetKeyDown(GameVars.Values.testRecieveWittsKey))
+            {
+                GameVars.Values.Inventory.ReceiveWitts(100);
+            }
             if (Input.GetKeyDown(GameVars.Values.testBuyFourthTrap))
             {
                 //Damage(2, EnemyType.Tank);
                 //ActiveTankHitFistDamageEffect();
                 FindObjectOfType<SkillTree>(true).UnlockElectricTrap();
+            }
+            if (Input.GetKeyDown(GameVars.Values.testBuyFifthTrap))
+            {
+                //Damage(2, EnemyType.Tank);
+                //ActiveTankHitFistDamageEffect();
+                FindObjectOfType<SkillTree>(true).UnlockPaintballMinigunTrap();
             }
             if (Input.GetKeyDown(GameVars.Values.testBuySixthTrap))
             {
@@ -407,7 +414,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 //ActiveTankHitFistDamageEffect();
                 FindObjectOfType<SkillTree>(true).UnlockMicrowaveTrap();
             }
+            #endif
         }
+
 
     }
 
