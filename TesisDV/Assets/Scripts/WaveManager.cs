@@ -566,8 +566,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     void Start()
     {
         _as = GetComponent<AudioSource>();
-        GameVars.Values.soundManager.PlaySound(_as,"MusicPreWave", 0.1f, true,0f);
         RoundEnd();
+        GameVars.Values.soundManager.PlaySound(_as, "MusicPreWave", 0.1f, true, 0f);
         InstantiateUFOIndicators();
     }
 

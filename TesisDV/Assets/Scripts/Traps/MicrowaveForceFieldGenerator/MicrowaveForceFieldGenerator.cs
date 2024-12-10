@@ -23,6 +23,7 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     private bool _isDisabledSFX;
     public bool IsBatteryFried;
     public bool IsMoving;
+    
     #region Upgrades
     [Header("Upgrades")]
     
@@ -41,6 +42,8 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
     public bool _canActivate1bUpgrade { get; private set; }
     public bool _canActivate2bUpgrade { get; private set; }
     private SkillTree _skillTree;
+    public Animator UIAnimFirstShield;
+    public Animator UIAnimSecondShield;
 
     #endregion
     // Start is called before the first frame update
@@ -51,6 +54,8 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         OnForceFieldShieldPoints += ForceField.GetComponent<ForceField>().SetShieldPoints;
         OnForceFieldReturnDamage += SecondaryForceField.GetComponent<ForceField>().DamageReturned;
         OnSecondaryForceFieldShieldPoints += SecondaryForceField.GetComponent<ForceField>().SetShieldPoints;
+        UIAnimFirstShield = GetComponentsInChildren<Animator>().Where(x => x.name.Contains("MicrowaveShieldHP_First")).FirstOrDefault();
+        UIAnimSecondShield = GetComponentsInChildren<Animator>(true).Where(x => x.name.Contains("MicrowaveShieldHP_Second")).FirstOrDefault();
         OnForceFieldShieldPoints?.Invoke(20f);
         OnSecondaryForceFieldShieldPoints?.Invoke(20f);
         _skillTree = GameVars.Values.craftingContainer.gameObject.GetComponentInChildren<SkillTree>(true);
@@ -108,7 +113,11 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         _canActivate1aUpgrade = false;
         _canActivate2aUpgrade = true;
         SecondaryShieldActive = _canActivate2aUpgrade;
-        SecondaryForceField.SetActive(SecondaryShieldActive);
+        if (!IsBatteryFried) 
+        {
+            SecondaryForceField.SetActive(SecondaryShieldActive);
+            UIAnimSecondShield.gameObject.SetActive(SecondaryShieldActive);
+        }
         //Aplicar beneficio del Upgrade
     }
     public void Activate2bUpgrade()
@@ -160,10 +169,13 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
         GameVars.Values.soundManager.PlaySound(_as, "EMRingWavesSFX", 0.15f, true, 1f);
         ForceField.SetActive(true);
         OnForceFieldShieldPoints?.Invoke(20f);
+        UIAnimFirstShield.SetFloat("ShieldHP", 1);
         if (SecondaryShieldActive)
         {
             SecondaryForceField.SetActive(true);
             OnSecondaryForceFieldShieldPoints?.Invoke(20f);
+            UIAnimSecondShield.gameObject.SetActive(SecondaryShieldActive);
+            UIAnimSecondShield.SetFloat("ShieldHP_Secondary", 1);
         }
         particleRipples.SetActive(true);
         IsBatteryFried = false;
@@ -200,5 +212,18 @@ public class MicrowaveForceFieldGenerator : Trap, IMovable, IInteractable
             GameVars.Values.soundManager.PlaySound(_as, "EMRingWavesSFX", 0.15f, true, 1f);
 
         return this;
+    }
+
+    internal void OnForceFieldDown()
+    {
+        if (SecondaryShieldActive)
+        {
+            if(!ForceField.GetComponent<ForceField>().active && !SecondaryForceField.GetComponent<ForceField>().active)
+                Inactive();
+        }
+        else 
+        {
+            Inactive();
+        }
     }
 }

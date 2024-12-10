@@ -11,42 +11,42 @@ public class EMPAttack : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        //var player = other.GetComponent<Player>();
         var trap = other.GetComponent<Trap>();
-
-        /*if (player)
-        {
-            //_myOwner.GetDoor(other.GetComponent<Door>());
-            other.GetComponent<Player>().Damage(_damageAmount);
-            
-        }
-        else*/
 
         if (trap && other.GetComponent<FERNPaintballMinigun>())
         {
             trap.Inactive();
-            //_myOwner.RevertSpecialAttackBool();
         }
 
         if (trap && other.GetComponent<ElectricTrap>())
         {
             trap.Inactive();
-            //_myOwner.RevertSpecialAttackBool();
         }
 
         if (trap && other.GetComponent<BaseballLauncher>())
         {
             trap.Inactive();
-           // _myOwner.RevertSpecialAttackBool();
         }
-
-        if (trap && other.GetComponent<ForceField>())
+        var forceField = other.GetComponent<ForceField>();
+        if (trap && forceField)
         {
-            if (other.GetComponent<ForceField>().IsDamageReturn)
+            if (forceField.name.Contains("Secondary") && forceField.Health > 0)
             {
-                _myOwner.TakeDamage(other.GetComponent<ForceField>().DamageReturnAmount);
+                ForceFieldTakeDamage(forceField);
             }
-            other.GetComponent<ForceField>().TakeDamage(_damageAmount);
+            else 
+            {
+                ForceFieldTakeDamage(forceField);
+            }
         }
+    }
+
+    public void ForceFieldTakeDamage(ForceField forceField) 
+    {
+        if (forceField.IsDamageReturn)
+        {
+            _myOwner.TakeDamage(forceField.DamageReturnAmount);
+        }
+        forceField.TakeDamage(_damageAmount);
     }
 }

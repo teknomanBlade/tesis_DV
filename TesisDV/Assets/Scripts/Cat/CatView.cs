@@ -6,11 +6,13 @@ using UnityEngine;
 public class CatView : MonoBehaviour
 {
     [SerializeField] Animator _myAnimator;
+    [SerializeField] AudioSource _as;
     public bool IsPlayedOnce;
 
     void Start()
     {
         _myAnimator = GetComponent<Animator>();
+        _as = GetComponent<AudioSource>();
         IsPlayedOnce = true;
     }
 
@@ -25,7 +27,9 @@ public class CatView : MonoBehaviour
      
     public void WalkAnim()
     {
-        if(IsPlayedOnce)
+        GameVars.Values.soundManager.StopSound(_as);
+
+        if (IsPlayedOnce)
             GameVars.Values.soundManager.PlaySoundAtPoint("SFX_CatMeowingToBasement", transform.position, 0.2f);
 
         _myAnimator.SetBool("IsMad", false);
@@ -36,6 +40,8 @@ public class CatView : MonoBehaviour
     }
     public void TakenAnim()
     {
+        GameVars.Values.soundManager.PlaySound(_as, "SFX_AngryCat", 1f,true, 1f);
+
         _myAnimator.SetBool("IsMad", true);
         _myAnimator.SetBool("IsWalking", false);
         _myAnimator.SetBool("IsRunning", false);
@@ -43,6 +49,7 @@ public class CatView : MonoBehaviour
     }
     public void RunningAnim()
     {
+        GameVars.Values.soundManager.StopSound(_as);
         _myAnimator.SetBool("IsRunning", true);
         _myAnimator.SetBool("IsMad", false);
     }
