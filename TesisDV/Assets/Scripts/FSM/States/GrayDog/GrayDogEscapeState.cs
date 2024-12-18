@@ -93,7 +93,7 @@ public class GrayDogEscapeState : IState
         endingPoint = PathfindingManager.Instance.GetClosestNode(_enemy._exitPos);
         Debug.Log("GrayDog End at " + endingPoint);
 
-        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
+        myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
         _enemy.SetPath(myPath);
     }
 

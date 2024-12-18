@@ -110,7 +110,7 @@ public class GrayDogProtectState : IState
         endingPoint = PathfindingManager.Instance.GetClosestNode(_enemy._target.transform.position);
 
         //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
-        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
+        myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
         _enemy.SetPath(myPath); //esto no hace falta, es para testear.
     }
 

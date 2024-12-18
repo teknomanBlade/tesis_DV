@@ -141,7 +141,8 @@ public class CatState : IState
         //}
 
         //myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
-        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
+
+        myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
         _enemy.SetPath(myPath); //esto no hace falta, es para testear.
     }
 }
