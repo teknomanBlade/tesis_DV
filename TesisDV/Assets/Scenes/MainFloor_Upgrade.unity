@@ -51241,6 +51241,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingNode: {fileID: 0}
   goalNode: {fileID: 0}
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 0
   obstacleMask:
     serializedVersion: 2
     m_Bits: 65536
@@ -53310,6 +53313,9 @@ MonoBehaviour:
   floorLayerName: Floor
   enemyLayerName: Enemy
   wallLayerName: Wall
+  allWallLayerMasks:
+    serializedVersion: 2
+    m_Bits: 54592448
   jumpKey: 32
   primaryFire: 323
   secondaryFire: 324
@@ -53334,9 +53340,9 @@ MonoBehaviour:
   testOpenAllDoorsKey: 116
   testKillingEnemiesKey: 112
   testBuySixthTrap: 287
-  testBuyFifthTrap: 286
+  testBuyFifthTrap: 0
   testBuyFourthTrap: 285
-  testBuyThirdTrap: 284
+  testBuyThirdTrap: 0
   crosshair: {fileID: 0}
   crosshairDoor: {fileID: 0}
   crosshairActivation: {fileID: 0}
@@ -53377,8 +53383,8 @@ MonoBehaviour:
   BaseballLauncherPrefab: {fileID: 4107004621178732684, guid: 0abdec12befb43f4c9c8e2de8fc50680, type: 3}
   FERNPaintballMinigunPrefab: {fileID: 1774618832773797495, guid: 74d3d8069396a5c4684daf81de1a6c73, type: 3}
   TeslaCoilGeneratorPrefab: {fileID: 5914786087182660881, guid: 3cb681e049f914e44a465fff7ce05cb9, type: 3}
-  TeslaElectricTrapPrefab: {fileID: 7563792352725659563, guid: 942247aea58e7644a880141f42434b67, type: 3}
-  MicrowaveForceFieldGeneratorPrefab: {fileID: 6020558278899212346, guid: a535142114d4b014abf2806c356eb5c8, type: 3}
+  TeslaElectricTrapPrefab: {fileID: 0}
+  MicrowaveForceFieldGeneratorPrefab: {fileID: 0}
   PassedTutorial: 0
   IsTutorial: 0
   positionObjectNotification: {x: 0, y: 0, z: 0}
