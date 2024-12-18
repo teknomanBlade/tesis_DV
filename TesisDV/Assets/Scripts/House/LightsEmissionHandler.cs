@@ -38,7 +38,7 @@ public class LightsEmissionHandler : MonoBehaviour
         }
         if (gameObject.name.Equals("Lamp"))
         {
-            GetComponent<MeshRenderer>().material.SetFloat("_EmissionLightLiving", 1f);
+            GetComponent<MeshRenderer>().material.SetFloat("_EmissionLightBarn", 1f);
         }
     }
     public void EnableBasementLightEmission() 

@@ -8,7 +8,7 @@ Shader "SDR_UIInteractions"
 		_FadeColor("FadeColor", Color) = (1,0,0,0)
 		_TransitionColorVal("TransitionColorVal", Range( 0 , 1)) = 0
 		_AlphaTransitionVal("AlphaTransitionVal", Range( 0 , 1)) = 0
-		_ArrowImg("ArrowImg", 2D) = "white" {}
+		_MainTex("MainTex", 2D) = "white" {}
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 		[HideInInspector] __dirty( "", Int ) = 1
 	}
@@ -27,8 +27,8 @@ Shader "SDR_UIInteractions"
 			float2 uv_texcoord;
 		};
 
-		uniform sampler2D _ArrowImg;
-		uniform float4 _ArrowImg_ST;
+		uniform sampler2D _MainTex;
+		uniform float4 _MainTex_ST;
 		uniform float4 _DamageColor;
 		uniform float _TransitionColorVal;
 		uniform float4 _FadeColor;
@@ -41,8 +41,8 @@ Shader "SDR_UIInteractions"
 
 		void surf( Input i , inout SurfaceOutput o )
 		{
-			float2 uv_ArrowImg = i.uv_texcoord * _ArrowImg_ST.xy + _ArrowImg_ST.zw;
-			float4 tex2DNode9 = tex2D( _ArrowImg, uv_ArrowImg );
+			float2 uv_MainTex = i.uv_texcoord * _MainTex_ST.xy + _MainTex_ST.zw;
+			float4 tex2DNode9 = tex2D( _MainTex, uv_MainTex );
 			float4 lerpResult3 = lerp( _DamageColor , tex2DNode9 , _TransitionColorVal);
 			o.Emission = ( tex2DNode9 * lerpResult3 ).rgb;
 			float4 temp_cast_1 = (tex2DNode9.a).xxxx;
@@ -56,12 +56,12 @@ Shader "SDR_UIInteractions"
 }
 /*ASEBEGIN
 Version=17800
-265;314;1195;494;3218.184;836.7116;3.956453;True;False
+260;284;1307;607;1725.775;803.208;1.366436;True;False
 Node;AmplifyShaderEditor.ColorNode;8;-717.3301,348.9319;Inherit;False;Property;_FadeColor;FadeColor;2;0;Create;True;0;0;False;0;1,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;5;-764.5714,549.5182;Inherit;False;Property;_AlphaTransitionVal;AlphaTransitionVal;4;0;Create;True;0;0;False;0;0;1;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;4;-696.095,222.4311;Inherit;False;Property;_TransitionColorVal;TransitionColorVal;3;0;Create;True;0;0;False;0;0;1;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.ColorNode;1;-726.9745,-8.934072;Inherit;False;Property;_DamageColor;DamageColor;1;0;Create;True;0;0;False;0;1,0,0,0;1,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;9;-889.7581,-456.0865;Inherit;True;Property;_ArrowImg;ArrowImg;5;0;Create;True;0;0;False;0;-1;None;132809d820192eb4e98eed71d6765e46;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;9;-889.7581,-456.0865;Inherit;True;Property;_MainTex;MainTex;5;0;Create;True;0;0;False;0;-1;None;132809d820192eb4e98eed71d6765e46;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.LerpOp;3;-370.1423,-61.09795;Inherit;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
 Node;AmplifyShaderEditor.LerpOp;6;-265.2579,294.9562;Inherit;True;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;13;133.966,50.2051;Inherit;True;2;2;0;FLOAT;0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
@@ -80,4 +80,4 @@ WireConnection;12;1;3;0
 WireConnection;0;2;12;0
 WireConnection;0;9;13;0
 ASEEND*/
-//CHKSM=5FB05AB04267911FD6F98DE24DC4A5C2C7A7A56C
+//CHKSM=17D2C7F2543854D1E9DDE43FC1A0A24C9DDF5E6E

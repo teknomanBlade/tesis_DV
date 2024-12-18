@@ -13,7 +13,7 @@ Material:
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -92,6 +92,9 @@ Material:
     - _GlossyReflections: 1
     - _Intensity: 0
     - _Intensity1: 0.15
+    - _LerpLightDir: 0.265
+    - _Levels: 39.3
+    - _LightIntensity: 3.82
     - _Max: 0.22
     - _Max2: 0.91
     - _MaxScreenEmission: 0.91
@@ -125,4 +128,5 @@ Material:
     - _MainColor1: {r: 0.254717, g: 0.254717, b: 0.254717, a: 0}
     - _RimColor1: {r: 0.5, g: 0.5, b: 0.5, a: 0}
     - _SpecularColor1: {r: 3.670588, g: 3.670588, b: 3.670588, a: 0}
+    - _Tint: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

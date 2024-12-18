@@ -30,6 +30,7 @@ public class Blueprint : MonoBehaviour
     int layerMask;
     private GameObject parent;
     public float time;
+    public int ClickCounter;
     void Start()
     {
         parent = GameObject.Find("MainGame");
@@ -37,6 +38,7 @@ public class Blueprint : MonoBehaviour
         int layerMask = GameVars.Values.GetWallLayer();
         layerMask = ~layerMask;
         canBuild = true;
+        ClickCounter = 0;
         //originalMaterial = GetComponent<Renderer>().material; //Probar despues de arreglar posicionamiento. 
         originalMaterial = GetComponentInChildren<Renderer>().material;
         //myRenderer = GetComponent<Renderer>(); //Probar despues de arreglar posicionamiento.
@@ -67,6 +69,10 @@ public class Blueprint : MonoBehaviour
 
         if (Input.GetKeyDown(GameVars.Values.primaryFire) && canBuild)
         {
+            ClickCounter++;
+
+            if (ClickCounter > 1) return;
+
             _player.SwitchIsCrafting();
             finalPosition = transform.position;
             finalRotation = transform.rotation;
