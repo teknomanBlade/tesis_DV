@@ -78,6 +78,7 @@ public class WeaponSlot : MonoBehaviour
         _image.sprite = item.itemImage;
         _itemID = item.myCraftingID;
         _myPrefab = item.myPrefab;
+        ShowWeaponHotBar();
         //Fade(); 
     }
 
@@ -120,6 +121,11 @@ public class WeaponSlot : MonoBehaviour
         _image.enabled = false;
         _image.color = new Color32(0,0,0,255);;
         _image.sprite = null;
+    }
+
+    public virtual void ShowWeaponHotBar() 
+    {
+        
     }
 
     public void Fade(CanvasGroup canvasGroup)

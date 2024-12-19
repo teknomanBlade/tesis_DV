@@ -36,6 +36,7 @@ public class TallGrayView : MonoBehaviour
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
         _as = GetComponent<AudioSource>();
+        GameVars.Values.soundManager.AddAudioSource(_as);
     }
 
     public void EndSpawnAnim()

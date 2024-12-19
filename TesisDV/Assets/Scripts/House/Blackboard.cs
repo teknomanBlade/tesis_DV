@@ -50,7 +50,7 @@ public class Blackboard : MonoBehaviour
     }
     public void ActiveFirstExperiment()
     {
-        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
+        GameVars.Values.soundManager.PlaySound(_as, "ChalkOnBlackboard", 0.8f, false,1f);
     }
 
     public void ActiveSecondExperiment() 
@@ -58,7 +58,7 @@ public class Blackboard : MonoBehaviour
         _animator.SetBool("IsSecondExperiment", true);
         IsTrap2StageEnabled = true;
         
-        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
+        GameVars.Values.soundManager.PlaySound(_as,"ChalkOnBlackboard", 0.8f, false,1f);
         GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!", transform.localPosition);
     }
     public void ActiveThirdExperiment()
@@ -67,7 +67,7 @@ public class Blackboard : MonoBehaviour
         _animator.SetBool("IsThirdExperiment", true);
         IsTrap3StageEnabled = true;
         GetComponent<BoxCollider>().enabled = IsTrap3StageEnabled;
-        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
+        GameVars.Values.soundManager.PlaySound(_as, "ChalkOnBlackboard", 0.8f, false,1f);
         GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!", transform.localPosition);
     }
     public void ActiveFourthExperiment()
@@ -76,7 +76,7 @@ public class Blackboard : MonoBehaviour
         _animator.SetBool("IsFourthExperiment", true);
         IsTrap4StageEnabled = true;
         GetComponent<BoxCollider>().enabled = IsTrap4StageEnabled;
-        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
+        GameVars.Values.soundManager.PlaySound(_as, "ChalkOnBlackboard", 0.8f, false,1f);
         GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!", transform.localPosition);
     }
     public void ActiveFifthExperiment()
@@ -85,7 +85,7 @@ public class Blackboard : MonoBehaviour
         _animator.SetBool("IsFifthExperiment", true);
         IsTrap5StageEnabled = true;
         GetComponent<BoxCollider>().enabled = IsTrap5StageEnabled;
-        GameVars.Values.soundManager.PlaySoundOnce("ChalkOnBlackboard", 0.8f, false);
+        GameVars.Values.soundManager.PlaySound(_as, "ChalkOnBlackboard", 0.8f, false,1f);
         GameVars.Values.ShowNotification("Go check the Blackboard in your room for new Traps to Build!", transform.localPosition);
     }
 

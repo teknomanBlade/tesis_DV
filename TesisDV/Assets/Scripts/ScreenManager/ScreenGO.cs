@@ -27,7 +27,7 @@ public class ScreenGO : IScreen
             if(keyValue.Key != null)
                 keyValue.Key.enabled = keyValue.Value;
         }
-
+        GameVars.Values.soundManager.PauseUnpauseAllSounds(false);
         _before.Clear();
     }
 
@@ -37,7 +37,7 @@ public class ScreenGO : IScreen
         {
             _before[b] = b.enabled;
 
-            if(b != root.GetComponentInChildren<CapsuleCollider2D>())
+            if(b != root.GetComponentInChildren<CapsuleCollider2D>() && !(b is AudioSource))
             {
                 b.enabled = false;
             }

@@ -62,6 +62,7 @@ public class GrayModelHardcodeado : Enemy
 
     public void BackToPool() 
     {
+        GameVars.Values.soundManager.RemoveAudioSource(_as);
         Destroy(gameObject);
     }
 }

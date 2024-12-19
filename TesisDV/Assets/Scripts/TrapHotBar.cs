@@ -31,7 +31,7 @@ public class TrapHotBar : MonoBehaviour
     }
     public bool IsAllSlotsDisabled()
     {
-        var isSlotsDisabled = trapSlots.ToList().Any(x => !x.SlotImage.enabled);
+        var isSlotsDisabled = trapSlots.ToList().Any(x => !x.SlotTrapImage.enabled);
         if (isSlotsDisabled)
         {
             FadeOut();

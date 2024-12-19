@@ -62,6 +62,7 @@ public class TallGrayModel : Enemy
 
     public void BackToPool() //Se llama desde la animacion.
     {
+        GameVars.Values.soundManager.RemoveAudioSource(_as);
         GameVars.Values.WaveManager.TallGrayPool.ReturnObject(this);
     }
 

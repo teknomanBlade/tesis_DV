@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,6 +8,8 @@ public class SoundManager : MonoBehaviour
 {
     //public List<AudioClip> AudioClips;
     private List<AudioClip> AudioClips;
+    [SerializeField]
+    private List<AudioSource> AudioSources;
     private Dictionary<string, AudioClip> SoundLibrary { get; set; }
     private AudioSource _sound;
     private AudioClip clip;
@@ -15,6 +18,7 @@ public class SoundManager : MonoBehaviour
     {
         SoundLibrary = new Dictionary<string, AudioClip>();
         _sound = GetComponent<AudioSource>();
+        AudioSources = FindObjectsOfType<AudioSource>(true).ToList();
     }
 
     // Update is called once per frame
@@ -22,11 +26,57 @@ public class SoundManager : MonoBehaviour
     {
 
     }
+    public void RemoveAudioSource(AudioSource audiosource) 
+    {
+        AudioSources.Remove(audiosource);
+    }
+    public void AddAudioSource(AudioSource audiosource) 
+    {
+        AudioSources.Add(audiosource);
+    }
     public SoundManager SetAudioClips(List<AudioClip> audioClips)
     {
         AudioClips = audioClips;
         AudioClips.ForEach(x => SoundLibrary.Add(x.name, x));
         return this;
+    }
+    public void PauseUnpauseAllSounds(bool pause) 
+    {
+        StartCoroutine(WaitToAudioSourcesEnabled(pause));
+    }
+
+    IEnumerator WaitToAudioSourcesEnabled(bool pause) 
+    {
+        yield return new WaitUntil(() => AudioSources.Any(x => x.enabled));
+        if (pause)
+        {
+            PauseAllSounds();
+        }
+        else 
+        {
+            UnpauseAllSounds();
+        }
+    }
+    public void UnpauseAllSounds() 
+    {
+        AudioSources.ForEach(source => 
+        {
+            if (!source.isPlaying)
+            {
+                source.UnPause();
+            }
+        });
+        
+    }
+    public void PauseAllSounds()
+    {
+        AudioSources.ForEach(source =>
+        {
+            if (source.isPlaying)
+            {
+                source.Pause();
+            }
+        });
     }
 
     public void PlaySoundOnce(string clipName, float volume, bool loop)

@@ -360,13 +360,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2284278942931050125}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 50.16425, z: 12.873878}
+  m_LocalRotation: {x: 0.8269761, y: 0.03703513, z: -0.054855183, w: 0.55832773}
+  m_LocalPosition: {x: 0, y: 42, z: 53}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8871488510914427325}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 111.95, y: 7.59, z: 0}
 --- !u!108 &4468991970240661101
 Light:
   m_ObjectHideFlags: 0
@@ -379,9 +379,9 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.25
-  m_Range: 1.94
-  m_SpotAngle: 83
+  m_Intensity: 1.13
+  m_Range: 1.5
+  m_SpotAngle: 67
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
@@ -1505,6 +1505,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _myAnimator: {fileID: 0}
   _as: {fileID: 0}
+  IsPlayedOnce: 0
 --- !u!114 &5583975485395833066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1519,14 +1520,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _runningSpeed: 3
   _walkingSpeed: 1.5
+  _isHeld: 0
+  MyOwner: {fileID: 0}
+  StartingPosition: {x: 0, y: 0, z: 0}
+  Renderers: []
   _navMeshAgent: {fileID: 0}
+  _catCapturedUI: {fileID: 0}
   _myPos:
   - {x: -14.35, y: 0, z: 11.627}
   - {x: -10.34, y: 0, z: 20.83}
   - {x: 2.735, y: 0, z: 15.407}
   Path: []
   PathToBasement: []
+  PathToShed: []
+  PathToKitchen: []
   canMove: 0
+  IsGoingBack: 0
+  IsInShed: 0
+  IsInKitchen: 0
 --- !u!195 &8586256982158449799
 NavMeshAgent:
   m_ObjectHideFlags: 0

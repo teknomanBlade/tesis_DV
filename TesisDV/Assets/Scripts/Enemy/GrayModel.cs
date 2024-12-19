@@ -67,6 +67,7 @@ public class GrayModel : Enemy
     }
     public void BackToPool()
     {
+        GameVars.Values.soundManager.RemoveAudioSource(_as);
         GameVars.Values.WaveManager.GrayCommonPool.ReturnObject(this);
     }
 }

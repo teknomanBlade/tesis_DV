@@ -91,6 +91,6 @@ public class PathfindingState : IState
             Debug.Log("End at " + endingPoint);
         //}
 
-        myPath = _pf.ConstructPathThetaStar(endingPoint, startingPoint);
+        myPath = _pf.ConstructPathAStar(endingPoint, startingPoint);
     }
 }

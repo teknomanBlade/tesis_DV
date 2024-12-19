@@ -53,7 +53,7 @@
     <UnityVersion>2020.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\House\WardrobeDoor.cs" />
@@ -156,6 +156,7 @@
     <Compile Include="Assets\Scripts\PathFinding\Pathfinding.cs" />
     <Compile Include="Assets\Scripts\Cinematics\UFOCinematicYouWin.cs" />
     <Compile Include="Assets\Scripts\House\AuxDoor.cs" />
+    <Compile Include="Assets\Scripts\Traps\MicrowaveForceFieldGenerator\MicrowaveForceFieldGeneratorConstructAnim.cs" />
     <Compile Include="Assets\Models\Materials\PostProcess\TankHitFistDamagePlayerPPSSettings.cs" />
     <Compile Include="Assets\Scripts\CatDistanceBar.cs" />
     <Compile Include="Assets\Scripts\Cinematics\UFOCinematicYouLose.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Assets\Scripts\OutLineItem.cs" />
     <Compile Include="Assets\Scripts\TrapSlot.cs" />
     <Compile Include="Assets\Scripts\Enemy\TankGray\TankGrayController.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\ITrapBuildable.cs" />
     <Compile Include="Assets\Scripts\MiniMap\MiniMapCamera.cs" />
     <Compile Include="Assets\Scripts\Cinematics\CinematicManager.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IScreen.cs" />
@@ -200,6 +202,7 @@
     <Compile Include="Assets\Scripts\FSM\States\Cat\KitchenState.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IMovable.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IHittableObservable.cs" />
+    <Compile Include="Assets\Scripts\Traps\ElectricTeslaTrap\ElectricTeslaTrapConstructAnim.cs" />
     <Compile Include="Assets\PickColor.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\TallGrayEscapeState.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IHittableObserver.cs" />
@@ -249,9 +252,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\AttackForceFieldState.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\TakenState.cs" />
-    <Compile Include="Assets\Scripts\Interfaces\ITrapBuildable.cs" />
-    <Compile Include="Assets\Scripts\Traps\ElectricTeslaTrap\ElectricTeslaTrapConstructAnim.cs" />
-    <Compile Include="Assets\Scripts\Traps\MicrowaveForceFieldGenerator\MicrowaveForceFieldGeneratorConstructAnim.cs" />
+    <Compile Include="Assets\Scripts\WeaponSlotHotBar.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />

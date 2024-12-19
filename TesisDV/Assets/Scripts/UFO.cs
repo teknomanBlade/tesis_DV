@@ -54,7 +54,7 @@ public class UFO : MonoBehaviour
         _animUFO = GetComponent<Animator>();
         _animUFO.enabled = true;
         rotationFinal = Quaternion.Euler(-90f, 0f, 0f);
-        _audioSource = GetComponent<AudioSource>();
+        
         _lm = GameObject.Find("GameManagement").GetComponent<LevelManager>();
         _lm.OnRoundEnd += RoundEnd;
         _lm.AddUFO(this);
@@ -67,6 +67,8 @@ public class UFO : MonoBehaviour
 
     void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
+        GameVars.Values.soundManager.AddAudioSource(_audioSource);
         GameVars.Values.soundManager.PlaySound(_audioSource, "UFOBuzz", sliderSoundVolume, true, 1f);
     }
 
@@ -208,6 +210,7 @@ public class UFO : MonoBehaviour
     }
     public void DestroyAndSetFalseAnimFinished() 
     {
+        GameVars.Values.soundManager.RemoveAudioSource(_audioSource);
         GameVars.Values.IsUFOExitPlanetAnimFinished = false;
         Destroy(this.gameObject);
     }

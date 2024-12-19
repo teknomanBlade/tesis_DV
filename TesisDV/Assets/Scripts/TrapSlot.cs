@@ -25,14 +25,16 @@ public class TrapSlot : MonoBehaviour
     private float fadeDelay = 1.1f;
     private bool isFaded;
     private Vector3 auxVector;
-    public Image SlotImage { get; set; }
+    public Image SlotTrapImage;
+    public Image SlotImage;
     [SerializeField]
     private Animator _animKeySlot;
 
     void Awake()
     {
         _slotCanvasGroup = GetComponent<CanvasGroup>();
-        SlotImage = transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        SlotImage = GetComponent<Image>();
+        SlotTrapImage = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         _animKeySlot = transform.GetChild(1).GetComponent<Animator>();
     }
 
@@ -40,27 +42,27 @@ public class TrapSlot : MonoBehaviour
     {
         if (GameVars.Values.HasBoughtSlowingTrap && _trapID == 2)
         {
-            SlotImage.sprite = _trapSpriteEnabled;
+            SlotTrapImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtSlowingTrap = false;
         }
         if (GameVars.Values.HasBoughtMicrowaveTrap && _trapID == 3)
         {
-            SlotImage.sprite = _trapSpriteEnabled;
+            SlotTrapImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtMicrowaveTrap = false;
         }
         if (GameVars.Values.HasBoughtElectricTrap && _trapID == 4)
         {
-            SlotImage.sprite = _trapSpriteEnabled;
+            SlotTrapImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtElectricTrap = false;
         }
         if (GameVars.Values.HasBoughtPaintballMinigunTrap && _trapID == 5)
         {
-            SlotImage.sprite = _trapSpriteEnabled;
+            SlotTrapImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtPaintballMinigunTrap = false;
         }
         if (GameVars.Values.HasBoughtTeslaCoilGenerator && _trapID == 6)
         {
-            SlotImage.sprite = _trapSpriteEnabled;
+            SlotTrapImage.sprite = _trapSpriteEnabled;
             GameVars.Values.HasBoughtTeslaCoilGenerator = false;
         }
     }
@@ -75,14 +77,15 @@ public class TrapSlot : MonoBehaviour
     public void ActivateImage()
     {
         PlayKeySlotAnimHighlight();
-        SlotImage.enabled = true;
+        SlotImage.color = Color.white;
+        SlotTrapImage.enabled = true;
     }
 
     public void DeactivateImage()
     {
-        if (SlotImage == null) return;
-
-        SlotImage.enabled = false;
+        if (SlotTrapImage == null) return;
+        SlotImage.color = Color.gray;
+        SlotTrapImage.enabled = false;
     }
 
     public void PlayKeySlotAnimHighlight() 

@@ -35,6 +35,7 @@ public class ScreenPause : MonoBehaviour, IScreen
     }
     public void Activate()
     {
+        GameVars.Values.soundManager.PauseUnpauseAllSounds(true);
         foreach(var button in _buttons)
         {
             button.interactable = true;
@@ -43,7 +44,8 @@ public class ScreenPause : MonoBehaviour, IScreen
 
     public void Deactivate()
     {
-        foreach(var button in _buttons)
+        
+        foreach (var button in _buttons)
         {
             button.interactable = false;
         }

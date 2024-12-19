@@ -567,7 +567,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     {
         _as = GetComponent<AudioSource>();
         RoundEnd();
-        GameVars.Values.soundManager.PlaySound(_as, "MusicPreWave", 0.1f, true, 0f);
+        GameVars.Values.soundManager.PlaySound("MusicPreWave", 0.1f, true);
         InstantiateUFOIndicators();
     }
 
@@ -620,7 +620,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
 
         DisableUFOLR(); 
         SpawnWave();
-        GameVars.Values.soundManager.PlaySound(_as, "SFX_UFOSpookyMusicWaves", 0.12f, true,0f);
+        GameVars.Values.soundManager.PlaySound("SFX_UFOSpookyMusicWaves", 0.12f, true);
         TimeWaves = _timeBetweenWaves;
     }
 

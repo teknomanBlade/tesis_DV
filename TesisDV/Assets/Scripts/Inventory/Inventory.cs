@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -10,6 +11,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] List<InventoryItem> items;
     [SerializeField] Slot[] itemSlots;
     [SerializeField] WeaponSlot[] weaponSlots;
+    [SerializeField] WeaponSlotHotBar weaponSlotsHotBar;
     private int _currentWeaponIndex = 0;
     [SerializeField] private CanvasGroup _myCanvasGroup;   
     [SerializeField] private float _wittsAmount;    
@@ -23,7 +25,8 @@ public class Inventory : MonoBehaviour
     {
         _myCanvasGroup = GetComponent<CanvasGroup>();
         isFaded = true;
-        _trapHotBar = GameObject.Find("InventoryBar").GetComponent<TrapHotBar>(); 
+        _trapHotBar = GameObject.Find("InventoryBar").GetComponent<TrapHotBar>();
+        weaponSlotsHotBar = FindObjectsOfType<WeaponSlotHotBar>(true).FirstOrDefault();
     }
 
     void Start()
@@ -54,6 +57,7 @@ public class Inventory : MonoBehaviour
                     item.Interact();   
 
                     weaponSlots[i].SetItem(item);
+                    weaponSlotsHotBar.SetItem(item);
 
                     _trapHotBar.CheckRecipeRequirements(this);
                     return;

@@ -67,6 +67,7 @@ public class TankGrayModel : Enemy
     }
     public void BackToPool() //Se llama desde la animacion.
     {
+        GameVars.Values.soundManager.RemoveAudioSource(_as);
         GameVars.Values.WaveManager.TankGrayPool.ReturnObject(this);
     }
 }

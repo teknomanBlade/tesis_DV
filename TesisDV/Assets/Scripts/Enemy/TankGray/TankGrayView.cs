@@ -36,6 +36,7 @@ public class TankGrayView : MonoBehaviour
         _as = GetComponent<AudioSource>();
         skinned = GetComponentInChildren<SkinnedMeshRenderer>();
         _myAnimator = GetComponent<Animator>();
+        GameVars.Values.soundManager.AddAudioSource(_as);
     }
 
     public void EndSpawnAnim()

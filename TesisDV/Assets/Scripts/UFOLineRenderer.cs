@@ -55,7 +55,7 @@ public class UFOLineRenderer : MonoBehaviour
         yield return new WaitUntil(() => _cat.StartingPosition != Vector3.zero);
         endingPoint = PathfindingManager.Instance.GetClosestNode(_cat.StartingPosition);
 
-        myPath = _pf.ConstructPathThetaStar(startingPoint, endingPoint);
+        myPath = _pf.ConstructPathAStar(startingPoint, endingPoint);
         DrawLineRenderer(myPath.AsEnumerable().Reverse().ToList());
     }
 }

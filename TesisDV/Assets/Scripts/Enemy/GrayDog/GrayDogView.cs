@@ -25,6 +25,7 @@ public class GrayDogView : MonoBehaviour
     void Start()
     {
         _as = GetComponent<AudioSource>();
+        GameVars.Values.soundManager.AddAudioSource(_as);
         _myAnimator = GetComponent<Animator>();
         _myAnimator.SetBool("IsSpawning", true);
         _witGainEffect.gameObject.SetActive(false);

@@ -35,7 +35,6 @@ public class Door : Item
         float time = 0;
         float startValue = _valueToChange;
         
-        //if (IsFront) _anim.SetTrigger("TriggerFront"); else _anim.SetTrigger("TriggerBack");
         if (IsFront)
         {
             while (time < duration)
@@ -58,8 +57,6 @@ public class Door : Item
                 yield return null;
             }
         }
-        //_anim.ResetTrigger("TriggerFront"); 
-        //_anim.ResetTrigger("TriggerBack");
         if(!IsOpened)
             doorTriggers.Select(x => x).ToList().ForEach(x => x.gameObject.SetActive(true));
 
@@ -70,19 +67,6 @@ public class Door : Item
     {
         StopAllCoroutines();
         doorTriggers.Select(x => x).ToList().ForEach(x => x.gameObject.SetActive(false));
-
-        if (IsEnemyInteracting) 
-        {
-            if (transform.CompareTag("Tutorial") && IsEnemyInteracting)
-            {
-                GameVars.Values.PassedTutorial = IsEnemyInteracting;
-                Debug.Log("PASSED TUTORIAL ENEMY INTERACTING = " + IsEnemyInteracting);
-            }
-            if(_animParent != null)
-                _animParent.SetBool("IsDropped", true);
-            
-            _collider.enabled = false;
-        }
 
         if (IsLocked)
         {
@@ -96,26 +80,40 @@ public class Door : Item
             return;
         }
 
-        if (!IsEnemyInteracting && !IsOpened)
+        if (IsEnemyInteracting)
         {
-            IsOpened = true;
-            if (transform.CompareTag("Tutorial") && IsOpened)
+            if (transform.CompareTag("Tutorial") && IsEnemyInteracting)
             {
-                GameVars.Values.PassedTutorial = IsOpened;
-                GameVars.Values.IsTutorial = IsOpened;
+                GameVars.Values.PassedTutorial = IsEnemyInteracting;
+                Debug.Log("PASSED TUTORIAL ENEMY INTERACTING = " + IsEnemyInteracting);
             }
-            GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
-            //_navMeshObstacle.enabled = false;
-            StartCoroutine(LerpDoorAnim(1f, 2f));
+            if (_animParent != null)
+                _animParent.SetBool("IsDropped", true);
+            GameVars.Values.soundManager.PlaySoundAtPoint("SFX_DoorSlammed", transform.position, 0.4f);
+            _collider.enabled = false;
         }
-        else
+        else 
         {
-            IsOpened = false;
-            GameVars.Values.soundManager.PlaySoundAtPoint("CloseDoor", transform.position, 0.4f);
-            //_navMeshObstacle.enabled = true;
-            StartCoroutine(LerpDoorAnim(0f, 2f));
+            if (!IsOpened)
+            {
+                IsOpened = true;
+                if (transform.CompareTag("Tutorial") && IsOpened)
+                {
+                    GameVars.Values.PassedTutorial = IsOpened;
+                    GameVars.Values.IsTutorial = IsOpened;
+                }
+                GameVars.Values.soundManager.PlaySoundAtPoint("OpenDoor", transform.position, 0.4f);
+                //_navMeshObstacle.enabled = false;
+                StartCoroutine(LerpDoorAnim(1f, 2f));
+            }
+            else
+            {
+                IsOpened = false;
+                GameVars.Values.soundManager.PlaySoundAtPoint("CloseDoor", transform.position, 0.4f);
+                //_navMeshObstacle.enabled = true;
+                StartCoroutine(LerpDoorAnim(0f, 2f));
+            }
         }
-
     }
     public void EnemyInteractionCheck(bool enabled) 
     {
