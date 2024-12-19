@@ -10,6 +10,10 @@ public class WeaponSlot : MonoBehaviour
 {
     [SerializeField] private InventoryItem _item;
     [SerializeField] private Image _image;
+    public InventoryItem Item { 
+        set { _item = value; }
+        get { return _item; } 
+    }
     [SerializeField] private GameObject _myPrefab;
     [SerializeField] private int _itemID;
     [SerializeField] private CanvasGroup _slotCanvasGroup;

@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using static CraftingRecipe;
 
 public class Inventory : MonoBehaviour
 {
@@ -13,8 +15,8 @@ public class Inventory : MonoBehaviour
     [SerializeField] WeaponSlot[] weaponSlots;
     [SerializeField] WeaponSlotHotBar weaponSlotsHotBar;
     private int _currentWeaponIndex = 0;
-    [SerializeField] private CanvasGroup _myCanvasGroup;   
-    [SerializeField] private float _wittsAmount;    
+    [SerializeField] private CanvasGroup _myCanvasGroup;
+    [SerializeField] private float _wittsAmount;
     private float fadeDelay = 1.1f;
 
     private bool isFaded;
@@ -39,7 +41,7 @@ public class Inventory : MonoBehaviour
         _wittsAmount += wittsAmount;
         OnWittsAmountChanged(_wittsAmount);
     }
-    
+
     public void AddTrapItem(int slotIndex)
     {
         itemSlots[slotIndex].ActivateTrapKey();
@@ -52,9 +54,9 @@ public class Inventory : MonoBehaviour
         {
             for (int i = 0; i < weaponSlots.Length; i++)
             {
-                if(weaponSlots[i].IsFree())
+                if (weaponSlots[i].IsFree())
                 {
-                    item.Interact();   
+                    item.Interact();
 
                     weaponSlots[i].SetItem(item);
                     weaponSlotsHotBar.SetItem(item);
@@ -72,9 +74,9 @@ public class Inventory : MonoBehaviour
 
             for (int i = 0; i < itemSlots.Length; i++)
             {
-                if(itemSlots[i].HasItemID(item.myCraftingID))
+                if (itemSlots[i].HasItemID(item.myCraftingID))
                 {
-                    item.Interact();   
+                    item.Interact();
                     //itemSlots[i].Item = item;
                     itemSlots[i].SetItem(item);
                     //USAR EVENTO
@@ -82,13 +84,13 @@ public class Inventory : MonoBehaviour
                     return;
                 }
             }
-            
-            
+
+
             for (int i = 0; i < itemSlots.Length; i++)
             {
-                if(itemSlots[i].IsFree())
+                if (itemSlots[i].IsFree())
                 {
-                    item.Interact();   
+                    item.Interact();
                     //itemSlots[i].Item = item;
                     itemSlots[i].SetItem(item);
                     //USAR EVENTO
@@ -97,37 +99,37 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
-        
-    } 
+
+    }
 
     public void AddItemID(InventoryItem item, int itemID)
     {
-       for (int i = 0; i < itemSlots.Length; i++)
-       {
-           if(itemSlots[i].IsFree())
-           {
-               item.Interact();
-               
-               //itemSlots[i].Item = item;
-               itemSlots[i].SetItem(item);
-               itemSlots[i].SetItemID(itemID);
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if (itemSlots[i].IsFree())
+            {
+                item.Interact();
 
-               return;
-           }
-       }
+                //itemSlots[i].Item = item;
+                itemSlots[i].SetItem(item);
+                itemSlots[i].SetItemID(itemID);
+
+                return;
+            }
+        }
     }
 
     public void DropItem()
     {
         for (int i = 0; i < itemSlots.Length; i++)
         {
-            if(!itemSlots[i].IsFree())
-           { 
-               itemSlots[i].DropItem();
-               //itemSlots[i].RemoveItem(); El remove va por lado del Slot.
-               
-               return;
-           }
+            if (!itemSlots[i].IsFree())
+            {
+                itemSlots[i].DropItem();
+                //itemSlots[i].RemoveItem(); El remove va por lado del Slot.
+
+                return;
+            }
         }
     }
 
@@ -170,18 +172,18 @@ public class Inventory : MonoBehaviour
 
         for (int i = 0; i < itemSlots.Length; i++)
         {
-            if(itemSlots[i].HasItemID(itemID))
+            if (itemSlots[i].HasItemID(itemID))
             {
                 //itemSlots[i].Item = null;
                 itemSlots[i].RemoveItem();
                 itemAmount++;
-                if(itemAmount >= amount)
+                if (itemAmount >= amount)
                 {
                     _trapHotBar.CheckRecipeRequirements(this);
                     break;
                 }
             }
-        }  
+        }
     }
 
     public void RemoveWitts(int wittsNeeded)
@@ -194,7 +196,7 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < itemSlots.Length; i++)
         {
-            if(itemSlots[i].IsFree()) //itemSlots[i].Item = null)
+            if (itemSlots[i].IsFree()) //itemSlots[i].Item = null)
             {
                 return false;
             }
@@ -206,7 +208,7 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < itemSlots.Length; i++)
         {
-            if(itemSlots[i].HasItem(item))
+            if (itemSlots[i].HasItem(item))
             {
                 return true;
             }
@@ -221,10 +223,10 @@ public class Inventory : MonoBehaviour
 
         for (int i = 0; i < itemSlots.Length; i++)
         {
-            if(itemSlots[i].HasItemID(itemID))
+            if (itemSlots[i].HasItemID(itemID))
             {
-                itemAmount ++;
-                if(itemAmount >= amount)
+                itemAmount++;
+                if (itemAmount >= amount)
                 {
                     return true;
                 }
@@ -232,10 +234,10 @@ public class Inventory : MonoBehaviour
         }
         for (int i = 0; i < weaponSlots.Length; i++)
         {
-            if(weaponSlots[i].HasItemID(itemID))
+            if (weaponSlots[i].HasItemID(itemID))
             {
-                itemAmount ++;
-                if(itemAmount >= amount)
+                itemAmount++;
+                if (itemAmount >= amount)
                 {
                     return true;
                 }
@@ -244,7 +246,17 @@ public class Inventory : MonoBehaviour
 
         return false;
     }
-
+    public InventoryItem GetWeaponItem(int itemID) 
+    {
+        for (int i = 0; i < weaponSlots.Length; i++)
+        {
+            if (weaponSlots[i].HasItemID(itemID))
+            {
+                return weaponSlots[i].Item;
+            }
+        }
+        return default;
+    }
     public bool HasEnoughWitts (int wittsNeeded)
     {
         if (_wittsAmount >= wittsNeeded)

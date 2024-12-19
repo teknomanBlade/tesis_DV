@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
@@ -15,6 +16,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     #region Events
     public delegate void OnNewRacketGrabbedDelegate();
     public event OnNewRacketGrabbedDelegate OnNewRacketGrabbed;
+    public delegate void OnWeaponChangedDelegate(int weaponID);
+    public event OnWeaponChangedDelegate OnWeaponChanged;
 
     public delegate void OnPlayerInteractDelegate(Transform player);
     public event OnPlayerInteractDelegate OnPlayerInteract;
@@ -121,6 +124,9 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public bool IsCrafting = false;
     #endregion
 
+    #region Weapons
+    private Dictionary<int, Action> weaponActions;
+    #endregion
     //Gizmos
     public float gizmoScale = 1f;
     public LayerMask itemMask;
@@ -176,7 +182,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void Start()
     {
-
+        weaponActions = new Dictionary<int, System.Action> {
+            { 3, () => SetWeapon(_weaponGORacket, typeof(Racket)) },
+            { 11, () => SetWeapon(_weaponGOBaseballBat, typeof(BaseballBat)) }, 
+            { 14, SetRemoteControlWeapon } };
     }
 
     private void Update()
@@ -1534,7 +1543,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void SwitchWeapon()
     {
-        int weaponID = _inventory.GetNextWeapon();
+        /*int weaponID = _inventory.GetNextWeapon();
         if(weaponID != 0)
         {
 
@@ -1564,7 +1573,38 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
                 _weapon = null;
                 _weaponGORemoteControl.SetActive(true);
             }
+        }*/
+        int weaponID = _inventory.GetNextWeapon();
+        OnWeaponChanged(weaponID);
+        if (weaponID != 0) 
+        { 
+            if (weaponActions.TryGetValue(weaponID, out Action action)) 
+            { 
+               action.Invoke(); 
+            } 
+            else 
+            { 
+               Debug.LogWarning("Weapon ID no reconocido: " + weaponID); 
+            }
         }
+    }
+    private void SetWeapon(GameObject weaponGO, Type weaponType)
+    {
+        Debug.Log("Set Weapon: " + weaponGO.name);
+        _currentWeaponManager.SetActive(false);
+        _currentWeaponManager = weaponGO;
+        _weapon = (Melee)weaponGO.GetComponent(weaponType);
+        weaponGO.SetActive(true);
+    }
+
+    private void SetRemoteControlWeapon()
+    {
+        Debug.Log("Set RemoteControl");
+        _currentWeaponManager.SetActive(false);
+        _currentWeaponManager = _weaponGORemoteControl;
+        _remoteControl = _weaponGORemoteControl.GetComponent<RemoteControl>();
+        _weapon = null;
+        _weaponGORemoteControl.SetActive(true);
     }
     private void OnSwitchLargeContainer()
     {
@@ -1787,17 +1827,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
             }
         }
     }
-
-    //CAMBIO PARA MVC
-    //No usamos observer para recibir daño, tomamos el daño directamente a traves de la funcion Damage().
     
-    //public void OnNotifyPlayerDamage(string message)
-    //{
-        //if (message.Equals("DamagePlayer"))
-        //{
-            //Damage();
-        //}
-    //}
 
     public void OnNotifyDoorGrayInteract(string message)
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,11 +6,22 @@ using UnityEngine;
 public class WeaponSlotHotBar : WeaponSlot
 {
     public Animator Animator;
+    public Player Player;
+    public Inventory Inventory;
     // Start is called before the first frame update
     void Start()
     {
         Animator = GetComponent<Animator>();
-        HideWeaponSlotHotBar(true);
+        Player = GameVars.Values.Player;
+        Player.OnWeaponChanged += OnPlayerWeaponChanged;
+        Inventory = GameVars.Values.Inventory;
+        
+    }
+
+    private void OnPlayerWeaponChanged(int weaponID)
+    {
+        var item = Inventory.GetWeaponItem(weaponID);
+        SetItem(item);
     }
 
     // Update is called once per frame
