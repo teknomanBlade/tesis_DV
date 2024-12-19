@@ -7,17 +7,18 @@ using UnityEngine.UI;
 
 public class IntroUFO : MonoBehaviour
 {
-    [SerializeField] private AudioSource _as;
     [SerializeField] private bool _isMoving = false;
     public Vector3 startPos;
     public Vector3 finalPos;
-
+    public GameObject UFOBuzzKeeper;
     void Start()
     {
         _isMoving = true;
         transform.position = startPos;
+        UFOBuzzKeeper = FindObjectsOfType<GameObject>().Where(x => x.name.Equals("UFOSoundBuzzKeeper")).FirstOrDefault();
+        UFOBuzzKeeper.transform.parent = transform;
+        UFOBuzzKeeper.GetComponent<AudioSource>().Play();
         Debug.Log(transform.position + " " + finalPos);
-        _as.Play();
     }
 
     private void Update()
@@ -38,7 +39,8 @@ public class IntroUFO : MonoBehaviour
 
         if (Vector3.Distance(transform.position, finalPos) < 0.1f)
         {
-            _isMoving = false; 
+            _isMoving = false;
+            UFOBuzzKeeper.transform.parent = null;
             Destroy(gameObject);
         }
     }

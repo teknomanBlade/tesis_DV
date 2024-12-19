@@ -53,7 +53,7 @@
     <UnityVersion>2020.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\House\WardrobeDoor.cs" />
@@ -124,6 +124,7 @@
     <Compile Include="Assets\Scripts\Cinematics\UFOBeamCinematicYouLose.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IDoorGrayInteractObserver.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Intro\UFOSender.cs" />
     <Compile Include="Assets\Scripts\Traps\FERNPaintballMinigun\FERNPaintballMinigunConstructing.cs" />
     <Compile Include="Assets\Scripts\Enemy\GrayModel.cs" />
     <Compile Include="Assets\CameraManager.cs" />
@@ -255,7 +256,6 @@
     <Compile Include="Assets\Scripts\Interfaces\IRoundChangeObservable.cs" />
     <Compile Include="Assets\Scripts\FSM\States\TallGray\AttackForceFieldState.cs" />
     <Compile Include="Assets\Scripts\FSM\States\Cat\TakenState.cs" />
-    <Compile Include="Assets\Scripts\Intro\UFOSender.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
