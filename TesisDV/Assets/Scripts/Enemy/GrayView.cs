@@ -141,6 +141,7 @@ public class GrayView : MonoBehaviour
         GameVars.Values.soundManager.PlaySound(_as, "CoinSFX", 0.45f, false, 1f);
         if (!gameObject.CompareTag("Tutorial")) 
         {
+            GameVars.Values.PassedTutorial = true;
             GameVars.Values.WaveManager.SubstractEnemyFromAmountInScene();
         }
     }

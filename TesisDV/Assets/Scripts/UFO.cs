@@ -212,6 +212,7 @@ public class UFO : MonoBehaviour
     {
         GameVars.Values.soundManager.RemoveAudioSource(_audioSource);
         GameVars.Values.IsUFOExitPlanetAnimFinished = false;
+        //GameVars.Values.WaveManager.UFOPool.ReturnObject(this);
         Destroy(this.gameObject);
     }
 

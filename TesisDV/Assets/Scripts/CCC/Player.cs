@@ -965,9 +965,10 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     public void CanStartNextWave(int round)
     {
-        if (!GameVars.Values.IsTutorial)
+        if (!GameVars.Values.PassedTutorial)
         {
             _canStartNextWave = true;
+            StartCoroutine(WaitToPassedTutorial());
         }
         else
         {
@@ -982,6 +983,16 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public void CallWaitToExitPlanetFinished()
     {
         StartCoroutine(WaitToConditionMet());
+    }
+    IEnumerator WaitToPassedTutorial() 
+    {
+        yield return new WaitUntil(() => Input.GetKeyDown(GameVars.Values.startWaveKey));
+        _canStartNextWave = false;
+        yield return new WaitUntil(() => GameVars.Values.PassedTutorial);
+        if (!GameVars.Values.LevelManager.InRound) 
+        {
+            _canStartNextWave = true;
+        }
     }
     IEnumerator WaitToConditionMet()
     {

@@ -50,7 +50,7 @@ public class LivingState : IState
                     _cat._navMeshAgent.enabled = true;
                     _cat.IsGoingBack = false;
                     GameVars.Values.IsCatBasementStateFinished = true;
-                    GameVars.Values.IsUFOExitPlanetAnimFinished = true;
+                    //GameVars.Values.IsUFOExitPlanetAnimFinished = true;
                     _cat.CallLivingStateFinished();
                     _fsm.ChangeCatState(CatStatesEnum.IdleState);
                 }

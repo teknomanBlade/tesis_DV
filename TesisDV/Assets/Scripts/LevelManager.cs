@@ -27,11 +27,16 @@ public class LevelManager : MonoBehaviour
 
     public delegate void LevelDelegate();
     public bool playing = true;
-    public bool inRound;
+    [SerializeField]
+    private bool _inRound;
     public bool InRound {
         get
         {
-            return AmountEnemiesInScene > 0;
+            return _inRound;
+        }
+        set 
+        {
+            _inRound = value;
         }
     }
     [SerializeField]
