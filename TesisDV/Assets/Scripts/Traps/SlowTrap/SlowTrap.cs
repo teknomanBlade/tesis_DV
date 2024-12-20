@@ -70,8 +70,8 @@ public class SlowTrap : MonoBehaviour
 
         if (enemy)
         {
-            TenPercentDamage = enemy.HP * 0.01f;
-            TwentyPercentDamage = enemy.HP * 0.02f;
+            TenPercentDamage = enemy.HP * 0.001f;
+            TwentyPercentDamage = enemy.HP * 0.002f;
             if (_canActivate1aUpgrade)
             {
                 if (enemy.enemyType == EnemyType.Dog)

@@ -101,7 +101,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _inventory = _craftingScreen.GetComponentInChildren<Inventory>();
         _coefMelee = 3f;
         _coefTank = 5f;
-        _damageBoostCoef = 2f;
+        _damageBoostCoef = 1.5f;
         _staticChargeSlowAmount = 1.2f;
         GameVars.Values.IsAllSlotsDisabled();
         _animator = GetComponent<Animator>();
@@ -564,7 +564,7 @@ public class BaseballLauncher : Trap, IMovable, IInteractable
         _canActivate1aUpgrade = false;
         StaticBallsUpgradeEnabled = _canActivate1bUpgrade;
         //Aplicar beneficio del Upgrade
-        _damageBoostCoef = 3f;
+        _damageBoostCoef = 2.5f;
         _damageAmount = _damageBoostCoef;
     }
 
