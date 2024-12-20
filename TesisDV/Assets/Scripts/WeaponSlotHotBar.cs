@@ -14,13 +14,21 @@ public class WeaponSlotHotBar : WeaponSlot
         Animator = GetComponent<Animator>();
         Player = GameVars.Values.Player;
         Player.OnWeaponChanged += OnPlayerWeaponChanged;
+        Player.OnWeaponDestroyed += OnPlayerWeaponDestroyed;
         Inventory = GameVars.Values.Inventory;
         
+    }
+    private void OnPlayerWeaponDestroyed()
+    {
+        RemoveItem();
+        Prefab = null;
     }
 
     private void OnPlayerWeaponChanged(int weaponID)
     {
         var item = Inventory.GetWeaponItem(weaponID);
+        if (item == null) return;
+
         SetItem(item);
     }
 

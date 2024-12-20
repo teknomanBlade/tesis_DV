@@ -22,7 +22,7 @@ public class LoadingScreen : MonoBehaviour
         Cam = GameObject.Find("Main Camera");
         volume = Cam.GetComponent<PostProcessVolume>();
         TimeCoroutine = 0.98f;
-        StartCoroutine(LoadNewScene(1));
+        StartCoroutine(LoadNewScene(5));
     }
 
     // Update is called once per frame
