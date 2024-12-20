@@ -1,5 +1,3 @@
-using System.Reflection;
-using System.Net.Mime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +7,30 @@ using System.Linq;
 public class WeaponSlot : MonoBehaviour
 {
     [SerializeField] private InventoryItem _item;
-    [SerializeField] private Image _image;
-    public InventoryItem Item { 
+    public InventoryItem Item
+    {
         set { _item = value; }
-        get { return _item; } 
+        get { return _item; }
     }
+    [SerializeField] private Image _image;
+    public Image Image
+    {
+        set { _image = value; }
+        get { return _image; }
+    }
+    
     [SerializeField] private GameObject _myPrefab;
+    public GameObject Prefab 
+    {
+        get { return _myPrefab; }
+        set { _myPrefab = value; }
+    }
     [SerializeField] private int _itemID;
+    public int ItemID
+    {
+        set { _itemID = value; }
+        get { return _itemID; }
+    }
     [SerializeField] private CanvasGroup _slotCanvasGroup;
     private CanvasGroup _keyCanvasGroup;
     private float fadeDelay = 1.1f;    

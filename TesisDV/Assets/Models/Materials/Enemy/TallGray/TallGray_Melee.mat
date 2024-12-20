@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: TallGray_Melee
   m_Shader: {fileID: 4800000, guid: 7ef6373f8c492764b97c41e07c35512a, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: _VERTEXPOSITION_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -67,6 +67,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _PrimaryTexture:
+        m_Texture: {fileID: 2800000, guid: 63cb144134004754e9a44257cd0ab5b5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -77,13 +81,17 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EdgeThickness: 0.3
+    - _ElectricityEffect: 0
     - _ElectricityEffect1: 0
     - _FirstPosition1: 0.07
     - _GlossMapScale: 1
     - _Glossiness: 3.16
     - _Glossiness1: 3.16
     - _GlossyReflections: 1
+    - _LerpLightDir: 0.177
     - _LerpStains: 0
+    - _Levels: 27.1
+    - _LightIntensity: 4.16
     - _LowerLimit: 2
     - _Max1: 6
     - _Metallic: 0
@@ -121,6 +129,7 @@ Material:
     - _RimColor1: {r: 1, g: 1, b: 1, a: 0}
     - _SpecularColor: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 0}
     - _SpecularColor1: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 0}
+    - _Tint: {r: 1, g: 1, b: 1, a: 0}
     - _TintColor: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
     - _TintColor1: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
   m_BuildTextureStacks: []

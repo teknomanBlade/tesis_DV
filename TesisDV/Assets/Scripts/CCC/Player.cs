@@ -18,6 +18,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     public event OnNewRacketGrabbedDelegate OnNewRacketGrabbed;
     public delegate void OnWeaponChangedDelegate(int weaponID);
     public event OnWeaponChangedDelegate OnWeaponChanged;
+    public delegate void OnWeaponDestroyedDelegate();
+    public event OnWeaponDestroyedDelegate OnWeaponDestroyed;
 
     public delegate void OnPlayerInteractDelegate(Transform player);
     public event OnPlayerInteractDelegate OnPlayerInteract;
@@ -1543,37 +1545,6 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
 
     private void SwitchWeapon()
     {
-        /*int weaponID = _inventory.GetNextWeapon();
-        if(weaponID != 0)
-        {
-
-            Debug.Log("entro aca");
-            if(weaponID == 11)
-            {
-                Debug.Log("entro a bat");
-                _currentWeaponManager.SetActive(false);
-                _currentWeaponManager = _weaponGOBaseballBat;
-                _weapon = _weaponGOBaseballBat.GetComponent<BaseballBat>();
-                _weaponGOBaseballBat.SetActive(true);
-            }
-            else if(weaponID == 3)
-            {
-                Debug.Log("entro a racket");
-                _currentWeaponManager.SetActive(false);
-                _currentWeaponManager = _weaponGORacket;
-                _weapon = _weaponGORacket.GetComponent<Racket>();
-                _weaponGORacket.SetActive(true);
-            }
-            else if(weaponID == 14)
-            {
-                Debug.Log("entro a remotecontrol");
-                _currentWeaponManager.SetActive(false);
-                _currentWeaponManager = _weaponGORemoteControl;
-                _remoteControl = _weaponGORemoteControl.GetComponent<RemoteControl>();
-                _weapon = null;
-                _weaponGORemoteControl.SetActive(true);
-            }
-        }*/
         int weaponID = _inventory.GetNextWeapon();
         OnWeaponChanged(weaponID);
         if (weaponID != 0) 
@@ -1841,7 +1812,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         _weaponIsActive = false;
         _inventory.RemoveItemByID(3);
-        if(_inventory.ContainsID(11,1))
+        OnWeaponDestroyed();
+        if (_inventory.ContainsID(11,1))
         {
             _weaponIsActive = true;
             _currentWeaponManager = _weaponGOBaseballBat;
@@ -1855,7 +1827,8 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         _weaponIsActive = false;
         _inventory.RemoveItemByID(11);
-        if(_inventory.ContainsID(3,1))
+        OnWeaponDestroyed();
+        if (_inventory.ContainsID(3,1))
         {
             _weaponIsActive = true;
             _currentWeaponManager = _weaponGORacket;

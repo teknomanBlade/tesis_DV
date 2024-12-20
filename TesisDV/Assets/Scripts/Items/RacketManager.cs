@@ -14,7 +14,7 @@ public class RacketManager : MonoBehaviour
 
     public void ResetValuesOnDestroyed()
     {
-        racket.DestroyAndRestoreValues();
+        //racket.DestroyAndRestoreValues();
     }
 
     public void RemoveParent()
