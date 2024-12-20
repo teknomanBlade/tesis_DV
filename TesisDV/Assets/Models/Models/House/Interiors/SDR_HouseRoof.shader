@@ -98,7 +98,7 @@ Shader "SDR_HouseRoof"
 
 		ENDCG
 		CGPROGRAM
-		#pragma surface surf StandardCustomLighting keepalpha fullforwardshadows 
+		#pragma surface surf StandardCustomLighting keepalpha fullforwardshadows noshadow 
 
 		ENDCG
 		Pass
@@ -171,7 +171,7 @@ Shader "SDR_HouseRoof"
 }
 /*ASEBEGIN
 Version=17800
-250;506;1195;464;2909.736;695.9412;3.425191;True;False
+-1913;179;1920;837;4151.368;1334.739;3.425191;True;True
 Node;AmplifyShaderEditor.WorldNormalVector;2;-3367.412,-167.2729;Inherit;False;False;1;0;FLOAT3;0,0,1;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
 Node;AmplifyShaderEditor.WorldSpaceLightDirHlpNode;3;-3367.412,-343.2729;Inherit;False;False;1;0;FLOAT;0;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
 Node;AmplifyShaderEditor.DotProductOpNode;4;-3079.412,-263.2729;Inherit;False;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT;0
@@ -185,8 +185,8 @@ Node;AmplifyShaderEditor.StepOpNode;11;-2151.465,-294.0994;Inherit;True;2;0;FLOA
 Node;AmplifyShaderEditor.RangedFloatNode;12;-1906.719,-13.99605;Inherit;False;Property;_SecondPositionIntensity1;SecondPositionIntensity;3;0;Create;True;0;0;False;0;0;-0.53;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleSubtractOpNode;13;-1618.768,75.54805;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.OneMinusNode;14;-1780.578,-316.9432;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SaturateNode;15;-1447.412,-199.2729;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SaturateNode;16;-1447.412,56.72705;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SaturateNode;15;-1447.412,-199.2729;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;17;-1255.412,-119.2729;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.LightAttenuation;18;-467.8427,463.9778;Inherit;False;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;19;-983.4121,312.7271;Inherit;False;Property;_ShadowIntensity1;ShadowIntensity;4;0;Create;True;0;0;False;0;0;0.73;0;0;0;1;FLOAT;0
@@ -200,7 +200,7 @@ Node;AmplifyShaderEditor.SimpleMultiplyOpNode;26;-151.0328,-191.515;Inherit;True
 Node;AmplifyShaderEditor.ColorNode;1;-228.9351,-710.3185;Inherit;False;Property;_Tint;Tint;0;0;Create;True;0;0;False;0;0,0,0,0;0.6886792,0.620461,0.5814791,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;28;178.184,-469.1539;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SaturateNode;29;485.3619,-315.2977;Inherit;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;929.4273,-146.5665;Float;False;True;-1;2;ASEMaterialInspector;0;0;CustomLighting;SDR_HouseRoof;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;Back;0;False;-1;0;False;-1;False;0;False;-1;0;False;-1;False;0;Opaque;0.5;True;True;0;False;Opaque;;Geometry;All;14;all;True;True;True;True;0;False;-1;False;0;False;-1;255;False;-1;255;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;2;15;10;25;False;0.5;True;0;0;False;-1;0;False;-1;0;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;;-1;-1;-1;-1;0;False;0;0;False;-1;-1;0;False;-1;0;0;0;False;0.1;False;-1;0;False;-1;15;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT3;0,0,0;False;4;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
+Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;929.4273,-146.5665;Float;False;True;-1;2;ASEMaterialInspector;0;0;CustomLighting;SDR_HouseRoof;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;Back;0;False;-1;0;False;-1;False;0;False;-1;0;False;-1;False;0;Opaque;0.5;True;True;0;False;Opaque;;Geometry;All;14;all;True;True;True;True;0;False;-1;False;0;False;-1;255;False;-1;255;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;2;15;10;25;False;0.5;False;0;0;False;-1;0;False;-1;0;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;;-1;-1;-1;-1;0;False;0;0;False;-1;-1;0;False;-1;0;0;0;False;0.1;False;-1;0;False;-1;15;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT3;0,0,0;False;4;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
 WireConnection;4;0;3;0
 WireConnection;4;1;2;0
 WireConnection;5;0;4;0
@@ -213,8 +213,8 @@ WireConnection;11;1;8;0
 WireConnection;13;0;10;0
 WireConnection;13;1;12;0
 WireConnection;14;0;11;0
-WireConnection;15;0;14;0
 WireConnection;16;0;13;0
+WireConnection;15;0;14;0
 WireConnection;17;0;15;0
 WireConnection;17;1;16;0
 WireConnection;20;0;17;0
@@ -232,4 +232,4 @@ WireConnection;28;1;26;0
 WireConnection;29;0;28;0
 WireConnection;0;13;29;0
 ASEEND*/
-//CHKSM=E2B7A7CA3FDC91AF8025F7948D29BCEA0E1E4D7E
+//CHKSM=4CEDB92A7CAA73CAF5CF317CA1AC32C9DA44CB1C

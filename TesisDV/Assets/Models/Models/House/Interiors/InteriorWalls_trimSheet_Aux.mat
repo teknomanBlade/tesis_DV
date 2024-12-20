@@ -7,20 +7,24 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: house-door-post-brown
-  m_Shader: {fileID: 4800000, guid: 9e4305ae8c588004eaef4d65cfbb2dcf, type: 3}
-  m_ShaderKeywords: _NORMALMAP
+  m_Name: InteriorWalls_trimSheet_Aux
+  m_Shader: {fileID: 4800000, guid: ed78c2e8582d5fc4f8bf2b889154216c, type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 83b0d18d63f9c154982168831157b7bc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 5861056640a48ee45b2048ef8b41dbc9, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -28,7 +32,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailMask:
-        m_Texture: {fileID: 2800000, guid: 42d4dd31e1c25384e821623a069bfe08, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailNormalMap:
@@ -40,11 +44,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: a58b0be0597253544b9924a6ef743794, type: 3}
+        m_Texture: {fileID: 2800000, guid: fba0c5d4708c9434698966e6fd18710a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: b3b60a3deed757045ba1e6b5499d31a8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 165124ea2a03dd24cbce4d6e4b80f5be, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -52,11 +56,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: 9a73cf940f6cdcb498842ea6830b9972, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SSSMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WoodBedsTexture:
+        m_Texture: {fileID: 2800000, guid: af6ade9429ff0fb4e85823683edfa5aa, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -64,46 +76,57 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _BoysRoomObjectsLevels1: 71
+    - _BoysRoomObjectsLightIntensity1: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _Distortion: 2.67
     - _DstBlend: 0
-    - _EdgeThickness: 0
-    - _FirstPosition1: 0.03
+    - _FirstPosition: 0.56
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0.27
     - _GlossyReflections: 1
-    - _LowerLimit: 5
-    - _Max1: 6
+    - _InternalColourPower: 4
+    - _Levels: 3.6
+    - _LightIntensity: 1.93
+    - _Max: 1.22
     - _Metallic: 0
-    - _Min1: 0.57
+    - _Min: 0.38
     - _Mode: 0
-    - _NoiseScrollspeed: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Rim: 0
-    - _RimAmount: 0
-    - _ScaleDissolveGray: 0.4301261
-    - _SecondPosition1: 0.02
-    - _SecondPositionIntensity1: 0.24
-    - _ShadowIntensity1: -0.53
+    - _PointLightPunchthrough: 1
+    - _Rim: 0.212
+    - _RimAmount: 1
+    - _SSSMultiplier: 1
+    - _SSSPower: 1
+    - _SSSScale: 1
+    - _SecondPosition: -1.02
+    - _SecondPositionIntensity: 0.4
+    - _ShadowIntensity: 1.2
+    - _ShadowStrength: 1
+    - _ShadowStrength1: 1
+    - _Shininess: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _SubsurfaceDistortion: 0.5
     - _UVSec: 0
-    - _UpperLimit: -5
-    - _VertexPosition: 1
+    - _Width: 0.01
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _AmbientColor: {r: 0.990566, g: 0.990566, b: 0.990566, a: 0}
+    - _AmbientColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 0}
+    - _BoysRoomObjectsTint1: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DissolveDirection: {r: 0, g: 1, b: 0, a: 0}
-    - _EdgeColor: {r: 0, g: 0, b: 0, a: 0}
+    - _Color0: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _NoiseDirection: {r: 0, g: 1, b: 0, a: 0}
-    - _NoiseScale: {r: 2, g: 2, b: 0, a: 0}
+    - _InternalColour: {r: 1, g: 1, b: 1, a: 0}
+    - _MainColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutLineColor: {r: 0, g: 0, b: 0, a: 0}
     - _RimColor: {r: 0, g: 0, b: 0, a: 0}
-    - _SpecularColor: {r: 0, g: 0, b: 0, a: 0}
-    - _TintColor: {r: 0.23921569, g: 0.23921569, b: 0.23921569, a: 1}
+    - _SpecularColor: {r: 0.245283, g: 0.245283, b: 0.245283, a: 1}
+    - _Tint: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 0}
+    - _TintColor: {r: 0.23921569, g: 0.23921569, b: 0.23921569, a: 0}
   m_BuildTextureStacks: []
