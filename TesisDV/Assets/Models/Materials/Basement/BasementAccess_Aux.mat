@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: hallwaySecondFloor
-  m_Shader: {fileID: 4800000, guid: 39cabc72409eb1143bf13bb3695a32c8, type: 3}
+  m_Name: BasementAccess_Aux
+  m_Shader: {fileID: 4800000, guid: 60c067e792060214bb58fa32c47dc2e9, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,9 +19,9 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Albedo:
-        m_Texture: {fileID: 2800000, guid: e6de346b2d34b364aa305bad6c68ef79, type: 3}
-        m_Scale: {x: 2, y: 2}
+    - _BasementWorkbench:
+        m_Texture: {fileID: 2800000, guid: d3a245ce59faca64586075634311c070, type: 3}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
@@ -44,11 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e6de346b2d34b364aa305bad6c68ef79, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: 539a224a3069ab942b4ab2e10fbef5ce, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -63,8 +59,8 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SSSMap:
-        m_Texture: {fileID: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: d3a245ce59faca64586075634311c070, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -75,52 +71,32 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _Distortion: 3.7
     - _DstBlend: 0
-    - _FirstPosition: 0.41
+    - _FirstPosition: 0.2
     - _GlossMapScale: 1
-    - _Glossiness: 1
+    - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _InternalColourPower: 4
-    - _LightIntensity: 1.24
-    - _LightIntensity2: 1.97
-    - _Max: 0
+    - _LerpLightDir1: 0.996
+    - _Levels: 4.1
+    - _Levels2: 71
+    - _LightIntensity: 3.71
+    - _LightIntensity2: 0
     - _Metallic: 0
-    - _Min: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PointLightPunchthrough: 1
-    - _Rim: 1
-    - _RimAmount: 0.899
-    - _SSSMultiplier: 1
-    - _SSSPower: 1
-    - _SSSScale: 1
-    - _SecondPosition: 0.8
-    - _SecondPositionIntensity: 0.13
-    - _ShadowIntensity: 0.22
-    - _ShadowStrength: 1
-    - _ShadowStrength1: 1
-    - _Shininess: 0.1
+    - _SecondPosition: 0.14
+    - _SecondPositionIntensity: 0.06
+    - _ShadowIntensity: 0.14
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SubsurfaceDistortion: 0.5
     - _UVSec: 0
-    - _Width: 0
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _AmbientColor: {r: 0.9716981, g: 0.9716981, b: 0.9716981, a: 0}
-    - _Color: {r: 0.5283019, g: 0.46449357, b: 0.31149876, a: 1}
-    - _Color0: {r: 0.7924528, g: 0.46614873, b: 0, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _InternalColour: {r: 1, g: 1, b: 1, a: 0}
-    - _MainColor: {r: 1, g: 0.86075187, b: 0.6084906, a: 1}
-    - _OutLineColor: {r: 0, g: 0, b: 0, a: 0}
-    - _RimColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 0}
-    - _SpecularColor: {r: 0.1037736, g: 0.09367702, b: 0, a: 1}
-    - _Tint: {r: 1, g: 1, b: 1, a: 0}
-    - _Tint2: {r: 1, g: 1, b: 1, a: 0}
-    - _TintColor: {r: 0.23921569, g: 0.23921569, b: 0.23921569, a: 0}
+    - _Tint: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 0}
+    - _Tint2: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
