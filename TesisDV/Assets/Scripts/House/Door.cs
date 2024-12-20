@@ -82,11 +82,11 @@ public class Door : Item
 
         if (IsEnemyInteracting)
         {
-            if (transform.CompareTag("Tutorial") && IsEnemyInteracting)
+            /*if (transform.CompareTag("Tutorial") && IsEnemyInteracting)
             {
                 GameVars.Values.PassedTutorial = IsEnemyInteracting;
                 Debug.Log("PASSED TUTORIAL ENEMY INTERACTING = " + IsEnemyInteracting);
-            }
+            }*/
             if (_animParent != null)
                 _animParent.SetBool("IsDropped", true);
             GameVars.Values.soundManager.PlaySoundAtPoint("SFX_DoorSlammed", transform.position, 0.4f);

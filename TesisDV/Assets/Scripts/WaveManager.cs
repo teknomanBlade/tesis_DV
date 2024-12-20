@@ -488,6 +488,8 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     #region Pool Definitions
     private void DeactivateUFO(UFO o)
     {
+        o.gameObject.transform.parent = null;
+        o.gameObject.name = "UFO(Clone)";
         o.gameObject.SetActive(false);
     }
 
@@ -608,14 +610,15 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public void StartRound()
     {
         TimeWaves = _timeBetweenWaves;
-        _inRound = true;
+        InRound = true;
+        GameVars.Values.LevelManager.InRound = true;
         OnRoundStartEnd(_inRound);
         OnGrayAmountChange(GetAmountEnemiesByWave());
     }
 
     private void SendUFOS()
     {
-        _inRound = false;
+        InRound = false;
         OnRoundStartEnd(_inRound);
 
         DisableUFOLR(); 
@@ -815,6 +818,7 @@ public class WaveManager : MonoBehaviour, IRoundChangeObservable
     public void RoundEnd() 
     {
         OnRoundEnd(_currentRound);
+        GameVars.Values.LevelManager.InRound = false;
         GameVars.Values.soundManager.StopSound(_as);
     }
 
