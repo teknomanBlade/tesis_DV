@@ -194,6 +194,7 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         if (_isAlive)
         {
+            NearDistanceToItem(); 
             LookingAt();
             CheckGround();
 
@@ -1188,7 +1189,22 @@ public class Player : MonoBehaviour, IInteractableItemObserver, IDoorGrayInterac
     {
         return lookingPlacement;
     }
+    private void NearDistanceToItem() 
+    {
+        var interactables = FindObjectsOfType<Item>();
 
+        interactables.ToList().ForEach(item =>
+        {
+            if (Vector3.Distance(item.transform.position, transform.position) <= 7f)
+            {
+                SetOnItem(item);
+            }
+            else 
+            {
+                SetOffItem(item);
+            }
+        });
+    }
     private void LookingAt()
     {
         RaycastHit hit;
